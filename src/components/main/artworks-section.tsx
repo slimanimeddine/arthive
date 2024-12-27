@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArtworkCard, ArtworkCardProps } from './artwork-card'
+import { ArtworkCard, ArtworkCardProps } from '../artwork-card'
 
 type ArtWork = { id: number } & ArtworkCardProps
 
