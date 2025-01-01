@@ -9,6 +9,8 @@ import Image from 'next/image'
 import { Logo } from '../logo'
 import { ProfileDropdown } from './profile-dropdown'
 import { SearchInput } from './search-input'
+import { usePathname } from 'next/navigation'
+import { classNames } from '@/lib/utils'
 
 const navigation = [
   { name: 'Artists', href: '/artists' },
@@ -24,6 +26,7 @@ const userNavigation = [
 
 export function Header() {
   const userSignedIn = false
+  const pathname = usePathname()
   return (
     <Disclosure
       as="nav"
@@ -43,7 +46,13 @@ export function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  className={classNames(
+                    pathname === item.href
+                      ? 'border-indigo-500 text-gray-900'
+                      : 'border-transparent text-gray-500 hover:border-gray-300',
+                    'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-500  hover:text-gray-700'
+                  )}
+                  // "inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 >
                   {item.name}
                 </Link>
@@ -91,7 +100,6 @@ export function Header() {
               </button>
             )}
 
-            {/* Profile dropdown */}
             {userSignedIn && <ProfileDropdown />}
           </div>
         </div>
@@ -104,7 +112,12 @@ export function Header() {
               as={Link}
               key={item.name}
               href={item.href}
-              className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
+              className={classNames(
+                pathname === item.href
+                  ? 'border-indigo-500 text-gray-900'
+                  : 'border-transparent text-gray-500 hover:border-gray-300',
+                'block border-l-4 py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800'
+              )}
             >
               {item.name}
             </DisclosureButton>

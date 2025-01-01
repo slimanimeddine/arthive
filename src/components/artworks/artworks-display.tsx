@@ -1,4 +1,5 @@
 import { ArtworkCard } from '../artwork-card'
+import { ArtworkPostModal } from '../artwork-post/post-modal'
 
 const artworks = Array.from(Array(30).keys()).map((i) => ({
   id: i,
@@ -15,6 +16,7 @@ const artworks = Array.from(Array(30).keys()).map((i) => ({
 export function ArtworksDisplay() {
   return (
     <div className="bg-white">
+      <ArtworkPostModal />
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <ul
           role="list"
