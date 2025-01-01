@@ -1,76 +1,76 @@
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 
-const categories = [
+const countries = [
   {
     id: '1',
-    title: 'Painting',
+    name: 'Painting',
   },
   {
     id: '2',
-    title: 'Graphic',
+    name: 'Graphic',
   },
   {
     id: '3',
-    title: 'Sculpture',
+    name: 'Sculpture',
   },
   {
     id: '4',
-    title: 'Folk Art',
+    name: 'Folk Art',
   },
   {
     id: '5',
-    title: 'Textile',
+    name: 'Textile',
   },
   {
     id: '6',
-    title: 'Ceramics',
+    name: 'Ceramics',
   },
   {
     id: '7',
-    title: 'Beads',
+    name: 'Beads',
   },
   {
     id: '8',
-    title: 'Paper',
+    name: 'Paper',
   },
   {
     id: '9',
-    title: 'Glass',
+    name: 'Glass',
   },
   {
     id: '10',
-    title: 'Dolls',
+    name: 'Dolls',
   },
   {
     id: '11',
-    title: 'Jewellery',
+    name: 'Jewellery',
   },
   {
     id: '12',
-    title: 'Fresco',
+    name: 'Fresco',
   },
   {
     id: '13',
-    title: 'Metal',
+    name: 'Metal',
   },
   {
     id: '14',
-    title: 'Mosaic',
+    name: 'Mosaic',
   },
   {
     id: '15',
-    title: 'Stained Glass Windows',
+    name: 'Stained Glass Windows',
   },
 ]
-export function ArtistCategoryFilter() {
+export function ArtistCountryFilter() {
   return (
     <div className="mt-1 space-y-2">
       <details className="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
         <summary className="flex cursor-pointer items-center justify-between gap-2 p-4 text-gray-900 transition">
           <span className="flex items-center gap-2">
-            <span className="text-sm font-medium"> Category </span>
+            <span className="text-sm font-medium"> Country </span>
             <span className="inline-flex items-center gap-x-0.5 rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-indigo-700">
-              Painting
+              Norway
               <button
                 type="button"
                 className="group relative -mr-1 h-3.5 w-3.5 rounded-sm hover:bg-indigo-600/20"
@@ -94,22 +94,22 @@ export function ArtistCategoryFilter() {
 
         <div className="border-t border-gray-200 bg-white overflow-y-scroll h-48">
           <div className="space-y-1 border-t border-gray-200 p-4">
-            {categories.map((category) => (
+            {countries.map((country) => (
               <div
-                key={category.id}
+                key={country.id}
                 className="flex items-center"
               >
                 <input
-                  id={category.id}
-                  name="category"
+                  id={country.id}
+                  name="country"
                   type="radio"
                   className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                 />
                 <label
-                  htmlFor={category.id}
+                  htmlFor={country.id}
                   className="ml-3 block text-sm font-medium leading-6 text-gray-900"
                 >
-                  {category.title}
+                  {country.name}
                 </label>
               </div>
             ))}

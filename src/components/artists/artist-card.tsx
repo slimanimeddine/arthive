@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 type ArtistCardProps = {
+  id: number
   name: string
   stars: number
   username: string
@@ -12,6 +13,7 @@ type ArtistCardProps = {
 }
 
 export function ArtistCard({
+  id,
   name,
   stars,
   username,
@@ -35,7 +37,7 @@ export function ArtistCard({
         <div>
           <div className="flex items-center justify-between">
             <h3 className="font-medium sm:text-lg">
-              <Link href={`/${username}`}>{name}</Link>
+              <Link href={`/artists/${id}`}>{name}</Link>
             </h3>
 
             <button className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">

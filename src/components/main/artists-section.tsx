@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ArtistCard, ArtistCardProps } from './artist-card'
 
-type Artist = { id: number } & ArtistCardProps
+type Artist = ArtistCardProps
 
 type ArtistsSectionProps = {
   title: string

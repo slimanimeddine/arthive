@@ -12,6 +12,7 @@ import {
 } from '@headlessui/react'
 import { SortArtists } from './sort-artists'
 import { ArtistCategoryFilter } from './artist-category-filter'
+import { ArtistCountryFilter } from './artist-country-filter'
 
 const artists = Array.from(Array(30).keys()).map((i) => ({
   id: i,
@@ -77,6 +78,7 @@ export function ArtistsDisplay() {
                           Filters
                         </p>
                         <ArtistCategoryFilter />
+                        <ArtistCountryFilter />
                       </div>
                     </div>
                   </div>
@@ -103,6 +105,7 @@ export function ArtistsDisplay() {
             <div>
               <p className="block text-xs font-medium text-gray-700">Filters</p>
               <ArtistCategoryFilter />
+              <ArtistCountryFilter />
             </div>
           </div>
 
