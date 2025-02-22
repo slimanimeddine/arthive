@@ -1,6 +1,46 @@
+'use client'
+import { useSignUp } from '@/api/authentication/authentication'
+import { onError } from '@/lib/utils'
+import { signUpBody } from '@/schemas/authentication'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { z as zod } from 'zod'
+
+type SignUpBody = zod.infer<typeof signUpBody>
+
 export function SignUpForm() {
+  const { handleSubmit, register, formState, reset } = useForm<SignUpBody>({
+    resolver: zodResolver(signUpBody),
+  })
+
+  const router = useRouter()
+
+  const signUpMutation = useSignUp()
+
+  function onSubmit(data: SignUpBody) {
+    signUpMutation.mutate(
+      {
+        data,
+      },
+      {
+        onError: (error) => onError(error),
+        onSuccess: () => {
+          toast.success('Account created successfully!')
+          reset()
+          router.push('/sign-in')
+        },
+      }
+    )
+  }
+
+  const isDisabled = formState.isSubmitting || signUpMutation.isPending
   return (
-    <form className="space-y-6">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6"
+    >
       <div>
         <label
           htmlFor="username"
@@ -11,12 +51,17 @@ export function SignUpForm() {
         <div className="mt-2">
           <input
             id="username"
-            name="username"
             type="text"
             required
             autoComplete="username"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            {...register('username')}
           />
+          {formState.errors.username && (
+            <p className="mt-2 text-sm text-red-600">
+              {formState.errors.username.message}
+            </p>
+          )}
         </div>
       </div>
 
@@ -30,12 +75,17 @@ export function SignUpForm() {
         <div className="mt-2">
           <input
             id="email"
-            name="email"
             type="email"
             required
             autoComplete="email"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            {...register('email')}
           />
+          {formState.errors.email && (
+            <p className="mt-2 text-sm text-red-600">
+              {formState.errors.email.message}
+            </p>
+          )}
         </div>
       </div>
 
@@ -49,12 +99,17 @@ export function SignUpForm() {
         <div className="mt-2">
           <input
             id="password"
-            name="password"
             type="password"
             required
             autoComplete="current-password"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            {...register('password')}
           />
+          {formState.errors.password && (
+            <p className="mt-2 text-sm text-red-600">
+              {formState.errors.password.message}
+            </p>
+          )}
         </div>
       </div>
 
@@ -68,17 +123,23 @@ export function SignUpForm() {
         <div className="mt-2">
           <input
             id="password-confirmation"
-            name="password-confirmation"
             type="password"
             required
             autoComplete="current-password-confirmation"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            {...register('password_confirmation')}
           />
+          {formState.errors.password_confirmation && (
+            <p className="mt-2 text-sm text-red-600">
+              {formState.errors.password_confirmation.message}
+            </p>
+          )}
         </div>
       </div>
 
       <div>
         <button
+          disabled={isDisabled}
           type="submit"
           className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >

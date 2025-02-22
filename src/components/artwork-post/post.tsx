@@ -9,7 +9,7 @@ import { Comment } from './comment'
 
 export function ArtworkPost() {
   return (
-    <div className="p-6 py-14 bg-white h-screen overflow-scroll">
+    <div className="p-6 py-14 bg-white">
       <div className="flex flex-col sm:max-w-4xl mx-auto gap-y-5">
         {/* 1st line */}
         <div className="flex justify-between items-center">

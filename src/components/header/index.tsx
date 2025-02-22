@@ -15,7 +15,7 @@ import { classNames } from '@/lib/utils'
 const navigation = [
   { name: 'Artists', href: '/artists' },
   { name: 'Artworks', href: '/artworks' },
-  { name: 'Submit', href: '/submit' },
+  { name: 'Submit Work', href: '/submit-work' },
 ]
 
 const userNavigation = [
