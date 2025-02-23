@@ -7,6 +7,7 @@ const protectedRoutes = [
   '/edit-profile',
   '/submit-work',
   '/sign-out',
+  '/notifications',
 ]
 
 export default async function middleware(req: NextRequest) {

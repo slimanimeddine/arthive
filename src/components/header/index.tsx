@@ -96,8 +96,8 @@ export function Header() {
               </Link>
             )}
             {user && (
-              <button
-                type="button"
+              <Link
+                href="/notifications"
                 className="relative flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 <span className="absolute -inset-1.5" />
@@ -106,7 +106,7 @@ export function Header() {
                   aria-hidden="true"
                   className="h-6 w-6"
                 />
-              </button>
+              </Link>
             )}
 
             {user && <ProfileDropdown />}
@@ -136,26 +136,28 @@ export function Header() {
           <div className="flex items-center px-4">
             {!user && (
               <Link
-                href="#"
+                href="/sign-in"
                 className="text-sm/6 font-semibold text-gray-900"
               >
                 Sign in
               </Link>
             )}
 
-            {user && user.photo ? (
-              <div className="flex-shrink-0">
-                <Image
-                  alt=""
-                  src={fileUrl(user.photo)}
-                  className="h-10 w-10 rounded-full"
-                  width={40}
-                  height={40}
-                />
-              </div>
-            ) : (
-              <AvatarPlaceholder />
-            )}
+            {user &&
+              (user.photo ? (
+                <div className="flex-shrink-0">
+                  <Image
+                    alt=""
+                    src={fileUrl(user.photo)!}
+                    className="h-10 w-10 rounded-full"
+                    width={40}
+                    height={40}
+                  />
+                </div>
+              ) : (
+                <AvatarPlaceholder />
+              ))}
+
             {user && (
               <div className="ml-3">
                 <div className="text-base font-medium text-gray-800">
@@ -167,8 +169,8 @@ export function Header() {
               </div>
             )}
             {user && (
-              <button
-                type="button"
+              <Link
+                href="/notifications"
                 className="relative ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 <span className="absolute -inset-1.5" />
@@ -177,7 +179,7 @@ export function Header() {
                   aria-hidden="true"
                   className="h-6 w-6"
                 />
-              </button>
+              </Link>
             )}
           </div>
           <div className="mt-3 space-y-1">

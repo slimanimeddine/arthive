@@ -35,7 +35,6 @@ export const listUsersQueryParams = zod.object({
   'filter[verified]': zod.number().optional(),
   searchQuery: zod.string().optional(),
   sort: zod.string().optional(),
-  include: zod.enum(['artworks']).optional(),
   page: zod.string().optional(),
   perPage: zod.string().optional(),
 })

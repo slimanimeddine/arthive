@@ -14,7 +14,7 @@ export function onError(error: Error) {
 }
 
 export function fileUrl(url: string | null | undefined) {
-  if (!url) return ''
+  if (!url) return undefined
   const modifiedUrl = url.replace('public', '')
   return `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${modifiedUrl}`
 }

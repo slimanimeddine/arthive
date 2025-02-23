@@ -32,7 +32,7 @@ export function ProfileDropdown() {
           {user && user.photo ? (
             <Image
               alt=""
-              src={fileUrl(user.photo)}
+              src={fileUrl(user.photo)!}
               className="h-8 w-8 rounded-full"
               width={32}
               height={32}

@@ -7,7 +7,6 @@
  */
 import type { ListUsersFilterTag } from './listUsersFilterTag'
 import type { ListUsersFilterVerified } from './listUsersFilterVerified'
-import type { ListUsersInclude } from './listUsersInclude'
 
 export type ListUsersParams = {
   /**
@@ -30,10 +29,6 @@ export type ListUsersParams = {
    * Sort artworks by new, or popular.
    */
   sort?: string
-  /**
-   * Include related artworks.
-   */
-  include?: ListUsersInclude
   /**
    * The page number to fetch.
    */
