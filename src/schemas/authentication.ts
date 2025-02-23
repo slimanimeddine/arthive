@@ -13,7 +13,14 @@ import { z as zod } from 'zod'
  */
 export const signUpBody = zod
   .object({
-    username: zod.string().max(255),
+    username: zod
+      .string()
+      .min(3)
+      .max(255)
+      .regex(
+        /^[a-zA-Z0-9_-]+$/,
+        'Username can only contain letters, numbers, dashes, and underscores'
+      ),
     email: zod.string().email(),
     password: zod.string().min(8),
     password_confirmation: zod.string().min(8),

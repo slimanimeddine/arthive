@@ -1,14 +1,25 @@
+import { useShowUserById } from '@/api/users/users'
+import { useGetSessionPayload } from '@/hooks/session/use-get-session-payload'
+import { SessionPayload } from '@/lib/session'
+import { fileUrl } from '@/lib/utils'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { AvatarPlaceholder } from '../avatar-placeholder'
 
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Your Profile', href: '/edit-profile' },
+  { name: 'Sign out', href: '/sign-out' },
 ]
 
 export function ProfileDropdown() {
+  const sessionPayloadQuery = useGetSessionPayload()
+  const sessionPayload = sessionPayloadQuery?.data?.payload as SessionPayload
+
+  const userQuery = useShowUserById(sessionPayload?.id)
+
+  const user = userQuery?.data?.data?.data
+
   return (
     <Menu
       as="div"
@@ -18,13 +29,17 @@ export function ProfileDropdown() {
         <MenuButton className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           <span className="absolute -inset-1.5" />
           <span className="sr-only">Open user menu</span>
-          <Image
-            alt=""
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            className="h-8 w-8 rounded-full"
-            width={32}
-            height={32}
-          />
+          {user && user.photo ? (
+            <Image
+              alt=""
+              src={fileUrl(user.photo)}
+              className="h-8 w-8 rounded-full"
+              width={32}
+              height={32}
+            />
+          ) : (
+            <AvatarPlaceholder />
+          )}
         </MenuButton>
       </div>
       <MenuItems

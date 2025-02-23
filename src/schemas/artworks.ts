@@ -18,7 +18,7 @@ import { z as zod } from 'zod'
  * @summary Create Artwork
  */
 export const createArtworkBody = zod.object({
-  title: zod.string().max(255),
+  title: zod.string().min(3).max(255),
   description: zod.string().refine(
     (value) => {
       if (!value) return true

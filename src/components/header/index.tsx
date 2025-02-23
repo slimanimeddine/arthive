@@ -1,3 +1,4 @@
+'use client'
 import {
   Disclosure,
   DisclosureButton,
@@ -10,7 +11,11 @@ import { Logo } from '../logo'
 import { ProfileDropdown } from './profile-dropdown'
 import { SearchInput } from './search-input'
 import { usePathname } from 'next/navigation'
-import { classNames } from '@/lib/utils'
+import { classNames, fileUrl } from '@/lib/utils'
+import { useGetSessionPayload } from '@/hooks/session/use-get-session-payload'
+import { SessionPayload } from '@/lib/session'
+import { useShowUserById } from '@/api/users/users'
+import { AvatarPlaceholder } from '../avatar-placeholder'
 
 const navigation = [
   { name: 'Artists', href: '/artists' },
@@ -19,13 +24,18 @@ const navigation = [
 ]
 
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Your Profile', href: '/edit-profile' },
+  { name: 'Sign out', href: '/sign-out' },
 ]
 
 export function Header() {
-  const userSignedIn = false
+  const sessionPayloadQuery = useGetSessionPayload()
+  const sessionPayload = sessionPayloadQuery?.data?.payload as SessionPayload
+
+  const userQuery = useShowUserById(sessionPayload?.id)
+
+  const user = userQuery?.data?.data?.data
+
   const pathname = usePathname()
   return (
     <Disclosure
@@ -52,7 +62,6 @@ export function Header() {
                       : 'border-transparent text-gray-500 hover:border-gray-300',
                     'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-500  hover:text-gray-700'
                   )}
-                  // "inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 >
                   {item.name}
                 </Link>
@@ -78,7 +87,7 @@ export function Header() {
             </DisclosureButton>
           </div>
           <div className="hidden lg:ml-4 lg:flex lg:items-center">
-            {!userSignedIn && (
+            {!user && (
               <Link
                 href="/sign-in"
                 className="text-sm/6 font-semibold text-gray-900"
@@ -86,7 +95,7 @@ export function Header() {
                 Sign in
               </Link>
             )}
-            {userSignedIn && (
+            {user && (
               <button
                 type="button"
                 className="relative flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -100,7 +109,7 @@ export function Header() {
               </button>
             )}
 
-            {userSignedIn && <ProfileDropdown />}
+            {user && <ProfileDropdown />}
           </div>
         </div>
       </div>
@@ -125,7 +134,7 @@ export function Header() {
         </div>
         <div className="border-t border-gray-200 pb-3 pt-4">
           <div className="flex items-center px-4">
-            {!userSignedIn && (
+            {!user && (
               <Link
                 href="#"
                 className="text-sm/6 font-semibold text-gray-900"
@@ -134,28 +143,30 @@ export function Header() {
               </Link>
             )}
 
-            {userSignedIn && (
+            {user && user.photo ? (
               <div className="flex-shrink-0">
                 <Image
                   alt=""
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  src={fileUrl(user.photo)}
                   className="h-10 w-10 rounded-full"
                   width={40}
                   height={40}
                 />
               </div>
+            ) : (
+              <AvatarPlaceholder />
             )}
-            {userSignedIn && (
+            {user && (
               <div className="ml-3">
                 <div className="text-base font-medium text-gray-800">
-                  Tom Cook
+                  {user.first_name} {user.last_name}
                 </div>
                 <div className="text-sm font-medium text-gray-500">
-                  tom@example.com
+                  {user.email}
                 </div>
               </div>
             )}
-            {userSignedIn && (
+            {user && (
               <button
                 type="button"
                 className="relative ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -170,7 +181,7 @@ export function Header() {
             )}
           </div>
           <div className="mt-3 space-y-1">
-            {userSignedIn &&
+            {user &&
               userNavigation.map((item) => (
                 <DisclosureButton
                   as={Link}

@@ -12,3 +12,9 @@ export function onError(error: Error) {
     toast.error(`${error.message}`)
   }
 }
+
+export function fileUrl(url: string | null | undefined) {
+  if (!url) return ''
+  const modifiedUrl = url.replace('public', '')
+  return `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${modifiedUrl}`
+}

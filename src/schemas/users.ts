@@ -18,7 +18,15 @@ import { z as zod } from 'zod'
  * @summary Update Authenticated User
  */
 export const updateAuthenticatedUserBody = zod.object({
-  username: zod.string().max(255).optional(),
+  username: zod
+    .string()
+    .min(3)
+    .max(255)
+    .regex(
+      /^[a-zA-Z0-9_-]+$/,
+      'Username can only contain letters, numbers, dashes, and underscores'
+    )
+    .optional(),
   first_name: zod.string().max(255).optional(),
   last_name: zod.string().max(255).optional(),
   email: zod.string().email().optional(),

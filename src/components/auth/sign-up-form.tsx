@@ -52,8 +52,6 @@ export function SignUpForm() {
           <input
             id="username"
             type="text"
-            required
-            autoComplete="username"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             {...register('username')}
           />
@@ -76,8 +74,6 @@ export function SignUpForm() {
           <input
             id="email"
             type="email"
-            required
-            autoComplete="email"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             {...register('email')}
           />
@@ -100,8 +96,6 @@ export function SignUpForm() {
           <input
             id="password"
             type="password"
-            required
-            autoComplete="current-password"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             {...register('password')}
           />
@@ -124,8 +118,6 @@ export function SignUpForm() {
           <input
             id="password-confirmation"
             type="password"
-            required
-            autoComplete="current-password-confirmation"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             {...register('password_confirmation')}
           />
