@@ -19,7 +19,7 @@ export function ArtistsSection({ title, viewMoreLink }: ArtistsSectionProps) {
     artistsQueryData?.map((artist) => ({
       id: artist.id!,
       fullName: `${artist.first_name} ${artist.last_name}`,
-      country: artist.country!,
+      country: artist.country,
       profilePictureUrl: artist.photo,
       verified: artist.artist_verified_at ? true : false,
     })) ?? []
@@ -58,7 +58,7 @@ export function ArtistsSection({ title, viewMoreLink }: ArtistsSectionProps) {
         )}
 
         {artistsQuery.isSuccess && artists.length === 0 && (
-          <p className="mt-2 text-sm text-gray-700">No artworks were found</p>
+          <p className="mt-2 text-sm text-gray-700">No artists were found</p>
         )}
 
         {artistsQuery.isSuccess && artists.length > 0 && (

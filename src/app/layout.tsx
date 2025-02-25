@@ -3,6 +3,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import TanQueryClientProvider from '@/providers/query-client-provider'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,7 +23,7 @@ export default function RootLayout({
         className="h-full"
       >
         <body className={`${inter.className} antialiased h-full`}>
-          {children}
+          <NuqsAdapter>{children}</NuqsAdapter>
           <Toaster />
         </body>
       </html>

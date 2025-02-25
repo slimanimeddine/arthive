@@ -13,28 +13,11 @@ import { z as zod } from 'zod'
  */
 export const listUsersQueryParams = zod.object({
   'filter[country]': zod.string().optional(),
-  'filter[tag]': zod
-    .enum([
-      'painting',
-      'graphic',
-      'sculpture',
-      'folk art',
-      'textile',
-      'ceramics',
-      'stained glass windows',
-      'beads',
-      'paper',
-      'glass',
-      'dolls',
-      'jewellery',
-      'fresco',
-      'metal',
-      'mosaic',
-    ])
-    .optional(),
+  'filter[tag]': zod.string().optional(),
   'filter[verified]': zod.boolean().optional(),
+  include: zod.enum(['artworks']).optional(),
   searchQuery: zod.string().optional(),
-  sort: zod.string().optional(),
+  sort: zod.enum(['new', 'popular']).optional(),
   page: zod.string().optional(),
   perPage: zod.string().optional(),
 })

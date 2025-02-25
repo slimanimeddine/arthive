@@ -6,11 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ListUsersFilterVerified =
-  (typeof ListUsersFilterVerified)[keyof typeof ListUsersFilterVerified]
+export type ListUsersSort = (typeof ListUsersSort)[keyof typeof ListUsersSort]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ListUsersFilterVerified = {
-  NUMBER_1: 1,
-  NUMBER_0: 0,
+export const ListUsersSort = {
+  new: 'new',
+  popular: 'popular',
 } as const

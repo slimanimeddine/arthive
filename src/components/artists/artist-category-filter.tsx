@@ -1,90 +1,44 @@
+import { useListTags } from '@/api/artwork-tags/artwork-tags'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
+import { useQueryState } from 'nuqs'
 
-const categories = [
-  {
-    id: '1',
-    title: 'Painting',
-  },
-  {
-    id: '2',
-    title: 'Graphic',
-  },
-  {
-    id: '3',
-    title: 'Sculpture',
-  },
-  {
-    id: '4',
-    title: 'Folk Art',
-  },
-  {
-    id: '5',
-    title: 'Textile',
-  },
-  {
-    id: '6',
-    title: 'Ceramics',
-  },
-  {
-    id: '7',
-    title: 'Beads',
-  },
-  {
-    id: '8',
-    title: 'Paper',
-  },
-  {
-    id: '9',
-    title: 'Glass',
-  },
-  {
-    id: '10',
-    title: 'Dolls',
-  },
-  {
-    id: '11',
-    title: 'Jewellery',
-  },
-  {
-    id: '12',
-    title: 'Fresco',
-  },
-  {
-    id: '13',
-    title: 'Metal',
-  },
-  {
-    id: '14',
-    title: 'Mosaic',
-  },
-  {
-    id: '15',
-    title: 'Stained Glass Windows',
-  },
-]
 export function ArtistCategoryFilter() {
+  const tagsQuery = useListTags()
+
+  const tagsQueryData = tagsQuery.data?.data?.data
+
+  const categories =
+    tagsQueryData?.map((tag) => ({
+      id: tag.id!,
+      title: tag.name!,
+    })) ?? []
+
+  const [category, setCategory] = useQueryState('category')
   return (
     <div className="mt-1 space-y-2">
       <details className="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
         <summary className="flex cursor-pointer items-center justify-between gap-2 p-4 text-gray-900 transition">
           <span className="flex items-center gap-2">
             <span className="text-sm font-medium"> Category </span>
-            <span className="inline-flex items-center gap-x-0.5 rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-indigo-700">
-              Painting
-              <button
-                type="button"
-                className="group relative -mr-1 h-3.5 w-3.5 rounded-sm hover:bg-indigo-600/20"
-              >
-                <span className="sr-only">Remove</span>
-                <svg
-                  viewBox="0 0 14 14"
-                  className="h-3.5 w-3.5 stroke-indigo-700/50 group-hover:stroke-indigo-700/75"
+            {category && (
+              <span className="inline-flex items-center gap-x-0.5 rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-indigo-700">
+                {category}
+                <button
+                  type="button"
+                  onClick={() => setCategory(null)}
+                  className="group relative -mr-1 h-3.5 w-3.5 rounded-sm hover:bg-indigo-600/20"
                 >
-                  <path d="M4 4l6 6m0-6l-6 6" />
-                </svg>
-                <span className="absolute -inset-1" />
-              </button>
-            </span>
+                  <span className="sr-only">Remove</span>
+                  <svg
+                    viewBox="0 0 14 14"
+                    className="h-3.5 w-3.5 stroke-indigo-700/50 group-hover:stroke-indigo-700/75"
+                  >
+                    <path d="M4 4l6 6m0-6l-6 6" />
+                  </svg>
+                  <span className="absolute -inset-1" />
+                </button>
+              </span>
+            )}
           </span>
 
           <span className="transition group-open:-rotate-180">
@@ -94,25 +48,49 @@ export function ArtistCategoryFilter() {
 
         <div className="border-t border-gray-200 bg-white overflow-y-scroll h-48">
           <div className="space-y-1 border-t border-gray-200 p-4">
-            {categories.map((category) => (
-              <div
-                key={category.id}
-                className="flex items-center"
-              >
-                <input
-                  id={category.id}
-                  name="category"
-                  type="radio"
-                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                />
-                <label
-                  htmlFor={category.id}
-                  className="ml-3 block text-sm font-medium leading-6 text-gray-900"
+            {tagsQuery.isError && (
+              <p className="mt-2 text-sm text-red-700">
+                We&apos;re sorry, something went wrong.
+              </p>
+            )}
+
+            {tagsQuery.isPending &&
+              [...Array(10)].map((_, index) => (
+                <div
+                  key={index}
+                  className="flex items-center animate-pulse"
                 >
-                  {category.title}
-                </label>
-              </div>
-            ))}
+                  <div className="inline-flex items-center gap-2 w-full">
+                    <div className="h-5 w-5 rounded-full bg-gray-200" />
+                    <div className="h-4 bg-gray-200 rounded w-20" />
+                  </div>
+                </div>
+              ))}
+
+            {tagsQuery.isSuccess && categories.length === 0 && (
+              <p className="mt-2 text-sm text-gray-700">
+                No categories were found
+              </p>
+            )}
+
+            {tagsQuery.isSuccess &&
+              categories.length > 0 &&
+              categories.map((c) => (
+                <div
+                  key={c.id}
+                  className="flex items-center"
+                >
+                  <input
+                    type="radio"
+                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    onChange={() => setCategory(c.title)}
+                    checked={c.title === category}
+                  />
+                  <label className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                    {c.title}
+                  </label>
+                </div>
+              ))}
           </div>
         </div>
       </details>

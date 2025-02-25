@@ -1,21 +1,34 @@
 import { classNames } from '@/lib/utils'
 
 type AvatarPlaceholderProps = {
-  size: 6 | 8 | 10 | 12
+  size: 6 | 8 | 10 | 12 | 14
 }
 
 export function AvatarPlaceholder({ size }: AvatarPlaceholderProps) {
+  let sizeClass = ''
+
+  switch (size) {
+    case 6:
+      sizeClass = 'h-6 w-6'
+      break
+    case 8:
+      sizeClass = 'h-8 w-8'
+      break
+    case 10:
+      sizeClass = 'h-10 w-10'
+      break
+    case 12:
+      sizeClass = 'h-12 w-12'
+      break
+    case 14:
+      sizeClass = 'h-14 w-14'
+      break
+  }
   return (
     <span
       className={classNames(
         'inline-block overflow-hidden rounded-full bg-gray-100',
-        size === 6
-          ? 'h-6 w-6'
-          : size === 8
-            ? 'h-8 w-8'
-            : size === 10
-              ? 'h-10 w-10'
-              : 'h-12 w-12'
+        sizeClass
       )}
     >
       <svg

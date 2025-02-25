@@ -7,7 +7,7 @@ import { AvatarPlaceholder } from '../avatar-placeholder'
 type ArtistCardProps = {
   id: number
   fullName: string
-  country: string
+  country: string | undefined
   profilePictureUrl: string | undefined
   verified: boolean
 }

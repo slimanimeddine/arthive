@@ -5,14 +5,13 @@
  * ArtHive API Documentation
  * OpenAPI spec version: 1.0.0
  */
-import type { ListPublishedArtworksFilterTag } from './listPublishedArtworksFilterTag'
 import type { ListPublishedArtworksSort } from './listPublishedArtworksSort'
 
 export type ListPublishedArtworksParams = {
   /**
    * Filter artworks by tag.
    */
-  'filter[tag]'?: ListPublishedArtworksFilterTag
+  'filter[tag]'?: string
   /**
    * Search for artworks by title or description.
    */

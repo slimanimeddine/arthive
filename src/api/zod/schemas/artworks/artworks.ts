@@ -12,25 +12,7 @@ import { z as zod } from 'zod'
  * @summary List Published Artworks
  */
 export const listPublishedArtworksQueryParams = zod.object({
-  'filter[tag]': zod
-    .enum([
-      'painting',
-      'graphic',
-      'sculpture',
-      'folk art',
-      'textile',
-      'ceramics',
-      'stained glass windows',
-      'beads',
-      'paper',
-      'glass',
-      'dolls',
-      'jewellery',
-      'fresco',
-      'metal',
-      'mosaic',
-    ])
-    .optional(),
+  'filter[tag]': zod.string().optional(),
   searchQuery: zod.string().optional(),
   sort: zod.enum(['rising', 'new', 'popular', 'trending']).optional(),
   page: zod.number().optional(),

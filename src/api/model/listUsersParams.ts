@@ -5,7 +5,8 @@
  * ArtHive API Documentation
  * OpenAPI spec version: 1.0.0
  */
-import type { ListUsersFilterTag } from './listUsersFilterTag'
+import type { ListUsersInclude } from './listUsersInclude'
+import type { ListUsersSort } from './listUsersSort'
 
 export type ListUsersParams = {
   /**
@@ -15,11 +16,15 @@ export type ListUsersParams = {
   /**
    * Filter artworks by tag.
    */
-  'filter[tag]'?: ListUsersFilterTag
+  'filter[tag]'?: string
   /**
    * Filter artists by verification status.
    */
   'filter[verified]'?: boolean
+  /**
+   * Include artworks in the response.
+   */
+  include?: ListUsersInclude
   /**
    * Search for users by username, first name, or last name.
    */
@@ -27,7 +32,7 @@ export type ListUsersParams = {
   /**
    * Sort artworks by new, or popular.
    */
-  sort?: string
+  sort?: ListUsersSort
   /**
    * The page number to fetch.
    */

@@ -13,21 +13,44 @@ import {
 import { SortArtists } from './sort-artists'
 import { ArtistCategoryFilter } from './artist-category-filter'
 import { ArtistCountryFilter } from './artist-country-filter'
-
-const artists = Array.from(Array(30).keys()).map((i) => ({
-  id: i,
-  name: 'Benjamin Moore',
-  image:
-    'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80',
-  stars: 21,
-  country: 'United States',
-  username: 'hendrix',
-  description:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-}))
+import { useListUsers } from '@/api/users/users'
+import { useSearchParams } from 'next/navigation'
+import { ArtistCardSkeleton2 } from '../ui-skeletons/artist-card-skeleton-2'
 
 export function ArtistsDisplay() {
   const [open, setOpen] = useState(false)
+
+  const searchParams = useSearchParams()
+  const artistSort = searchParams.get('artistSort')
+  const category = searchParams.get('category')
+  const country = searchParams.get('country')
+
+  const queryParams: Record<string, string> = {
+    include: 'artworks',
+    ...(country && { 'filter[country]': country }),
+    ...(category && { 'filter[tag]': category }),
+    ...(artistSort && { sort: artistSort }),
+  }
+
+  const artistsQuery = useListUsers(queryParams)
+
+  const artistsQueryData = artistsQuery.data?.data?.data
+
+  const artists =
+    artistsQueryData?.map((artist) => ({
+      id: artist.id!,
+      fullName: `${artist.first_name} ${artist.last_name}`,
+      starsCount: 10,
+      username: artist.username!,
+      country: artist.country,
+      profilePictureUrl: artist.photo,
+      description: artist.bio,
+      artworks:
+        artist.artworks?.map((artwork) => ({
+          id: artwork.id!,
+          mainPhotoUrl: artwork.artwork_main_photo_path!,
+        })) ?? [],
+    })) ?? []
 
   return (
     <>
@@ -110,14 +133,41 @@ export function ArtistsDisplay() {
           </div>
 
           <div className="lg:col-span-3">
-            <ul className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {artists.map((artist) => (
-                <li key={artist.id}>
-                  <ArtistCard {...artist} />
-                </li>
-              ))}
-            </ul>
-            <Pagination />
+            {artistsQuery.isError && (
+              <p className="mt-2 text-sm text-red-700">
+                We&apos;re sorry, something went wrong.
+              </p>
+            )}
+
+            {artistsQuery.isPending && (
+              <ul
+                role="list"
+                className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2"
+              >
+                {[...Array(10)].map((_, index) => (
+                  <li key={index}>
+                    <ArtistCardSkeleton2 />
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {artistsQuery.isSuccess && artists.length === 0 && (
+              <p className="mt-2 text-sm text-gray-700">
+                No artists were found
+              </p>
+            )}
+
+            {artistsQuery.isSuccess && artists.length > 0 && (
+              <ul className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+                {artists.map((artist) => (
+                  <li key={artist.id}>
+                    <ArtistCard {...artist} />
+                  </li>
+                ))}
+              </ul>
+            )}
+            {artistsQuery.isSuccess && artists.length > 0 && <Pagination />}
           </div>
         </div>
       </div>

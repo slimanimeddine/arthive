@@ -3,12 +3,12 @@ import { ArtworkCard } from '../artwork-card'
 const artworks = Array.from(Array(30).keys()).map((i) => ({
   id: i,
   title: 'fried eggs',
-  image:
+  mainPhotoUrl:
     'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80',
-  likes: 21,
-  comments: 32,
-  artistName: 'hendrix',
-  artistImage:
+  likesCount: 21,
+  commentsCount: 32,
+  artistFullName: 'hendrix',
+  artistProfilePictureUrl:
     'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80',
 }))
 

@@ -1,9 +1,13 @@
+import { useQueryState } from 'nuqs'
+
 const sortOptions = [
   { id: 1, value: 'popular', label: 'Popular' },
   { id: 2, value: 'new', label: 'New' },
 ]
 
 export function SortArtists() {
+  const [, setArtistSort] = useQueryState('artistSort')
+
   return (
     <div>
       <label
@@ -16,7 +20,11 @@ export function SortArtists() {
       <select
         id="SortBy"
         className="mt-1 rounded border-gray-300 text-sm"
+        onChange={(e) =>
+          setArtistSort(e.target.value === '' ? null : e.target.value)
+        }
       >
+        <option value="">Select</option>
         {sortOptions.map((option) => (
           <option
             key={option.id}
