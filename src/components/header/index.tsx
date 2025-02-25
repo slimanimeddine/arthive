@@ -155,7 +155,7 @@ export function Header() {
                   />
                 </div>
               ) : (
-                <AvatarPlaceholder />
+                <AvatarPlaceholder size={10} />
               ))}
 
             {user && (

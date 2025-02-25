@@ -1,28 +1,42 @@
 import Link from 'next/link'
 import { CheckBadgeIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
+import { fileUrl } from '@/lib/utils'
+import { AvatarPlaceholder } from '../avatar-placeholder'
 
-export type ArtistCardProps = {
+type ArtistCardProps = {
   id: number
-  name: string
+  fullName: string
   country: string
-  imageUrl: string
+  profilePictureUrl: string | undefined
+  verified: boolean
 }
 
-export function ArtistCard({ id, name, country, imageUrl }: ArtistCardProps) {
+export function ArtistCard({
+  id,
+  fullName,
+  country,
+  profilePictureUrl,
+  verified,
+}: ArtistCardProps) {
   return (
     <div className="flex items-center justify-between gap-x-6 py-5">
       <div className="flex min-w-0 gap-x-4">
-        <Image
-          alt=""
-          src={imageUrl}
-          className="h-12 w-12 flex-none rounded-full bg-gray-50"
-          height={48}
-          width={48}
-        />
+        {profilePictureUrl ? (
+          <Image
+            alt=""
+            src={fileUrl(profilePictureUrl)!}
+            className="h-12 w-12 flex-none rounded-full bg-gray-50"
+            height={48}
+            width={48}
+          />
+        ) : (
+          <AvatarPlaceholder size={12} />
+        )}
         <div className="min-w-0 flex-auto">
           <p className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-            {name} <CheckBadgeIcon className="h-4 w-4 text-green-500" />
+            {fullName}{' '}
+            {verified && <CheckBadgeIcon className="h-4 w-4 text-green-500" />}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500">
             {country}

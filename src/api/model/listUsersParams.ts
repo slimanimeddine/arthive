@@ -6,7 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ListUsersFilterTag } from './listUsersFilterTag'
-import type { ListUsersFilterVerified } from './listUsersFilterVerified'
 
 export type ListUsersParams = {
   /**
@@ -20,7 +19,7 @@ export type ListUsersParams = {
   /**
    * Filter artists by verification status.
    */
-  'filter[verified]'?: ListUsersFilterVerified
+  'filter[verified]'?: boolean
   /**
    * Search for users by username, first name, or last name.
    */

@@ -19,7 +19,6 @@ export function ArtworksSection({
   const artworksQuery = useListPublishedArtworks({
     sort,
     perPage: 4,
-    page: 1,
   })
 
   const artworksQueryData = artworksQuery.data?.data?.data
@@ -67,10 +66,9 @@ export function ArtworksSection({
             ))}
           </ul>
         )}
+
         {artworksQuery.isSuccess && artworks.length === 0 && (
-          <div className="flex justify-center items-center">
-            <p className="text-gray-700">No artworks were found</p>
-          </div>
+          <p className="mt-2 text-sm text-gray-700">No artworks were found</p>
         )}
 
         {artworksQuery.isSuccess && artworks.length > 0 && (

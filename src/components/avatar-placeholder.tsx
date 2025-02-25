@@ -1,6 +1,23 @@
-export function AvatarPlaceholder() {
+import { classNames } from '@/lib/utils'
+
+type AvatarPlaceholderProps = {
+  size: 6 | 8 | 10 | 12
+}
+
+export function AvatarPlaceholder({ size }: AvatarPlaceholderProps) {
   return (
-    <span className="inline-block h-8 w-8 overflow-hidden rounded-full bg-gray-100">
+    <span
+      className={classNames(
+        'inline-block overflow-hidden rounded-full bg-gray-100',
+        size === 6
+          ? 'h-6 w-6'
+          : size === 8
+            ? 'h-8 w-8'
+            : size === 10
+              ? 'h-10 w-10'
+              : 'h-12 w-12'
+      )}
+    >
       <svg
         fill="currentColor"
         viewBox="0 0 24 24"

@@ -38,7 +38,7 @@ export function ProfileDropdown() {
               height={32}
             />
           ) : (
-            <AvatarPlaceholder />
+            <AvatarPlaceholder size={8} />
           )}
         </MenuButton>
       </div>

@@ -32,7 +32,7 @@ export const listUsersQueryParams = zod.object({
       'mosaic',
     ])
     .optional(),
-  'filter[verified]': zod.number().optional(),
+  'filter[verified]': zod.boolean().optional(),
   searchQuery: zod.string().optional(),
   sort: zod.string().optional(),
   page: zod.string().optional(),

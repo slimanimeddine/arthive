@@ -66,7 +66,7 @@ export function ArtworkCard({
                 height={28}
               />
             ) : (
-              <AvatarPlaceholder />
+              <AvatarPlaceholder size={8} />
             )}
           </div>
           <div className="min-w-0 flex-1">
