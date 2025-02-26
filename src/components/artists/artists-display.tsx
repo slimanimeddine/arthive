@@ -1,7 +1,7 @@
 'use client'
 import { ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { ArtistCard } from './artist-card'
-import { Pagination } from './pagination'
+import { Pagination } from '../pagination'
 import { useState } from 'react'
 import {
   Dialog,
@@ -21,6 +21,7 @@ export function ArtistsDisplay() {
   const [open, setOpen] = useState(false)
 
   const searchParams = useSearchParams()
+  const page = searchParams.get('page')
   const artistSort = searchParams.get('artistSort')
   const category = searchParams.get('category')
   const country = searchParams.get('country')
@@ -30,6 +31,7 @@ export function ArtistsDisplay() {
     ...(country && { 'filter[country]': country }),
     ...(category && { 'filter[tag]': category }),
     ...(artistSort && { sort: artistSort }),
+    ...(page && { page }),
   }
 
   const artistsQuery = useListUsers(queryParams)
@@ -40,7 +42,6 @@ export function ArtistsDisplay() {
     artistsQueryData?.map((artist) => ({
       id: artist.id!,
       fullName: `${artist.first_name} ${artist.last_name}`,
-      starsCount: 10,
       username: artist.username!,
       country: artist.country,
       profilePictureUrl: artist.photo,
@@ -51,6 +52,9 @@ export function ArtistsDisplay() {
           mainPhotoUrl: artwork.artwork_main_photo_path!,
         })) ?? [],
     })) ?? []
+
+  const links = artistsQuery?.data?.data?.links || {}
+  const meta = artistsQuery?.data?.data?.meta || {}
 
   return (
     <>
@@ -167,7 +171,12 @@ export function ArtistsDisplay() {
                 ))}
               </ul>
             )}
-            {artistsQuery.isSuccess && artists.length > 0 && <Pagination />}
+            <div className="mt-8">
+              <Pagination
+                links={links}
+                meta={meta}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 import { fileUrl } from '@/lib/utils'
-import { StarIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -11,7 +10,6 @@ type Artwork = {
 type ArtistCardProps = {
   id: number
   fullName: string
-  starsCount: number
   username: string
   country: string | undefined
   profilePictureUrl: string | undefined
@@ -22,7 +20,6 @@ type ArtistCardProps = {
 export function ArtistCard({
   id,
   fullName,
-  starsCount,
   username,
   country,
   profilePictureUrl,
@@ -72,13 +69,6 @@ export function ArtistCard({
           <p className="line-clamp-2 text-sm text-gray-700">{description}</p>
 
           <div className="mt-2 flex items-center gap-2">
-            <div className="flex items-center gap-1 text-gray-500">
-              <StarIcon className="h-4 w-4 text-yellow-500" />
-              <p className="text-xs">{starsCount} stars</p>
-            </div>
-
-            <span aria-hidden="true">&middot;</span>
-
             <p className="text-xs text-gray-500">@{username}</p>
 
             <span aria-hidden="true">&middot;</span>
