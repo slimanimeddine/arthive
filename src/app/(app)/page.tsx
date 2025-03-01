@@ -9,17 +9,17 @@ export default function Page() {
       <Introduction />
       <ArtworksSection
         title={'Trending'}
-        viewMoreLink={'/artworks?filter=trending'}
+        viewMoreLink={'/artworks?artworkSort=trending'}
         sort={'trending'}
       />
       <ArtworksSection
         title={'New & Rising'}
-        viewMoreLink={'/artworks?filter=new'}
+        viewMoreLink={'/artworks?artworkSort=new'}
         sort={'new'}
       />
       <ArtistsSection
         title={'Verified Artists'}
-        viewMoreLink={'/artists?filter=verified'}
+        viewMoreLink={'/artists'}
       />
     </>
   )

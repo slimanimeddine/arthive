@@ -3,8 +3,8 @@ import { ArtworkPost } from '@/components/artwork-post/post'
 export default async function Page({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: number }>
 }) {
   const id = (await params).id
-  return <ArtworkPost />
+  return <ArtworkPost id={id} />
 }

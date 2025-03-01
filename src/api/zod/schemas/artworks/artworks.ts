@@ -117,122 +117,120 @@ export const createArtworkResponse = zod.object({
  */
 export const showPublishedArtworkResponse = zod.object({
   data: zod
-    .array(
-      zod.object({
-        id: zod.number().optional(),
-        title: zod.string().optional(),
-        description: zod.string().optional(),
-        status: zod.string().optional(),
-        user_id: zod.number().optional(),
-        created_at: zod.string().optional(),
-        updated_at: zod.string().optional(),
-        artwork_likes_count: zod.number().optional(),
-        artwork_comments_count: zod.number().optional(),
-        artwork_main_photo_path: zod.string().optional(),
-        user: zod
-          .object({
+    .object({
+      id: zod.number().optional(),
+      title: zod.string().optional(),
+      description: zod.string().optional(),
+      status: zod.string().optional(),
+      user_id: zod.number().optional(),
+      created_at: zod.string().optional(),
+      updated_at: zod.string().optional(),
+      artwork_likes_count: zod.number().optional(),
+      artwork_comments_count: zod.number().optional(),
+      artwork_main_photo_path: zod.string().optional(),
+      user: zod
+        .object({
+          id: zod.number().optional(),
+          username: zod.string().optional(),
+          first_name: zod.string().optional(),
+          last_name: zod.string().optional(),
+          email: zod.string().optional(),
+          country: zod.string().optional(),
+          bio: zod.string().optional(),
+          photo: zod.string().optional(),
+          artist_verified_at: zod.string().optional(),
+          email_verified_at: zod.string().optional(),
+          role: zod.string().optional(),
+          created_at: zod.string().optional(),
+          updated_at: zod.string().optional(),
+        })
+        .optional(),
+      artwork_photos: zod
+        .array(
+          zod.object({
             id: zod.number().optional(),
-            username: zod.string().optional(),
-            first_name: zod.string().optional(),
-            last_name: zod.string().optional(),
-            email: zod.string().optional(),
-            country: zod.string().optional(),
-            bio: zod.string().optional(),
-            photo: zod.string().optional(),
-            artist_verified_at: zod.string().optional(),
-            email_verified_at: zod.string().optional(),
-            role: zod.string().optional(),
+            path: zod.string().optional(),
+            is_main: zod.number().optional(),
+            artwork_id: zod.number().optional(),
             created_at: zod.string().optional(),
             updated_at: zod.string().optional(),
           })
-          .optional(),
-        artwork_photos: zod
-          .array(
-            zod.object({
-              id: zod.number().optional(),
-              path: zod.string().optional(),
-              is_main: zod.number().optional(),
-              artwork_id: zod.number().optional(),
-              created_at: zod.string().optional(),
-              updated_at: zod.string().optional(),
-            })
-          )
-          .optional(),
-        artwork_comments: zod
-          .array(
-            zod.object({
-              id: zod.number().optional(),
-              comment_text: zod.string().optional(),
-              artwork_id: zod.number().optional(),
-              user_id: zod.number().optional(),
-              created_at: zod.string().optional(),
-              updated_at: zod.string().optional(),
-              user: zod
-                .object({
-                  id: zod.number().optional(),
-                  username: zod.string().optional(),
-                  first_name: zod.string().optional(),
-                  last_name: zod.string().optional(),
-                  email: zod.string().optional(),
-                  country: zod.string().optional(),
-                  bio: zod.string().optional(),
-                  photo: zod.string().optional(),
-                  artist_verified_at: zod.string().optional(),
-                  email_verified_at: zod.string().optional(),
-                  role: zod.string().optional(),
-                  created_at: zod.string().optional(),
-                  updated_at: zod.string().optional(),
-                })
-                .optional(),
-            })
-          )
-          .optional(),
-        artwork_likes: zod
-          .array(
-            zod.object({
-              id: zod.number().optional(),
-              artwork_id: zod.number().optional(),
-              user_id: zod.number().optional(),
-              created_at: zod.string().optional(),
-              updated_at: zod.string().optional(),
-              user: zod
-                .object({
-                  id: zod.number().optional(),
-                  username: zod.string().optional(),
-                  first_name: zod.string().optional(),
-                  last_name: zod.string().optional(),
-                  email: zod.string().optional(),
-                  country: zod.string().optional(),
-                  bio: zod.string().optional(),
-                  photo: zod.string().optional(),
-                  artist_verified_at: zod.string().optional(),
-                  email_verified_at: zod.string().optional(),
-                  role: zod.string().optional(),
-                  created_at: zod.string().optional(),
-                  updated_at: zod.string().optional(),
-                })
-                .optional(),
-            })
-          )
-          .optional(),
-        tags: zod
-          .array(
-            zod.object({
-              id: zod.number().optional(),
-              name: zod.string().optional(),
-              created_at: zod.string().optional(),
-              updated_at: zod.string().optional(),
-              pivot: zod
-                .object({
-                  artwork_id: zod.number().optional(),
-                  tag_id: zod.number().optional(),
-                })
-                .optional(),
-            })
-          )
-          .optional(),
-      })
-    )
+        )
+        .optional(),
+      artwork_comments: zod
+        .array(
+          zod.object({
+            id: zod.number().optional(),
+            comment_text: zod.string().optional(),
+            artwork_id: zod.number().optional(),
+            user_id: zod.number().optional(),
+            created_at: zod.string().optional(),
+            updated_at: zod.string().optional(),
+            user: zod
+              .object({
+                id: zod.number().optional(),
+                username: zod.string().optional(),
+                first_name: zod.string().optional(),
+                last_name: zod.string().optional(),
+                email: zod.string().optional(),
+                country: zod.string().optional(),
+                bio: zod.string().optional(),
+                photo: zod.string().optional(),
+                artist_verified_at: zod.string().optional(),
+                email_verified_at: zod.string().optional(),
+                role: zod.string().optional(),
+                created_at: zod.string().optional(),
+                updated_at: zod.string().optional(),
+              })
+              .optional(),
+          })
+        )
+        .optional(),
+      artwork_likes: zod
+        .array(
+          zod.object({
+            id: zod.number().optional(),
+            artwork_id: zod.number().optional(),
+            user_id: zod.number().optional(),
+            created_at: zod.string().optional(),
+            updated_at: zod.string().optional(),
+            user: zod
+              .object({
+                id: zod.number().optional(),
+                username: zod.string().optional(),
+                first_name: zod.string().optional(),
+                last_name: zod.string().optional(),
+                email: zod.string().optional(),
+                country: zod.string().optional(),
+                bio: zod.string().optional(),
+                photo: zod.string().optional(),
+                artist_verified_at: zod.string().optional(),
+                email_verified_at: zod.string().optional(),
+                role: zod.string().optional(),
+                created_at: zod.string().optional(),
+                updated_at: zod.string().optional(),
+              })
+              .optional(),
+          })
+        )
+        .optional(),
+      tags: zod
+        .array(
+          zod.object({
+            id: zod.number().optional(),
+            name: zod.string().optional(),
+            created_at: zod.string().optional(),
+            updated_at: zod.string().optional(),
+            pivot: zod
+              .object({
+                artwork_id: zod.number().optional(),
+                tag_id: zod.number().optional(),
+              })
+              .optional(),
+          })
+        )
+        .optional(),
+    })
     .optional(),
 })
 

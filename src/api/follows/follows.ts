@@ -22,6 +22,9 @@ import type {
 import axios from '@/lib/axios'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import type {
+  CheckIfAuthenticatedUserIsFollowing200,
+  CheckIfAuthenticatedUserIsFollowing401,
+  CheckIfAuthenticatedUserIsFollowing404,
   FollowUser200,
   FollowUser401,
   FollowUser403,
@@ -534,4 +537,188 @@ export const useUnfollowUser = <
   const mutationOptions = getUnfollowUserMutationOptions(options)
 
   return useMutation(mutationOptions)
+}
+/**
+ * Check if the currently authenticated user is following a user
+ * @summary Check if Authenticated User is Following
+ */
+export const checkIfAuthenticatedUserIsFollowing = (
+  userId: number,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<CheckIfAuthenticatedUserIsFollowing200>> => {
+  return axios.get(`/api/v1/users/${userId}/is-following`, options)
+}
+
+export const getCheckIfAuthenticatedUserIsFollowingQueryKey = (
+  userId: number
+) => {
+  return [`/api/v1/users/${userId}/is-following`] as const
+}
+
+export const getCheckIfAuthenticatedUserIsFollowingQueryOptions = <
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFollowing401
+    | CheckIfAuthenticatedUserIsFollowing404
+  >,
+>(
+  userId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getCheckIfAuthenticatedUserIsFollowingQueryKey(userId)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>
+  > = ({ signal }) =>
+    checkIfAuthenticatedUserIsFollowing(userId, { signal, ...axiosOptions })
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!userId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckIfAuthenticatedUserIsFollowingQueryResult = NonNullable<
+  Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>
+>
+export type CheckIfAuthenticatedUserIsFollowingQueryError = AxiosError<
+  | CheckIfAuthenticatedUserIsFollowing401
+  | CheckIfAuthenticatedUserIsFollowing404
+>
+
+export function useCheckIfAuthenticatedUserIsFollowing<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFollowing401
+    | CheckIfAuthenticatedUserIsFollowing404
+  >,
+>(
+  userId: number,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+          TError,
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>
+        >,
+        'initialData'
+      >
+    axios?: AxiosRequestConfig
+  }
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCheckIfAuthenticatedUserIsFollowing<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFollowing401
+    | CheckIfAuthenticatedUserIsFollowing404
+  >,
+>(
+  userId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+          TError,
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>
+        >,
+        'initialData'
+      >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCheckIfAuthenticatedUserIsFollowing<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFollowing401
+    | CheckIfAuthenticatedUserIsFollowing404
+  >,
+>(
+  userId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Check if Authenticated User is Following
+ */
+
+export function useCheckIfAuthenticatedUserIsFollowing<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFollowing401
+    | CheckIfAuthenticatedUserIsFollowing404
+  >,
+>(
+  userId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getCheckIfAuthenticatedUserIsFollowingQueryOptions(
+    userId,
+    options
+  )
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
 }

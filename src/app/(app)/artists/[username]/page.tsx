@@ -3,8 +3,8 @@ import { ArtistProfile } from '@/components/artist-profile'
 export default async function Page({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ username: string }>
 }) {
-  const id = (await params).id
+  const username = (await params).username
   return <ArtistProfile />
 }

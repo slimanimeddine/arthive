@@ -5,18 +5,18 @@ import { fileUrl } from '@/lib/utils'
 import { AvatarPlaceholder } from '../avatar-placeholder'
 
 type ArtistCardProps = {
-  id: number
   fullName: string
   country: string | undefined
+  username: string
   profilePictureUrl: string | undefined
   verified: boolean
 }
 
 export function ArtistCard({
-  id,
   fullName,
   country,
   profilePictureUrl,
+  username,
   verified,
 }: ArtistCardProps) {
   return (
@@ -44,7 +44,7 @@ export function ArtistCard({
         </div>
       </div>
       <Link
-        href={`/artists/${id}`}
+        href={`/artists/${username}`}
         className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
       >
         View

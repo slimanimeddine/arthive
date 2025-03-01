@@ -14,6 +14,7 @@ export function ArtworksDisplay() {
   const tag = searchParams.get('tag')
 
   const queryParams: Record<string, string> = {
+    perPage: '12',
     ...(tag && { 'filter[tag]': tag }),
     ...(artworkSort && { sort: artworkSort }),
     ...(page && { page }),
@@ -30,6 +31,7 @@ export function ArtworksDisplay() {
       mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
       likesCount: artwork.artwork_likes_count!,
       commentsCount: artwork.artwork_comments_count!,
+      artistUsername: artwork.user!.username!,
       artistFullName: `${artwork.user?.first_name} ${artwork.user?.last_name}`,
       artistProfilePictureUrl: fileUrl(artwork.user?.photo),
     })) ?? []
@@ -55,7 +57,7 @@ export function ArtworksDisplay() {
               role="list"
               className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
             >
-              {[...Array(10)].map((_, index) => (
+              {[...Array(12)].map((_, index) => (
                 <li key={index}>
                   <ArtworkCardSkeleton />
                 </li>

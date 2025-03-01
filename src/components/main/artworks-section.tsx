@@ -30,6 +30,7 @@ export function ArtworksSection({
       mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
       likesCount: artwork.artwork_likes_count!,
       commentsCount: artwork.artwork_comments_count!,
+      artistUsername: artwork.user!.username!,
       artistFullName: `${artwork.user?.first_name} ${artwork.user?.last_name}`,
       artistProfilePictureUrl: fileUrl(artwork.user?.photo),
     })) ?? []

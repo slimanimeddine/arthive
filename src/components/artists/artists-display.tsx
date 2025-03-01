@@ -47,7 +47,7 @@ export function ArtistsDisplay() {
       profilePictureUrl: artist.photo,
       description: artist.bio,
       artworks:
-        artist.artworks?.map((artwork) => ({
+        artist.artworks?.slice(0, 3).map((artwork) => ({
           id: artwork.id!,
           mainPhotoUrl: artwork.artwork_main_photo_path!,
         })) ?? [],

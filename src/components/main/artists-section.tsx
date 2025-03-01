@@ -19,6 +19,7 @@ export function ArtistsSection({ title, viewMoreLink }: ArtistsSectionProps) {
     artistsQueryData?.map((artist) => ({
       id: artist.id!,
       fullName: `${artist.first_name} ${artist.last_name}`,
+      username: artist.username!,
       country: artist.country,
       profilePictureUrl: artist.photo,
       verified: artist.artist_verified_at ? true : false,

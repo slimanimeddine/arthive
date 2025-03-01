@@ -5,8 +5,9 @@
  * ArtHive API Documentation
  * OpenAPI spec version: 1.0.0
  */
-import type { ShowPublishedArtwork200Data } from './showPublishedArtwork200Data'
 
-export type ShowPublishedArtwork200 = {
-  data?: ShowPublishedArtwork200Data
+export type CheckIfAuthenticatedUserIsFollowing200 = {
+  message?: string
+  data?: boolean
+  status?: number
 }

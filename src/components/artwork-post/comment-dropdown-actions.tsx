@@ -15,11 +15,6 @@ const commentDropdownOptions = [
     href: '#',
     name: 'Remove',
   },
-  {
-    id: 3,
-    href: '#',
-    name: 'Report',
-  },
 ]
 
 export function CommentDropdownActions() {

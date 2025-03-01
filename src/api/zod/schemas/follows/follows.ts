@@ -140,3 +140,13 @@ export const followUserResponse = zod.object({
     })
     .optional(),
 })
+
+/**
+ * Check if the currently authenticated user is following a user
+ * @summary Check if Authenticated User is Following
+ */
+export const checkIfAuthenticatedUserIsFollowingResponse = zod.object({
+  message: zod.string().optional(),
+  data: zod.boolean().optional(),
+  status: zod.number().optional(),
+})
