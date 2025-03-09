@@ -99,12 +99,12 @@ export function FollowButton({ userId }: FollowButtonProps) {
           Follow
         </button>
       )}
-      {isFollowingQuery.isLoading && (
+      {token && !isFollowingQuery.data && isFollowingQuery.isLoading && (
         <button className="rounded-full bg-gray px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300">
           Loading...
         </button>
       )}
-      {isFollowingQuery.isSuccess && (
+      {token && isFollowingQuery.isSuccess && (
         <button
           onClick={isFollowing ? handleUnfollow : handleFollow}
           className={classNames(

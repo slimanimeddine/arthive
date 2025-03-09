@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { PostComment } from './post-comment'
 import { Comment } from './comment'
 import { useShowPublishedArtwork } from '@/api/artworks/artworks'
-import { ArtworkPostSkeleton } from '../ui-skeletons/artwork-post-skeleton'
 import { fileUrl } from '@/lib/utils'
 import { AvatarPlaceholder } from '../avatar-placeholder'
 import LikedByModal from './liked-by-modal'
@@ -16,7 +15,7 @@ export function ArtworkPost({ id }: { id: number }) {
   const artworkQuery = useShowPublishedArtwork(id)
 
   if (artworkQuery.isPending) {
-    return <ArtworkPostSkeleton />
+    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
   }
 
   if (artworkQuery.isError) {
@@ -35,45 +34,41 @@ export function ArtworkPost({ id }: { id: number }) {
     publishedAt: artworkData.created_at!,
     // photos
     mainPhotoUrl: fileUrl(artworkData.artwork_main_photo_path!)!,
-    photos:
-      artworkData
-        .artwork_photos!.filter((photo) => photo.is_main === 0)
-        .map((photo) => ({
-          id: photo.id!,
-          url: fileUrl(photo.path!)!,
-        })) ?? [],
+    photos: artworkData
+      .artwork_photos!.filter((photo) => photo.is_main === 0)
+      .map((photo) => ({
+        id: photo.id!,
+        url: fileUrl(photo.path!)!,
+      })),
     // counts
     commentsCount: artworkData.artwork_comments_count!,
     likesCount: artworkData.artwork_likes_count!,
     // liked by
-    likedBy:
-      artworkData.artwork_likes!.map((artworkLike) => ({
-        id: artworkLike.user_id!,
-        user: {
-          fullName: `${artworkLike.user!.first_name} ${artworkLike.user!.last_name}`,
-          username: artworkLike.user!.username!,
-          profilePictureUrl: fileUrl(artworkLike.user!.photo),
-        },
-      })) ?? [],
+    likedBy: artworkData.artwork_likes!.map((artworkLike) => ({
+      id: artworkLike.user_id!,
+      user: {
+        fullName: `${artworkLike.user!.first_name} ${artworkLike.user!.last_name}`,
+        username: artworkLike.user!.username!,
+        profilePictureUrl: fileUrl(artworkLike.user!.photo),
+      },
+    })),
     // comments
-    comments:
-      artworkData.artwork_comments!.map((artworkComment) => ({
-        id: artworkComment.id!,
-        content: artworkComment.comment_text!,
-        commentedAt: artworkComment.created_at!,
-        user: {
-          id: artworkComment.user_id!,
-          fullName: `${artworkComment.user!.first_name} ${artworkComment.user!.last_name}`,
-          username: artworkComment.user!.username!,
-          profilePictureUrl: fileUrl(artworkComment.user!.photo),
-        },
-      })) ?? [],
+    comments: artworkData.artwork_comments!.map((artworkComment) => ({
+      id: artworkComment.id!,
+      content: artworkComment.comment_text!,
+      commentedAt: artworkComment.created_at!,
+      user: {
+        id: artworkComment.user_id!,
+        fullName: `${artworkComment.user!.first_name} ${artworkComment.user!.last_name}`,
+        username: artworkComment.user!.username!,
+        profilePictureUrl: fileUrl(artworkComment.user!.photo),
+      },
+    })),
     // tags
-    tags:
-      artworkData.tags!.map((tag) => ({
-        id: tag.id!,
-        name: tag.name!,
-      })) ?? [],
+    tags: artworkData.tags!.map((tag) => ({
+      id: tag.id!,
+      name: tag.name!,
+    })),
     // artist
     artist: {
       id: artworkData.user!.id!,

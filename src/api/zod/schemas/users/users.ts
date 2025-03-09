@@ -15,7 +15,7 @@ export const listUsersQueryParams = zod.object({
   'filter[country]': zod.string().optional(),
   'filter[tag]': zod.string().optional(),
   'filter[verified]': zod.boolean().optional(),
-  include: zod.enum(['artworks']).optional(),
+  include: zod.enum(['publishedArtworks']).optional(),
   searchQuery: zod.string().optional(),
   sort: zod.enum(['new', 'popular']).optional(),
   page: zod.string().optional(),
@@ -39,7 +39,7 @@ export const listUsersResponse = zod.object({
         role: zod.string().optional(),
         created_at: zod.string().optional(),
         updated_at: zod.string().optional(),
-        artworks: zod
+        published_artworks: zod
           .array(
             zod.object({
               id: zod.number().optional(),

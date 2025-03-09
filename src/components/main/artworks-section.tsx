@@ -3,7 +3,6 @@ import { ArtworkCard } from '../artwork-card'
 import { useListPublishedArtworks } from '@/api/artworks/artworks'
 import { fileUrl } from '@/lib/utils'
 import { ListPublishedArtworksSort } from '@/api/model'
-import { ArtworkCardSkeleton } from '../ui-skeletons/artwork-card-skeleton'
 
 type ArtworksSectionProps = {
   title: string
@@ -21,19 +20,30 @@ export function ArtworksSection({
     perPage: 4,
   })
 
-  const artworksQueryData = artworksQuery.data?.data?.data
+  if (artworksQuery.isPending) {
+    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+  }
 
-  const artworks =
-    artworksQueryData?.map((artwork) => ({
-      id: artwork.id!,
-      title: artwork.title,
-      mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
-      likesCount: artwork.artwork_likes_count!,
-      commentsCount: artwork.artwork_comments_count!,
-      artistUsername: artwork.user!.username!,
-      artistFullName: `${artwork.user?.first_name} ${artwork.user?.last_name}`,
-      artistProfilePictureUrl: fileUrl(artwork.user?.photo),
-    })) ?? []
+  if (artworksQuery.isError) {
+    return (
+      <p className="mt-2 text-sm text-red-700">
+        We&apos;re sorry, something went wrong.
+      </p>
+    )
+  }
+
+  const artworksQueryData = artworksQuery.data!.data.data!
+
+  const artworks = artworksQueryData.map((artwork) => ({
+    id: artwork.id!,
+    title: artwork.title!,
+    mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path!)!,
+    likesCount: artwork.artwork_likes_count!,
+    commentsCount: artwork.artwork_comments_count!,
+    artistUsername: artwork.user!.username!,
+    artistFullName: `${artwork.user!.first_name} ${artwork.user!.last_name}`,
+    artistProfilePictureUrl: fileUrl(artwork.user!.photo),
+  }))
 
   return (
     <div className="bg-white">
@@ -49,25 +59,6 @@ export function ArtworksSection({
             View more <span aria-hidden="true">→</span>
           </Link>
         </div>
-        {artworksQuery.isError && (
-          <p className="mt-2 text-sm text-red-700">
-            We&apos;re sorry, something went wrong.
-          </p>
-        )}
-
-        {artworksQuery.isPending && (
-          <ul
-            role="list"
-            className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
-          >
-            {[...Array(10)].map((_, index) => (
-              <li key={index}>
-                <ArtworkCardSkeleton />
-              </li>
-            ))}
-          </ul>
-        )}
-
         {artworksQuery.isSuccess && artworks.length === 0 && (
           <p className="mt-2 text-sm text-gray-700">No artworks were found</p>
         )}

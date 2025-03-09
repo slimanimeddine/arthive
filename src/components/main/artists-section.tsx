@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { ArtistCard } from './artist-card'
 import { useListUsers } from '@/api/users/users'
-import { ArtistCardSkeleton } from '../ui-skeletons/artist-card-skeleton'
 
 type ArtistsSectionProps = {
   title: string
@@ -13,17 +12,29 @@ export function ArtistsSection({ title, viewMoreLink }: ArtistsSectionProps) {
     'filter[verified]': true,
   })
 
-  const artistsQueryData = artistsQuery.data?.data?.data
+  if (artistsQuery.isPending) {
+    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+  }
 
-  const artists =
-    artistsQueryData?.map((artist) => ({
-      id: artist.id!,
-      fullName: `${artist.first_name} ${artist.last_name}`,
-      username: artist.username!,
-      country: artist.country,
-      profilePictureUrl: artist.photo,
-      verified: artist.artist_verified_at ? true : false,
-    })) ?? []
+  if (artistsQuery.isError) {
+    return (
+      <p className="mt-2 text-sm text-red-700">
+        We&apos;re sorry, something went wrong.
+      </p>
+    )
+  }
+
+  const artistsQueryData = artistsQuery.data!.data.data!
+
+  const artists = artistsQueryData.map((artist) => ({
+    id: artist.id!,
+    fullName: `${artist.first_name} ${artist.last_name}`,
+    username: artist.username!,
+    country: artist.country,
+    profilePictureUrl: artist.photo,
+    verified: artist.artist_verified_at ? true : false,
+  }))
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
@@ -38,25 +49,6 @@ export function ArtistsSection({ title, viewMoreLink }: ArtistsSectionProps) {
             View more <span aria-hidden="true">→</span>
           </Link>
         </div>
-
-        {artistsQuery.isError && (
-          <p className="mt-2 text-sm text-red-700">
-            We&apos;re sorry, something went wrong.
-          </p>
-        )}
-
-        {artistsQuery.isPending && (
-          <ul
-            role="list"
-            className="divide-y divide-gray-100"
-          >
-            {[...Array(10)].map((_, index) => (
-              <li key={index}>
-                <ArtistCardSkeleton />
-              </li>
-            ))}
-          </ul>
-        )}
 
         {artistsQuery.isSuccess && artists.length === 0 && (
           <p className="mt-2 text-sm text-gray-700">No artists were found</p>

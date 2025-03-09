@@ -22,7 +22,7 @@ export type ListUsersParams = {
    */
   'filter[verified]'?: boolean
   /**
-   * Include artworks in the response.
+   * Include publishedArtworks in the response.
    */
   include?: ListUsersInclude
   /**

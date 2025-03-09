@@ -7,8 +7,8 @@ import Link from 'next/link'
 import { useQueryState, parseAsInteger } from 'nuqs'
 
 interface PaginationProps {
-  links: ListUsers200Links | undefined
-  meta: ListUsers200Meta | undefined
+  links: ListUsers200Links
+  meta: ListUsers200Meta
 }
 
 export function Pagination({ links, meta }: PaginationProps) {

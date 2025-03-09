@@ -5,7 +5,7 @@
  * ArtHive API Documentation
  * OpenAPI spec version: 1.0.0
  */
-import type { ListUsers200DataItemArtworksItem } from './listUsers200DataItemArtworksItem'
+import type { ListUsers200DataItemPublishedArtworksItem } from './listUsers200DataItemPublishedArtworksItem'
 
 export type ListUsers200DataItem = {
   id?: number
@@ -21,5 +21,5 @@ export type ListUsers200DataItem = {
   role?: string
   created_at?: string
   updated_at?: string
-  artworks?: ListUsers200DataItemArtworksItem[]
+  published_artworks?: ListUsers200DataItemPublishedArtworksItem[]
 }

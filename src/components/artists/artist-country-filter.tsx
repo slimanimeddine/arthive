@@ -3,17 +3,28 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'nuqs'
 
 export function ArtistCountryFilter() {
+  const [country, setCountry] = useQueryState('country')
+
   const countriesQuery = useListCountries()
 
-  const countriesQueryData = countriesQuery.data?.data?.data
+  if (countriesQuery.isPending) {
+    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+  }
 
-  const countries =
-    countriesQueryData?.map((country) => ({
-      id: country.id!,
-      name: country.name!,
-    })) ?? []
+  if (countriesQuery.isError) {
+    return (
+      <p className="mt-2 text-sm text-red-700">
+        We&apos;re sorry, something went wrong.
+      </p>
+    )
+  }
 
-  const [country, setCountry] = useQueryState('country')
+  const countriesQueryData = countriesQuery.data!.data.data!
+
+  const countries = countriesQueryData.map((country) => ({
+    id: country.id!,
+    name: country.name!,
+  }))
 
   return (
     <div className="mt-1 space-y-2">
@@ -49,25 +60,6 @@ export function ArtistCountryFilter() {
 
         <div className="border-t border-gray-200 bg-white overflow-y-scroll h-48">
           <div className="space-y-1 border-t border-gray-200 p-4">
-            {countriesQuery.isError && (
-              <p className="mt-2 text-sm text-red-700">
-                We&apos;re sorry, something went wrong.
-              </p>
-            )}
-
-            {countriesQuery.isPending &&
-              [...Array(10)].map((_, index) => (
-                <div
-                  key={index}
-                  className="flex items-center animate-pulse"
-                >
-                  <div className="inline-flex items-center gap-2 w-full">
-                    <div className="h-5 w-5 rounded-full bg-gray-200" />
-                    <div className="h-4 bg-gray-200 rounded w-20" />
-                  </div>
-                </div>
-              ))}
-
             {countriesQuery.isSuccess && countries.length === 0 && (
               <p className="mt-2 text-sm text-gray-700">
                 No countries were found

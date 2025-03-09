@@ -11,5 +11,5 @@ export type ListUsersInclude =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ListUsersInclude = {
-  artworks: 'artworks',
+  publishedArtworks: 'publishedArtworks',
 } as const

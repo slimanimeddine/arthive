@@ -5,7 +5,7 @@ import { AvatarPlaceholder } from './avatar-placeholder'
 
 type ArtworkCardProps = {
   id: number
-  title: string | undefined
+  title: string
   mainPhotoUrl: string
   likesCount: number
   commentsCount: number

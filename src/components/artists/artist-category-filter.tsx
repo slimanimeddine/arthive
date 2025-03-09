@@ -3,17 +3,29 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'nuqs'
 
 export function ArtistCategoryFilter() {
+  const [category, setCategory] = useQueryState('category')
+
   const tagsQuery = useListTags()
 
-  const tagsQueryData = tagsQuery.data?.data?.data
+  if (tagsQuery.isPending) {
+    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+  }
 
-  const categories =
-    tagsQueryData?.map((tag) => ({
-      id: tag.id!,
-      title: tag.name!,
-    })) ?? []
+  if (tagsQuery.isError) {
+    return (
+      <p className="mt-2 text-sm text-red-700">
+        We&apos;re sorry, something went wrong.
+      </p>
+    )
+  }
 
-  const [category, setCategory] = useQueryState('category')
+  const tagsQueryData = tagsQuery.data!.data.data!
+
+  const categories = tagsQueryData.map((tag) => ({
+    id: tag.id!,
+    title: tag.name!,
+  }))
+
   return (
     <div className="mt-1 space-y-2">
       <details className="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
@@ -48,25 +60,6 @@ export function ArtistCategoryFilter() {
 
         <div className="border-t border-gray-200 bg-white overflow-y-scroll h-48">
           <div className="space-y-1 border-t border-gray-200 p-4">
-            {tagsQuery.isError && (
-              <p className="mt-2 text-sm text-red-700">
-                We&apos;re sorry, something went wrong.
-              </p>
-            )}
-
-            {tagsQuery.isPending &&
-              [...Array(10)].map((_, index) => (
-                <div
-                  key={index}
-                  className="flex items-center animate-pulse"
-                >
-                  <div className="inline-flex items-center gap-2 w-full">
-                    <div className="h-5 w-5 rounded-full bg-gray-200" />
-                    <div className="h-4 bg-gray-200 rounded w-20" />
-                  </div>
-                </div>
-              ))}
-
             {tagsQuery.isSuccess && categories.length === 0 && (
               <p className="mt-2 text-sm text-gray-700">
                 No categories were found

@@ -1,6 +1,5 @@
 'use client'
 import { signInBody } from '@/schemas/authentication'
-// import Link from 'next/link'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
@@ -36,8 +35,8 @@ export function SignInForm() {
           reset()
           createSessionMutation.mutate(
             {
-              id: data?.data?.data?.id as number,
-              token: data?.data?.data?.token as string,
+              id: data.data.data!.id!,
+              token: data.data.data!.token!,
             },
             {
               onError: (error) => onError(error),
@@ -89,14 +88,6 @@ export function SignInForm() {
           >
             Password
           </label>
-          {/* <div className="text-sm">
-            <Link
-              href="/forgot-password"
-              className="font-semibold text-indigo-600 hover:text-indigo-500"
-            >
-              Forgot password?
-            </Link>
-          </div> */}
         </div>
         <div className="mt-2">
           <input

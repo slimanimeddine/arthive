@@ -23,19 +23,30 @@ const sortOptions = [
 ]
 
 export function SortFilterArtworks() {
-  const tagsQuery = useListTags()
-
-  const tagsQueryData = tagsQuery.data?.data?.data
-
-  const filters =
-    tagsQueryData?.map((tag) => ({
-      id: tag.id!,
-      title: tag.name!,
-    })) ?? []
-
   const [tag, setTag] = useQueryState('tag')
 
   const [artworkSort, setArtworkSort] = useQueryState('artworkSort')
+
+  const tagsQuery = useListTags()
+
+  if (tagsQuery.isPending) {
+    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+  }
+
+  if (tagsQuery.isError) {
+    return (
+      <p className="mt-2 text-sm text-red-700">
+        We&apos;re sorry, something went wrong.
+      </p>
+    )
+  }
+
+  const tagsQueryData = tagsQuery.data!.data.data!
+
+  const filters = tagsQueryData.map((tag) => ({
+    id: tag.id!,
+    title: tag.name!,
+  }))
 
   return (
     <div className="bg-white">
@@ -71,22 +82,6 @@ export function SortFilterArtworks() {
               onChange={setTag}
               className="flex flex-wrap gap-2 justify-end"
             >
-              {tagsQuery.isError && (
-                <p className="mt-2 text-sm text-red-700">
-                  We&apos;re sorry, something went wrong.
-                </p>
-              )}
-
-              {tagsQuery.isPending &&
-                [...Array(10)].map((_, index) => (
-                  <div
-                    key={index}
-                    className="whitespace-nowrap flex items-center justify-center rounded-md bg-gray-300 p-2 text-xs font-semibold sm:flex-1 animate-pulse"
-                  >
-                    <span></span>
-                  </div>
-                ))}
-
               {tagsQuery.isSuccess && filters.length === 0 && (
                 <p className="mt-2 text-sm text-gray-700">
                   No filters were found

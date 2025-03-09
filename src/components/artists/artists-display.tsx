@@ -15,7 +15,6 @@ import { ArtistCategoryFilter } from './artist-category-filter'
 import { ArtistCountryFilter } from './artist-country-filter'
 import { useListUsers } from '@/api/users/users'
 import { useSearchParams } from 'next/navigation'
-import { ArtistCardSkeleton2 } from '../ui-skeletons/artist-card-skeleton-2'
 
 export function ArtistsDisplay() {
   const [open, setOpen] = useState(false)
@@ -27,7 +26,7 @@ export function ArtistsDisplay() {
   const country = searchParams.get('country')
 
   const queryParams: Record<string, string> = {
-    include: 'artworks',
+    include: 'publishedArtworks',
     ...(country && { 'filter[country]': country }),
     ...(category && { 'filter[tag]': category }),
     ...(artistSort && { sort: artistSort }),
@@ -36,25 +35,35 @@ export function ArtistsDisplay() {
 
   const artistsQuery = useListUsers(queryParams)
 
-  const artistsQueryData = artistsQuery.data?.data?.data
+  if (artistsQuery.isPending) {
+    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+  }
 
-  const artists =
-    artistsQueryData?.map((artist) => ({
-      id: artist.id!,
-      fullName: `${artist.first_name} ${artist.last_name}`,
-      username: artist.username!,
-      country: artist.country,
-      profilePictureUrl: artist.photo,
-      description: artist.bio,
-      artworks:
-        artist.artworks?.slice(0, 3).map((artwork) => ({
-          id: artwork.id!,
-          mainPhotoUrl: artwork.artwork_main_photo_path!,
-        })) ?? [],
-    })) ?? []
+  if (artistsQuery.isError) {
+    return (
+      <p className="mt-2 text-sm text-red-700">
+        We&apos;re sorry, something went wrong.
+      </p>
+    )
+  }
 
-  const links = artistsQuery?.data?.data?.links || {}
-  const meta = artistsQuery?.data?.data?.meta || {}
+  const artistsQueryData = artistsQuery.data!.data.data!
+
+  const artists = artistsQueryData.map((artist) => ({
+    id: artist.id!,
+    fullName: `${artist.first_name} ${artist.last_name}`,
+    username: artist.username!,
+    country: artist.country,
+    profilePictureUrl: artist.photo,
+    description: artist.bio,
+    artworks: artist.published_artworks!.slice(0, 3).map((artwork) => ({
+      id: artwork.id!,
+      mainPhotoUrl: artwork.artwork_main_photo_path!,
+    })),
+  }))
+
+  const links = artistsQuery.data!.data.links!
+  const meta = artistsQuery.data!.data.meta!
 
   return (
     <>
@@ -137,25 +146,6 @@ export function ArtistsDisplay() {
           </div>
 
           <div className="lg:col-span-3">
-            {artistsQuery.isError && (
-              <p className="mt-2 text-sm text-red-700">
-                We&apos;re sorry, something went wrong.
-              </p>
-            )}
-
-            {artistsQuery.isPending && (
-              <ul
-                role="list"
-                className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2"
-              >
-                {[...Array(10)].map((_, index) => (
-                  <li key={index}>
-                    <ArtistCardSkeleton2 />
-                  </li>
-                ))}
-              </ul>
-            )}
-
             {artistsQuery.isSuccess && artists.length === 0 && (
               <p className="mt-2 text-sm text-gray-700">
                 No artists were found
