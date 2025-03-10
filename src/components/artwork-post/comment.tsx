@@ -4,6 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { CommentDropdownActions } from './comment-dropdown-actions'
 import { AvatarPlaceholder } from '../avatar-placeholder'
+import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
+import { useShowAuthenticatedUser } from '@/api/users/users'
 
 type CommentProps = {
   id: number
@@ -18,6 +20,24 @@ type CommentProps = {
 }
 
 export function Comment({ id, content, commentedAt, user }: CommentProps) {
+  const token = useGetAuthenticatedUserToken()
+
+  const axiosConfig = token
+    ? {
+        axios: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      }
+    : undefined
+
+  const authenticatedUserQuery = useShowAuthenticatedUser(axiosConfig)
+
+  const authenticatedUser = authenticatedUserQuery.data?.data.data
+
+  const isOwner = authenticatedUser?.id === user.id
+
   return (
     <article
       id={`${id}`}
@@ -54,7 +74,7 @@ export function Comment({ id, content, commentedAt, user }: CommentProps) {
             </time>
           </p>
         </div>
-        <CommentDropdownActions />
+        {isOwner && <CommentDropdownActions />}
       </footer>
       <Link
         href={`#${id}`}

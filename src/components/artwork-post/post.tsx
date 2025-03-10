@@ -220,7 +220,7 @@ export function ArtworkPost({ id }: { id: number }) {
                 Comments ({artwork.commentsCount})
               </h2>
             </div>
-            <PostComment />
+            <PostComment artworkId={artwork.id} />
             {artwork.comments.length > 0 && (
               <div className="divide-y">
                 {artwork.comments.map((comment) => (
