@@ -106,3 +106,13 @@ export const markArtworkAsFavoriteResponse = zod.object({
     })
     .optional(),
 })
+
+/**
+ * Check if the currently authenticated user is favoriting an artwork
+ * @summary Check if Authenticated User is Favoriting
+ */
+export const checkIfAuthenticatedUserIsFavoritingResponse = zod.object({
+  message: zod.string().optional(),
+  data: zod.boolean().optional(),
+  status: zod.number().optional(),
+})

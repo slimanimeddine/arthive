@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import { BookmarkIcon, HandThumbUpIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { PostComment } from './post-comment'
 import { Comment } from './comment'
@@ -10,6 +9,8 @@ import { fileUrl } from '@/lib/utils'
 import { AvatarPlaceholder } from '../avatar-placeholder'
 import LikedByModal from './liked-by-modal'
 import { FollowButton } from './follow-button'
+import { LikeButton } from './like-button'
+import { FavoriteButton } from './favorite-button'
 
 export function ArtworkPost({ id }: { id: number }) {
   const artworkQuery = useShowPublishedArtwork(id)
@@ -29,6 +30,7 @@ export function ArtworkPost({ id }: { id: number }) {
   const artworkData = artworkQuery.data!.data.data!
 
   const artwork = {
+    id: artworkData.id!,
     title: artworkData.title!,
     description: artworkData.description!,
     publishedAt: artworkData.created_at!,
@@ -203,13 +205,9 @@ export function ArtworkPost({ id }: { id: number }) {
               <span className="font-semibold text-md border-r px-4">
                 Likes {artwork.likesCount}
               </span>
-              <button>
-                <HandThumbUpIcon className="h-6 w-6" />
-              </button>
+              <LikeButton artworkId={artwork.id} />
             </div>
-            <button>
-              <BookmarkIcon className="h-6 w-6" />
-            </button>
+            <FavoriteButton artworkId={artwork.id} />
           </div>
         </div>
 

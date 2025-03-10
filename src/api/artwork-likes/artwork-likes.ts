@@ -22,6 +22,9 @@ import type {
 import axios from '@/lib/axios'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import type {
+  CheckIfAuthenticatedUserIsLiking200,
+  CheckIfAuthenticatedUserIsLiking401,
+  CheckIfAuthenticatedUserIsLiking404,
   LikeArtwork200,
   LikeArtwork401,
   LikeArtwork403,
@@ -541,4 +544,182 @@ export const useUnlikeArtwork = <
   const mutationOptions = getUnlikeArtworkMutationOptions(options)
 
   return useMutation(mutationOptions)
+}
+/**
+ * Check if the currently authenticated user is liking an artwork
+ * @summary Check if Authenticated User is Liking
+ */
+export const checkIfAuthenticatedUserIsLiking = (
+  artworkId: number,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<CheckIfAuthenticatedUserIsLiking200>> => {
+  return axios.get(`/api/v1/artworks/${artworkId}/is-liking`, options)
+}
+
+export const getCheckIfAuthenticatedUserIsLikingQueryKey = (
+  artworkId: number
+) => {
+  return [`/api/v1/artworks/${artworkId}/is-liking`] as const
+}
+
+export const getCheckIfAuthenticatedUserIsLikingQueryOptions = <
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+  TError = AxiosError<
+    CheckIfAuthenticatedUserIsLiking401 | CheckIfAuthenticatedUserIsLiking404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getCheckIfAuthenticatedUserIsLikingQueryKey(artworkId)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>
+  > = ({ signal }) =>
+    checkIfAuthenticatedUserIsLiking(artworkId, { signal, ...axiosOptions })
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!artworkId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckIfAuthenticatedUserIsLikingQueryResult = NonNullable<
+  Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>
+>
+export type CheckIfAuthenticatedUserIsLikingQueryError = AxiosError<
+  CheckIfAuthenticatedUserIsLiking401 | CheckIfAuthenticatedUserIsLiking404
+>
+
+export function useCheckIfAuthenticatedUserIsLiking<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+  TError = AxiosError<
+    CheckIfAuthenticatedUserIsLiking401 | CheckIfAuthenticatedUserIsLiking404
+  >,
+>(
+  artworkId: number,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+          TError,
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>
+        >,
+        'initialData'
+      >
+    axios?: AxiosRequestConfig
+  }
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCheckIfAuthenticatedUserIsLiking<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+  TError = AxiosError<
+    CheckIfAuthenticatedUserIsLiking401 | CheckIfAuthenticatedUserIsLiking404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+          TError,
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>
+        >,
+        'initialData'
+      >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCheckIfAuthenticatedUserIsLiking<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+  TError = AxiosError<
+    CheckIfAuthenticatedUserIsLiking401 | CheckIfAuthenticatedUserIsLiking404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Check if Authenticated User is Liking
+ */
+
+export function useCheckIfAuthenticatedUserIsLiking<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+  TError = AxiosError<
+    CheckIfAuthenticatedUserIsLiking401 | CheckIfAuthenticatedUserIsLiking404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getCheckIfAuthenticatedUserIsLikingQueryOptions(
+    artworkId,
+    options
+  )
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
 }

@@ -49,3 +49,13 @@ export const likeArtworkResponse = zod.object({
     })
     .optional(),
 })
+
+/**
+ * Check if the currently authenticated user is liking an artwork
+ * @summary Check if Authenticated User is Liking
+ */
+export const checkIfAuthenticatedUserIsLikingResponse = zod.object({
+  message: zod.string().optional(),
+  data: zod.boolean().optional(),
+  status: zod.number().optional(),
+})

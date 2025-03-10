@@ -22,6 +22,9 @@ import type {
 import axios from '@/lib/axios'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import type {
+  CheckIfAuthenticatedUserIsFavoriting200,
+  CheckIfAuthenticatedUserIsFavoriting401,
+  CheckIfAuthenticatedUserIsFavoriting404,
   ListAuthenticatedUserFavoriteArtworks200,
   ListAuthenticatedUserFavoriteArtworks401,
   ListAuthenticatedUserFavoriteArtworksParams,
@@ -386,4 +389,191 @@ export const useRemoveArtworkFromFavorites = <
   const mutationOptions = getRemoveArtworkFromFavoritesMutationOptions(options)
 
   return useMutation(mutationOptions)
+}
+/**
+ * Check if the currently authenticated user is favoriting an artwork
+ * @summary Check if Authenticated User is Favoriting
+ */
+export const checkIfAuthenticatedUserIsFavoriting = (
+  artworkId: number,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<CheckIfAuthenticatedUserIsFavoriting200>> => {
+  return axios.get(
+    `/api/v1/artworks/${artworkId}/favorites/is-favoriting`,
+    options
+  )
+}
+
+export const getCheckIfAuthenticatedUserIsFavoritingQueryKey = (
+  artworkId: number
+) => {
+  return [`/api/v1/artworks/${artworkId}/favorites/is-favoriting`] as const
+}
+
+export const getCheckIfAuthenticatedUserIsFavoritingQueryOptions = <
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFavoriting401
+    | CheckIfAuthenticatedUserIsFavoriting404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getCheckIfAuthenticatedUserIsFavoritingQueryKey(artworkId)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>
+  > = ({ signal }) =>
+    checkIfAuthenticatedUserIsFavoriting(artworkId, { signal, ...axiosOptions })
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!artworkId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckIfAuthenticatedUserIsFavoritingQueryResult = NonNullable<
+  Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>
+>
+export type CheckIfAuthenticatedUserIsFavoritingQueryError = AxiosError<
+  | CheckIfAuthenticatedUserIsFavoriting401
+  | CheckIfAuthenticatedUserIsFavoriting404
+>
+
+export function useCheckIfAuthenticatedUserIsFavoriting<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFavoriting401
+    | CheckIfAuthenticatedUserIsFavoriting404
+  >,
+>(
+  artworkId: number,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+          TError,
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>
+        >,
+        'initialData'
+      >
+    axios?: AxiosRequestConfig
+  }
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCheckIfAuthenticatedUserIsFavoriting<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFavoriting401
+    | CheckIfAuthenticatedUserIsFavoriting404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+          TError,
+          Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>
+        >,
+        'initialData'
+      >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCheckIfAuthenticatedUserIsFavoriting<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFavoriting401
+    | CheckIfAuthenticatedUserIsFavoriting404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Check if Authenticated User is Favoriting
+ */
+
+export function useCheckIfAuthenticatedUserIsFavoriting<
+  TData = Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+  TError = AxiosError<
+    | CheckIfAuthenticatedUserIsFavoriting401
+    | CheckIfAuthenticatedUserIsFavoriting404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getCheckIfAuthenticatedUserIsFavoritingQueryOptions(
+    artworkId,
+    options
+  )
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
 }
