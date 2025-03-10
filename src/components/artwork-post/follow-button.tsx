@@ -16,107 +16,95 @@ type FollowButtonProps = {
 
 export function FollowButton({ userId }: FollowButtonProps) {
   const token = useGetAuthenticatedUserToken()
+  const router = useRouter()
+  const queryClient = useQueryClient()
 
-  const isFollowingQuery = useCheckIfAuthenticatedUserIsFollowing(userId, {
-    axios: {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  })
+  const axiosConfig = token
+    ? {
+        axios: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      }
+    : undefined
+
+  const isFollowingQuery = useCheckIfAuthenticatedUserIsFollowing(
+    userId,
+    axiosConfig
+  )
 
   const isFollowing = isFollowingQuery.data?.data.data
 
-  const followUserMutation = useFollowUser({
-    axios: {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  })
+  const followUserMutation = useFollowUser(axiosConfig)
+  const unfollowUserMutation = useUnfollowUser(axiosConfig)
 
-  const unfollowUserMutation = useUnfollowUser({
-    axios: {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  })
+  const invalidateFollowQueries = () => {
+    queryClient.invalidateQueries({
+      queryKey: ['/api/v1/users/me/follows/following'],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`/api/v1/users/${userId}/is-following`],
+    })
+  }
 
-  const router = useRouter()
-
-  const queryClient = useQueryClient()
-
-  function handleUnfollow() {
+  const handleFollowToggle = (isCurrentlyFollowing: boolean) => {
     if (!token || isFollowing === undefined) {
-      router.push('/sign-in')
+      return router.push('/sign-in')
     }
-    unfollowUserMutation.mutate(
+
+    const mutation = isCurrentlyFollowing
+      ? unfollowUserMutation
+      : followUserMutation
+
+    mutation.mutate(
       { userId },
       {
-        onError: (error) => onError(error),
+        onError,
         onSuccess: () => {
-          toast.success('User unfollowed successfully')
-          queryClient.invalidateQueries({
-            queryKey: ['/api/v1/users/me/follows/following'],
-          })
-          queryClient.invalidateQueries({
-            queryKey: [`/api/v1/users/${userId}/is-following`],
-          })
+          toast.success(
+            isCurrentlyFollowing
+              ? 'User unfollowed successfully'
+              : 'User followed successfully'
+          )
+          invalidateFollowQueries()
         },
       }
     )
   }
 
-  function handleFollow() {
-    if (!token || isFollowing === undefined) {
-      router.push('/sign-in')
-    }
+  if (token === undefined) return null
 
-    followUserMutation.mutate(
-      { userId },
-      {
-        onError: (error) => onError(error),
-        onSuccess: () => {
-          toast.success('User followed successfully')
-          queryClient.invalidateQueries({
-            queryKey: ['/api/v1/users/me/follows/following'],
-          })
-          queryClient.invalidateQueries({
-            queryKey: [`/api/v1/users/${userId}/is-following`],
-          })
-        },
-      }
+  if (!token) {
+    return (
+      <button
+        onClick={() => router.push('/sign-in')}
+        className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+      >
+        Follow
+      </button>
     )
   }
+
+  if (isFollowingQuery.isLoading) {
+    return (
+      <button className="rounded-full bg-gray px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300">
+        Loading...
+      </button>
+    )
+  }
+
   return (
-    <>
-      {!token && (
-        <button
-          onClick={() => router.push('/sign-in')}
-          className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-        >
-          Follow
-        </button>
+    <button
+      onClick={() => handleFollowToggle(!!isFollowing)}
+      className={classNames(
+        'rounded-full px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset',
+        isFollowing
+          ? 'bg-indigo-600 text-white hover:bg-indigo-500'
+          : 'text-gray-900 bg-white ring-gray-300 hover:bg-gray-50'
       )}
-      {token && !isFollowingQuery.data && isFollowingQuery.isLoading && (
-        <button className="rounded-full bg-gray px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300">
-          Loading...
-        </button>
-      )}
-      {token && isFollowingQuery.isSuccess && (
-        <button
-          onClick={isFollowing ? handleUnfollow : handleFollow}
-          className={classNames(
-            'rounded-full  px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ',
-            isFollowing
-              ? 'bg-indigo-600 text-white hover:bg-indigo-500'
-              : 'text-gray-900 bg-white ring-gray-300 hover:bg-gray-50'
-          )}
-        >
-          {isFollowing ? 'Following' : 'Follow'}
-        </button>
-      )}
-    </>
+    >
+      {isFollowing ? 'Following' : 'Follow'}
+    </button>
   )
 }

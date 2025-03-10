@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
+
 export type SessionPayload = {
   id: number
   token: string
