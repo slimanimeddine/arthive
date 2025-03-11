@@ -6,11 +6,14 @@ import { CommentDropdownActions } from './comment-dropdown-actions'
 import { AvatarPlaceholder } from '../avatar-placeholder'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import { useShowAuthenticatedUser } from '@/api/users/users'
+import { EditComment } from './edit-comment'
+import { useEditCommentStore } from '@/stores/edit-comment-store'
 
 type CommentProps = {
   id: number
   content: string
   commentedAt: string
+  artworkId: number
   user: {
     id: number
     fullName: string
@@ -19,8 +22,15 @@ type CommentProps = {
   }
 }
 
-export function Comment({ id, content, commentedAt, user }: CommentProps) {
+export function Comment({
+  id,
+  content,
+  commentedAt,
+  artworkId,
+  user,
+}: CommentProps) {
   const token = useGetAuthenticatedUserToken()
+  const formVisble = useEditCommentStore((state) => state.formVisble)
 
   const axiosConfig = token
     ? {
@@ -74,14 +84,27 @@ export function Comment({ id, content, commentedAt, user }: CommentProps) {
             </time>
           </p>
         </div>
-        {isOwner && <CommentDropdownActions />}
+        {isOwner && (
+          <CommentDropdownActions
+            commentId={id}
+            artworkId={artworkId}
+          />
+        )}
       </footer>
-      <Link
-        href={`#${id}`}
-        className="text-gray-500 dark:text-gray-400"
-      >
-        {content}
-      </Link>
+      {isOwner && formVisble ? (
+        <EditComment
+          defaultContent={content}
+          commentId={id}
+          artworkId={artworkId}
+        />
+      ) : (
+        <Link
+          href={`#${id}`}
+          className="text-gray-500 dark:text-gray-400"
+        >
+          {content}
+        </Link>
+      )}
     </article>
   )
 }

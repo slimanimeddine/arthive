@@ -29,7 +29,7 @@ export function SignUpForm() {
         onSuccess: () => {
           toast.success('Account created successfully!')
           reset()
-          router.push('/sign-in')
+          router.back()
         },
       }
     )

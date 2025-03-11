@@ -77,6 +77,11 @@ export function PostComment({ artworkId }: PostCommentProps) {
           defaultValue={''}
           {...register('comment_text')}
         />
+        {formState.errors.comment_text && (
+          <p className="mt-2 text-sm text-red-600">
+            {formState.errors.comment_text.message}
+          </p>
+        )}
       </div>
       <button
         disabled={isDisabled}

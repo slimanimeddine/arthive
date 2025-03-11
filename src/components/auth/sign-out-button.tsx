@@ -20,7 +20,7 @@ export function SignOutButton() {
 
   const router = useRouter()
 
-  function onSubmit() {
+  function onSignOut() {
     signOutMutation.mutate(undefined, {
       onSuccess: () => {
         console.log('signed out from backend')
@@ -28,7 +28,7 @@ export function SignOutButton() {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['session'] })
             toast.success('You have been signed out')
-            router.push('/')
+            router.back()
           },
           onError: (error) => onError(error),
         })
@@ -44,7 +44,7 @@ export function SignOutButton() {
 
   return (
     <button
-      onClick={onSubmit}
+      onClick={onSignOut}
       type="submit"
       disabled={isDisabled}
       className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

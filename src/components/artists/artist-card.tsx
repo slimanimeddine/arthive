@@ -1,6 +1,7 @@
 import { fileUrl } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
+import { FollowButton } from './follow-button'
 
 type Artwork = {
   id: number
@@ -8,6 +9,7 @@ type Artwork = {
 }
 
 type ArtistCardProps = {
+  id: number
   fullName: string
   username: string
   country: string | undefined
@@ -17,6 +19,7 @@ type ArtistCardProps = {
 }
 
 export function ArtistCard({
+  id,
   fullName,
   username,
   country,
@@ -59,10 +62,7 @@ export function ArtistCard({
               <h3 className="font-medium sm:text-lg">
                 <Link href={`/artists/${username}`}>{fullName}</Link>
               </h3>
-
-              <button className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                Follow
-              </button>
+              <FollowButton userId={id} />
             </div>
 
             <p className="line-clamp-2 text-sm text-gray-700">{description}</p>

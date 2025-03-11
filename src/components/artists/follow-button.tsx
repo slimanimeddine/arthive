@@ -19,7 +19,7 @@ export function FollowButton({ userId }: FollowButtonProps) {
     return (
       <button
         onClick={() => router.push('/sign-in')}
-        className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
       >
         Follow
       </button>
@@ -28,7 +28,7 @@ export function FollowButton({ userId }: FollowButtonProps) {
 
   if (isLoading) {
     return (
-      <button className="rounded-full bg-gray px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300">
+      <button className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
         Loading...
       </button>
     )
@@ -38,7 +38,7 @@ export function FollowButton({ userId }: FollowButtonProps) {
     <button
       onClick={() => handleFollowToggle(!!isFollowing)}
       className={classNames(
-        'rounded-full px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset',
+        'rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ring-1 ring-inset',
         isFollowing
           ? 'bg-indigo-600 text-white hover:bg-indigo-500'
           : 'text-gray-900 bg-white ring-gray-300 hover:bg-gray-50'

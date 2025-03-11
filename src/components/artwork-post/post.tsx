@@ -59,6 +59,7 @@ export function ArtworkPost({ id }: { id: number }) {
       id: artworkComment.id!,
       content: artworkComment.comment_text!,
       commentedAt: artworkComment.created_at!,
+      artworkId: artworkComment.artwork_id!,
       user: {
         id: artworkComment.user_id!,
         fullName: `${artworkComment.user!.first_name} ${artworkComment.user!.last_name}`,
