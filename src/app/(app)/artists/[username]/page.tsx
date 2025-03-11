@@ -6,5 +6,5 @@ export default async function Page({
   params: Promise<{ username: string }>
 }) {
   const username = (await params).username
-  return <ArtistProfile />
+  return <ArtistProfile username={username} />
 }

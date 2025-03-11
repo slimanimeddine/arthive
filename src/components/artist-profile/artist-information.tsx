@@ -1,79 +1,95 @@
 'use client'
-
-import { HeartIcon } from '@heroicons/react/24/outline'
-import { StarIcon } from '@heroicons/react/24/solid'
+import { useShowUser } from '@/api/users/users'
+import { fileUrl } from '@/lib/utils'
+import { CheckBadgeIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
+import { notFound } from 'next/navigation'
+import { RatingsByTag } from './ratings-by-tag'
 
-const categoriesRatings = [
-  {
-    id: 1,
-    category: 'Painting',
-    stars: 12,
-  },
-  {
-    id: 2,
-    category: 'Photography',
-    stars: 32,
-  },
-  {
-    id: 3,
-    category: 'Sculpture',
-    stars: 62,
-  },
-  {
-    id: 4,
-    category: 'Digital Art',
-    stars: 82,
-  },
-  {
-    id: 5,
-    category: 'Mixed Media',
-    stars: 92,
-  },
-  {
-    id: 6,
-    category: 'Prints',
-    stars: 62,
-  },
-  {
-    id: 7,
-    category: 'Drawing',
-    stars: 32,
-  },
-  {
-    id: 8,
-    category: 'Textile Arts',
-    stars: 52,
-  },
-]
+type ArtistInformationProps = {
+  username: string
+}
 
-export function ArtistInformation() {
+export function ArtistInformation({ username }: ArtistInformationProps) {
+  const artistInformationQuery = useShowUser(username)
+
+  if (artistInformationQuery.isPending) {
+    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+  }
+
+  if (artistInformationQuery.isError) {
+    if (artistInformationQuery.error?.response?.status === 404) {
+      notFound()
+    }
+
+    return (
+      <div className="h-screen">
+        <p className="mt-2 text-sm text-red-700">
+          {artistInformationQuery.error?.response?.data.message}
+        </p>
+      </div>
+    )
+  }
+
+  const artistInformationData = artistInformationQuery.data!.data.data!
+
+  const artistInformation = {
+    id: artistInformationData.id!,
+    fullName: `${artistInformationData.first_name} ${artistInformationData.last_name}`,
+    username: artistInformationData.username!,
+    description: artistInformationData.bio,
+    profilePictureUrl: fileUrl(artistInformationData.photo),
+    country: artistInformationData.country,
+    dateJoined: artistInformationData.created_at!,
+    verified: artistInformationData.artist_verified_at ? true : false,
+  }
+
   return (
     <div className="flex h-full flex-col overflow-y-scroll bg-white">
       <div>
         <div className="pb-1 sm:pb-6">
           <div>
-            <div className="relative h-40 sm:h-56">
-              <Image
-                alt=""
-                src="https://images.unsplash.com/photo-1501031170107-cfd33f0cbdcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80"
-                className="absolute h-full w-full object-cover rounded-lg"
-                height={600}
-                width={800}
-              />
+            <div>
+              {artistInformation.profilePictureUrl ? (
+                <div className="relative h-40 sm:h-56">
+                  <Image
+                    alt=""
+                    src={artistInformation.profilePictureUrl}
+                    className="absolute h-full w-full object-cover rounded-lg"
+                    height={600}
+                    width={800}
+                  />
+                </div>
+              ) : (
+                <div
+                  className={
+                    'inline-block overflow-hidden rounded-lg bg-gray-100 w-[400px] h-[200px] xs:w-full'
+                  }
+                >
+                  <svg
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    className="h-full w-full text-gray-300"
+                  >
+                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+              )}
             </div>
             <div className="mt-6 px-4 sm:mt-8 sm:flex sm:items-end sm:px-6">
               <div className="sm:flex-1">
                 <div>
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-2">
                     <h3 className="text-xl font-bold text-gray-900 sm:text-2xl">
-                      Ashley Porter
+                      {artistInformation.fullName}
                     </h3>
-                    <span className="ml-2.5 inline-block h-2 w-2 flex-shrink-0 rounded-full bg-green-400">
-                      <span className="sr-only">Online</span>
-                    </span>
+                    {artistInformation.verified && (
+                      <CheckBadgeIcon className="h-5 w-5 text-green-500" />
+                    )}
                   </div>
-                  <p className="text-sm text-gray-500">@ashleyporter</p>
+                  <p className="text-sm text-gray-500">
+                    @{artistInformation.username}
+                  </p>
                 </div>
                 <div className="mt-5 flex flex-wrap space-y-3 sm:space-x-3 sm:space-y-0">
                   <button
@@ -81,12 +97,6 @@ export function ArtistInformation() {
                     className="inline-flex w-full flex-shrink-0 items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:flex-1"
                   >
                     Follow
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex w-full flex-1 items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  >
-                    Message
                   </button>
                 </div>
               </div>
@@ -100,12 +110,7 @@ export function ArtistInformation() {
                 Bio
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                <p>
-                  Enim feugiat ut ipsum, neque ut. Tristique mi id elementum
-                  praesent. Gravida in tempus feugiat netus enim aliquet a, quam
-                  scelerisque. Dictumst in convallis nec in bibendum aenean
-                  arcu.
-                </p>
+                <p>{artistInformation.description ?? 'Unknown'}</p>
               </dd>
             </div>
             <div>
@@ -113,7 +118,7 @@ export function ArtistInformation() {
                 Country
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                United States
+                {artistInformationData.country ?? 'Unknown'}
               </dd>
             </div>
             <div>
@@ -121,36 +126,12 @@ export function ArtistInformation() {
                 Date joined
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                <time dateTime="2020-01-07">January 7, 2020</time>
+                <time dateTime="2020-01-07">
+                  {new Date(artistInformation.dateJoined).toDateString()}
+                </time>
               </dd>
             </div>
-            <div>
-              <div className="flex items-center justify-between">
-                <h3 className="font-medium text-gray-900">Total ratings</h3>
-                <div className="flex items-center gap-x-1">
-                  <StarIcon className="h-5 w-5 text-yellow-400" />
-                  <span className="text-sm text-gray-900 font-medium">
-                    35966
-                  </span>
-                </div>
-              </div>
-              <dl className="mt-2">
-                {categoriesRatings.map((categoryRating) => (
-                  <div
-                    key={categoryRating.id}
-                    className="flex justify-between py-3 text-sm font-medium"
-                  >
-                    <dt className="text-gray-500">{categoryRating.category}</dt>
-                    <div className="flex items-center gap-x-1">
-                      <HeartIcon className="h-5 w-5" />
-                      <span className="text-sm text-gray-900 font-medium">
-                        {categoryRating.stars}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </dl>
-            </div>
+            <RatingsByTag username={username} />
           </dl>
         </div>
       </div>

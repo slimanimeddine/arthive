@@ -11,6 +11,7 @@ import LikedByModal from './liked-by-modal'
 import { FollowButton } from './follow-button'
 import { LikeButton } from './like-button'
 import { FavoriteButton } from './favorite-button'
+import { notFound } from 'next/navigation'
 
 export function ArtworkPost({ id }: { id: number }) {
   const artworkQuery = useShowPublishedArtwork(id)
@@ -20,10 +21,15 @@ export function ArtworkPost({ id }: { id: number }) {
   }
 
   if (artworkQuery.isError) {
+    if (artworkQuery.error?.response?.status === 404) {
+      notFound()
+    }
     return (
-      <p className="mt-2 text-sm text-red-700">
-        We&apos;re sorry, something went wrong.
-      </p>
+      <div className="h-screen">
+        <p className="mt-2 text-sm text-red-700">
+          {artworkQuery.error?.response?.data.message}
+        </p>
+      </div>
     )
   }
 

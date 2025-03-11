@@ -10,6 +10,7 @@ export function ArtworksDisplay() {
   const searchParams = useSearchParams()
   const page = searchParams.get('page')
   const artworkSort = searchParams.get('artworkSort')
+
   const tag = searchParams.get('tag')
 
   const queryParams: Record<string, string> = {

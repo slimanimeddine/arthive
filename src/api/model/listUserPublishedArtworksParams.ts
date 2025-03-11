@@ -6,12 +6,17 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ListUserPublishedArtworksFilterTag } from './listUserPublishedArtworksFilterTag'
+import type { ListUserPublishedArtworksSort } from './listUserPublishedArtworksSort'
 
 export type ListUserPublishedArtworksParams = {
   /**
    * Filter artworks by tag.
    */
   'filter[tag]'?: ListUserPublishedArtworksFilterTag
+  /**
+   * Sort artworks.
+   */
+  sort?: ListUserPublishedArtworksSort
   /**
    * The page number to fetch.
    */

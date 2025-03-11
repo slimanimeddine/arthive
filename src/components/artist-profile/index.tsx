@@ -1,11 +1,9 @@
 'use client'
 
-import { SortFilterArtworks } from './sort-filter-artworks'
 import { ArtworksDisplay } from './artworks-display'
-import { Pagination } from './pagination'
 import { ArtistInformation } from './artist-information'
 
-export function ArtistProfile() {
+export function ArtistProfile({ username }: { username: string }) {
   return (
     <main>
       <div className="mx-auto max-w-7xl px-2 py-8 sm:px-2 lg:px-4">
@@ -13,17 +11,11 @@ export function ArtistProfile() {
           {/* artist information */}
           <div className="lg:col-start-3 lg:row-end-1">
             <h2 className="sr-only">Summary</h2>
-            <ArtistInformation />
+            <ArtistInformation username={username} />
           </div>
 
           {/* artworks */}
-          <div className="sm:rounded-lg lg:col-span-2 lg:row-span-2 lg:row-end-2">
-            <SortFilterArtworks />
-            <ArtworksDisplay />
-            <div className="pt-8">
-              <Pagination />
-            </div>
-          </div>
+          <ArtworksDisplay username={username} />
         </div>
       </div>
     </main>

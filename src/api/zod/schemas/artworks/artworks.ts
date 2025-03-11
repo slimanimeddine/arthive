@@ -370,6 +370,7 @@ export const listUserPublishedArtworksQueryParams = zod.object({
       'mosaic',
     ])
     .optional(),
+  sort: zod.enum(['rising', 'new', 'popular', 'trending']).optional(),
   page: zod.string().optional(),
   perPage: zod.number().optional(),
 })
