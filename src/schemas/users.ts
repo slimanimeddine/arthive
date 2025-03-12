@@ -50,5 +50,6 @@ export const updateAuthenticatedUserBody = zod.object({
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
       'Only .jpg, .jpeg, .png and .webp formats are supported.'
-    ),
+    )
+    .optional(),
 })

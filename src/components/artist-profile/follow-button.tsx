@@ -19,7 +19,7 @@ export function FollowButton({ userId }: FollowButtonProps) {
     return (
       <button
         onClick={() => router.push('/sign-in')}
-        className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        className="inline-flex w-full flex-shrink-0 items-center justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:flex-1 text-gray-900 bg-gray-300 ring-gray-300 hover:bg-gray-200"
       >
         Follow
       </button>
@@ -30,7 +30,7 @@ export function FollowButton({ userId }: FollowButtonProps) {
     return (
       <button
         disabled
-        className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 cursor-not-allowed"
+        className="inline-flex w-full flex-shrink-0 items-center justify-center rounded-md  px-3 py-2 text-sm font-semibold shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:flex-1 text-gray-900 bg-gray-300 ring-gray-300 cursor-not-allowed"
       >
         loading...
       </button>
@@ -41,10 +41,10 @@ export function FollowButton({ userId }: FollowButtonProps) {
     <button
       onClick={() => handleFollowToggle(!!isFollowing)}
       className={classNames(
-        'rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ring-1 ring-inset',
+        'inline-flex w-full flex-shrink-0 items-center justify-center rounded-md px-3 py-2 text-sm font-semibold  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:flex-1',
         isFollowing
           ? 'bg-indigo-600 text-white hover:bg-indigo-500'
-          : 'text-gray-900 bg-white ring-gray-300 hover:bg-gray-50'
+          : 'text-gray-900 bg-gray-300 ring-gray-300 hover:bg-gray-200'
       )}
     >
       {isFollowing ? 'Following' : 'Follow'}

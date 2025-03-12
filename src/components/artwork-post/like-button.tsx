@@ -74,14 +74,24 @@ export function LikeButton({ artworkId }: LikeButtonProps) {
 
   if (!token) {
     return (
-      <button onClick={() => router.push('/sign-in')}>
+      <button
+        className="cursor-not-allowed flex items-center justify-center rounded-full p-2 transition-colors bg-gray-200 text-gray-700"
+        onClick={() => router.push('/sign-in')}
+      >
         <HandThumbUpIcon className="h-6 w-6" />
       </button>
     )
   }
 
   if (isLikingQuery.isLoading) {
-    return <button>Loading...</button>
+    return (
+      <button
+        disabled
+        className="cursor-not-allowed flex items-center justify-center rounded-full p-2 transition-colors bg-gray-200 text-gray-700"
+      >
+        loading...
+      </button>
+    )
   }
 
   return (

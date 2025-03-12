@@ -10,7 +10,7 @@ export function TotalRatings({ username }: TotalRatingsProps) {
   const likesCountTotalQuery = useShowUserReceivedLikesCount(username)
 
   if (likesCountTotalQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+    return <p className="mt-2 text-sm text-gray-700">loading...</p>
   }
 
   if (likesCountTotalQuery.isError) {

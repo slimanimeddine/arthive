@@ -23,7 +23,7 @@ export function ArtworksDisplay() {
   const artworksQuery = useListPublishedArtworks(queryParams)
 
   if (artworksQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+    return <p className="mt-2 text-sm text-gray-700">loading...</p>
   }
 
   if (artworksQuery.isError) {

@@ -5,6 +5,7 @@ import { CheckBadgeIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { RatingsByTag } from './ratings-by-tag'
+import { FollowButton } from './follow-button'
 
 type ArtistInformationProps = {
   username: string
@@ -14,7 +15,7 @@ export function ArtistInformation({ username }: ArtistInformationProps) {
   const artistInformationQuery = useShowUser(username)
 
   if (artistInformationQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+    return <p className="mt-2 text-sm text-gray-700">loading...</p>
   }
 
   if (artistInformationQuery.isError) {
@@ -92,12 +93,7 @@ export function ArtistInformation({ username }: ArtistInformationProps) {
                   </p>
                 </div>
                 <div className="mt-5 flex flex-wrap space-y-3 sm:space-x-3 sm:space-y-0">
-                  <button
-                    type="button"
-                    className="inline-flex w-full flex-shrink-0 items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:flex-1"
-                  >
-                    Follow
-                  </button>
+                  <FollowButton userId={artistInformation.id} />
                 </div>
               </div>
             </div>

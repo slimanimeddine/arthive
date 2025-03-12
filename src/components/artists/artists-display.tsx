@@ -36,7 +36,7 @@ export function ArtistsDisplay() {
   const artistsQuery = useListUsers(queryParams)
 
   if (artistsQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+    return <p className="mt-2 text-sm text-gray-700">loading...</p>
   }
 
   if (artistsQuery.isError) {

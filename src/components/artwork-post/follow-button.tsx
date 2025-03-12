@@ -28,8 +28,11 @@ export function FollowButton({ userId }: FollowButtonProps) {
 
   if (isLoading) {
     return (
-      <button className="rounded-full bg-gray px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300">
-        Loading...
+      <button
+        disabled
+        className="rounded-full bg-gray px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 cursor-not-allowed"
+      >
+        loading...
       </button>
     )
   }

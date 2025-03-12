@@ -27,13 +27,13 @@ export function ArtworksDisplay({ username }: ArtworksDisplayProps) {
   const artworksQuery = useListUserPublishedArtworks(username, queryParams)
 
   if (artworksQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">Loading...</p>
+    return <p className="mt-2 text-sm text-gray-700">loading...</p>
   }
 
   if (artworksQuery.isError) {
     return (
       <p className="mt-2 text-sm text-red-700">
-        We&apos;re sorry, something went wrong.
+        {artworksQuery.error?.response?.data.message}
       </p>
     )
   }
