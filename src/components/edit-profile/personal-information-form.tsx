@@ -59,7 +59,6 @@ export function PersonalInformationForm({
     useUpdateAuthenticatedUser(axiosConfig)
 
   function onSubmit(data: UpdateAuthenticatedUserBody) {
-    console.log(data)
     updateAuthenticatedUserMutation.mutate(
       {
         data,

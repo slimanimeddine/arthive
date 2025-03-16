@@ -28,7 +28,7 @@ export function SignOutButton() {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['session'] })
             toast.success('You have been signed out')
-            router.back()
+            router.push('/')
           },
           onError: (error) => onError(error),
         })
