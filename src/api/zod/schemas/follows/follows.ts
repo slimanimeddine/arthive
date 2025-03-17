@@ -11,11 +11,6 @@ import { z as zod } from 'zod'
  * Retrieve a list of users following the currently authenticated user
  * @summary List Authenticated User Followers
  */
-export const listAuthenticatedUserFollowersQueryParams = zod.object({
-  page: zod.number().optional(),
-  perPage: zod.number().optional(),
-})
-
 export const listAuthenticatedUserFollowersResponse = zod.object({
   data: zod
     .array(
@@ -36,45 +31,12 @@ export const listAuthenticatedUserFollowersResponse = zod.object({
       })
     )
     .optional(),
-  links: zod
-    .object({
-      first: zod.string().optional(),
-      last: zod.string().optional(),
-      prev: zod.string().optional(),
-      next: zod.string().optional(),
-    })
-    .optional(),
-  meta: zod
-    .object({
-      current_page: zod.number().optional(),
-      from: zod.number().optional(),
-      last_page: zod.number().optional(),
-      links: zod
-        .array(
-          zod.object({
-            url: zod.string().optional(),
-            label: zod.string().optional(),
-            active: zod.boolean().optional(),
-          })
-        )
-        .optional(),
-      path: zod.string().optional(),
-      per_page: zod.number().optional(),
-      to: zod.number().optional(),
-      total: zod.number().optional(),
-    })
-    .optional(),
 })
 
 /**
  * Retrieve a list of users followed by the currently authenticated user
  * @summary List Authenticated User Following
  */
-export const listAuthenticatedUserFollowingQueryParams = zod.object({
-  page: zod.number().optional(),
-  perPage: zod.number().optional(),
-})
-
 export const listAuthenticatedUserFollowingResponse = zod.object({
   data: zod
     .array(
@@ -94,34 +56,6 @@ export const listAuthenticatedUserFollowingResponse = zod.object({
         updated_at: zod.string().optional(),
       })
     )
-    .optional(),
-  links: zod
-    .object({
-      first: zod.string().optional(),
-      last: zod.string().optional(),
-      prev: zod.string().optional(),
-      next: zod.string().optional(),
-    })
-    .optional(),
-  meta: zod
-    .object({
-      current_page: zod.number().optional(),
-      from: zod.number().optional(),
-      last_page: zod.number().optional(),
-      links: zod
-        .array(
-          zod.object({
-            url: zod.string().optional(),
-            label: zod.string().optional(),
-            active: zod.boolean().optional(),
-          })
-        )
-        .optional(),
-      path: zod.string().optional(),
-      per_page: zod.number().optional(),
-      to: zod.number().optional(),
-      total: zod.number().optional(),
-    })
     .optional(),
 })
 

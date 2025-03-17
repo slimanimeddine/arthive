@@ -27,6 +27,7 @@ import type {
   AdminSignInBody,
   ChangePassword200,
   ChangePassword401,
+  ChangePassword422,
   ChangePasswordBody,
   ResendVerificationEmail200,
   ResendVerificationEmail401,
@@ -682,7 +683,7 @@ export const changePassword = (
 }
 
 export const getChangePasswordMutationOptions = <
-  TError = AxiosError<ChangePassword401>,
+  TError = AxiosError<ChangePassword401 | ChangePassword422>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -723,13 +724,15 @@ export type ChangePasswordMutationResult = NonNullable<
   Awaited<ReturnType<typeof changePassword>>
 >
 export type ChangePasswordMutationBody = ChangePasswordBody
-export type ChangePasswordMutationError = AxiosError<ChangePassword401>
+export type ChangePasswordMutationError = AxiosError<
+  ChangePassword401 | ChangePassword422
+>
 
 /**
  * @summary Change Password
  */
 export const useChangePassword = <
-  TError = AxiosError<ChangePassword401>,
+  TError = AxiosError<ChangePassword401 | ChangePassword422>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<

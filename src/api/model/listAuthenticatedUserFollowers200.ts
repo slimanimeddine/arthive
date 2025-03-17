@@ -6,11 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ListAuthenticatedUserFollowers200DataItem } from './listAuthenticatedUserFollowers200DataItem'
-import type { ListAuthenticatedUserFollowers200Links } from './listAuthenticatedUserFollowers200Links'
-import type { ListAuthenticatedUserFollowers200Meta } from './listAuthenticatedUserFollowers200Meta'
 
 export type ListAuthenticatedUserFollowers200 = {
   data?: ListAuthenticatedUserFollowers200DataItem[]
-  links?: ListAuthenticatedUserFollowers200Links
-  meta?: ListAuthenticatedUserFollowers200Meta
 }

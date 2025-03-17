@@ -31,10 +31,8 @@ import type {
   FollowUser404,
   ListAuthenticatedUserFollowers200,
   ListAuthenticatedUserFollowers401,
-  ListAuthenticatedUserFollowersParams,
   ListAuthenticatedUserFollowing200,
   ListAuthenticatedUserFollowing401,
-  ListAuthenticatedUserFollowingParams,
   UnfollowUser401,
   UnfollowUser403,
   UnfollowUser404,
@@ -45,49 +43,37 @@ import type {
  * @summary List Authenticated User Followers
  */
 export const listAuthenticatedUserFollowers = (
-  params?: ListAuthenticatedUserFollowersParams,
   options?: AxiosRequestConfig
 ): Promise<AxiosResponse<ListAuthenticatedUserFollowers200>> => {
-  return axios.get(`/api/v1/users/me/follows/followers`, {
-    ...options,
-    params: { ...params, ...options?.params },
-  })
+  return axios.get(`/api/v1/users/me/follows/followers`, options)
 }
 
-export const getListAuthenticatedUserFollowersQueryKey = (
-  params?: ListAuthenticatedUserFollowersParams
-) => {
-  return [
-    `/api/v1/users/me/follows/followers`,
-    ...(params ? [params] : []),
-  ] as const
+export const getListAuthenticatedUserFollowersQueryKey = () => {
+  return [`/api/v1/users/me/follows/followers`] as const
 }
 
 export const getListAuthenticatedUserFollowersQueryOptions = <
   TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
   TError = AxiosError<ListAuthenticatedUserFollowers401>,
->(
-  params?: ListAuthenticatedUserFollowersParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
-        TError,
-        TData
-      >
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
+      TError,
+      TData
     >
-    axios?: AxiosRequestConfig
-  }
-) => {
+  >
+  axios?: AxiosRequestConfig
+}) => {
   const { query: queryOptions, axios: axiosOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ?? getListAuthenticatedUserFollowersQueryKey(params)
+    queryOptions?.queryKey ?? getListAuthenticatedUserFollowersQueryKey()
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>
   > = ({ signal }) =>
-    listAuthenticatedUserFollowers(params, { signal, ...axiosOptions })
+    listAuthenticatedUserFollowers({ signal, ...axiosOptions })
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
@@ -105,71 +91,62 @@ export type ListAuthenticatedUserFollowersQueryError =
 export function useListAuthenticatedUserFollowers<
   TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
   TError = AxiosError<ListAuthenticatedUserFollowers401>,
->(
-  params: undefined | ListAuthenticatedUserFollowersParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
-          TError,
-          Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>
-        >,
-        'initialData'
-      >
-    axios?: AxiosRequestConfig
-  }
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useListAuthenticatedUserFollowers<
-  TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
-  TError = AxiosError<ListAuthenticatedUserFollowers401>,
->(
-  params?: ListAuthenticatedUserFollowersParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
-          TError,
-          Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>
-        >,
-        'initialData'
-      >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useListAuthenticatedUserFollowers<
-  TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
-  TError = AxiosError<ListAuthenticatedUserFollowers401>,
->(
-  params?: ListAuthenticatedUserFollowersParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
-        TError,
-        TData
-      >
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
+      TError,
+      TData
     >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
+        TError,
+        Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>
+      >,
+      'initialData'
+    >
+  axios?: AxiosRequestConfig
+}): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAuthenticatedUserFollowers<
+  TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
+  TError = AxiosError<ListAuthenticatedUserFollowers401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
+        TError,
+        Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>
+      >,
+      'initialData'
+    >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAuthenticatedUserFollowers<
+  TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
+  TError = AxiosError<ListAuthenticatedUserFollowers401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
+      TError,
+      TData
+    >
+  >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>
 }
 /**
@@ -179,25 +156,19 @@ export function useListAuthenticatedUserFollowers<
 export function useListAuthenticatedUserFollowers<
   TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
   TError = AxiosError<ListAuthenticatedUserFollowers401>,
->(
-  params?: ListAuthenticatedUserFollowersParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
-        TError,
-        TData
-      >
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
+      TError,
+      TData
     >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
+  >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>
 } {
-  const queryOptions = getListAuthenticatedUserFollowersQueryOptions(
-    params,
-    options
-  )
+  const queryOptions = getListAuthenticatedUserFollowersQueryOptions(options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -213,49 +184,37 @@ export function useListAuthenticatedUserFollowers<
  * @summary List Authenticated User Following
  */
 export const listAuthenticatedUserFollowing = (
-  params?: ListAuthenticatedUserFollowingParams,
   options?: AxiosRequestConfig
 ): Promise<AxiosResponse<ListAuthenticatedUserFollowing200>> => {
-  return axios.get(`/api/v1/users/me/follows/following`, {
-    ...options,
-    params: { ...params, ...options?.params },
-  })
+  return axios.get(`/api/v1/users/me/follows/following`, options)
 }
 
-export const getListAuthenticatedUserFollowingQueryKey = (
-  params?: ListAuthenticatedUserFollowingParams
-) => {
-  return [
-    `/api/v1/users/me/follows/following`,
-    ...(params ? [params] : []),
-  ] as const
+export const getListAuthenticatedUserFollowingQueryKey = () => {
+  return [`/api/v1/users/me/follows/following`] as const
 }
 
 export const getListAuthenticatedUserFollowingQueryOptions = <
   TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
   TError = AxiosError<ListAuthenticatedUserFollowing401>,
->(
-  params?: ListAuthenticatedUserFollowingParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
-        TError,
-        TData
-      >
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
+      TError,
+      TData
     >
-    axios?: AxiosRequestConfig
-  }
-) => {
+  >
+  axios?: AxiosRequestConfig
+}) => {
   const { query: queryOptions, axios: axiosOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ?? getListAuthenticatedUserFollowingQueryKey(params)
+    queryOptions?.queryKey ?? getListAuthenticatedUserFollowingQueryKey()
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>
   > = ({ signal }) =>
-    listAuthenticatedUserFollowing(params, { signal, ...axiosOptions })
+    listAuthenticatedUserFollowing({ signal, ...axiosOptions })
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
@@ -273,71 +232,62 @@ export type ListAuthenticatedUserFollowingQueryError =
 export function useListAuthenticatedUserFollowing<
   TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
   TError = AxiosError<ListAuthenticatedUserFollowing401>,
->(
-  params: undefined | ListAuthenticatedUserFollowingParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
-          TError,
-          Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>
-        >,
-        'initialData'
-      >
-    axios?: AxiosRequestConfig
-  }
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useListAuthenticatedUserFollowing<
-  TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
-  TError = AxiosError<ListAuthenticatedUserFollowing401>,
->(
-  params?: ListAuthenticatedUserFollowingParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
-          TError,
-          Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>
-        >,
-        'initialData'
-      >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useListAuthenticatedUserFollowing<
-  TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
-  TError = AxiosError<ListAuthenticatedUserFollowing401>,
->(
-  params?: ListAuthenticatedUserFollowingParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
-        TError,
-        TData
-      >
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
+      TError,
+      TData
     >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
+        TError,
+        Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>
+      >,
+      'initialData'
+    >
+  axios?: AxiosRequestConfig
+}): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAuthenticatedUserFollowing<
+  TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
+  TError = AxiosError<ListAuthenticatedUserFollowing401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
+        TError,
+        Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>
+      >,
+      'initialData'
+    >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAuthenticatedUserFollowing<
+  TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
+  TError = AxiosError<ListAuthenticatedUserFollowing401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
+      TError,
+      TData
+    >
+  >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>
 }
 /**
@@ -347,25 +297,19 @@ export function useListAuthenticatedUserFollowing<
 export function useListAuthenticatedUserFollowing<
   TData = Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
   TError = AxiosError<ListAuthenticatedUserFollowing401>,
->(
-  params?: ListAuthenticatedUserFollowingParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
-        TError,
-        TData
-      >
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
+      TError,
+      TData
     >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
+  >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>
 } {
-  const queryOptions = getListAuthenticatedUserFollowingQueryOptions(
-    params,
-    options
-  )
+  const queryOptions = getListAuthenticatedUserFollowingQueryOptions(options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>

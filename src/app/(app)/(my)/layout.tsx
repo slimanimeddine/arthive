@@ -4,7 +4,6 @@ import {
   BookmarkIcon,
   CameraIcon,
   FolderIcon,
-  NoSymbolIcon,
   PlusCircleIcon,
   UserCircleIcon,
   UserPlusIcon,
@@ -38,7 +37,6 @@ const secondaryNavigation = [
   { name: 'Favorites', href: '/favorites', icon: BookmarkIcon },
   { name: 'Followers', href: '/followers', icon: UsersIcon },
   { name: 'Following', href: '/following', icon: UserPlusIcon },
-  { name: 'Blocked', href: '/blocked', icon: NoSymbolIcon },
 ]
 
 export default function Layout({
