@@ -1,11 +1,10 @@
-import { useShowUserById } from '@/api/users/users'
-import { useGetSessionPayload } from '@/hooks/session/use-get-session-payload'
-import { SessionPayload } from '@/lib/session'
+import { useShowAuthenticatedUser } from '@/api/users/users'
 import { fileUrl } from '@/lib/utils'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { AvatarPlaceholder } from '../avatar-placeholder'
+import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 
 const userNavigation = [
   { name: 'Your Profile', href: '/edit-profile' },
@@ -13,10 +12,18 @@ const userNavigation = [
 ]
 
 export function ProfileDropdown() {
-  const sessionPayloadQuery = useGetSessionPayload()
-  const sessionPayload = sessionPayloadQuery?.data?.payload as SessionPayload
+  const token = useGetAuthenticatedUserToken()
+  const axiosConfig = token
+    ? {
+        axios: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      }
+    : undefined
 
-  const userQuery = useShowUserById(sessionPayload?.id)
+  const userQuery = useShowAuthenticatedUser(axiosConfig)
 
   const user = userQuery?.data?.data?.data
 

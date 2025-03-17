@@ -12,10 +12,9 @@ import { ProfileDropdown } from './profile-dropdown'
 import { SearchInput } from './search-input'
 import { usePathname } from 'next/navigation'
 import { classNames, fileUrl } from '@/lib/utils'
-import { useGetSessionPayload } from '@/hooks/session/use-get-session-payload'
-import { SessionPayload } from '@/lib/session'
-import { useShowUserById } from '@/api/users/users'
+import { useShowAuthenticatedUser } from '@/api/users/users'
 import { AvatarPlaceholder } from '../avatar-placeholder'
+import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 
 const navigation = [
   { name: 'Artists', href: '/artists' },
@@ -29,10 +28,18 @@ const userNavigation = [
 ]
 
 export function Header() {
-  const sessionPayloadQuery = useGetSessionPayload()
-  const sessionPayload = sessionPayloadQuery?.data?.payload as SessionPayload
+  const token = useGetAuthenticatedUserToken()
+  const axiosConfig = token
+    ? {
+        axios: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      }
+    : undefined
 
-  const userQuery = useShowUserById(sessionPayload?.id)
+  const userQuery = useShowAuthenticatedUser(axiosConfig)
 
   const user = userQuery?.data?.data?.data
 

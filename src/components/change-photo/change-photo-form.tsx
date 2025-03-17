@@ -1,57 +1,202 @@
+'use client'
+import { useUpdateAuthenticatedUser } from '@/api/users/users'
+import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
+import { MAX_FILE_SIZE } from '@/lib/constants'
+import { classNames, getCroppedImg, onError } from '@/lib/utils'
 import { PhotoIcon } from '@heroicons/react/24/solid'
+import { useQueryClient } from '@tanstack/react-query'
+import { useState, useCallback } from 'react'
+import { useDropzone } from 'react-dropzone'
+import Cropper, { Area } from 'react-easy-crop'
+import toast from 'react-hot-toast'
 
 export function ChangePhotoForm() {
+  const token = useGetAuthenticatedUserToken()
+  const axiosConfig = token
+    ? {
+        axios: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      }
+    : undefined
+
+  const queryClient = useQueryClient()
+
+  const updateAuthenticatedUserMutation =
+    useUpdateAuthenticatedUser(axiosConfig)
+
+  const [file, setFile] = useState<string>()
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
+  const [rotation, setRotation] = useState(0)
+  const [croppedImage, setCroppedImage] = useState<Blob | null>(null)
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: { 'image/*': ['.png', '.jpeg', '.jpg', '.webp'] },
+    maxFiles: 1,
+    multiple: false,
+    maxSize: MAX_FILE_SIZE,
+    onDrop: (acceptedFiles) => {
+      const image = URL.createObjectURL(acceptedFiles[0])
+      setFile(image)
+    },
+  })
+
+  const onCropComplete = useCallback(
+    async (croppedArea: Area, croppedAreaPixels: Area) => {
+      if (!file) return
+      const croppedImage = await getCroppedImg(
+        file,
+        croppedAreaPixels,
+        rotation
+      )
+      setCroppedImage(croppedImage)
+    },
+    [file, rotation]
+  )
+
+  const resetModifications = () => {
+    setCrop({ x: 0, y: 0 })
+    setZoom(1)
+    setRotation(0)
+  }
+
+  const cancelEditing = () => {
+    setFile(undefined)
+  }
+
+  function onUpload() {
+    if (croppedImage) {
+      updateAuthenticatedUserMutation.mutate(
+        {
+          data: {
+            photo: croppedImage,
+          },
+        },
+        {
+          onError,
+          onSuccess: () => {
+            toast.success('Profile picture changed successfully!')
+            queryClient.invalidateQueries({ queryKey: ['/api/v1/users/me'] })
+            setFile(undefined)
+          },
+        }
+      )
+    }
+  }
+
+  const isDisabled = !croppedImage || updateAuthenticatedUserMutation.isPending
   return (
-    <form className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
+    <div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
       <div className="px-4 py-6 sm:p-8">
         <h2 className="text-base/7 font-semibold text-gray-900">
           Change Profile Photo
         </h2>
-        <div className="mt-10 grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div className="mt-10 grid max-w-full grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="col-span-full">
-            <label
-              htmlFor="profile-photo"
-              className="block text-sm/6 font-medium text-gray-900"
-            >
-              Profile photo
-            </label>
-            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-              <div className="text-center">
-                <PhotoIcon
-                  aria-hidden="true"
-                  className="mx-auto size-12 text-gray-300"
+            {file ? (
+              <div className="relative w-full h-48 sm:h-96 rounded-lg overflow-hidden">
+                <Cropper
+                  image={file}
+                  crop={crop}
+                  zoom={zoom}
+                  rotation={rotation}
+                  aspect={8 / 7}
+                  onCropChange={setCrop}
+                  onCropComplete={onCropComplete}
+                  onZoomChange={setZoom}
+                  onRotationChange={setRotation}
                 />
-                <div className="mt-4 flex text-sm/6 text-gray-600">
-                  <label
-                    htmlFor="file-upload"
-                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                  >
-                    <span>Upload a file</span>
-                    <input
-                      id="file-upload"
-                      name="file-upload"
-                      type="file"
-                      className="sr-only"
-                    />
-                  </label>
-                  <p className="pl-1">or drag and drop</p>
-                </div>
-                <p className="text-xs/5 text-gray-600">
-                  PNG, JPG, GIF up to 10MB
-                </p>
               </div>
-            </div>
+            ) : (
+              <div
+                {...getRootProps()}
+                className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10"
+              >
+                <div className="text-center">
+                  <PhotoIcon
+                    aria-hidden="true"
+                    className="mx-auto size-12 text-gray-300"
+                  />
+                  <div className="mt-4 flex justify-center text-sm/6 text-gray-600">
+                    <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 hover:text-indigo-500">
+                      <span>Upload a file</span>
+                      <input
+                        {...getInputProps()}
+                        type="file"
+                        className="sr-only"
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs/5 text-gray-600">
+                    1 Image allowed, PNG, JPG, JPEG OR WEBP, up to 5MB
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
+
+          {file && (
+            <div className="col-span-full flex flex-row items-center justify-center space-x-4 mt-4">
+              <span className="isolate inline-flex rounded-md shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setZoom((prev) => Math.min(prev + 0.2, 3))}
+                  className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                >
+                  Zoom in
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setZoom((prev) => Math.max(prev - 0.2, 1))}
+                  className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                >
+                  Zoom out
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRotation((prev) => prev + 90)}
+                  className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                >
+                  Rotate
+                </button>
+                <button
+                  type="button"
+                  onClick={resetModifications}
+                  className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                >
+                  Reset
+                </button>
+              </span>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+        {file && (
+          <button
+            type="button"
+            onClick={cancelEditing}
+            className="relative -ml-px inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+          >
+            Cancel
+          </button>
+        )}
         <button
-          type="submit"
-          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          type="button"
+          onClick={onUpload}
+          disabled={isDisabled}
+          className={classNames(
+            'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
+            isDisabled ? 'cursor-not-allowed' : 'hover:bg-indigo-500'
+          )}
         >
-          Save
+          Upload
         </button>
       </div>
-    </form>
+    </div>
   )
 }
