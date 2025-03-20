@@ -5,8 +5,6 @@
  * ArtHive API Documentation
  * OpenAPI spec version: 1.0.0
  */
-import type { ListAuthenticatedUserFavoriteArtworks200DataItemArtworkPhotosItem } from './listAuthenticatedUserFavoriteArtworks200DataItemArtworkPhotosItem'
-import type { ListAuthenticatedUserFavoriteArtworks200DataItemTagsItem } from './listAuthenticatedUserFavoriteArtworks200DataItemTagsItem'
 
 export type ListAuthenticatedUserFavoriteArtworks200DataItem = {
   id?: number
@@ -19,6 +17,4 @@ export type ListAuthenticatedUserFavoriteArtworks200DataItem = {
   artwork_likes_count?: number
   artwork_comments_count?: number
   artwork_main_photo_path?: string
-  artwork_photos?: ListAuthenticatedUserFavoriteArtworks200DataItemArtworkPhotosItem[]
-  tags?: ListAuthenticatedUserFavoriteArtworks200DataItemTagsItem[]
 }

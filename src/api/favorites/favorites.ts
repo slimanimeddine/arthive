@@ -27,7 +27,6 @@ import type {
   CheckIfAuthenticatedUserIsFavoriting404,
   ListAuthenticatedUserFavoriteArtworks200,
   ListAuthenticatedUserFavoriteArtworks401,
-  ListAuthenticatedUserFavoriteArtworksParams,
   MarkArtworkAsFavorite200,
   MarkArtworkAsFavorite401,
   MarkArtworkAsFavorite403,
@@ -42,50 +41,37 @@ import type {
  * @summary List Authenticated User Favorite Artworks
  */
 export const listAuthenticatedUserFavoriteArtworks = (
-  params?: ListAuthenticatedUserFavoriteArtworksParams,
   options?: AxiosRequestConfig
 ): Promise<AxiosResponse<ListAuthenticatedUserFavoriteArtworks200>> => {
-  return axios.get(`/api/v1/users/me/favorites/artworks`, {
-    ...options,
-    params: { ...params, ...options?.params },
-  })
+  return axios.get(`/api/v1/users/me/favorites/artworks`, options)
 }
 
-export const getListAuthenticatedUserFavoriteArtworksQueryKey = (
-  params?: ListAuthenticatedUserFavoriteArtworksParams
-) => {
-  return [
-    `/api/v1/users/me/favorites/artworks`,
-    ...(params ? [params] : []),
-  ] as const
+export const getListAuthenticatedUserFavoriteArtworksQueryKey = () => {
+  return [`/api/v1/users/me/favorites/artworks`] as const
 }
 
 export const getListAuthenticatedUserFavoriteArtworksQueryOptions = <
   TData = Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
   TError = AxiosError<ListAuthenticatedUserFavoriteArtworks401>,
->(
-  params?: ListAuthenticatedUserFavoriteArtworksParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
-        TError,
-        TData
-      >
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
+      TError,
+      TData
     >
-    axios?: AxiosRequestConfig
-  }
-) => {
+  >
+  axios?: AxiosRequestConfig
+}) => {
   const { query: queryOptions, axios: axiosOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getListAuthenticatedUserFavoriteArtworksQueryKey(params)
+    queryOptions?.queryKey ?? getListAuthenticatedUserFavoriteArtworksQueryKey()
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>
   > = ({ signal }) =>
-    listAuthenticatedUserFavoriteArtworks(params, { signal, ...axiosOptions })
+    listAuthenticatedUserFavoriteArtworks({ signal, ...axiosOptions })
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
@@ -103,71 +89,62 @@ export type ListAuthenticatedUserFavoriteArtworksQueryError =
 export function useListAuthenticatedUserFavoriteArtworks<
   TData = Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
   TError = AxiosError<ListAuthenticatedUserFavoriteArtworks401>,
->(
-  params: undefined | ListAuthenticatedUserFavoriteArtworksParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
-          TError,
-          Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>
-        >,
-        'initialData'
-      >
-    axios?: AxiosRequestConfig
-  }
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useListAuthenticatedUserFavoriteArtworks<
-  TData = Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
-  TError = AxiosError<ListAuthenticatedUserFavoriteArtworks401>,
->(
-  params?: ListAuthenticatedUserFavoriteArtworksParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
-          TError,
-          Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>
-        >,
-        'initialData'
-      >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useListAuthenticatedUserFavoriteArtworks<
-  TData = Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
-  TError = AxiosError<ListAuthenticatedUserFavoriteArtworks401>,
->(
-  params?: ListAuthenticatedUserFavoriteArtworksParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
-        TError,
-        TData
-      >
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
+      TError,
+      TData
     >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
+        TError,
+        Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>
+      >,
+      'initialData'
+    >
+  axios?: AxiosRequestConfig
+}): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAuthenticatedUserFavoriteArtworks<
+  TData = Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
+  TError = AxiosError<ListAuthenticatedUserFavoriteArtworks401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
+        TError,
+        Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>
+      >,
+      'initialData'
+    >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAuthenticatedUserFavoriteArtworks<
+  TData = Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
+  TError = AxiosError<ListAuthenticatedUserFavoriteArtworks401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
+      TError,
+      TData
+    >
+  >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>
 }
 /**
@@ -177,25 +154,20 @@ export function useListAuthenticatedUserFavoriteArtworks<
 export function useListAuthenticatedUserFavoriteArtworks<
   TData = Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
   TError = AxiosError<ListAuthenticatedUserFavoriteArtworks401>,
->(
-  params?: ListAuthenticatedUserFavoriteArtworksParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
-        TError,
-        TData
-      >
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof listAuthenticatedUserFavoriteArtworks>>,
+      TError,
+      TData
     >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
+  >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>
 } {
-  const queryOptions = getListAuthenticatedUserFavoriteArtworksQueryOptions(
-    params,
-    options
-  )
+  const queryOptions =
+    getListAuthenticatedUserFavoriteArtworksQueryOptions(options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>

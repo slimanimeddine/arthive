@@ -3,10 +3,10 @@ import { JSX, SVGProps } from 'react'
 
 const navigation = {
   main: [
-    { name: 'About', href: '/about' },
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms & Conditions', href: '/terms' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'About', href: '#' },
+    { name: 'Privacy Policy', href: '#' },
+    { name: 'Terms & Conditions', href: '#' },
+    { name: 'Contact', href: '#' },
   ],
   social: [
     {

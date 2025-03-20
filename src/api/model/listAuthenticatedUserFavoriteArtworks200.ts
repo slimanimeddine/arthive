@@ -6,11 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ListAuthenticatedUserFavoriteArtworks200DataItem } from './listAuthenticatedUserFavoriteArtworks200DataItem'
-import type { ListAuthenticatedUserFavoriteArtworks200Links } from './listAuthenticatedUserFavoriteArtworks200Links'
-import type { ListAuthenticatedUserFavoriteArtworks200Meta } from './listAuthenticatedUserFavoriteArtworks200Meta'
 
 export type ListAuthenticatedUserFavoriteArtworks200 = {
   data?: ListAuthenticatedUserFavoriteArtworks200DataItem[]
-  links?: ListAuthenticatedUserFavoriteArtworks200Links
-  meta?: ListAuthenticatedUserFavoriteArtworks200Meta
 }

@@ -11,11 +11,6 @@ import { z as zod } from 'zod'
  * Retrieve a list of artworks favorites by the currently authenticated user
  * @summary List Authenticated User Favorite Artworks
  */
-export const listAuthenticatedUserFavoriteArtworksQueryParams = zod.object({
-  page: zod.number().optional(),
-  perPage: zod.number().optional(),
-})
-
 export const listAuthenticatedUserFavoriteArtworksResponse = zod.object({
   data: zod
     .array(
@@ -30,64 +25,8 @@ export const listAuthenticatedUserFavoriteArtworksResponse = zod.object({
         artwork_likes_count: zod.number().optional(),
         artwork_comments_count: zod.number().optional(),
         artwork_main_photo_path: zod.string().optional(),
-        artwork_photos: zod
-          .array(
-            zod.object({
-              id: zod.number().optional(),
-              path: zod.string().optional(),
-              is_main: zod.number().optional(),
-              artwork_id: zod.number().optional(),
-              created_at: zod.string().optional(),
-              updated_at: zod.string().optional(),
-            })
-          )
-          .optional(),
-        tags: zod
-          .array(
-            zod.object({
-              id: zod.number().optional(),
-              name: zod.string().optional(),
-              created_at: zod.string().optional(),
-              updated_at: zod.string().optional(),
-              pivot: zod
-                .object({
-                  artwork_id: zod.number().optional(),
-                  tag_id: zod.number().optional(),
-                })
-                .optional(),
-            })
-          )
-          .optional(),
       })
     )
-    .optional(),
-  links: zod
-    .object({
-      first: zod.string().optional(),
-      last: zod.string().optional(),
-      prev: zod.string().optional(),
-      next: zod.string().optional(),
-    })
-    .optional(),
-  meta: zod
-    .object({
-      current_page: zod.number().optional(),
-      from: zod.number().optional(),
-      last_page: zod.number().optional(),
-      links: zod
-        .array(
-          zod.object({
-            url: zod.string().optional(),
-            label: zod.string().optional(),
-            active: zod.boolean().optional(),
-          })
-        )
-        .optional(),
-      path: zod.string().optional(),
-      per_page: zod.number().optional(),
-      to: zod.number().optional(),
-      total: zod.number().optional(),
-    })
     .optional(),
 })
 
