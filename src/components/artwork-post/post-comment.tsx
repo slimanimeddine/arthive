@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { postArtworkCommentBody } from '@/schemas/artwork-comments'
 import { usePostArtworkComment } from '@/api/artwork-comments/artwork-comments'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
+import { useEffect } from 'react'
 
 type PostArtworkCommentBody = zod.infer<typeof postArtworkCommentBody>
 
@@ -18,10 +19,16 @@ export function PostComment({ artworkId }: PostCommentProps) {
   const token = useGetAuthenticatedUserToken()
   const queryClient = useQueryClient()
 
-  const { handleSubmit, register, formState, reset } =
+  const { handleSubmit, register, formState, reset, clearErrors } =
     useForm<PostArtworkCommentBody>({
       resolver: zodResolver(postArtworkCommentBody),
     })
+
+  useEffect(() => {
+    setTimeout(() => {
+      clearErrors('comment_text')
+    }, 6000)
+  }, [clearErrors, formState.errors.comment_text])
 
   const axiosConfig = token
     ? {
@@ -62,7 +69,7 @@ export function PostComment({ artworkId }: PostCommentProps) {
       onSubmit={handleSubmit(onSubmit)}
       className="mb-6"
     >
-      <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <div className="py-2 px-4 mb-2 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <label
           htmlFor="comment"
           className="sr-only"
@@ -77,12 +84,12 @@ export function PostComment({ artworkId }: PostCommentProps) {
           defaultValue={''}
           {...register('comment_text')}
         />
-        {formState.errors.comment_text && (
-          <p className="mt-2 text-sm text-red-600">
-            {formState.errors.comment_text.message}
-          </p>
-        )}
       </div>
+      {formState.errors.comment_text && (
+        <p className="my-2 text-sm text-red-600">
+          {formState.errors.comment_text.message}
+        </p>
+      )}
       <button
         disabled={isDisabled}
         type="submit"

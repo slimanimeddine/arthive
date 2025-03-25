@@ -53,7 +53,10 @@ export function ArtworksDisplay({ username }: ArtworksDisplayProps) {
 
   return (
     <div className="sm:rounded-lg lg:col-span-2 lg:row-span-2 lg:row-end-2">
-      <SortFilterArtworks />
+      {artworksQuery.isSuccess && artworks.length === 0 && (
+        <SortFilterArtworks />
+      )}
+
       <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           {artworksQuery.isSuccess && artworks.length === 0 && (
@@ -63,7 +66,7 @@ export function ArtworksDisplay({ username }: ArtworksDisplayProps) {
           {artworksQuery.isSuccess && artworks.length > 0 && (
             <ul
               role="list"
-              className="mt-6 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8"
+              className="mt-6 mb-8 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8"
             >
               {artworks.map((work) => (
                 <li key={work.id}>
@@ -74,13 +77,14 @@ export function ArtworksDisplay({ username }: ArtworksDisplayProps) {
           )}
         </div>
       </div>
-
-      <div className="pt-8">
-        <Pagination
-          links={links}
-          meta={meta}
-        />
-      </div>
+      {artworksQuery.isSuccess && meta.total! >= 12 && (
+        <div className="pt-8">
+          <Pagination
+            links={links}
+            meta={meta}
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  BellIcon,
   BookmarkIcon,
   CameraIcon,
   FolderIcon,
@@ -19,6 +20,7 @@ const secondaryNavigation = [
     href: '/edit-profile',
     icon: UserCircleIcon,
   },
+  { name: 'Notifications', href: '/notifications', icon: BellIcon },
   {
     name: 'Change Photo',
     href: '/change-photo',
@@ -51,10 +53,7 @@ export default function Layout({
 
       <aside className="flex overflow-x-auto border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-10">
         <nav className="flex-none px-4 sm:px-6 lg:px-0">
-          <ul
-            role="list"
-            className="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col"
-          >
+          <ul className="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
             {secondaryNavigation.map((item) => (
               <li key={item.name}>
                 <Link

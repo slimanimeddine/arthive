@@ -137,11 +137,15 @@ export function ArtistsDisplay() {
 
         <div className="mt-4 lg:mt-8 lg:grid lg:grid-cols-4 lg:items-start lg:gap-8">
           <div className="hidden space-y-4 lg:block">
-            <SortArtists />
+            {artistsQuery.isSuccess && artists.length === 0 && <SortArtists />}
             <div>
               <p className="block text-xs font-medium text-gray-700">Filters</p>
-              <ArtistCategoryFilter />
-              <ArtistCountryFilter />
+              {artistsQuery.isSuccess && artists.length === 0 && (
+                <ArtistCategoryFilter />
+              )}
+              {artistsQuery.isSuccess && artists.length === 0 && (
+                <ArtistCountryFilter />
+              )}
             </div>
           </div>
 
@@ -153,7 +157,7 @@ export function ArtistsDisplay() {
             )}
 
             {artistsQuery.isSuccess && artists.length > 0 && (
-              <ul className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+              <ul className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2 mb-8">
                 {artists.map((artist) => (
                   <li key={artist.id}>
                     <ArtistCard {...artist} />
@@ -161,12 +165,14 @@ export function ArtistsDisplay() {
                 ))}
               </ul>
             )}
-            <div className="mt-8">
-              <Pagination
-                links={links}
-                meta={meta}
-              />
-            </div>
+            {artistsQuery.isSuccess && meta.total! >= 10 && (
+              <div className="mt-8">
+                <Pagination
+                  links={links}
+                  meta={meta}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

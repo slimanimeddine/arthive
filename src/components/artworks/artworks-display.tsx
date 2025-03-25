@@ -53,7 +53,9 @@ export function ArtworksDisplay() {
   return (
     <div className="flex flex-col">
       <div className="pt-8">
-        <SortFilterArtworks />
+        {artworksQuery.isSuccess && artworks.length === 0 && (
+          <SortFilterArtworks />
+        )}
       </div>
       <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -64,7 +66,7 @@ export function ArtworksDisplay() {
           {artworksQuery.isSuccess && artworks.length > 0 && (
             <ul
               role="list"
-              className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
+              className="mt-6 mb-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
             >
               {artworks.map((work) => (
                 <li key={work.id}>
@@ -74,12 +76,14 @@ export function ArtworksDisplay() {
             </ul>
           )}
 
-          <div className="py-8">
-            <Pagination
-              links={links}
-              meta={meta}
-            />
-          </div>
+          {artworksQuery.isSuccess && meta.total! >= 12 && (
+            <div className="py-8">
+              <Pagination
+                links={links}
+                meta={meta}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
