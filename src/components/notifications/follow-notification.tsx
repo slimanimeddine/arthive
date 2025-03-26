@@ -1,5 +1,5 @@
 'use client'
-import { UserIcon } from '@heroicons/react/20/solid'
+import { UserPlusIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -37,7 +37,7 @@ export function FollowNotification({
       <div className="relative flex space-x-3">
         <div>
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-400">
-            <UserIcon
+            <UserPlusIcon
               aria-hidden="true"
               className="h-5 w-5 text-white"
             />

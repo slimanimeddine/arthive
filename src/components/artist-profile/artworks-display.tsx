@@ -53,9 +53,7 @@ export function ArtworksDisplay({ username }: ArtworksDisplayProps) {
 
   return (
     <div className="sm:rounded-lg lg:col-span-2 lg:row-span-2 lg:row-end-2">
-      {artworksQuery.isSuccess && artworks.length === 0 && (
-        <SortFilterArtworks />
-      )}
+      {artworksQuery.isSuccess && artworks.length > 1 && <SortFilterArtworks />}
 
       <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">

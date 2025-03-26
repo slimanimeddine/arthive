@@ -53,7 +53,7 @@ export function ArtworksDisplay() {
   return (
     <div className="flex flex-col">
       <div className="pt-8">
-        {artworksQuery.isSuccess && artworks.length === 0 && (
+        {artworksQuery.isSuccess && artworks.length > 1 && (
           <SortFilterArtworks />
         )}
       </div>

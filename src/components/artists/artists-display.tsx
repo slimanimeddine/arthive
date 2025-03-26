@@ -108,13 +108,20 @@ export function ArtistsDisplay() {
                   </div>
                   <div className="relative mt-6 flex-1 px-4 sm:px-6">
                     <div className=" space-y-4">
-                      <SortArtists />
+                      {artistsQuery.isSuccess && artists.length > 1 && (
+                        <SortArtists />
+                      )}
+
                       <div>
                         <p className="block text-xs font-medium text-gray-700">
                           Filters
                         </p>
-                        <ArtistCategoryFilter />
-                        <ArtistCountryFilter />
+                        {artistsQuery.isSuccess && artists.length > 1 && (
+                          <ArtistCategoryFilter />
+                        )}
+                        {artistsQuery.isSuccess && artists.length > 1 && (
+                          <ArtistCountryFilter />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -137,13 +144,13 @@ export function ArtistsDisplay() {
 
         <div className="mt-4 lg:mt-8 lg:grid lg:grid-cols-4 lg:items-start lg:gap-8">
           <div className="hidden space-y-4 lg:block">
-            {artistsQuery.isSuccess && artists.length === 0 && <SortArtists />}
+            {artistsQuery.isSuccess && artists.length > 1 && <SortArtists />}
             <div>
               <p className="block text-xs font-medium text-gray-700">Filters</p>
-              {artistsQuery.isSuccess && artists.length === 0 && (
+              {artistsQuery.isSuccess && artists.length > 1 && (
                 <ArtistCategoryFilter />
               )}
-              {artistsQuery.isSuccess && artists.length === 0 && (
+              {artistsQuery.isSuccess && artists.length > 1 && (
                 <ArtistCountryFilter />
               )}
             </div>
