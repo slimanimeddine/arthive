@@ -151,3 +151,17 @@ export const markAllNotificationsAsReadResponse = zod.object({
   data: zod.string().optional(),
   status: zod.number().optional(),
 })
+
+/**
+ * Check if the authenticated user has any unread notifications
+ * @summary Check if unread notifications exist
+ */
+export const checkIfUnreadNotificationsExistResponse = zod.object({
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      exists: zod.boolean().optional(),
+    })
+    .optional(),
+  status: zod.number().optional(),
+})

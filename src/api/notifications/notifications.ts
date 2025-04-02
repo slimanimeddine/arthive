@@ -22,6 +22,8 @@ import type {
 import axios from '@/lib/axios'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import type {
+  CheckIfUnreadNotificationsExist200,
+  CheckIfUnreadNotificationsExist401,
   ListAuthenticatedUserNotifications200,
   ListAuthenticatedUserNotifications400,
   ListAuthenticatedUserNotifications401,
@@ -379,4 +381,144 @@ export const useMarkAllNotificationsAsRead = <
   const mutationOptions = getMarkAllNotificationsAsReadMutationOptions(options)
 
   return useMutation(mutationOptions)
+}
+/**
+ * Check if the authenticated user has any unread notifications
+ * @summary Check if unread notifications exist
+ */
+export const checkIfUnreadNotificationsExist = (
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<CheckIfUnreadNotificationsExist200>> => {
+  return axios.get(`/api/v1/users/me/notifications/unread/exists`, options)
+}
+
+export const getCheckIfUnreadNotificationsExistQueryKey = () => {
+  return [`/api/v1/users/me/notifications/unread/exists`] as const
+}
+
+export const getCheckIfUnreadNotificationsExistQueryOptions = <
+  TData = Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+  TError = AxiosError<CheckIfUnreadNotificationsExist401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+      TError,
+      TData
+    >
+  >
+  axios?: AxiosRequestConfig
+}) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getCheckIfUnreadNotificationsExistQueryKey()
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>
+  > = ({ signal }) =>
+    checkIfUnreadNotificationsExist({ signal, ...axiosOptions })
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckIfUnreadNotificationsExistQueryResult = NonNullable<
+  Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>
+>
+export type CheckIfUnreadNotificationsExistQueryError =
+  AxiosError<CheckIfUnreadNotificationsExist401>
+
+export function useCheckIfUnreadNotificationsExist<
+  TData = Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+  TError = AxiosError<CheckIfUnreadNotificationsExist401>,
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+        TError,
+        Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>
+      >,
+      'initialData'
+    >
+  axios?: AxiosRequestConfig
+}): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCheckIfUnreadNotificationsExist<
+  TData = Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+  TError = AxiosError<CheckIfUnreadNotificationsExist401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+        TError,
+        Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>
+      >,
+      'initialData'
+    >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useCheckIfUnreadNotificationsExist<
+  TData = Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+  TError = AxiosError<CheckIfUnreadNotificationsExist401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+      TError,
+      TData
+    >
+  >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Check if unread notifications exist
+ */
+
+export function useCheckIfUnreadNotificationsExist<
+  TData = Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+  TError = AxiosError<CheckIfUnreadNotificationsExist401>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
+      TError,
+      TData
+    >
+  >
+  axios?: AxiosRequestConfig
+}): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getCheckIfUnreadNotificationsExistQueryOptions(options)
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
 }

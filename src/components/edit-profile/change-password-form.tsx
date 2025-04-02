@@ -33,7 +33,6 @@ export function ChangePasswordForm() {
   const changePasswordMutation = useChangePassword(axiosConfig)
 
   function onSubmit(data: ChangePasswordBody) {
-    console.log(data)
     changePasswordMutation.mutate(
       {
         data,

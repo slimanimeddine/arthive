@@ -9,6 +9,7 @@ import { useCreateSession } from '@/hooks/session/use-create-session'
 import { useQueryClient } from '@tanstack/react-query'
 import { onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
+import axios from '@/lib/axios'
 
 type SignInBody = zod.infer<typeof signInBody>
 
@@ -24,7 +25,9 @@ export function SignInForm() {
 
   const router = useRouter()
 
-  function onSubmit(data: SignInBody) {
+  async function onSubmit(data: SignInBody) {
+    const csrf = () => axios.get('/sanctum/csrf-cookie')
+    await csrf()
     signInMutation.mutate(
       {
         data,

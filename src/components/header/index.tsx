@@ -15,6 +15,7 @@ import { classNames, fileUrl } from '@/lib/utils'
 import { useShowAuthenticatedUser } from '@/api/users/users'
 import { AvatarPlaceholder } from '../avatar-placeholder'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
+import { useCheckIfUnreadNotificationsExist } from '@/api/notifications/notifications'
 
 const navigation = [
   { name: 'Artists', href: '/artists' },
@@ -40,6 +41,10 @@ export function Header() {
     : undefined
 
   const userQuery = useShowAuthenticatedUser(axiosConfig)
+
+  const unreadNotifsExists = useCheckIfUnreadNotificationsExist(axiosConfig)
+
+  const unreadNotifs = unreadNotifsExists?.data?.data?.data
 
   const user = userQuery?.data?.data?.data
 
@@ -109,10 +114,15 @@ export function Header() {
               >
                 <span className="absolute -inset-1.5" />
                 <span className="sr-only">View notifications</span>
-                <BellIcon
-                  aria-hidden="true"
-                  className="h-6 w-6"
-                />
+                <span className="relative inline-block">
+                  <BellIcon
+                    aria-hidden="true"
+                    className="h-6 w-6"
+                  />
+                  {unreadNotifs?.exists && (
+                    <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white" />
+                  )}
+                </span>
               </Link>
             )}
 
@@ -182,10 +192,15 @@ export function Header() {
               >
                 <span className="absolute -inset-1.5" />
                 <span className="sr-only">View notifications</span>
-                <BellIcon
-                  aria-hidden="true"
-                  className="h-6 w-6"
-                />
+                <span className="relative inline-block">
+                  <BellIcon
+                    aria-hidden="true"
+                    className="h-6 w-6"
+                  />
+                  {unreadNotifs?.exists && (
+                    <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white" />
+                  )}
+                </span>
               </Link>
             )}
           </div>

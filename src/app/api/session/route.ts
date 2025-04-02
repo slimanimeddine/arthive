@@ -2,7 +2,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { decrypt, encrypt } from '@/lib/session'
-
 export async function GET() {
   try {
     const cookieStore = await cookies()

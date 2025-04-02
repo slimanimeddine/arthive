@@ -23,7 +23,6 @@ export function SignOutButton() {
   function onSignOut() {
     signOutMutation.mutate(undefined, {
       onSuccess: () => {
-        console.log('signed out from backend')
         deleteSessionMutation.mutate(undefined, {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['session'] })

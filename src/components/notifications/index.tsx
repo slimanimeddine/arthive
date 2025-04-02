@@ -3,7 +3,6 @@ import {
   useListAuthenticatedUserNotifications,
   useMarkAllNotificationsAsRead,
 } from '@/api/notifications/notifications'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import { NotificationDataItem } from '@/lib/types'
 import { Notification } from './notification'
 import { Pagination } from '../pagination'
@@ -12,9 +11,15 @@ import { CheckIcon } from '@heroicons/react/20/solid'
 import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { onError } from '@/lib/utils'
+import { useGetSessionPayload } from '@/hooks/session/use-get-session-payload'
+import { useEcho } from '@/hooks/use-echo'
+import { useEffect } from 'react'
 
 export function Index() {
-  const token = useGetAuthenticatedUserToken()
+  const sessionPayloadQuery = useGetSessionPayload()
+  const payload = sessionPayloadQuery?.data?.payload
+  const token = payload?.token as string
+  const userId = payload?.id as number
 
   const searchParams = useSearchParams()
   const page = searchParams.get('page')
@@ -50,9 +55,30 @@ export function Index() {
         queryClient.invalidateQueries({
           queryKey: [`/api/v1/users/me/notifications`],
         })
+        queryClient.invalidateQueries({
+          queryKey: [`/api/v1/users/me/notifications/unread/exists`],
+        })
       },
     })
   }
+
+  const echo = useEcho(token)
+
+  useEffect(() => {
+    if (echo) {
+      echo
+        .private(`App.Models.User.${userId}`)
+        .notification((notification: unknown) => {
+          console.log('notification: ', notification)
+          queryClient.invalidateQueries({
+            queryKey: [`/api/v1/users/me/notifications`],
+          })
+          queryClient.invalidateQueries({
+            queryKey: [`/api/v1/users/me/notifications/unread/exists`],
+          })
+        })
+    }
+  }, [echo, queryClient, userId])
 
   if (notificationsQuery.isPending) {
     return <p className="mt-2 text-sm text-gray-700">loading...</p>
