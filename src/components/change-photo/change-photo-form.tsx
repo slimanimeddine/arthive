@@ -2,7 +2,7 @@
 import { useUpdateAuthenticatedUser } from '@/api/users/users'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import { MAX_FILE_SIZE } from '@/lib/constants'
-import { classNames, getCroppedImg, onError } from '@/lib/utils'
+import { classNames, getCroppedImg, getUrlFromBlob, onError } from '@/lib/utils'
 import { PhotoIcon } from '@heroicons/react/24/solid'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState, useCallback } from 'react'
@@ -39,7 +39,7 @@ export function ChangePhotoForm() {
     multiple: false,
     maxSize: MAX_FILE_SIZE,
     onDrop: (acceptedFiles) => {
-      const image = URL.createObjectURL(acceptedFiles[0])
+      const image = getUrlFromBlob(acceptedFiles[0])
       setFile(image)
     },
   })

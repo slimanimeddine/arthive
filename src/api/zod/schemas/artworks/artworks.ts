@@ -87,13 +87,6 @@ export const listPublishedArtworksResponse = zod.object({
  * Create a new artwork
  * @summary Create Artwork
  */
-export const createArtworkBody = zod.object({
-  title: zod.string(),
-  description: zod.string(),
-  tags: zod.array(zod.string()),
-  photos: zod.string().optional(),
-})
-
 export const createArtworkResponse = zod.object({
   data: zod
     .object({

@@ -18,7 +18,12 @@ import { z as zod } from 'zod'
  * @summary Create Artwork
  */
 export const createArtworkBody = zod.object({
-  title: zod.string().min(3).max(255),
+  title: zod
+    .string()
+    .min(3, {
+      message: 'Title is too short',
+    })
+    .max(255),
   description: zod.string().refine(
     (value) => {
       if (!value) return true
@@ -30,7 +35,7 @@ export const createArtworkBody = zod.object({
     }
   ),
   tags: zod
-    .set(
+    .array(
       zod.enum([
         'painting',
         'graphic',
@@ -49,12 +54,19 @@ export const createArtworkBody = zod.object({
         'mosaic',
       ])
     )
-    .min(1)
-    .max(3),
+    .min(1, {
+      message: 'At least one tag is required',
+    })
+    .max(3, {
+      message: 'A maximum of 3 tags are allowed',
+    })
+    .refine((tags) => new Set(tags).size === tags.length, {
+      message: 'Tags must be unique', // Custom error message for duplicate tags
+    }),
   photos: zod
     .object({
       file: zod
-        .instanceof(File)
+        .instanceof(Blob)
         .refine((f) => f.size < MAX_FILE_SIZE, '5 MB is the max upload size.')
         .refine(
           (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),

@@ -218,7 +218,18 @@ export const createArtwork = (
   createArtworkBody: CreateArtworkBody,
   options?: AxiosRequestConfig
 ): Promise<AxiosResponse<CreateArtwork200>> => {
-  return axios.post(`/api/v1/artworks`, createArtworkBody, options)
+  const formData = new FormData()
+  formData.append('title', createArtworkBody.title)
+  formData.append('description', createArtworkBody.description)
+  createArtworkBody.tags.forEach((value, index) =>
+    formData.append(`tags[${index}]`, value)
+  )
+  createArtworkBody.photos.forEach((value, index) => {
+    formData.append(`photos[${index}][file]`, value.file)
+    formData.append(`photos[${index}][is_main]`, value.is_main ? '1' : '0')
+  })
+
+  return axios.post(`/api/v1/artworks`, formData, options)
 }
 
 export const getCreateArtworkMutationOptions = <

@@ -75,3 +75,20 @@ export type NotificationItem = {
   updatedAt: string
   data: NotificationData
 }
+
+export type Tag =
+  | 'painting'
+  | 'graphic'
+  | 'sculpture'
+  | 'folk art'
+  | 'textile'
+  | 'ceramics'
+  | 'stained glass windows'
+  | 'beads'
+  | 'paper'
+  | 'glass'
+  | 'dolls'
+  | 'jewellery'
+  | 'fresco'
+  | 'metal'
+  | 'mosaic'

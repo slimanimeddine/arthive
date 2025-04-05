@@ -65,3 +65,8 @@ export async function getCroppedImg(
     canvas.toBlob((blob) => resolve(blob), 'image/png')
   })
 }
+
+export function getUrlFromBlob(blob: Blob | null): string {
+  if (!blob) return ''
+  return URL.createObjectURL(blob)
+}

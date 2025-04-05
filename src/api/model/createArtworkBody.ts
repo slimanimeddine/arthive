@@ -5,6 +5,7 @@
  * ArtHive API Documentation
  * OpenAPI spec version: 1.0.0
  */
+import type { CreateArtworkBodyPhotosItem } from './createArtworkBodyPhotosItem'
 
 export type CreateArtworkBody = {
   /**
@@ -17,8 +18,6 @@ export type CreateArtworkBody = {
   description: string
   /** The tag of the artwork. The <code>name</code> of an existing record in the tags table. */
   tags: string[]
-  /**
-   * The photos of the artwork.
-   */
-  photos?: string
+  /** The photos of the artwork. Must have at least 1 items. Must not have more than 10 items. */
+  photos: CreateArtworkBodyPhotosItem[]
 }

@@ -38,7 +38,7 @@ export function ArtworkLikeNotification({
     >
       <div className="relative flex space-x-3">
         <div>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bgindigo500">
             <HandThumbUpIcon
               aria-hidden="true"
               className="h-5 w-5 text-white"

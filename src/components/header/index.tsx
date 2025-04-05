@@ -120,7 +120,7 @@ export function Header() {
                     className="h-6 w-6"
                   />
                   {unreadNotifs?.exists && (
-                    <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white" />
+                    <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-indigo-600 ring-2 ring-white" />
                   )}
                 </span>
               </Link>
@@ -198,7 +198,7 @@ export function Header() {
                     className="h-6 w-6"
                   />
                   {unreadNotifs?.exists && (
-                    <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white" />
+                    <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-indigo-600 ring-2 ring-white" />
                   )}
                 </span>
               </Link>
