@@ -221,13 +221,10 @@ export const createArtwork = (
   const formData = new FormData()
   formData.append('title', createArtworkBody.title)
   formData.append('description', createArtworkBody.description)
-  createArtworkBody.tags.forEach((value, index) =>
-    formData.append(`tags[${index}]`, value)
+  createArtworkBody.tags.forEach((value) => formData.append('tags', value))
+  createArtworkBody.photos.forEach((value) =>
+    formData.append('photos', JSON.stringify(value))
   )
-  createArtworkBody.photos.forEach((value, index) => {
-    formData.append(`photos[${index}][file]`, value.file)
-    formData.append(`photos[${index}][is_main]`, value.is_main ? '1' : '0')
-  })
 
   return axios.post(`/api/v1/artworks`, formData, options)
 }

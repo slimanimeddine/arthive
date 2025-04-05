@@ -1,3 +1,5 @@
+import { Index } from '@/components/my-artworks'
+
 export default function Page() {
-  return <div>my artworks</div>
+  return <Index />
 }
