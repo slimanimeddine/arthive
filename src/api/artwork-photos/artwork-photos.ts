@@ -37,8 +37,8 @@ export const uploadArtworkPhotos = (
   options?: AxiosRequestConfig
 ): Promise<AxiosResponse<UploadArtworkPhotos200>> => {
   const formData = new FormData()
-  uploadArtworkPhotosBody.photos.forEach((value) =>
-    formData.append('photos', value)
+  uploadArtworkPhotosBody.photos.forEach((value, index) =>
+    formData.append(`photos[${index}]`, value)
   )
 
   return axios.post(

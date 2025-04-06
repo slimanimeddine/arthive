@@ -2,25 +2,15 @@
 
 import { usePublishArtwork } from '@/api/artworks/artworks'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { getUrlFromBlob, onError } from '@/lib/utils'
-import useArtworkStore from '@/stores/artwork-store'
+import { onError } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
+import { FirstStepProps } from './first-step'
 
-export function FourthStep() {
-  const {
-    photos,
-    mainPhoto,
-    croppedMainPhoto,
-    categories,
-    title,
-    description,
-    setStatus,
-    id,
-    setToDefault,
-  } = useArtworkStore()
+type FourthStepProps = FirstStepProps
 
+export function FourthStep({ artwork }: FourthStepProps) {
   const token = useGetAuthenticatedUserToken()
 
   const axiosConfig = token
@@ -38,11 +28,9 @@ export function FourthStep() {
   const queryClient = useQueryClient()
 
   const handlePublish = () => {
-    setStatus('published')
-
     publishArtworkMutation.mutate(
       {
-        artworkId: id!,
+        artworkId: artwork.id,
       },
       {
         onError,
@@ -51,7 +39,6 @@ export function FourthStep() {
             queryKey: ['/api/v1/users/me/artworks'],
           })
           toast.success('Artwork draft published successfully!')
-          setToDefault()
         },
       }
     )
@@ -63,9 +50,7 @@ export function FourthStep() {
       <div>
         <h3 className="text-lg font-semibold mb-2">Main Photo:</h3>
         <Image
-          src={
-            getUrlFromBlob(croppedMainPhoto) || getUrlFromBlob(mainPhoto) || ''
-          }
+          src={artwork.mainPhotoUrl}
           alt="Main Photo"
           className="w-48 h-48 object-cover rounded-md"
           width={192}
@@ -75,11 +60,11 @@ export function FourthStep() {
       <div className="mt-4">
         <h3 className="text-lg font-semibold mb-2">Other Photos:</h3>
         <div className="flex flex-wrap gap-2">
-          {photos.map((photo, index) => (
+          {artwork.photos.map((photo) => (
             <Image
-              key={index}
-              src={getUrlFromBlob(photo)}
-              alt={`Uploaded ${index}`}
+              key={photo.id}
+              src={photo.path}
+              alt={`Uploaded ${photo.id}`}
               className="w-24 h-24 object-cover rounded-md"
               width={96}
               height={96}
@@ -90,13 +75,14 @@ export function FourthStep() {
       <div className="mt-4">
         <h3 className="text-lg font-semibold mb-2">Details:</h3>
         <p className="text-gray-700">
-          <strong>Title:</strong> {title}
+          <strong>Title:</strong> {artwork.title}
         </p>
         <p className="text-gray-700">
-          <strong>Description:</strong> {description}
+          <strong>Description:</strong> {artwork.description}
         </p>
         <p className="text-gray-700">
-          <strong>Categories:</strong> {categories.join(', ')}
+          <strong>Categories:</strong>{' '}
+          {artwork.tags.map((item) => item.name).join(', ')}
         </p>
       </div>
       <button

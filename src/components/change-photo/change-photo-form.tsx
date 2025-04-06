@@ -3,7 +3,6 @@ import { useUpdateAuthenticatedUser } from '@/api/users/users'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import { MAX_FILE_SIZE } from '@/lib/constants'
 import { classNames, getCroppedImg, getUrlFromBlob, onError } from '@/lib/utils'
-import { PhotoIcon } from '@heroicons/react/24/solid'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -113,28 +112,12 @@ export function ChangePhotoForm() {
             ) : (
               <div
                 {...getRootProps()}
-                className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10"
+                className="border-2 border-dashed border-gray-300 p-8 text-center cursor-pointer hover:border-indigo-500 transition-colors"
               >
-                <div className="text-center">
-                  <PhotoIcon
-                    aria-hidden="true"
-                    className="mx-auto size-12 text-gray-300"
-                  />
-                  <div className="mt-4 flex justify-center text-sm/6 text-gray-600">
-                    <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 hover:text-indigo-500">
-                      <span>Upload a file</span>
-                      <input
-                        {...getInputProps()}
-                        type="file"
-                        className="sr-only"
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs/5 text-gray-600">
-                    1 Image allowed, PNG, JPG, JPEG OR WEBP, up to 5MB
-                  </p>
-                </div>
+                <input {...getInputProps()} />
+                <p className="text-gray-600">
+                  Drag and drop photos here, or click to select files
+                </p>
               </div>
             )}
           </div>

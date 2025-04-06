@@ -25,13 +25,21 @@ export function CreateArtwork() {
     }
   }
 
+  const handleBack = () => {
+    setStep(Math.max(step - 1, 1))
+  }
+
+  const handleNext = () => {
+    setStep(Math.min(step + 1, 4))
+  }
+
   return (
     <div className="p-8 max-w-4xl mx-auto bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-center mb-8">Create Artwork</h1>
       {renderStep()}
       <div className="flex justify-between mt-6">
         <button
-          onClick={() => setStep(Math.max(step - 1, 1))}
+          onClick={handleBack}
           className={classNames(
             'px-4 py-2 text-white rounded-md transition-colors',
             step === 1
@@ -43,7 +51,7 @@ export function CreateArtwork() {
           Back
         </button>
         <button
-          onClick={() => setStep(Math.min(step + 1, 4))}
+          onClick={handleNext}
           className={classNames(
             'px-4 py-2 text-white rounded-md transition-colors',
             isStepValid()

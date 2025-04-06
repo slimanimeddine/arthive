@@ -41,6 +41,9 @@ import type {
   PublishArtwork401,
   PublishArtwork403,
   PublishArtwork404,
+  ShowAuthenticatedUserArtwork200,
+  ShowAuthenticatedUserArtwork401,
+  ShowAuthenticatedUserArtwork404,
   ShowPublishedArtwork200,
   ShowPublishedArtwork404,
   UpdateArtworkDraft200,
@@ -784,6 +787,182 @@ export function useListAuthenticatedUserArtworks<
 } {
   const queryOptions = getListAuthenticatedUserArtworksQueryOptions(
     params,
+    options
+  )
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * Retrieve a single artwork published or draft by the currently authenticated user
+ * @summary Show Authenticated User Artwork
+ */
+export const showAuthenticatedUserArtwork = (
+  artworkId: number,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<ShowAuthenticatedUserArtwork200>> => {
+  return axios.get(`/api/v1/users/me/artworks/${artworkId}`, options)
+}
+
+export const getShowAuthenticatedUserArtworkQueryKey = (artworkId: number) => {
+  return [`/api/v1/users/me/artworks/${artworkId}`] as const
+}
+
+export const getShowAuthenticatedUserArtworkQueryOptions = <
+  TData = Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+  TError = AxiosError<
+    ShowAuthenticatedUserArtwork401 | ShowAuthenticatedUserArtwork404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getShowAuthenticatedUserArtworkQueryKey(artworkId)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>
+  > = ({ signal }) =>
+    showAuthenticatedUserArtwork(artworkId, { signal, ...axiosOptions })
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!artworkId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ShowAuthenticatedUserArtworkQueryResult = NonNullable<
+  Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>
+>
+export type ShowAuthenticatedUserArtworkQueryError = AxiosError<
+  ShowAuthenticatedUserArtwork401 | ShowAuthenticatedUserArtwork404
+>
+
+export function useShowAuthenticatedUserArtwork<
+  TData = Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+  TError = AxiosError<
+    ShowAuthenticatedUserArtwork401 | ShowAuthenticatedUserArtwork404
+  >,
+>(
+  artworkId: number,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+          TError,
+          Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>
+        >,
+        'initialData'
+      >
+    axios?: AxiosRequestConfig
+  }
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useShowAuthenticatedUserArtwork<
+  TData = Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+  TError = AxiosError<
+    ShowAuthenticatedUserArtwork401 | ShowAuthenticatedUserArtwork404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+          TError,
+          Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>
+        >,
+        'initialData'
+      >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useShowAuthenticatedUserArtwork<
+  TData = Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+  TError = AxiosError<
+    ShowAuthenticatedUserArtwork401 | ShowAuthenticatedUserArtwork404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Show Authenticated User Artwork
+ */
+
+export function useShowAuthenticatedUserArtwork<
+  TData = Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+  TError = AxiosError<
+    ShowAuthenticatedUserArtwork401 | ShowAuthenticatedUserArtwork404
+  >,
+>(
+  artworkId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
+        TError,
+        TData
+      >
+    >
+    axios?: AxiosRequestConfig
+  }
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getShowAuthenticatedUserArtworkQueryOptions(
+    artworkId,
     options
   )
 

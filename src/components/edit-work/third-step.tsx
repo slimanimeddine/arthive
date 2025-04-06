@@ -3,19 +3,21 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import useArtworkStore from '@/stores/artwork-store'
 import { createArtworkBody } from '@/schemas/artworks'
 import { TAGS } from '@/lib/constants'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { useCreateArtwork } from '@/api/artworks/artworks'
+import { useUpdateArtworkDraft } from '@/api/artworks/artworks'
 import { onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
+import { FirstStepProps } from './first-step'
 
 const schema = createArtworkBody.omit({ photos: true })
 type FormData = z.infer<typeof schema>
 
-export function ThirdStep() {
+type ThirdStepProps = FirstStepProps
+
+export function ThirdStep({ artwork }: ThirdStepProps) {
   const token = useGetAuthenticatedUserToken()
 
   const axiosConfig = token
@@ -23,28 +25,14 @@ export function ThirdStep() {
         axios: {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
           },
         },
       }
     : undefined
 
-  const createArtworkMutation = useCreateArtwork(axiosConfig)
+  const updateArtworkMutation = useUpdateArtworkDraft(axiosConfig)
 
   const queryClient = useQueryClient()
-
-  const {
-    photos,
-    mainPhoto,
-    croppedMainPhoto,
-    categories,
-    title,
-    description,
-    setCategories,
-    setTitle,
-    setDescription,
-    setId,
-  } = useArtworkStore()
 
   const {
     register,
@@ -52,47 +40,32 @@ export function ThirdStep() {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { title, description, tags: categories },
+    defaultValues: {
+      title: artwork.title,
+      description: artwork.description,
+      tags: artwork.tags.map((item) => item.name),
+    },
   })
 
   const onSubmit = (data: FormData) => {
-    setTitle(data.title)
-    setDescription(data.description)
-    setCategories(data.tags)
-
     const dataObj = {
       title: data.title,
       description: data.description,
       tags: data.tags,
-      photos: photos.map((item) => ({
-        file: item === mainPhoto ? (croppedMainPhoto as Blob) : item,
-        is_main: item === mainPhoto,
-      })),
     }
 
-    // const formData = new FormData()
-    // formData.append('title', createArtworkBody.title)
-    // formData.append('description', createArtworkBody.description)
-    // createArtworkBody.tags.forEach((value, index) =>
-    //   formData.append(`tags[${index}]`, value)
-    // )
-    // createArtworkBody.photos.forEach((value, index) => {
-    //   formData.append(`photos[${index}][file]`, value.file)
-    //   formData.append(`photos[${index}][is_main]`, value.is_main ? '1' : '0')
-    // })
-
-    createArtworkMutation.mutate(
+    updateArtworkMutation.mutate(
       {
+        artworkId: artwork.id,
         data: dataObj,
       },
       {
         onError,
-        onSuccess: (data) => {
-          setId(data.data.data!.id!)
+        onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: ['/api/v1/users/me/artworks'],
           })
-          toast.success('Artwork draft created successfully!')
+          toast.success('Artwork draft updated successfully!')
         },
       }
     )
@@ -155,7 +128,7 @@ export function ThirdStep() {
         type="submit"
         className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors"
       >
-        Save as Draft
+        Update Draft
       </button>
     </form>
   )

@@ -1,11 +1,16 @@
 import { Tag } from '@/lib/types'
 import { create } from 'zustand'
 
-interface ArtworkState {
+type Photo = {
+  id: number
+  path: string
+}
+
+interface EditArtworkState {
   step: number
-  photos: Blob[]
-  mainPhoto: Blob | null
-  croppedMainPhoto: Blob | null
+  photos: Photo[]
+  mainPhoto: string | null
+  croppedMainPhoto: string | null
   categories: Tag[]
   title: string
   description: string
@@ -13,12 +18,12 @@ interface ArtworkState {
   id?: number
 
   setStep: (step: number) => void
-  addPhotos: (newPhotos: Blob[]) => void
-  removePhoto: (photoToRemove: Blob) => void
+  addPhotos: (newPhotos: Photo[]) => void
+  removePhoto: (photoId: number) => void
   removeMainPhoto: () => void
   removeCroppedMainPhoto: () => void
-  setMainPhoto: (photo: Blob | null) => void
-  setCroppedMainPhoto: (croppedPhoto: Blob | null) => void
+  setMainPhoto: (photo: string) => void
+  setCroppedMainPhoto: (photo: string) => void
   setCategories: (categories: Tag[]) => void
   setTitle: (title: string) => void
   setDescription: (description: string) => void
@@ -30,7 +35,7 @@ interface ArtworkState {
   isStepValid: () => boolean
 }
 
-const useArtworkStore = create<ArtworkState>((set, get) => ({
+const useEditArtworkStore = create<EditArtworkState>((set, get) => ({
   step: 1,
   photos: [],
   mainPhoto: null,
@@ -44,9 +49,9 @@ const useArtworkStore = create<ArtworkState>((set, get) => ({
   setStep: (step) => set({ step }),
   addPhotos: (newPhotos) =>
     set((state) => ({ photos: [...state.photos, ...newPhotos] })),
-  removePhoto: (photoToRemove) =>
+  removePhoto: (photoId) =>
     set((state) => ({
-      photos: state.photos.filter((photo) => photo !== photoToRemove),
+      photos: state.photos.filter((photo) => photo.id !== photoId),
     })),
   setMainPhoto: (photo) => set({ mainPhoto: photo }),
   removeMainPhoto: () => set({ mainPhoto: null }),
@@ -101,4 +106,4 @@ const useArtworkStore = create<ArtworkState>((set, get) => ({
   },
 }))
 
-export default useArtworkStore
+export default useEditArtworkStore

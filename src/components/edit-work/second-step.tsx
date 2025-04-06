@@ -1,0 +1,116 @@
+'use client'
+import { getCroppedImg, onError } from '@/lib/utils'
+import Image from 'next/image'
+import { useCallback, useState } from 'react'
+import Cropper, { Area } from 'react-easy-crop'
+import { FirstStepProps } from './first-step'
+import { useQueryClient } from '@tanstack/react-query'
+import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
+import { useSetArtworkPhotoAsMain } from '@/api/artwork-photos/artwork-photos'
+
+type SecondStepProps = FirstStepProps
+
+export function SecondStep({ artwork }: SecondStepProps) {
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
+
+  const defaultMainPhoto = artwork.photos.find(
+    (photo) => photo.id === artwork.id
+  )
+
+  const [mainPhoto, setMainPhoto] = useState<
+    | {
+        id: number
+        path: string
+      }
+    | undefined
+  >(defaultMainPhoto)
+
+  const queryClient = useQueryClient()
+
+  const token = useGetAuthenticatedUserToken()
+
+  const axiosConfig = token
+    ? {
+        axios: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      }
+    : undefined
+
+  const setArtworkPhotoAsMainMutation = useSetArtworkPhotoAsMain(axiosConfig)
+
+  const onCropComplete = useCallback(
+    async (croppedArea: Area, croppedAreaPixels: Area) => {
+      const croppedImage = await getCroppedImg(
+        artwork.mainPhotoUrl,
+        croppedAreaPixels
+      )
+      setArtworkPhotoAsMainMutation.mutate(
+        {
+          artworkPhotoId: artwork.id,
+        },
+        {
+          onError,
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
+            })
+          },
+        }
+      )
+    },
+    [
+      artwork.id,
+      artwork.mainPhotoUrl,
+      queryClient,
+      setArtworkPhotoAsMainMutation,
+    ]
+  )
+
+  return (
+    <div className="p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4">
+        Step 2: Select Main Photo & Crop
+      </h2>
+      <div>
+        <h3 className="text-lg font-semibold mb-2">Select Main Photo:</h3>
+        <div className="flex flex-wrap gap-2">
+          {artwork.photos.map((photo) => (
+            <Image
+              key={photo.id}
+              src={photo.path}
+              alt={`Uploaded ${photo.id}`}
+              width={96}
+              height={96}
+              onClick={() => setMainPhoto(photo)}
+              className={`w-24 h-24 object-cover rounded-md cursor-pointer ${
+                artwork.mainPhotoUrl === photo.path
+                  ? 'border-2 border-indigo-500'
+                  : ''
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+      {artwork.mainPhotoUrl && (
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold mb-2">Crop Main Photo:</h3>
+          <div className="relative w-full h-96 overflow-hidden rounded-md">
+            <Cropper
+              image={artwork.mainPhotoUrl}
+              crop={crop}
+              zoom={zoom}
+              aspect={1}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={onCropComplete}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
