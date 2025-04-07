@@ -28,20 +28,26 @@ export function FourthStep({ artwork }: FourthStepProps) {
   const queryClient = useQueryClient()
 
   const handlePublish = () => {
-    publishArtworkMutation.mutate(
-      {
-        artworkId: artwork.id,
-      },
-      {
-        onError,
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['/api/v1/users/me/artworks'],
-          })
-          toast.success('Artwork draft published successfully!')
+    if (
+      window.confirm(
+        'Once you publish your artwork you cannot modify it anymore. Do you want to proceed?'
+      )
+    ) {
+      publishArtworkMutation.mutate(
+        {
+          artworkId: artwork.id,
         },
-      }
-    )
+        {
+          onError,
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: ['/api/v1/users/me/artworks'],
+            })
+            toast.success('Artwork draft published successfully!')
+          },
+        }
+      )
+    }
   }
 
   return (

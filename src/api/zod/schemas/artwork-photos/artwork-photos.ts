@@ -52,3 +52,13 @@ export const deleteArtworkPhotoResponse = zod.object({
   data: zod.string().optional(),
   status: zod.number().optional(),
 })
+
+/**
+ * Replace the path of an artwork photo
+ * @summary Replace Artwork Photo Path
+ */
+export const replaceArtworkPhotoPathResponse = zod.object({
+  message: zod.string().optional(),
+  data: zod.string().optional(),
+  status: zod.number().optional(),
+})

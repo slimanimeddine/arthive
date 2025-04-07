@@ -1,14 +1,20 @@
 'use client'
 
-import { useListAuthenticatedUserArtworks } from '@/api/artworks/artworks'
+import {
+  useDeleteArtwork,
+  useListAuthenticatedUserArtworks,
+} from '@/api/artworks/artworks'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { fileUrl } from '@/lib/utils'
+import { fileUrl, onError } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Pagination } from '../pagination'
+import { useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 export function Index() {
+  const queryClient = useQueryClient()
   const token = useGetAuthenticatedUserToken()
   const axiosConfig = token
     ? {
@@ -36,6 +42,8 @@ export function Index() {
     axiosConfig
   )
 
+  const deleteArtworkMutation = useDeleteArtwork(axiosConfig)
+
   if (artworksQuery.isPending) {
     return <p className="mt-2 text-sm text-gray-700">loading...</p>
   }
@@ -59,6 +67,30 @@ export function Index() {
 
   const links = artworksQuery.data!.data.links!
   const meta = artworksQuery.data!.data.meta!
+
+  const handleDeleteArtwork = (artworkId: number) => {
+    if (
+      window.confirm(
+        'Are you sure you want to delete this artwork? This action cannot be undone.'
+      )
+    ) {
+      deleteArtworkMutation.mutate(
+        {
+          artworkId,
+        },
+        {
+          onError,
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: ['/api/v1/users/me/artworks'],
+            })
+
+            toast.success('Artwork deleted successfully!')
+          },
+        }
+      )
+    }
+  }
 
   return (
     <div className="bg-white">
@@ -151,15 +183,15 @@ export function Index() {
                                 </Link>
                               )}
 
-                              <Link
-                                href={`/my-artworks/${artwork.id}/edit`}
+                              <button
+                                onClick={() => handleDeleteArtwork(artwork.id)}
                                 className="text-indigo-600 hover:text-indigo-900"
                               >
                                 Remove
                                 <span className="sr-only">
                                   , {artwork.title}
                                 </span>
-                              </Link>
+                              </button>
                             </div>
                           </td>
                         </tr>

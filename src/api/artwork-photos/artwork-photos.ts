@@ -18,6 +18,11 @@ import type {
   DeleteArtworkPhoto401,
   DeleteArtworkPhoto403,
   DeleteArtworkPhoto404,
+  ReplaceArtworkPhotoPath200,
+  ReplaceArtworkPhotoPath401,
+  ReplaceArtworkPhotoPath403,
+  ReplaceArtworkPhotoPath404,
+  ReplaceArtworkPhotoPathBody,
   SetArtworkPhotoAsMain200,
   SetArtworkPhotoAsMain401,
   SetArtworkPhotoAsMain404,
@@ -37,8 +42,8 @@ export const uploadArtworkPhotos = (
   options?: AxiosRequestConfig
 ): Promise<AxiosResponse<UploadArtworkPhotos200>> => {
   const formData = new FormData()
-  uploadArtworkPhotosBody.photos.forEach((value, index) =>
-    formData.append(`photos[${index}]`, value)
+  uploadArtworkPhotosBody.photos.forEach((value) =>
+    formData.append('photos', value)
   )
 
   return axios.post(
@@ -289,6 +294,105 @@ export const useDeleteArtworkPhoto = <
   TContext
 > => {
   const mutationOptions = getDeleteArtworkPhotoMutationOptions(options)
+
+  return useMutation(mutationOptions)
+}
+/**
+ * Replace the path of an artwork photo
+ * @summary Replace Artwork Photo Path
+ */
+export const replaceArtworkPhotoPath = (
+  artworkPhotoId: number,
+  replaceArtworkPhotoPathBody: ReplaceArtworkPhotoPathBody,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<ReplaceArtworkPhotoPath200>> => {
+  const formData = new FormData()
+  formData.append('photo', replaceArtworkPhotoPathBody.photo)
+
+  return axios.put(
+    `/api/v1/artwork-photos/${artworkPhotoId}/path`,
+    formData,
+    options
+  )
+}
+
+export const getReplaceArtworkPhotoPathMutationOptions = <
+  TError = AxiosError<
+    | ReplaceArtworkPhotoPath401
+    | ReplaceArtworkPhotoPath403
+    | ReplaceArtworkPhotoPath404
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof replaceArtworkPhotoPath>>,
+    TError,
+    { artworkPhotoId: number; data: ReplaceArtworkPhotoPathBody },
+    TContext
+  >
+  axios?: AxiosRequestConfig
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof replaceArtworkPhotoPath>>,
+  TError,
+  { artworkPhotoId: number; data: ReplaceArtworkPhotoPathBody },
+  TContext
+> => {
+  const mutationKey = ['replaceArtworkPhotoPath']
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof replaceArtworkPhotoPath>>,
+    { artworkPhotoId: number; data: ReplaceArtworkPhotoPathBody }
+  > = (props) => {
+    const { artworkPhotoId, data } = props ?? {}
+
+    return replaceArtworkPhotoPath(artworkPhotoId, data, axiosOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type ReplaceArtworkPhotoPathMutationResult = NonNullable<
+  Awaited<ReturnType<typeof replaceArtworkPhotoPath>>
+>
+export type ReplaceArtworkPhotoPathMutationBody = ReplaceArtworkPhotoPathBody
+export type ReplaceArtworkPhotoPathMutationError = AxiosError<
+  | ReplaceArtworkPhotoPath401
+  | ReplaceArtworkPhotoPath403
+  | ReplaceArtworkPhotoPath404
+>
+
+/**
+ * @summary Replace Artwork Photo Path
+ */
+export const useReplaceArtworkPhotoPath = <
+  TError = AxiosError<
+    | ReplaceArtworkPhotoPath401
+    | ReplaceArtworkPhotoPath403
+    | ReplaceArtworkPhotoPath404
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof replaceArtworkPhotoPath>>,
+    TError,
+    { artworkPhotoId: number; data: ReplaceArtworkPhotoPathBody },
+    TContext
+  >
+  axios?: AxiosRequestConfig
+}): UseMutationResult<
+  Awaited<ReturnType<typeof replaceArtworkPhotoPath>>,
+  TError,
+  { artworkPhotoId: number; data: ReplaceArtworkPhotoPathBody },
+  TContext
+> => {
+  const mutationOptions = getReplaceArtworkPhotoPathMutationOptions(options)
 
   return useMutation(mutationOptions)
 }

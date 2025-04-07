@@ -55,12 +55,10 @@ export function EditArtwork({ id }: EditArtworkProps) {
     status: artworkData.status!,
     publishedAt: artworkData.created_at!,
     mainPhotoUrl: fileUrl(artworkData.artwork_main_photo_path!)!,
-    photos: artworkData
-      .artwork_photos!.filter((photo) => photo.is_main === 0)
-      .map((photo) => ({
-        id: photo.id!,
-        path: fileUrl(photo.path!)!,
-      })),
+    photos: artworkData.artwork_photos!.map((photo) => ({
+      id: photo.id!,
+      path: fileUrl(photo.path!)!,
+    })),
     tags: artworkData.tags!.map((tag) => ({
       id: tag.id!,
       name: tag.name as Tag,

@@ -99,7 +99,7 @@ export const updateArtworkDraftBody = zod.object({
       }
     ),
   tags: zod
-    .set(
+    .array(
       zod.enum([
         'painting',
         'graphic',
@@ -118,7 +118,14 @@ export const updateArtworkDraftBody = zod.object({
         'mosaic',
       ])
     )
-    .min(1)
-    .max(3)
+    .min(1, {
+      message: 'At least one tag is required',
+    })
+    .max(3, {
+      message: 'A maximum of 3 tags are allowed',
+    })
+    .refine((tags) => new Set(tags).size === tags.length, {
+      message: 'Tags must be unique', // Custom error message for duplicate tags
+    })
     .optional(),
 })

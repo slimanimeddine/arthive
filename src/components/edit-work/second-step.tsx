@@ -6,7 +6,10 @@ import Cropper, { Area } from 'react-easy-crop'
 import { FirstStepProps } from './first-step'
 import { useQueryClient } from '@tanstack/react-query'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { useSetArtworkPhotoAsMain } from '@/api/artwork-photos/artwork-photos'
+import {
+  useReplaceArtworkPhotoPath,
+  useSetArtworkPhotoAsMain,
+} from '@/api/artwork-photos/artwork-photos'
 
 type SecondStepProps = FirstStepProps
 
@@ -26,6 +29,8 @@ export function SecondStep({ artwork }: SecondStepProps) {
     | undefined
   >(defaultMainPhoto)
 
+  const [croppedMainPhoto, setCroppedMainPhoto] = useState<Blob | null>(null)
+
   const queryClient = useQueryClient()
 
   const token = useGetAuthenticatedUserToken()
@@ -35,22 +40,37 @@ export function SecondStep({ artwork }: SecondStepProps) {
         axios: {
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
           },
         },
       }
     : undefined
 
   const setArtworkPhotoAsMainMutation = useSetArtworkPhotoAsMain(axiosConfig)
+  const replaceArtworkPhotoPathMutation =
+    useReplaceArtworkPhotoPath(axiosConfig)
 
   const onCropComplete = useCallback(
     async (croppedArea: Area, croppedAreaPixels: Area) => {
+      if (!mainPhoto) return
       const croppedImage = await getCroppedImg(
         artwork.mainPhotoUrl,
         croppedAreaPixels
       )
-      setArtworkPhotoAsMainMutation.mutate(
+
+      setCroppedMainPhoto(croppedImage)
+    },
+    [artwork.mainPhotoUrl, mainPhoto]
+  )
+
+  function handleSetAsMainPhoto() {
+    if (mainPhoto && croppedMainPhoto) {
+      replaceArtworkPhotoPathMutation.mutate(
         {
-          artworkPhotoId: artwork.id,
+          artworkPhotoId: mainPhoto.id,
+          data: {
+            photo: croppedMainPhoto,
+          },
         },
         {
           onError,
@@ -58,17 +78,25 @@ export function SecondStep({ artwork }: SecondStepProps) {
             queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
             })
+
+            setArtworkPhotoAsMainMutation.mutate(
+              {
+                artworkPhotoId: mainPhoto.id,
+              },
+              {
+                onError,
+                onSuccess: () => {
+                  queryClient.invalidateQueries({
+                    queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
+                  })
+                },
+              }
+            )
           },
         }
       )
-    },
-    [
-      artwork.id,
-      artwork.mainPhotoUrl,
-      queryClient,
-      setArtworkPhotoAsMainMutation,
-    ]
-  )
+    }
+  }
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -87,7 +115,7 @@ export function SecondStep({ artwork }: SecondStepProps) {
               height={96}
               onClick={() => setMainPhoto(photo)}
               className={`w-24 h-24 object-cover rounded-md cursor-pointer ${
-                artwork.mainPhotoUrl === photo.path
+                mainPhoto?.path === photo.path
                   ? 'border-2 border-indigo-500'
                   : ''
               }`}
@@ -95,12 +123,21 @@ export function SecondStep({ artwork }: SecondStepProps) {
           ))}
         </div>
       </div>
-      {artwork.mainPhotoUrl && (
+      {mainPhoto?.path && (
         <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-2">Crop Main Photo:</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold mb-2">Crop Main Photo:</h3>
+            <button
+              type="button"
+              onClick={handleSetAsMainPhoto}
+              className="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              Set as Main Photo
+            </button>
+          </div>
           <div className="relative w-full h-96 overflow-hidden rounded-md">
             <Cropper
-              image={artwork.mainPhotoUrl}
+              image={mainPhoto?.path}
               crop={crop}
               zoom={zoom}
               aspect={1}

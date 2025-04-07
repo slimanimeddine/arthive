@@ -3,17 +3,16 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { createArtworkBody } from '@/schemas/artworks'
+import { updateArtworkDraftBody } from '@/schemas/artworks'
 import { TAGS } from '@/lib/constants'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { useUpdateArtworkDraft } from '@/api/artworks/artworks'
 import { onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { FirstStepProps } from './first-step'
+import { useUpdateArtworkDraft } from '@/api/artworks/artworks'
 
-const schema = createArtworkBody.omit({ photos: true })
-type FormData = z.infer<typeof schema>
+type FormData = z.infer<typeof updateArtworkDraftBody>
 
 type ThirdStepProps = FirstStepProps
 
@@ -39,7 +38,7 @@ export function ThirdStep({ artwork }: ThirdStepProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(updateArtworkDraftBody),
     defaultValues: {
       title: artwork.title,
       description: artwork.description,
@@ -65,6 +64,10 @@ export function ThirdStep({ artwork }: ThirdStepProps) {
           queryClient.invalidateQueries({
             queryKey: ['/api/v1/users/me/artworks'],
           })
+          queryClient.invalidateQueries({
+            queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
+          })
+
           toast.success('Artwork draft updated successfully!')
         },
       }

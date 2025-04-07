@@ -7,10 +7,10 @@ import useArtworkStore from '@/stores/artwork-store'
 import { createArtworkBody } from '@/schemas/artworks'
 import { TAGS } from '@/lib/constants'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { useCreateArtwork } from '@/api/artworks/artworks'
 import { onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
+import { useCreateArtwork } from '@/hooks/artworks'
 
 const schema = createArtworkBody.omit({ photos: true })
 type FormData = z.infer<typeof schema>
@@ -69,17 +69,6 @@ export function ThirdStep() {
         is_main: item === mainPhoto,
       })),
     }
-
-    // const formData = new FormData()
-    // formData.append('title', createArtworkBody.title)
-    // formData.append('description', createArtworkBody.description)
-    // createArtworkBody.tags.forEach((value, index) =>
-    //   formData.append(`tags[${index}]`, value)
-    // )
-    // createArtworkBody.photos.forEach((value, index) => {
-    //   formData.append(`photos[${index}][file]`, value.file)
-    //   formData.append(`photos[${index}][is_main]`, value.is_main ? '1' : '0')
-    // })
 
     createArtworkMutation.mutate(
       {
