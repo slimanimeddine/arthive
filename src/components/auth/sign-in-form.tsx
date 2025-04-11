@@ -45,7 +45,7 @@ export function SignInForm() {
               onError: (error) => onError(error),
               onSuccess: () => {
                 toast.success('User signed in successfully!')
-                router.back()
+                router.push('/')
                 queryClient.invalidateQueries({ queryKey: ['session'] })
               },
             }

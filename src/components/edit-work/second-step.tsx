@@ -18,7 +18,7 @@ export function SecondStep({ artwork }: SecondStepProps) {
   const [zoom, setZoom] = useState(1)
 
   const defaultMainPhoto = artwork.photos.find(
-    (photo) => photo.id === artwork.id
+    (photo) => photo.path === artwork.mainPhotoUrl
   )
 
   const [mainPhoto, setMainPhoto] = useState<

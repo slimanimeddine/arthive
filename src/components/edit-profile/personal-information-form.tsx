@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { updateAuthenticatedUserBody } from '@/schemas/users'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import { useUpdateAuthenticatedUser } from '@/api/users/users'
 import { classNames, onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -19,6 +18,7 @@ type PersonalInformationFormProps = {
   email: string
   country?: string
   bio?: string
+  token: string
 }
 
 export function PersonalInformationForm({
@@ -28,8 +28,8 @@ export function PersonalInformationForm({
   email,
   country,
   bio,
+  token,
 }: PersonalInformationFormProps) {
-  const token = useGetAuthenticatedUserToken()
   const axiosConfig = token
     ? {
         axios: {
@@ -50,7 +50,7 @@ export function PersonalInformationForm({
         first_name,
         last_name,
         email,
-        country,
+        country: country ?? '',
         bio,
       },
     })

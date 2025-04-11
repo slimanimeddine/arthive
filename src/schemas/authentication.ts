@@ -45,35 +45,6 @@ export const signInBody = zod.object({
 })
 
 /**
- * Sends a reset password link to the user's email
- * @summary Send Reset Password Link
- */
-export const sendResetPasswordLinkBody = zod.object({
-  email: zod.string().email(),
-})
-
-/**
- * Resets the password of the user
- * @summary Reset Password
- */
-export const resetPasswordBody = zod
-  .object({
-    token: zod.string(),
-    email: zod.string().email(),
-    password: zod.string().min(8),
-    password_confirmation: zod.string().min(8),
-  })
-  .refine(
-    (value) => {
-      return value.password === value.password_confirmation
-    },
-    {
-      message: 'Passwords does not match.',
-      path: ['password_confirmation'],
-    }
-  )
-
-/**
  * Changes the password of the authenticated user
  * @summary Change Password
  */
@@ -92,3 +63,11 @@ export const changePasswordBody = zod
       path: ['password_confirmation'],
     }
   )
+
+/**
+ * Verifies the email verification code
+ * @summary Verify Email Code
+ */
+export const verifyEmailCodeBody = zod.object({
+  code: zod.string().length(6),
+})

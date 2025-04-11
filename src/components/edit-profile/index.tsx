@@ -2,8 +2,10 @@
 import { useShowAuthenticatedUser } from '@/api/users/users'
 import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import { PersonalInformationForm } from './personal-information-form'
+import { ChangePasswordForm } from './change-password-form'
+import { EmailVerificationForm } from './email-verification-form'
 
-export function PersonalInformationContainer() {
+export function Index() {
   const token = useGetAuthenticatedUserToken()
   const axiosConfig = token
     ? {
@@ -30,14 +32,23 @@ export function PersonalInformationContainer() {
   }
 
   const authenticatedUser = authenticatedUserQuery.data!.data.data!
+
   return (
-    <PersonalInformationForm
-      username={authenticatedUser.username!}
-      first_name={authenticatedUser.first_name}
-      last_name={authenticatedUser.last_name}
-      email={authenticatedUser.email!}
-      country={authenticatedUser.country}
-      bio={authenticatedUser.bio}
-    />
+    <div className="flex flex-col justify-start gap-y-6">
+      <PersonalInformationForm
+        username={authenticatedUser.username!}
+        first_name={authenticatedUser.first_name}
+        last_name={authenticatedUser.last_name}
+        email={authenticatedUser.email!}
+        country={authenticatedUser.country}
+        bio={authenticatedUser.bio}
+        token={token}
+      />
+      <ChangePasswordForm token={token} />
+      <EmailVerificationForm
+        token={token}
+        email_verified_at={authenticatedUser.email_verified_at}
+      />
+    </div>
   )
 }

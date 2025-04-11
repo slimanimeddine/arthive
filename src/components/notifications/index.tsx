@@ -66,17 +66,14 @@ export function Index() {
 
   useEffect(() => {
     if (echo) {
-      echo
-        .private(`App.Models.User.${userId}`)
-        .notification((notification: unknown) => {
-          console.log('notification: ', notification)
-          queryClient.invalidateQueries({
-            queryKey: [`/api/v1/users/me/notifications`],
-          })
-          queryClient.invalidateQueries({
-            queryKey: [`/api/v1/users/me/notifications/unread/exists`],
-          })
+      echo.private(`App.Models.User.${userId}`).notification(() => {
+        queryClient.invalidateQueries({
+          queryKey: [`/api/v1/users/me/notifications`],
         })
+        queryClient.invalidateQueries({
+          queryKey: [`/api/v1/users/me/notifications/unread/exists`],
+        })
+      })
     }
   }, [echo, queryClient, userId])
 
@@ -124,7 +121,7 @@ export function Index() {
 
   return (
     <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
+      <div className="mx-auto max-w-2xl py-4 sm:py-8 lg:max-w-7xl">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-x-1">
             Notifications

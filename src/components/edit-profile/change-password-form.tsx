@@ -3,7 +3,6 @@ import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from '@tanstack/react-query'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import { classNames, onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { changePasswordBody } from '@/schemas/authentication'
@@ -11,8 +10,11 @@ import { useChangePassword } from '@/api/authentication/authentication'
 
 type ChangePasswordBody = zod.infer<typeof changePasswordBody>
 
-export function ChangePasswordForm() {
-  const token = useGetAuthenticatedUserToken()
+type ChangePasswordFormProps = {
+  token: string
+}
+
+export function ChangePasswordForm({ token }: ChangePasswordFormProps) {
   const axiosConfig = token
     ? {
         axios: {

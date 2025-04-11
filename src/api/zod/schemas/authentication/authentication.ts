@@ -58,64 +58,6 @@ export const signOutResponse = zod.object({
 })
 
 /**
- * Verifies the email of the authenticated user
- * @summary Verify Email
- */
-export const verifyEmailResponse = zod.object({
-  message: zod.string().optional(),
-  data: zod.string().optional(),
-  status: zod.number().optional(),
-})
-
-/**
- * Resends the verification email to the authenticated user
- * @summary Resend Verification Email
- */
-export const resendVerificationEmailResponse = zod.object({
-  message: zod.string().optional(),
-  data: zod.string().optional(),
-  status: zod.number().optional(),
-})
-
-/**
- * Sends a reset password link to the user's email
- * @summary Send Reset Password Link
- */
-export const sendResetPasswordLinkBody = zod.object({
-  email: zod.string(),
-})
-
-export const sendResetPasswordLinkResponse = zod.object({
-  message: zod.string().optional(),
-  data: zod
-    .object({
-      status: zod.string().optional(),
-    })
-    .optional(),
-  status: zod.number().optional(),
-})
-
-/**
- * Resets the password of the user
- * @summary Reset Password
- */
-export const resetPasswordBody = zod.object({
-  token: zod.string(),
-  email: zod.string(),
-  password: zod.string(),
-})
-
-export const resetPasswordResponse = zod.object({
-  message: zod.string().optional(),
-  data: zod
-    .object({
-      status: zod.string().optional(),
-    })
-    .optional(),
-  status: zod.number().optional(),
-})
-
-/**
  * Changes the password of the authenticated user
  * @summary Change Password
  */
@@ -125,6 +67,30 @@ export const changePasswordBody = zod.object({
 })
 
 export const changePasswordResponse = zod.object({
+  message: zod.string().optional(),
+  data: zod.string().optional(),
+  status: zod.number().optional(),
+})
+
+/**
+ * Sends a verification code to the authenticated user's email
+ * @summary Send Email Verification Code
+ */
+export const sendEmailVerificationCodeResponse = zod.object({
+  message: zod.string().optional(),
+  data: zod.string().optional(),
+  status: zod.number().optional(),
+})
+
+/**
+ * Verifies the email verification code
+ * @summary Verify Email Code
+ */
+export const verifyEmailCodeBody = zod.object({
+  code: zod.string(),
+})
+
+export const verifyEmailCodeResponse = zod.object({
   message: zod.string().optional(),
   data: zod.string().optional(),
   status: zod.number().optional(),

@@ -83,7 +83,7 @@ export default function Layout({
       </aside>
 
       <main className="px-4 py-8 sm:px-6 lg:flex-auto lg:px-0 lg:py-10">
-        <div className="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+        <div className="mx-auto max-w-2xl space-y-4 lg:mx-0 lg:max-w-none">
           {children}
         </div>
       </main>

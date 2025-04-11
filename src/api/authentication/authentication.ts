@@ -5,19 +5,11 @@
  * ArtHive API Documentation
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
 } from '@tanstack/react-query'
 import axios from '@/lib/axios'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
@@ -29,14 +21,9 @@ import type {
   ChangePassword401,
   ChangePassword422,
   ChangePasswordBody,
-  ResendVerificationEmail200,
-  ResendVerificationEmail401,
-  ResetPassword200,
-  ResetPassword500,
-  ResetPasswordBody,
-  SendResetPasswordLink200,
-  SendResetPasswordLink500,
-  SendResetPasswordLinkBody,
+  SendEmailVerificationCode200,
+  SendEmailVerificationCode400,
+  SendEmailVerificationCode401,
   SignIn200,
   SignIn401,
   SignInBody,
@@ -44,8 +31,10 @@ import type {
   SignOut401,
   SignUp200,
   SignUpBody,
-  VerifyEmail200,
-  VerifyEmail401,
+  VerifyEmailCode200,
+  VerifyEmailCode400,
+  VerifyEmailCode401,
+  VerifyEmailCodeBody,
 } from '.././model'
 
 /**
@@ -283,395 +272,6 @@ export const useSignOut = <
   return useMutation(mutationOptions)
 }
 /**
- * Verifies the email of the authenticated user
- * @summary Verify Email
- */
-export const verifyEmail = (
-  id: string,
-  hash: string,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<VerifyEmail200>> => {
-  return axios.get(`/api/v1/email/verify/${id}/${hash}`, options)
-}
-
-export const getVerifyEmailQueryKey = (id: string, hash: string) => {
-  return [`/api/v1/email/verify/${id}/${hash}`] as const
-}
-
-export const getVerifyEmailQueryOptions = <
-  TData = Awaited<ReturnType<typeof verifyEmail>>,
-  TError = AxiosError<VerifyEmail401>,
->(
-  id: string,
-  hash: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
-    >
-    axios?: AxiosRequestConfig
-  }
-) => {
-  const { query: queryOptions, axios: axiosOptions } = options ?? {}
-
-  const queryKey = queryOptions?.queryKey ?? getVerifyEmailQueryKey(id, hash)
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyEmail>>> = ({
-    signal,
-  }) => verifyEmail(id, hash, { signal, ...axiosOptions })
-
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(id && hash),
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof verifyEmail>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type VerifyEmailQueryResult = NonNullable<
-  Awaited<ReturnType<typeof verifyEmail>>
->
-export type VerifyEmailQueryError = AxiosError<VerifyEmail401>
-
-export function useVerifyEmail<
-  TData = Awaited<ReturnType<typeof verifyEmail>>,
-  TError = AxiosError<VerifyEmail401>,
->(
-  id: string,
-  hash: string,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof verifyEmail>>,
-          TError,
-          Awaited<ReturnType<typeof verifyEmail>>
-        >,
-        'initialData'
-      >
-    axios?: AxiosRequestConfig
-  }
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useVerifyEmail<
-  TData = Awaited<ReturnType<typeof verifyEmail>>,
-  TError = AxiosError<VerifyEmail401>,
->(
-  id: string,
-  hash: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof verifyEmail>>,
-          TError,
-          Awaited<ReturnType<typeof verifyEmail>>
-        >,
-        'initialData'
-      >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useVerifyEmail<
-  TData = Awaited<ReturnType<typeof verifyEmail>>,
-  TError = AxiosError<VerifyEmail401>,
->(
-  id: string,
-  hash: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
-    >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-/**
- * @summary Verify Email
- */
-
-export function useVerifyEmail<
-  TData = Awaited<ReturnType<typeof verifyEmail>>,
-  TError = AxiosError<VerifyEmail401>,
->(
-  id: string,
-  hash: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
-    >
-    axios?: AxiosRequestConfig
-  }
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
-  const queryOptions = getVerifyEmailQueryOptions(id, hash, options)
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
-
-  query.queryKey = queryOptions.queryKey
-
-  return query
-}
-
-/**
- * Resends the verification email to the authenticated user
- * @summary Resend Verification Email
- */
-export const resendVerificationEmail = (
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<ResendVerificationEmail200>> => {
-  return axios.post(
-    `/api/v1/email/verification-notification`,
-    undefined,
-    options
-  )
-}
-
-export const getResendVerificationEmailMutationOptions = <
-  TError = AxiosError<ResendVerificationEmail401>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof resendVerificationEmail>>,
-    TError,
-    void,
-    TContext
-  >
-  axios?: AxiosRequestConfig
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof resendVerificationEmail>>,
-  TError,
-  void,
-  TContext
-> => {
-  const mutationKey = ['resendVerificationEmail']
-  const { mutation: mutationOptions, axios: axiosOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, axios: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof resendVerificationEmail>>,
-    void
-  > = () => {
-    return resendVerificationEmail(axiosOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type ResendVerificationEmailMutationResult = NonNullable<
-  Awaited<ReturnType<typeof resendVerificationEmail>>
->
-
-export type ResendVerificationEmailMutationError =
-  AxiosError<ResendVerificationEmail401>
-
-/**
- * @summary Resend Verification Email
- */
-export const useResendVerificationEmail = <
-  TError = AxiosError<ResendVerificationEmail401>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof resendVerificationEmail>>,
-    TError,
-    void,
-    TContext
-  >
-  axios?: AxiosRequestConfig
-}): UseMutationResult<
-  Awaited<ReturnType<typeof resendVerificationEmail>>,
-  TError,
-  void,
-  TContext
-> => {
-  const mutationOptions = getResendVerificationEmailMutationOptions(options)
-
-  return useMutation(mutationOptions)
-}
-/**
- * Sends a reset password link to the user's email
- * @summary Send Reset Password Link
- */
-export const sendResetPasswordLink = (
-  sendResetPasswordLinkBody: SendResetPasswordLinkBody,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<SendResetPasswordLink200>> => {
-  return axios.post(
-    `/api/v1/forgot-password`,
-    sendResetPasswordLinkBody,
-    options
-  )
-}
-
-export const getSendResetPasswordLinkMutationOptions = <
-  TError = AxiosError<SendResetPasswordLink500>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof sendResetPasswordLink>>,
-    TError,
-    { data: SendResetPasswordLinkBody },
-    TContext
-  >
-  axios?: AxiosRequestConfig
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof sendResetPasswordLink>>,
-  TError,
-  { data: SendResetPasswordLinkBody },
-  TContext
-> => {
-  const mutationKey = ['sendResetPasswordLink']
-  const { mutation: mutationOptions, axios: axiosOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, axios: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof sendResetPasswordLink>>,
-    { data: SendResetPasswordLinkBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return sendResetPasswordLink(data, axiosOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type SendResetPasswordLinkMutationResult = NonNullable<
-  Awaited<ReturnType<typeof sendResetPasswordLink>>
->
-export type SendResetPasswordLinkMutationBody = SendResetPasswordLinkBody
-export type SendResetPasswordLinkMutationError =
-  AxiosError<SendResetPasswordLink500>
-
-/**
- * @summary Send Reset Password Link
- */
-export const useSendResetPasswordLink = <
-  TError = AxiosError<SendResetPasswordLink500>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof sendResetPasswordLink>>,
-    TError,
-    { data: SendResetPasswordLinkBody },
-    TContext
-  >
-  axios?: AxiosRequestConfig
-}): UseMutationResult<
-  Awaited<ReturnType<typeof sendResetPasswordLink>>,
-  TError,
-  { data: SendResetPasswordLinkBody },
-  TContext
-> => {
-  const mutationOptions = getSendResetPasswordLinkMutationOptions(options)
-
-  return useMutation(mutationOptions)
-}
-/**
- * Resets the password of the user
- * @summary Reset Password
- */
-export const resetPassword = (
-  resetPasswordBody: ResetPasswordBody,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<ResetPassword200>> => {
-  return axios.post(`/api/v1/reset-password`, resetPasswordBody, options)
-}
-
-export const getResetPasswordMutationOptions = <
-  TError = AxiosError<ResetPassword500>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof resetPassword>>,
-    TError,
-    { data: ResetPasswordBody },
-    TContext
-  >
-  axios?: AxiosRequestConfig
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof resetPassword>>,
-  TError,
-  { data: ResetPasswordBody },
-  TContext
-> => {
-  const mutationKey = ['resetPassword']
-  const { mutation: mutationOptions, axios: axiosOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, axios: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof resetPassword>>,
-    { data: ResetPasswordBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return resetPassword(data, axiosOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type ResetPasswordMutationResult = NonNullable<
-  Awaited<ReturnType<typeof resetPassword>>
->
-export type ResetPasswordMutationBody = ResetPasswordBody
-export type ResetPasswordMutationError = AxiosError<ResetPassword500>
-
-/**
- * @summary Reset Password
- */
-export const useResetPassword = <
-  TError = AxiosError<ResetPassword500>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof resetPassword>>,
-    TError,
-    { data: ResetPasswordBody },
-    TContext
-  >
-  axios?: AxiosRequestConfig
-}): UseMutationResult<
-  Awaited<ReturnType<typeof resetPassword>>,
-  TError,
-  { data: ResetPasswordBody },
-  TContext
-> => {
-  const mutationOptions = getResetPasswordMutationOptions(options)
-
-  return useMutation(mutationOptions)
-}
-/**
  * Changes the password of the authenticated user
  * @summary Change Password
  */
@@ -749,6 +349,173 @@ export const useChangePassword = <
   TContext
 > => {
   const mutationOptions = getChangePasswordMutationOptions(options)
+
+  return useMutation(mutationOptions)
+}
+/**
+ * Sends a verification code to the authenticated user's email
+ * @summary Send Email Verification Code
+ */
+export const sendEmailVerificationCode = (
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<SendEmailVerificationCode200>> => {
+  return axios.post(`/api/v1/email-verification/send`, undefined, options)
+}
+
+export const getSendEmailVerificationCodeMutationOptions = <
+  TError = AxiosError<
+    SendEmailVerificationCode400 | SendEmailVerificationCode401
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sendEmailVerificationCode>>,
+    TError,
+    void,
+    TContext
+  >
+  axios?: AxiosRequestConfig
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sendEmailVerificationCode>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationKey = ['sendEmailVerificationCode']
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sendEmailVerificationCode>>,
+    void
+  > = () => {
+    return sendEmailVerificationCode(axiosOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type SendEmailVerificationCodeMutationResult = NonNullable<
+  Awaited<ReturnType<typeof sendEmailVerificationCode>>
+>
+
+export type SendEmailVerificationCodeMutationError = AxiosError<
+  SendEmailVerificationCode400 | SendEmailVerificationCode401
+>
+
+/**
+ * @summary Send Email Verification Code
+ */
+export const useSendEmailVerificationCode = <
+  TError = AxiosError<
+    SendEmailVerificationCode400 | SendEmailVerificationCode401
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sendEmailVerificationCode>>,
+    TError,
+    void,
+    TContext
+  >
+  axios?: AxiosRequestConfig
+}): UseMutationResult<
+  Awaited<ReturnType<typeof sendEmailVerificationCode>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationOptions = getSendEmailVerificationCodeMutationOptions(options)
+
+  return useMutation(mutationOptions)
+}
+/**
+ * Verifies the email verification code
+ * @summary Verify Email Code
+ */
+export const verifyEmailCode = (
+  verifyEmailCodeBody: VerifyEmailCodeBody,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<VerifyEmailCode200>> => {
+  return axios.post(
+    `/api/v1/email-verification/verify`,
+    verifyEmailCodeBody,
+    options
+  )
+}
+
+export const getVerifyEmailCodeMutationOptions = <
+  TError = AxiosError<VerifyEmailCode400 | VerifyEmailCode401>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof verifyEmailCode>>,
+    TError,
+    { data: VerifyEmailCodeBody },
+    TContext
+  >
+  axios?: AxiosRequestConfig
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof verifyEmailCode>>,
+  TError,
+  { data: VerifyEmailCodeBody },
+  TContext
+> => {
+  const mutationKey = ['verifyEmailCode']
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof verifyEmailCode>>,
+    { data: VerifyEmailCodeBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return verifyEmailCode(data, axiosOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type VerifyEmailCodeMutationResult = NonNullable<
+  Awaited<ReturnType<typeof verifyEmailCode>>
+>
+export type VerifyEmailCodeMutationBody = VerifyEmailCodeBody
+export type VerifyEmailCodeMutationError = AxiosError<
+  VerifyEmailCode400 | VerifyEmailCode401
+>
+
+/**
+ * @summary Verify Email Code
+ */
+export const useVerifyEmailCode = <
+  TError = AxiosError<VerifyEmailCode400 | VerifyEmailCode401>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof verifyEmailCode>>,
+    TError,
+    { data: VerifyEmailCodeBody },
+    TContext
+  >
+  axios?: AxiosRequestConfig
+}): UseMutationResult<
+  Awaited<ReturnType<typeof verifyEmailCode>>,
+  TError,
+  { data: VerifyEmailCodeBody },
+  TContext
+> => {
+  const mutationOptions = getVerifyEmailCodeMutationOptions(options)
 
   return useMutation(mutationOptions)
 }
