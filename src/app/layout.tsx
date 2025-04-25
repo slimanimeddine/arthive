@@ -17,16 +17,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <TanQueryClientProvider>
-      <html
-        lang="en"
-        className="h-full"
-      >
-        <body className={`${inter.className} antialiased h-full`}>
+    <html
+      lang="en"
+      className="h-full"
+    >
+      <body className={`${inter.className} antialiased h-full`}>
+        <TanQueryClientProvider>
           <NuqsAdapter>{children}</NuqsAdapter>
           <Toaster />
-        </body>
-      </html>
-    </TanQueryClientProvider>
+        </TanQueryClientProvider>
+      </body>
+    </html>
   )
 }
