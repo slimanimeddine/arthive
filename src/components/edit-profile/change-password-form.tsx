@@ -1,30 +1,17 @@
 'use client'
-import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from '@tanstack/react-query'
-import { classNames, onError } from '@/lib/utils'
+import { authHeader, classNames, onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { changePasswordBody } from '@/schemas/authentication'
-import { useChangePassword } from '@/api/authentication/authentication'
-
-type ChangePasswordBody = zod.infer<typeof changePasswordBody>
+import { ChangePasswordBody, useChangePassword } from '@/hooks/authentication'
 
 type ChangePasswordFormProps = {
   token: string
 }
 
-export function ChangePasswordForm({ token }: ChangePasswordFormProps) {
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
-
+export default function ChangePasswordForm({ token }: ChangePasswordFormProps) {
   const queryClient = useQueryClient()
 
   const { handleSubmit, register, formState, reset } =
@@ -32,7 +19,7 @@ export function ChangePasswordForm({ token }: ChangePasswordFormProps) {
       resolver: zodResolver(changePasswordBody),
     })
 
-  const changePasswordMutation = useChangePassword(axiosConfig)
+  const changePasswordMutation = useChangePassword(authHeader(token))
 
   function onSubmit(data: ChangePasswordBody) {
     changePasswordMutation.mutate(

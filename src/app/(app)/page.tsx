@@ -1,9 +1,27 @@
-'use client'
-import { ArtistsSection } from '@/components/main/artists-section'
-import { Introduction } from '@/components/main/introduction'
-import { ArtworksSection } from '@/components/main/artworks-section'
+import ArtistsSection from '@/components/main/artists-section'
+import Introduction from '@/components/main/introduction'
+import ArtworksSection from '@/components/main/artworks-section'
+import { QueryClient } from '@tanstack/react-query'
+import { prefetchListPublishedArtworks } from '@/hooks/artworks'
+import { prefetchListUsers } from '@/hooks/users'
 
-export default function Page() {
+export default async function Page() {
+  const queryClient = new QueryClient()
+
+  await prefetchListPublishedArtworks(queryClient, {
+    sort: 'trending',
+    perPage: 4,
+  })
+
+  await prefetchListPublishedArtworks(queryClient, {
+    sort: 'new',
+    perPage: 4,
+  })
+
+  await prefetchListUsers(queryClient, {
+    'filter[verified]': true,
+  })
+
   return (
     <>
       <Introduction />

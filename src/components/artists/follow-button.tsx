@@ -1,19 +1,20 @@
 'use client'
-import { useFollowUserAction } from '@/hooks/use-follow-user-action'
+import { useFollowUserAction } from '@/hooks/follow-user'
 import { classNames } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
 type FollowButtonProps = {
-  userId: number
+  token: string | undefined
+  userId: string
 }
 
-export function FollowButton({ userId }: FollowButtonProps) {
-  const { isFollowing, isLoading, handleFollowToggle, token } =
-    useFollowUserAction(userId)
+export default function FollowButton({ token, userId }: FollowButtonProps) {
+  const { isFollowing, isLoading, handleFollowToggle } = useFollowUserAction(
+    token,
+    userId
+  )
 
   const router = useRouter()
-
-  if (token === undefined) return null
 
   if (!token) {
     return (

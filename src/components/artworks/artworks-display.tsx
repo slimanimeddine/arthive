@@ -1,16 +1,19 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
 import { ArtworkCard } from '../artwork-card'
-import { Pagination } from '../pagination'
-import { SortFilterArtworks } from './sort-filter-artworks'
-import { useListPublishedArtworks } from '@/api/artworks/artworks'
-import { fileUrl } from '@/lib/utils'
+import Pagination from '../pagination'
+import SortFilterArtworks from './sort-filter-artworks'
+import { fileUrl, matchQueryStatus } from '@/lib/utils'
+import { useListPublishedArtworks } from '@/hooks/artworks'
+import LoadingUI from '../loading-ui'
+import ErrorUI from '../error-ui'
+import EmptyUI from '../empty-ui'
 
-export function ArtworksDisplay() {
+export default function ArtworksDisplay() {
   const searchParams = useSearchParams()
+
   const page = searchParams.get('page')
   const artworkSort = searchParams.get('artworkSort')
-
   const tag = searchParams.get('tag')
 
   const queryParams: Record<string, string> = {
@@ -20,72 +23,52 @@ export function ArtworksDisplay() {
     ...(page && { page }),
   }
 
-  const artworksQuery = useListPublishedArtworks(queryParams)
+  const listPublishedArtworksQuery = useListPublishedArtworks(queryParams)
 
-  if (artworksQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">loading...</p>
-  }
-
-  if (artworksQuery.isError) {
-    return (
-      <p className="mt-2 text-sm text-red-700">
-        We&apos;re sorry, something went wrong.
-      </p>
-    )
-  }
-
-  const artworksQueryData = artworksQuery.data!.data.data!
-
-  const artworks = artworksQueryData.map((artwork) => ({
-    id: artwork.id!,
-    title: artwork.title!,
-    mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path!)!,
-    likesCount: artwork.artwork_likes_count!,
-    commentsCount: artwork.artwork_comments_count!,
-    artistUsername: artwork.user!.username!,
-    artistFullName: `${artwork.user!.first_name} ${artwork.user!.last_name}`,
-    artistProfilePictureUrl: fileUrl(artwork.user!.photo),
-  }))
-
-  const links = artworksQuery.data!.data.links!
-  const meta = artworksQuery.data!.data.meta!
-
-  return (
-    <div className="flex flex-col">
-      <div className="pt-8">
-        {artworksQuery.isSuccess && artworks.length > 1 && (
-          <SortFilterArtworks />
-        )}
-      </div>
-      <div className="bg-white">
-        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-          {artworksQuery.isSuccess && artworks.length === 0 && (
-            <p className="mt-2 text-sm text-gray-700">No artworks were found</p>
-          )}
-
-          {artworksQuery.isSuccess && artworks.length > 0 && (
-            <ul
-              role="list"
-              className="mt-6 mb-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
-            >
-              {artworks.map((work) => (
-                <li key={work.id}>
-                  <ArtworkCard {...work} />
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {artworksQuery.isSuccess && meta.total! >= 12 && (
-            <div className="py-8">
-              <Pagination
-                links={links}
-                meta={meta}
-              />
+  return matchQueryStatus(listPublishedArtworksQuery, {
+    Loading: <LoadingUI />,
+    Errored: <ErrorUI />,
+    Empty: <EmptyUI />,
+    Success: ({ data }) => {
+      const artworks = data.data.map((artwork) => ({
+        id: artwork.id,
+        title: artwork.title,
+        mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
+        likesCount: artwork.artwork_likes_count,
+        commentsCount: artwork.artwork_comments_count,
+        artistUsername: artwork.user.username,
+        artistFullName: `${artwork.user.first_name} ${artwork.user.last_name}`,
+        artistProfilePictureUrl: fileUrl(artwork.user.photo),
+      }))
+      const links = data.links
+      const meta = data.meta
+      return (
+        <div className="flex flex-col">
+          <div className="pt-8">
+            <SortFilterArtworks />
+          </div>
+          <div className="bg-white">
+            <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+              <ul
+                role="list"
+                className="mt-6 mb-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
+              >
+                {artworks.map((work) => (
+                  <li key={work.id}>
+                    <ArtworkCard {...work} />
+                  </li>
+                ))}
+              </ul>
+              <div className="py-8">
+                <Pagination
+                  links={links}
+                  meta={meta}
+                />
+              </div>
             </div>
-          )}
+          </div>
         </div>
-      </div>
-    </div>
-  )
+      )
+    },
+  })
 }

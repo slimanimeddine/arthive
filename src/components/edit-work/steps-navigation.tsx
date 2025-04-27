@@ -3,10 +3,9 @@ import { classNames } from '@/lib/utils'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import useArtworkStore from '@/stores/artwork-store'
 
-export function StepsNavigation() {
+export default function StepsNavigation() {
   const { step: currentStep, setStep, isStepValid } = useArtworkStore()
 
-  // Define the steps dynamically based on the current step
   const steps = [
     {
       name: 'Step 1',
@@ -40,7 +39,6 @@ export function StepsNavigation() {
     },
   ]
 
-  // Handle step navigation
   const handleStepClick = (stepIndex: number) => {
     if (
       stepIndex < currentStep ||

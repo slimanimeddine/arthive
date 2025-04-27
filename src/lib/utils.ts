@@ -1,7 +1,12 @@
-import axios from 'axios'
+import axios, { isAxiosError } from 'axios'
 import toast from 'react-hot-toast'
 import { type UseQueryResult } from '@tanstack/react-query'
 import { JSX } from 'react'
+import { notFound } from 'next/navigation'
+
+export function isOneOf<T>(value: T, options: readonly T[]): boolean {
+  return options.includes(value)
+}
 
 export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -29,6 +34,12 @@ export function authHeader(token: string) {
       },
     },
   }
+}
+
+export function turnBlobToFile(blob: Blob) {
+  return new File([blob], 'image.jpeg', {
+    type: blob.type,
+  })
 }
 
 export function matchQueryStatus<T>(
@@ -71,6 +82,19 @@ export function matchQueryStatus<T>(
   }
 
   if (query.isError) {
+    if (isAxiosError(query.error)) {
+      const codes = [400, 401, 403, 422, 429]
+
+      if (query.error.response?.status === 404) {
+        notFound()
+      } else if (isOneOf(query.error.response?.status, codes)) {
+        throw new Error(
+          query.error.response?.data.message ||
+            'Something went wrong, please try again later'
+        )
+      }
+    }
+
     if (typeof Errored === 'function') {
       return Errored(query.error)
     }

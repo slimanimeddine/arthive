@@ -1,51 +1,46 @@
 'use client'
-import {
-  useListAuthenticatedUserNotifications,
-  useMarkAllNotificationsAsRead,
-} from '@/api/notifications/notifications'
-import { NotificationDataItem } from '@/lib/types'
-import { Notification } from './notification'
-import { Pagination } from '../pagination'
+import Notification from './notification'
+import Pagination from '../pagination'
 import { useSearchParams } from 'next/navigation'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
-import { onError } from '@/lib/utils'
-import { useGetSessionPayload } from '@/hooks/session/use-get-session-payload'
-import { useEcho } from '@/hooks/use-echo'
+import { authHeader, matchQueryStatus, onError } from '@/lib/utils'
+import { useEcho } from '@/hooks/echo'
 import { useEffect } from 'react'
+import LoadingUI from '../loading-ui'
+import ErrorUI from '../error-ui'
+import EmptyUI from '../empty-ui'
+import {
+  useListAuthenticatedUserNotifications,
+  useMarkAllNotificationsAsRead,
+} from '@/hooks/notifications'
+import { NotificationData, NotificationType } from '@/types/models/notification'
 
-export function Index() {
-  const sessionPayloadQuery = useGetSessionPayload()
-  const payload = sessionPayloadQuery?.data?.payload
-  const token = payload?.token as string
-  const userId = payload?.id as number
+type IndexProps = {
+  token: string
+  userId: string
+}
 
+export default function Index({ token, userId }: IndexProps) {
   const searchParams = useSearchParams()
-  const page = searchParams.get('page')
   const queryClient = useQueryClient()
+
+  const page = searchParams.get('page')
 
   const queryParams: Record<string, string> = {
     perPage: '10',
     ...(page && { page }),
   }
 
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+  const authConfig = authHeader(token)
 
   const notificationsQuery = useListAuthenticatedUserNotifications(
     queryParams,
-    axiosConfig
+    authConfig
   )
 
-  const markAllReadMutation = useMarkAllNotificationsAsRead(axiosConfig)
+  const markAllReadMutation = useMarkAllNotificationsAsRead(authConfig)
 
   function markAllRead() {
     markAllReadMutation.mutate(undefined, {
@@ -77,96 +72,85 @@ export function Index() {
     }
   }, [echo, queryClient, userId])
 
-  if (notificationsQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">loading...</p>
-  }
+  return matchQueryStatus(notificationsQuery, {
+    Loading: <LoadingUI />,
+    Errored: <ErrorUI />,
+    Empty: <EmptyUI />,
+    Success: ({ data }) => {
+      const notificationsQueryData = data.data.data
 
-  if (notificationsQuery.isError) {
-    return (
-      <p className="mt-2 text-sm text-red-700">
-        We&apos;re sorry, something went wrong.
-      </p>
-    )
-  }
+      const notifications = notificationsQueryData.map((notification) => ({
+        id: notification.id,
+        type: notification.type as NotificationType,
+        readAt: notification.read_at,
+        createdAt: notification.created_at,
+        updatedAt: notification.updated_at,
+        data: notification.data as NotificationData,
+      }))
 
-  const notificationsQueryData = notificationsQuery.data!.data.data!
-    .data! as NotificationDataItem[]
+      const links = {
+        first: data.data.first_page_url,
+        last: data.data.last_page_url,
+        prev: data.data.prev_page_url,
+        next: data.data.next_page_url,
+      }
 
-  const notifications = notificationsQueryData.map((notification) => ({
-    id: notification.id!,
-    type: notification.type!,
-    readAt: notification.read_at,
-    createdAt: notification.created_at!,
-    updatedAt: notification.updated_at!,
-    data: notification.data,
-  }))
+      const meta = {
+        current_page: data.data.current_page,
+        from: data.data.from,
+        last_page: data.data.last_page,
+        links: data.data.links,
+        path: data.data.path,
+        per_page: data.data.per_page,
+        to: data.data.to,
+        total: data.data.total,
+      }
 
-  const links = {
-    first: notificationsQuery.data?.data?.data?.first_page_url,
-    last: notificationsQuery.data?.data?.data?.last_page_url,
-    prev: notificationsQuery.data?.data?.data?.prev_page_url,
-    next: notificationsQuery?.data?.data?.data?.next_page_url,
-  }
+      return (
+        <div className="bg-white">
+          <div className="mx-auto max-w-2xl py-4 sm:py-8 lg:max-w-7xl">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-x-1">
+                Notifications
+              </h2>
+              <button
+                type="button"
+                onClick={markAllRead}
+                className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                <CheckIcon
+                  aria-hidden="true"
+                  className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
+                />
+                <span>Mark all as read</span>
+              </button>
+            </div>
 
-  const meta = {
-    current_page: notificationsQuery?.data?.data?.data?.current_page,
-    from: notificationsQuery?.data?.data?.data?.from,
-    last_page: notificationsQuery?.data?.data?.data?.last_page,
-    links: notificationsQuery?.data?.data?.data?.links,
-    path: notificationsQuery?.data?.data?.data?.path,
-    per_page: notificationsQuery?.data?.data?.data?.per_page,
-    to: notificationsQuery?.data?.data?.data?.to,
-    total: notificationsQuery?.data?.data?.data?.total,
-  }
+            <ul
+              role="list"
+              className="flex flex-col gap-2 mt-2"
+            >
+              {notifications.map((notification) => (
+                <li key={notification.id}>
+                  <Notification
+                    token={token}
+                    notification={notification}
+                  />
+                </li>
+              ))}
+            </ul>
 
-  return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-2xl py-4 sm:py-8 lg:max-w-7xl">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-x-1">
-            Notifications
-          </h2>
-          <button
-            type="button"
-            onClick={markAllRead}
-            className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            <CheckIcon
-              aria-hidden="true"
-              className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-            />
-            <span>Mark all as read</span>
-          </button>
-        </div>
-
-        {notificationsQuery.isSuccess && notifications.length === 0 && (
-          <p className="mt-2 text-sm text-gray-700">
-            No notifications were found
-          </p>
-        )}
-
-        {notificationsQuery.isSuccess && notifications.length > 0 && (
-          <ul
-            role="list"
-            className="flex flex-col gap-2 mt-2"
-          >
-            {notifications.map((notification) => (
-              <li key={notification.id}>
-                <Notification notification={notification} />
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {notificationsQuery.isSuccess && meta.total! >= 10 && (
-          <div className="py-8">
-            <Pagination
-              links={links}
-              meta={meta}
-            />
+            {meta.total > 10 && (
+              <div className="py-8">
+                <Pagination
+                  links={links}
+                  meta={meta}
+                />
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
-  )
+        </div>
+      )
+    },
+  })
 }

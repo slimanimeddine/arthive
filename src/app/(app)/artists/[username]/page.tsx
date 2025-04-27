@@ -1,4 +1,5 @@
-import { ArtistProfile } from '@/components/artist-profile'
+import ArtistProfile from '@/components/artist-profile'
+import { getAuth } from '@/lib/dal'
 
 export default async function Page({
   params,
@@ -6,5 +7,11 @@ export default async function Page({
   params: Promise<{ username: string }>
 }) {
   const username = (await params).username
-  return <ArtistProfile username={username} />
+  const { token } = await getAuth()
+  return (
+    <ArtistProfile
+      token={token}
+      username={username}
+    />
+  )
 }

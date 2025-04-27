@@ -3,7 +3,7 @@ import { BaseModel } from './base'
 
 export type ArtworkPhotoModel = BaseModel & {
   path: string
-  is_main: boolean
+  is_main: 1 | 0
   artwork_id: string
 }
 

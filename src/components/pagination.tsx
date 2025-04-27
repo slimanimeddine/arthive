@@ -1,4 +1,4 @@
-import { ListUsers200Links, ListUsers200Meta } from '@/api/model'
+import { LinksField, MetaField } from '@/types/api-responses'
 import {
   ArrowLongLeftIcon,
   ArrowLongRightIcon,
@@ -7,11 +7,11 @@ import Link from 'next/link'
 import { useQueryState, parseAsInteger } from 'nuqs'
 
 interface PaginationProps {
-  links: ListUsers200Links
-  meta: ListUsers200Meta
+  links: LinksField
+  meta: MetaField
 }
 
-export function Pagination({ links, meta }: PaginationProps) {
+export default function Pagination({ links, meta }: PaginationProps) {
   const [, setPage] = useQueryState('page', parseAsInteger)
 
   const handlePageChange = (newPage: number) => {

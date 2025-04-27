@@ -14,55 +14,73 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-type CreateArtwork200 = ApiResource<Artwork>
-type CreateArtwork401 = UnauthenticatedApiResponse
-type CreateArtwork403 = UnauthorizedApiResponse
-type CreateArtworkBody = z.infer<typeof createArtworkBody>
-type DeleteArtwork401 = UnauthenticatedApiResponse
-type DeleteArtwork403 = UnauthorizedApiResponse
-type DeleteArtwork404 = NotFoundApiResponse
-type ListAuthenticatedUserArtworks200 = PaginatedApiResponse<Artwork>
-type ListAuthenticatedUserArtworks401 = UnauthenticatedApiResponse
-type ListAuthenticatedUserArtworksParams = {
+export type CreateArtwork200 = ApiResource<ArtworkModel>
+export type CreateArtwork401 = UnauthenticatedApiResponse
+export type CreateArtwork403 = UnauthorizedApiResponse
+export type CreateArtworkBody = z.infer<typeof createArtworkBody>
+
+export type DeleteArtwork200 = NoContentApiResponse
+export type DeleteArtwork401 = UnauthenticatedApiResponse
+export type DeleteArtwork403 = UnauthorizedApiResponse
+export type DeleteArtwork404 = NotFoundApiResponse
+
+export type ListAuthenticatedUserArtworks200 =
+  PaginatedApiResponse<ArtworkModel>
+export type ListAuthenticatedUserArtworks401 = UnauthenticatedApiResponse
+export type ListAuthenticatedUserArtworksParams = {
   'filter[status]'?: 'draft' | 'published'
-  page?: string
-  perPage?: string
+  page?: number
+  perPage?: number
 }
-type ListPublishedArtworks200 = PaginatedApiResponse<Artwork>
-type ListPublishedArtworksParams = {
+
+export type ListPublishedArtworks200 = PaginatedApiResponse<
+  Omit<
+    Artwork,
+    'artwork_photos' | 'artwork_comments' | 'artwork_likes' | 'tags'
+  >
+>
+export type ListPublishedArtworksParams = {
   'filter[tag]'?: string
   searchQuery?: string
   sort?: 'rising' | 'new' | 'popular' | 'trending'
-  page?: string
-  perPage?: string
+  page?: number
+  perPage?: number
 }
-type ListUserPublishedArtworks200 = PaginatedApiResponse<Artwork>
-type ListUserPublishedArtworks404 = NotFoundApiResponse
-type ListUserPublishedArtworksParams = {
+
+export type ListUserPublishedArtworks200 = PaginatedApiResponse<ArtworkModel>
+export type ListUserPublishedArtworks404 = NotFoundApiResponse
+export type ListUserPublishedArtworksParams = {
   'filter[tag]'?: Tag
   sort?: 'rising' | 'new' | 'popular' | 'trending'
-  page?: string
-  perPage?: string
+  page?: number
+  perPage?: number
 }
-type PublishArtwork200 = ApiResource<Artwork>
-type PublishArtwork401 = UnauthenticatedApiResponse
-type PublishArtwork403 = UnauthorizedApiResponse
-type PublishArtwork404 = NotFoundApiResponse
-type ShowAuthenticatedUserArtwork200 = ApiResource<Artwork>
-type ShowAuthenticatedUserArtwork401 = UnauthenticatedApiResponse
-type ShowAuthenticatedUserArtwork404 = NotFoundApiResponse
-type ShowPublishedArtwork200 = ApiResource<Artwork[]>
-type ShowPublishedArtwork404 = NotFoundApiResponse
-type UpdateArtworkDraft200 = ApiResource<Artwork>
-type UpdateArtworkDraft401 = UnauthenticatedApiResponse
-type UpdateArtworkDraft403 = UnauthorizedApiResponse
-type UpdateArtworkDraft404 = NotFoundApiResponse
-type UpdateArtworkDraftBody = z.infer<typeof updateArtworkDraftBody>
+
+export type PublishArtwork200 = ApiResource<Artwork>
+export type PublishArtwork401 = UnauthenticatedApiResponse
+export type PublishArtwork403 = UnauthorizedApiResponse
+export type PublishArtwork404 = NotFoundApiResponse
+
+export type ShowAuthenticatedUserArtwork200 = ApiResource<
+  Omit<Artwork, 'artwork_comments' | 'artwork_likes' | 'user'>
+>
+export type ShowAuthenticatedUserArtwork401 = UnauthenticatedApiResponse
+export type ShowAuthenticatedUserArtwork404 = NotFoundApiResponse
+
+export type ShowPublishedArtwork200 = ApiResource<Artwork>
+export type ShowPublishedArtwork404 = NotFoundApiResponse
+
+export type UpdateArtworkDraft200 = ApiResource<ArtworkModel>
+export type UpdateArtworkDraft401 = UnauthenticatedApiResponse
+export type UpdateArtworkDraft403 = UnauthorizedApiResponse
+export type UpdateArtworkDraft404 = NotFoundApiResponse
+export type UpdateArtworkDraftBody = z.infer<typeof updateArtworkDraftBody>
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType, BodyType } from '@/lib/axios'
 import {
   ApiResource,
+  NoContentApiResponse,
   NotFoundApiResponse,
   PaginatedApiResponse,
   UnauthenticatedApiResponse,
@@ -70,7 +88,7 @@ import {
 } from '@/types/api-responses'
 import { z } from 'zod'
 import { createArtworkBody, updateArtworkDraftBody } from '@/schemas/artworks'
-import { Artwork } from '@/types/models/artwork'
+import { Artwork, ArtworkModel } from '@/types/models/artwork'
 import { Tag } from '@/types/misc'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
@@ -674,7 +692,7 @@ export const deleteArtwork = (
   artworkId: string,
   options?: SecondParameter<typeof customInstance>
 ) => {
-  return customInstance<string>(
+  return customInstance<DeleteArtwork200>(
     { url: `/api/v1/artworks/${artworkId}`, method: 'DELETE' },
     options
   )

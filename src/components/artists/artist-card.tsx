@@ -1,15 +1,16 @@
 import { fileUrl } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FollowButton } from './follow-button'
+import FollowButton from './follow-button'
 
 type Artwork = {
-  id: number
+  id: string
   mainPhotoUrl: string
 }
 
 type ArtistCardProps = {
-  id: number
+  token: string | undefined
+  id: string
   fullName: string
   username: string
   country: string | undefined
@@ -18,7 +19,8 @@ type ArtistCardProps = {
   artworks: Artwork[]
 }
 
-export function ArtistCard({
+export default function ArtistCard({
+  token,
   id,
   fullName,
   username,
@@ -62,7 +64,10 @@ export function ArtistCard({
               <h3 className="font-medium sm:text-lg">
                 <Link href={`/artists/${username}`}>{fullName}</Link>
               </h3>
-              <FollowButton userId={id} />
+              <FollowButton
+                token={token}
+                userId={id}
+              />
             </div>
 
             <p className="line-clamp-2 text-sm text-gray-700">{description}</p>

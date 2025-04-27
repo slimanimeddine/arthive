@@ -2,34 +2,18 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { updateArtworkDraftBody } from '@/schemas/artworks'
 import { TAGS } from '@/lib/constants'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { onError } from '@/lib/utils'
+import { authHeader, onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { FirstStepProps } from './first-step'
-import { useUpdateArtworkDraft } from '@/api/artworks/artworks'
-
-type FormData = z.infer<typeof updateArtworkDraftBody>
+import { UpdateArtworkDraftBody, useUpdateArtworkDraft } from '@/hooks/artworks'
+import { updateArtworkDraftBody } from '@/schemas/artworks'
 
 type ThirdStepProps = FirstStepProps
 
-export function ThirdStep({ artwork }: ThirdStepProps) {
-  const token = useGetAuthenticatedUserToken()
-
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
-
-  const updateArtworkMutation = useUpdateArtworkDraft(axiosConfig)
+export default function ThirdStep({ token, artwork }: ThirdStepProps) {
+  const updateArtworkMutation = useUpdateArtworkDraft(authHeader(token))
 
   const queryClient = useQueryClient()
 
@@ -37,7 +21,7 @@ export function ThirdStep({ artwork }: ThirdStepProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<UpdateArtworkDraftBody>({
     resolver: zodResolver(updateArtworkDraftBody),
     defaultValues: {
       title: artwork.title,
@@ -46,7 +30,7 @@ export function ThirdStep({ artwork }: ThirdStepProps) {
     },
   })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: UpdateArtworkDraftBody) => {
     const dataObj = {
       title: data.title,
       description: data.description,

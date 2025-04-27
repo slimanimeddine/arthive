@@ -1,38 +1,30 @@
 'use client'
 
-import { useDeleteArtworkComment } from '@/api/artwork-comments/artwork-comments'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
-import { onError } from '@/lib/utils'
+import { authHeader, onError } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { useEditCommentStore } from '@/stores/edit-comment-store'
+import { useDeleteArtworkComment } from '@/hooks/artwork-comments'
 
 type CommentDropdownActionsProps = {
-  artworkId: number
-  commentId: number
+  token: string | undefined
+  artworkId: string
+  commentId: string
 }
 
-export function CommentDropdownActions({
+export default function CommentDropdownActions({
+  token,
   artworkId,
   commentId,
 }: CommentDropdownActionsProps) {
-  const token = useGetAuthenticatedUserToken()
   const queryClient = useQueryClient()
   const setFormVisible = useEditCommentStore((state) => state.setFormVisible)
 
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+  const authConfig = token ? authHeader(token!) : undefined
 
-  const deleteCommentMutation = useDeleteArtworkComment(axiosConfig)
+  const deleteCommentMutation = useDeleteArtworkComment(authConfig)
 
   function onDelete() {
     deleteCommentMutation.mutate(

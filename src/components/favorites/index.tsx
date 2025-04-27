@@ -1,73 +1,59 @@
 'use client'
 
-import { useListAuthenticatedUserFavoriteArtworks } from '@/api/favorites/favorites'
-import { fileUrl } from '@/lib/utils'
-import { ArtworkCard } from '../artist-profile/artwork-card'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
+import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
+import ArtworkCard from '../artist-profile/artwork-card'
+import { useListAuthenticatedUserFavoriteArtworks } from '@/hooks/favorites'
+import LoadingUI from '../loading-ui'
+import ErrorUI from '../error-ui'
+import EmptyUI from '../empty-ui'
 
-export function Index() {
-  const token = useGetAuthenticatedUserToken()
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+type IndexProps = {
+  token: string
+}
 
-  const artworksQuery = useListAuthenticatedUserFavoriteArtworks(axiosConfig)
-
-  if (artworksQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">loading...</p>
-  }
-
-  if (artworksQuery.isError) {
-    return (
-      <p className="mt-2 text-sm text-red-700">
-        {artworksQuery.error?.response?.data.message}
-      </p>
-    )
-  }
-
-  const artworksQueryData = artworksQuery.data!.data.data!
-
-  const artworks = artworksQueryData.map((artwork) => ({
-    id: artwork.id!,
-    title: artwork.title!,
-    mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path!)!,
-    likesCount: artwork.artwork_likes_count!,
-    commentsCount: artwork.artwork_comments_count!,
-  }))
-
-  return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-2xl lg:max-w-7xl">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-x-1">
-            Favorites |{' '}
-            <span className="text-lg">{artworks.length} saved artworks</span>
-          </h2>
-        </div>
-
-        {artworksQuery.isSuccess && artworks.length === 0 && (
-          <p className="mt-2 text-sm text-gray-700">No artworks were found</p>
-        )}
-
-        {artworksQuery.isSuccess && artworks.length > 0 && (
-          <ul
-            role="list"
-            className="mt-6 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8"
-          >
-            {artworks.map((work) => (
-              <li key={work.id}>
-                <ArtworkCard {...work} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
+export default function Index({ token }: IndexProps) {
+  const artworksQuery = useListAuthenticatedUserFavoriteArtworks(
+    authHeader(token)
   )
+
+  return matchQueryStatus(artworksQuery, {
+    Loading: <LoadingUI />,
+    Errored: <ErrorUI />,
+    Empty: <EmptyUI />,
+    Success: ({ data }) => {
+      const artworks = data.data.map((artwork) => ({
+        id: artwork.id,
+        title: artwork.title,
+        mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
+        likesCount: artwork.artwork_likes_count,
+        commentsCount: artwork.artwork_comments_count,
+      }))
+
+      return (
+        <div className="bg-white">
+          <div className="mx-auto max-w-2xl lg:max-w-7xl">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-x-1">
+                Favorites |{' '}
+                <span className="text-lg">
+                  {artworks.length} saved artworks
+                </span>
+              </h2>
+            </div>
+
+            <ul
+              role="list"
+              className="mt-6 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8"
+            >
+              {artworks.map((work) => (
+                <li key={work.id}>
+                  <ArtworkCard {...work} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )
+    },
+  })
 }

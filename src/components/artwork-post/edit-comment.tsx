@@ -1,30 +1,30 @@
 import { updateArtworkCommentBody } from '@/schemas/artwork-comments'
 import { useEditCommentStore } from '@/stores/edit-comment-store'
-import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from '@tanstack/react-query'
-import { onError } from '@/lib/utils'
+import { authHeader, onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { useUpdateArtworkComment } from '@/api/artwork-comments/artwork-comments'
+import {
+  UpdateArtworkCommentBody,
+  useUpdateArtworkComment,
+} from '@/hooks/artwork-comments'
 
 type EditCommentProps = {
-  commentId: number
-  artworkId: number
+  token: string | undefined
+  commentId: string
+  artworkId: string
   defaultContent: string
 }
 
-type UpdateArtworkCommentBody = zod.infer<typeof updateArtworkCommentBody>
-
-export function EditComment({
+export default function EditComment({
+  token,
   defaultContent,
   commentId,
   artworkId,
 }: EditCommentProps) {
   const setFormVisible = useEditCommentStore((state) => state.setFormVisible)
 
-  const token = useGetAuthenticatedUserToken()
   const queryClient = useQueryClient()
 
   const { handleSubmit, register, formState, reset } =
@@ -32,17 +32,9 @@ export function EditComment({
       resolver: zodResolver(updateArtworkCommentBody),
     })
 
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+  const authConfig = token ? authHeader(token!) : undefined
 
-  const updateArtworkComment = useUpdateArtworkComment(axiosConfig)
+  const updateArtworkComment = useUpdateArtworkComment(authConfig)
 
   function onSubmit(data: UpdateArtworkCommentBody) {
     updateArtworkComment.mutate(

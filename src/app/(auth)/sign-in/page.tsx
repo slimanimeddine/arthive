@@ -1,5 +1,5 @@
-import { SignInForm } from '@/components/auth/sign-in-form'
-import { Logo } from '@/components/logo'
+import SignInForm from '@/components/sign-in-form'
+import Logo from '@/components/logo'
 import Link from 'next/link'
 
 export default function Page() {

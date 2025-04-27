@@ -6,20 +6,22 @@ import type {
   UseMutationResult,
 } from '@tanstack/react-query'
 
-type DeleteArtworkComment200 = NoContentApiResponse
-type DeleteArtworkComment401 = UnauthenticatedApiResponse
-type DeleteArtworkComment403 = UnauthorizedApiResponse
-type DeleteArtworkComment404 = NotFoundApiResponse
-type PostArtworkComment200 = NoContentApiResponse
-type PostArtworkComment401 = UnauthenticatedApiResponse
-type PostArtworkComment403 = UnauthorizedApiResponse
-type PostArtworkComment404 = NotFoundApiResponse
-type PostArtworkCommentBody = z.infer<typeof postArtworkCommentBody>
-type UpdateArtworkComment200 = ApiResource<ArtworkComment>
-type UpdateArtworkComment401 = UnauthenticatedApiResponse
-type UpdateArtworkComment403 = UnauthorizedApiResponse
-type UpdateArtworkComment404 = NotFoundApiResponse
-type UpdateArtworkCommentBody = z.infer<typeof updateArtworkCommentBody>
+export type DeleteArtworkComment200 = NoContentApiResponse
+export type DeleteArtworkComment401 = UnauthenticatedApiResponse
+export type DeleteArtworkComment403 = UnauthorizedApiResponse
+export type DeleteArtworkComment404 = NotFoundApiResponse
+
+export type PostArtworkComment200 = ApiResource<ArtworkCommentModel>
+export type PostArtworkComment401 = UnauthenticatedApiResponse
+export type PostArtworkComment403 = UnauthorizedApiResponse
+export type PostArtworkComment404 = NotFoundApiResponse
+export type PostArtworkCommentBody = z.infer<typeof postArtworkCommentBody>
+
+export type UpdateArtworkComment200 = ApiResource<ArtworkCommentModel>
+export type UpdateArtworkComment401 = UnauthenticatedApiResponse
+export type UpdateArtworkComment403 = UnauthorizedApiResponse
+export type UpdateArtworkComment404 = NotFoundApiResponse
+export type UpdateArtworkCommentBody = z.infer<typeof updateArtworkCommentBody>
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType, BodyType } from '@/lib/axios'
@@ -35,7 +37,7 @@ import {
   postArtworkCommentBody,
   updateArtworkCommentBody,
 } from '@/schemas/artwork-comments'
-import { ArtworkComment } from '@/types/models/artwork-comment'
+import { ArtworkCommentModel } from '@/types/models/artwork-comment'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 

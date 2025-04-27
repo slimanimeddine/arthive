@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-export function FirstStep() {
+export default function FirstStep() {
   const {
     photos,
     removePhoto,

@@ -1,5 +1,12 @@
-import { Index } from '@/components/notifications'
+import Index from '@/components/notifications'
+import { verifyAuth } from '@/lib/dal'
 
-export default function Page() {
-  return <Index />
+export default async function Page() {
+  const { token, id } = await verifyAuth()
+  return (
+    <Index
+      token={token}
+      userId={id}
+    />
+  )
 }

@@ -3,7 +3,7 @@ import Echo from 'laravel-echo'
 import { useEffect, useState } from 'react'
 
 import Pusher from 'pusher-js'
-import axios from '@/lib/axios'
+import { AXIOS_INSTANCE } from '@/lib/axios'
 
 interface Authorizer {
   authorize: (socketId: string, callback: CallableFunction) => void
@@ -32,19 +32,18 @@ export function useEcho(token: string) {
       ): Authorizer => {
         return {
           authorize: (socketId: string, callback: CallableFunction) => {
-            axios
-              .post(
-                '/api/broadcasting/auth',
-                {
-                  socket_id: socketId,
-                  channel_name: channel.name,
+            AXIOS_INSTANCE.post(
+              '/api/broadcasting/auth',
+              {
+                socket_id: socketId,
+                channel_name: channel.name,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
                 },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              )
+              }
+            )
 
               .then((response) => {
                 callback(false, response.data)

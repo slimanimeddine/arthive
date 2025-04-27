@@ -14,27 +14,45 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-type ListUsers200 = PaginatedApiResponse<User>
-type ListUsersParams = {
+export type ListUsers200 = PaginatedApiResponse<
+  Omit<
+    User,
+    | 'artworks'
+    | 'drafts'
+    | 'followers'
+    | 'following'
+    | 'favorites'
+    | 'artwork_likes'
+    | 'artwork_comments'
+    | 'received_artwork_likes'
+  >
+>
+export type ListUsersParams = {
   'filter[country]'?: string
   'filter[tag]'?: string
   'filter[verified]'?: boolean
   include?: 'publishedArtworks'
   searchQuery?: string
   sort?: 'new' | 'popular'
-  page?: string
-  perPage?: string
+  page?: number
+  perPage?: number
 }
-type ShowAuthenticatedUser200 = ApiResource<User>
-type ShowAuthenticatedUser401 = UnauthenticatedApiResponse
-type ShowUser200 = ApiResource<User>
-type ShowUser404 = NotFoundApiResponse
-type ShowUserById200 = ApiResource<User>
-type ShowUserById404 = NotFoundApiResponse
-type UpdateAuthenticatedUser200 = ApiResource<User>
-type UpdateAuthenticatedUser401 = UnauthenticatedApiResponse
-type UpdateAuthenticatedUser403 = UnauthorizedApiResponse
-type UpdateAuthenticatedUserBody = z.infer<typeof updateAuthenticatedUserBody>
+
+export type ShowAuthenticatedUser200 = ApiResource<UserModel>
+export type ShowAuthenticatedUser401 = UnauthenticatedApiResponse
+
+export type ShowUser200 = ApiResource<UserModel>
+export type ShowUser404 = NotFoundApiResponse
+
+export type ShowUserById200 = ApiResource<UserModel>
+export type ShowUserById404 = NotFoundApiResponse
+
+export type UpdateAuthenticatedUser200 = ApiResource<UserModel>
+export type UpdateAuthenticatedUser401 = UnauthenticatedApiResponse
+export type UpdateAuthenticatedUser403 = UnauthorizedApiResponse
+export type UpdateAuthenticatedUserBody = z.infer<
+  typeof updateAuthenticatedUserBody
+>
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType, BodyType } from '@/lib/axios'
@@ -45,7 +63,7 @@ import {
   UnauthenticatedApiResponse,
   UnauthorizedApiResponse,
 } from '@/types/api-responses'
-import { User } from '@/types/models/user'
+import { User, UserModel } from '@/types/models/user'
 import { z } from 'zod'
 import { updateAuthenticatedUserBody } from '@/schemas/users'
 

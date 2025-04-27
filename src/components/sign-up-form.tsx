@@ -1,16 +1,13 @@
 'use client'
-import { useSignUp } from '@/api/authentication/authentication'
+import { SignUpBody, useSignUp } from '@/hooks/authentication'
 import { onError } from '@/lib/utils'
 import { signUpBody } from '@/schemas/authentication'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { z as zod } from 'zod'
 
-type SignUpBody = zod.infer<typeof signUpBody>
-
-export function SignUpForm() {
+export default function SignUpForm() {
   const { handleSubmit, register, formState, reset } = useForm<SignUpBody>({
     resolver: zodResolver(signUpBody),
   })
@@ -25,7 +22,7 @@ export function SignUpForm() {
         data,
       },
       {
-        onError: (error) => onError(error),
+        onError,
         onSuccess: () => {
           toast.success('Account created successfully!')
           reset()

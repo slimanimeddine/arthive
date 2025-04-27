@@ -1,43 +1,30 @@
+import { HandThumbUpIcon } from '@heroicons/react/24/outline'
+import { authHeader, classNames, matchQueryStatus, onError } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 import {
   useCheckIfAuthenticatedUserIsLiking,
   useLikeArtwork,
   useUnlikeArtwork,
-} from '@/api/artwork-likes/artwork-likes'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { HandThumbUpIcon } from '@heroicons/react/24/outline'
-import { classNames, onError } from '@/lib/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
+} from '@/hooks/artwork-likes'
 
 type LikeButtonProps = {
-  artworkId: number
+  token: string | undefined
+  artworkId: string
 }
 
-export function LikeButton({ artworkId }: LikeButtonProps) {
-  const token = useGetAuthenticatedUserToken()
+export default function LikeButton({ token, artworkId }: LikeButtonProps) {
   const router = useRouter()
   const queryClient = useQueryClient()
 
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+  const authConfig = token ? authHeader(token!) : undefined
 
-  const isLikingQuery = useCheckIfAuthenticatedUserIsLiking(
-    artworkId,
-    axiosConfig
-  )
+  const checkIfAuthenticatedUserIsLikingQuery =
+    useCheckIfAuthenticatedUserIsLiking(artworkId, authConfig)
 
-  const isLiking = isLikingQuery.data?.data.data
-
-  const likeArtworkMutation = useLikeArtwork(axiosConfig)
-  const unlikeArtworkMutation = useUnlikeArtwork(axiosConfig)
+  const likeArtworkMutation = useLikeArtwork(authConfig)
+  const unlikeArtworkMutation = useUnlikeArtwork(authConfig)
 
   const invalidateLikeQueries = () => {
     queryClient.invalidateQueries({
@@ -46,7 +33,7 @@ export function LikeButton({ artworkId }: LikeButtonProps) {
   }
 
   const handleLikeToggle = (isCurrentlyLiking: boolean) => {
-    if (!token || isLiking === undefined) {
+    if (!token) {
       return router.push('/sign-in')
     }
 
@@ -70,8 +57,6 @@ export function LikeButton({ artworkId }: LikeButtonProps) {
     )
   }
 
-  if (token === undefined) return null
-
   if (!token) {
     return (
       <button
@@ -83,33 +68,37 @@ export function LikeButton({ artworkId }: LikeButtonProps) {
     )
   }
 
-  if (isLikingQuery.isLoading) {
-    return (
+  return matchQueryStatus(checkIfAuthenticatedUserIsLikingQuery, {
+    Loading: (
       <button
         disabled
         className="cursor-not-allowed flex items-center justify-center rounded-full p-2 transition-colors bg-gray-200 text-gray-700"
       >
         loading...
       </button>
-    )
-  }
-
-  return (
-    <button
-      onClick={() => handleLikeToggle(!!isLiking)}
-      className={classNames(
-        'flex items-center justify-center rounded-full p-2 transition-colors',
-        isLiking
-          ? 'bg-indigo-500 text-white hover:bg-indigo-600'
-          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-      )}
-    >
-      <HandThumbUpIcon
-        className={classNames(
-          'h-6 w-6 transition-transform',
-          isLiking ? 'text-white scale-110' : 'text-gray-700'
-        )}
-      />
-    </button>
-  )
+    ),
+    Errored: <button></button>,
+    Empty: <button></button>,
+    Success: ({ data }) => {
+      const isLiking = data.data
+      return (
+        <button
+          onClick={() => handleLikeToggle(isLiking)}
+          className={classNames(
+            'flex items-center justify-center rounded-full p-2 transition-colors',
+            isLiking
+              ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          )}
+        >
+          <HandThumbUpIcon
+            className={classNames(
+              'h-6 w-6 transition-transform',
+              isLiking ? 'text-white scale-110' : 'text-gray-700'
+            )}
+          />
+        </button>
+      )
+    },
+  })
 }

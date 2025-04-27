@@ -1,5 +1,8 @@
-import { ArtistsDisplay } from '@/components/artists/artists-display'
+import ArtistsDisplay from '@/components/artists/artists-display'
+import { getAuth } from '@/lib/dal'
 
-export default function Page() {
-  return <ArtistsDisplay />
+export default async function Page() {
+  const { token } = await getAuth()
+
+  return <ArtistsDisplay token={token} />
 }

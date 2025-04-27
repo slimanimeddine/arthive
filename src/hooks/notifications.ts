@@ -14,17 +14,16 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-type CheckIfUnreadNotificationsExist200 = SuccessApiResponse<{
+export type CheckIfUnreadNotificationsExist200 = SuccessApiResponse<{
   exists: boolean
 }>
-type CheckIfUnreadNotificationsExist401 = UnauthenticatedApiResponse
-type ListAuthenticatedUserNotifications200 = PaginatedNotificationResponse<
-  NotificationType,
-  NotificationData
->
-type ListAuthenticatedUserNotifications400 = ErrorApiResponse
-type ListAuthenticatedUserNotifications401 = UnauthenticatedApiResponse
-type ListAuthenticatedUserNotificationsParams = {
+export type CheckIfUnreadNotificationsExist401 = UnauthenticatedApiResponse
+
+export type ListAuthenticatedUserNotifications200 =
+  SuccessApiResponse<PaginatedNotificationResponse>
+export type ListAuthenticatedUserNotifications400 = ErrorApiResponse
+export type ListAuthenticatedUserNotifications401 = UnauthenticatedApiResponse
+export type ListAuthenticatedUserNotificationsParams = {
   'filter[notificationType]'?:
     | 'artist-verification-request'
     | 'artist-verification-response'
@@ -35,11 +34,12 @@ type ListAuthenticatedUserNotificationsParams = {
   page?: number
   perPage?: number
 }
-type MarkAllNotificationsAsRead200 = NoContentApiResponse
-type MarkAllNotificationsAsRead401 = UnauthenticatedApiResponse
-type MarkNotificationAsRead200 = NoContentApiResponse
-type MarkNotificationAsRead401 = UnauthenticatedApiResponse
-type MarkNotificationAsRead404 = NotFoundApiResponse
+
+export type MarkAllNotificationsAsRead200 = NoContentApiResponse
+export type MarkAllNotificationsAsRead401 = UnauthenticatedApiResponse
+export type MarkNotificationAsRead200 = NoContentApiResponse
+export type MarkNotificationAsRead401 = UnauthenticatedApiResponse
+export type MarkNotificationAsRead404 = NotFoundApiResponse
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
@@ -51,7 +51,6 @@ import {
   SuccessApiResponse,
   UnauthenticatedApiResponse,
 } from '@/types/api-responses'
-import { NotificationData, NotificationType } from '@/types/models/notification'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 

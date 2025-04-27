@@ -1,10 +1,10 @@
 import { ChatBubbleOvalLeftIcon, HeartIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import { AvatarPlaceholder } from './avatar-placeholder'
+import AvatarPlaceholder from './avatar-placeholder'
 
 type ArtworkCardProps = {
-  id: number
+  id: string
   title: string
   mainPhotoUrl: string
   likesCount: number

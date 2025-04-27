@@ -1,36 +1,26 @@
 'use client'
-import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from '@tanstack/react-query'
-import { classNames, onError } from '@/lib/utils'
+import { authHeader, classNames, onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { verifyEmailCodeBody } from '@/schemas/authentication'
 import {
   useSendEmailVerificationCode,
   useVerifyEmailCode,
-} from '@/api/authentication/authentication'
-
-type VerifyEmailCodeBody = zod.infer<typeof verifyEmailCodeBody>
+  VerifyEmailCodeBody,
+} from '@/hooks/authentication'
 
 type EmailVerificationFormProps = {
   token: string
   email_verified_at?: string
 }
 
-export function EmailVerificationForm({
+export default function EmailVerificationForm({
   token,
   email_verified_at,
 }: EmailVerificationFormProps) {
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+  const authConfig = authHeader(token)
 
   const queryClient = useQueryClient()
 
@@ -40,7 +30,9 @@ export function EmailVerificationForm({
     })
 
   const sendEmailVerificationCodeMutation =
-    useSendEmailVerificationCode(axiosConfig)
+    useSendEmailVerificationCode(authConfig)
+
+  const verifyEmailCodeMutation = useVerifyEmailCode(authConfig)
 
   function sendEmailVerificationCode() {
     sendEmailVerificationCodeMutation.mutate(undefined, {
@@ -50,8 +42,6 @@ export function EmailVerificationForm({
       },
     })
   }
-
-  const verifyEmailCodeMutation = useVerifyEmailCode(axiosConfig)
 
   function onSubmit(data: VerifyEmailCodeBody) {
     verifyEmailCodeMutation.mutate(

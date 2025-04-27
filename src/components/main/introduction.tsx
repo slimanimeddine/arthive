@@ -1,4 +1,5 @@
-export function Introduction() {
+'use client'
+export default function Introduction() {
   return (
     <div className="bg-gray-900 py-12 sm:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">

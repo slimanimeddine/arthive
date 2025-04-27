@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import Image from 'next/image'
-import { AvatarPlaceholder } from '../avatar-placeholder'
+import AvatarPlaceholder from '../avatar-placeholder'
 import Link from 'next/link'
 
 type Like = {
-  id: number
+  id: string
   user: {
     fullName: string
     username: string

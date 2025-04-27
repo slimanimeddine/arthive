@@ -1,7 +1,7 @@
 import { JWTPayload } from 'jose'
 
 export type SessionPayload = {
-  id: number
+  id: string
   token: string
 }
 

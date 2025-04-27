@@ -1,22 +1,21 @@
-import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from '@tanstack/react-query'
-import { onError } from '@/lib/utils'
+import { authHeader, onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { postArtworkCommentBody } from '@/schemas/artwork-comments'
-import { usePostArtworkComment } from '@/api/artwork-comments/artwork-comments'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import { useEffect } from 'react'
-
-type PostArtworkCommentBody = zod.infer<typeof postArtworkCommentBody>
+import {
+  PostArtworkCommentBody,
+  usePostArtworkComment,
+} from '@/hooks/artwork-comments'
 
 type PostCommentProps = {
-  artworkId: number
+  token: string | undefined
+  artworkId: string
 }
 
-export function PostComment({ artworkId }: PostCommentProps) {
-  const token = useGetAuthenticatedUserToken()
+export default function PostComment({ token, artworkId }: PostCommentProps) {
   const queryClient = useQueryClient()
 
   const { handleSubmit, register, formState, reset, clearErrors } =
@@ -30,17 +29,9 @@ export function PostComment({ artworkId }: PostCommentProps) {
     }, 6000)
   }, [clearErrors, formState.errors.comment_text])
 
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+  const authConfig = token ? authHeader(token!) : undefined
 
-  const postArtworkComment = usePostArtworkComment(axiosConfig)
+  const postArtworkComment = usePostArtworkComment(authConfig)
 
   function onSubmit(data: PostArtworkCommentBody) {
     postArtworkComment.mutate(

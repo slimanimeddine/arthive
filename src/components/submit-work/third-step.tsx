@@ -6,8 +6,7 @@ import { z } from 'zod'
 import useArtworkStore from '@/stores/artwork-store'
 import { createArtworkBody } from '@/schemas/artworks'
 import { TAGS } from '@/lib/constants'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { onError } from '@/lib/utils'
+import { authHeader, onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCreateArtwork } from '@/hooks/artworks'
@@ -15,21 +14,12 @@ import { useCreateArtwork } from '@/hooks/artworks'
 const schema = createArtworkBody.omit({ photos: true })
 type FormData = z.infer<typeof schema>
 
-export function ThirdStep() {
-  const token = useGetAuthenticatedUserToken()
+type ThirdStepProps = {
+  token: string
+}
 
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        },
-      }
-    : undefined
-
-  const createArtworkMutation = useCreateArtwork(axiosConfig)
+export default function ThirdStep({ token }: ThirdStepProps) {
+  const createArtworkMutation = useCreateArtwork(authHeader(token))
 
   const queryClient = useQueryClient()
 
@@ -77,7 +67,7 @@ export function ThirdStep() {
       {
         onError,
         onSuccess: (data) => {
-          setId(data.data.data!.id!)
+          setId(data.data.id)
           queryClient.invalidateQueries({
             queryKey: ['/api/v1/users/me/artworks'],
           })

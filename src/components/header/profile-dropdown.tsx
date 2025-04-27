@@ -1,32 +1,19 @@
-import { useShowAuthenticatedUser } from '@/api/users/users'
 import { fileUrl } from '@/lib/utils'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { AvatarPlaceholder } from '../avatar-placeholder'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
+import AvatarPlaceholder from '../avatar-placeholder'
 
 const userNavigation = [
   { name: 'Your Profile', href: '/edit-profile' },
   { name: 'Sign out', href: '/sign-out' },
 ]
 
-export function ProfileDropdown() {
-  const token = useGetAuthenticatedUserToken()
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+type ProfileDropdownProps = {
+  userPhoto?: string
+}
 
-  const userQuery = useShowAuthenticatedUser(axiosConfig)
-
-  const user = userQuery?.data?.data?.data
-
+export default function ProfileDropdown({ userPhoto }: ProfileDropdownProps) {
   return (
     <Menu
       as="div"
@@ -36,10 +23,10 @@ export function ProfileDropdown() {
         <MenuButton className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           <span className="absolute -inset-1.5" />
           <span className="sr-only">Open user menu</span>
-          {user && user.photo ? (
+          {userPhoto ? (
             <Image
               alt=""
-              src={fileUrl(user.photo)!}
+              src={fileUrl(userPhoto)!}
               className="h-8 w-8 rounded-full"
               width={32}
               height={32}

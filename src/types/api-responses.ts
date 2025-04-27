@@ -1,3 +1,5 @@
+import { NotificationData, NotificationType } from './models/notification'
+
 export type ApiResource<T> = {
   data: T
 }
@@ -8,13 +10,13 @@ export type MetaLinksField = {
   active: boolean
 }
 
-export type MetaField = {
+export type MetaField<P extends number = 10> = {
   current_page: number
   from: number | null
   last_page: number
   links: MetaLinksField[]
   path: string
-  per_page: number
+  per_page: P
   to: number | null
   total: number
 }
@@ -26,10 +28,10 @@ export type LinksField = {
   next: string | null
 }
 
-export type PaginatedApiResponse<T> = {
+export type PaginatedApiResponse<T, P extends number = 10> = {
   data: T[]
   links: LinksField
-  meta: MetaField
+  meta: MetaField<P>
 }
 
 export type SuccessApiResponse<T> = {
@@ -43,7 +45,9 @@ export type NoContentApiResponse = {
   status: 204
 }
 
-export type ErrorApiResponse<T extends 400 | 403 | 404 | 422 | 429 = 400> = {
+export type ErrorApiResponse<
+  T extends 400 | 401 | 403 | 404 | 422 | 429 = 400,
+> = {
   message: string
   status: T
 }
@@ -58,28 +62,29 @@ export type NotFoundApiResponse = ErrorApiResponse<404>
 
 export type TooManyRequestsApiResponse = ErrorApiResponse<429>
 
-export type NotificationResponse<T, D> = {
+export type NotificationResponse = {
   id: string
   type: string
-  notifiable_type: T
+  notifiable_type: NotificationType
   notifiable_id: number
-  data: D
+  data: NotificationData
   read_at?: string
   created_at: string
   updated_at: string
 }
 
-export type PaginatedNotificationResponse<T, D> = {
-  data: NotificationResponse<T, D>[]
+export type PaginatedNotificationResponse<P extends number = 10> = {
+  data: NotificationResponse[]
   current_page: number
   from: number | null
   last_page: number
   path: string
-  per_page: number
+  per_page: P
   to: number | null
   total: number
   first_page_url: string | null
   last_page_url: string | null
   prev_page_url: string | null
   next_page_url: string | null
+  links: MetaLinksField[]
 }

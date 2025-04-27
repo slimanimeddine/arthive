@@ -6,44 +6,58 @@ import type {
   UseMutationResult,
 } from '@tanstack/react-query'
 
-type AdminSignIn200 = SignIn200
-type AdminSignIn401 = UnauthenticatedApiResponse
-type AdminSignInBody = SignInBody
-type ChangePassword200 = NoContentApiResponse
-type ChangePassword401 = UnauthenticatedApiResponse
-type ChangePassword422 = ErrorApiResponse<422>
-type ChangePasswordBody = z.infer<typeof changePasswordBody>
-type DeleteUser200 = NoContentApiResponse
-type DeleteUser401 = UnauthenticatedApiResponse
-type ResetPassword200 = NoContentApiResponse
-type ResetPassword400 = ErrorApiResponse
-type ResetPassword404 = NotFoundApiResponse
-type ResetPasswordBody = z.infer<typeof resetPasswordBody>
-type SendEmailVerificationCode200 = NoContentApiResponse
-type SendEmailVerificationCode400 = ErrorApiResponse
-type SendEmailVerificationCode401 = UnauthenticatedApiResponse
-type SendForgotPasswordCode200 = NoContentApiResponse
-type SendForgotPasswordCodeBody = z.infer<typeof sendForgotPasswordCodeBody>
-type SignIn200 = SuccessApiResponse<{
+export type AdminSignIn200 = SignIn200
+export type AdminSignIn401 = SignIn401
+export type AdminSignInBody = SignInBody
+
+export type ChangePassword200 = NoContentApiResponse
+export type ChangePassword401 = UnauthenticatedApiResponse
+export type ChangePassword422 = ErrorApiResponse<422>
+export type ChangePasswordBody = z.infer<typeof changePasswordBody>
+
+export type DeleteUser200 = NoContentApiResponse
+export type DeleteUser401 = UnauthenticatedApiResponse
+
+export type ResetPassword200 = NoContentApiResponse
+export type ResetPassword400 = ErrorApiResponse
+export type ResetPassword404 = NotFoundApiResponse
+export type ResetPasswordBody = z.infer<typeof resetPasswordBody>
+
+export type SendEmailVerificationCode200 = NoContentApiResponse
+export type SendEmailVerificationCode400 = ErrorApiResponse
+export type SendEmailVerificationCode401 = UnauthenticatedApiResponse
+
+export type SendForgotPasswordCode200 = NoContentApiResponse
+export type SendForgotPasswordCodeBody = z.infer<
+  typeof sendForgotPasswordCodeBody
+>
+
+export type SignIn200 = SuccessApiResponse<{
   token: string
   id: string
 }>
-type SignIn401 = UnauthenticatedApiResponse
-type SignInBody = z.infer<typeof signInBody>
-type SignOut200 = NoContentApiResponse
-type SignOut401 = UnauthenticatedApiResponse
-type SignUp200 = NoContentApiResponse
-type SignUpBody = z.infer<typeof signUpBody>
-type VerifyEmailCode200 = NoContentApiResponse
-type VerifyEmailCode400 = ErrorApiResponse
-type VerifyEmailCode401 = UnauthenticatedApiResponse
-type VerifyEmailCodeBody = z.infer<typeof verifyEmailCodeBody>
-type VerifyForgotPasswordCode200 = SuccessApiResponse<{
+export type SignIn401 = ErrorApiResponse<401>
+export type SignInBody = z.infer<typeof signInBody>
+
+export type SignOut200 = NoContentApiResponse
+export type SignOut401 = UnauthenticatedApiResponse
+
+export type SignUp200 = NoContentApiResponse
+export type SignUpBody = z.infer<typeof signUpBody>
+
+export type VerifyEmailCode200 = NoContentApiResponse
+export type VerifyEmailCode400 = ErrorApiResponse
+export type VerifyEmailCode401 = UnauthenticatedApiResponse
+export type VerifyEmailCodeBody = z.infer<typeof verifyEmailCodeBody>
+
+export type VerifyForgotPasswordCode200 = SuccessApiResponse<{
   token: string
 }>
-type VerifyForgotPasswordCode400 = ErrorApiResponse
-type VerifyForgotPasswordCode404 = NotFoundApiResponse
-type VerifyForgotPasswordCodeBody = z.infer<typeof verifyForgotPasswordCodeBody>
+export type VerifyForgotPasswordCode400 = ErrorApiResponse
+export type VerifyForgotPasswordCode404 = NotFoundApiResponse
+export type VerifyForgotPasswordCodeBody = z.infer<
+  typeof verifyForgotPasswordCodeBody
+>
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType, BodyType } from '@/lib/axios'

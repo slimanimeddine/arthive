@@ -1,5 +1,5 @@
 'use client'
-import { useListTags } from '@/api/artwork-tags/artwork-tags'
+import { TAGS } from '@/lib/constants'
 import { classNames } from '@/lib/utils'
 import {
   Disclosure,
@@ -22,31 +22,10 @@ const sortOptions = [
   { id: 4, value: 'trending', label: 'Trending' },
 ]
 
-export function SortFilterArtworks() {
+export default function SortFilterArtworks() {
   const [tag, setTag] = useQueryState('tag')
 
   const [artworkSort, setArtworkSort] = useQueryState('artworkSort')
-
-  const tagsQuery = useListTags()
-
-  if (tagsQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">loading...</p>
-  }
-
-  if (tagsQuery.isError) {
-    return (
-      <p className="mt-2 text-sm text-red-700">
-        We&apos;re sorry, something went wrong.
-      </p>
-    )
-  }
-
-  const tagsQueryData = tagsQuery.data!.data.data!
-
-  const filters = tagsQueryData.map((tag) => ({
-    id: tag.id!,
-    title: tag.name!,
-  }))
 
   return (
     <div className="bg-white">
@@ -82,39 +61,31 @@ export function SortFilterArtworks() {
               onChange={setTag}
               className="flex flex-wrap gap-2 justify-end"
             >
-              {tagsQuery.isSuccess && filters.length === 0 && (
-                <p className="mt-2 text-sm text-gray-700">
-                  No filters were found
-                </p>
-              )}
-
-              {tagsQuery.isSuccess &&
-                filters.length > 0 &&
-                filters.map((option) => (
-                  <Radio
-                    key={option.id!}
-                    value={option.title!}
-                    className="whitespace-nowrap cursor-pointer focus:outline-none flex items-center justify-center rounded-md bg-white p-2 text-xs font-semibold text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50 data-[checked]:bg-indigo-100 data-[checked]:text-indigo-700 data-[checked]:ring-0 data-[focus]:data-[checked]:ring-2 data-[focus]:ring-2 data-[focus]:ring-indigo-600 data-[focus]:ring-offset-2 data-[checked]:hover:bg-indigo-200 sm:flex-1 [&:not([data-focus],[data-checked])]:ring-inset"
-                  >
-                    <span>{option.title!}</span>
-                    {option.title === tag && (
-                      <button
-                        type="button"
-                        className="group relative h-3.5 w-3.5 rounded-sm hover:bg-indigo-600/20"
-                        onClick={() => setTag(null)}
+              {TAGS.map((option) => (
+                <Radio
+                  key={option}
+                  value={option}
+                  className="whitespace-nowrap cursor-pointer focus:outline-none flex items-center justify-center rounded-md bg-white p-2 text-xs font-semibold text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50 data-[checked]:bg-indigo-100 data-[checked]:text-indigo-700 data-[checked]:ring-0 data-[focus]:data-[checked]:ring-2 data-[focus]:ring-2 data-[focus]:ring-indigo-600 data-[focus]:ring-offset-2 data-[checked]:hover:bg-indigo-200 sm:flex-1 [&:not([data-focus],[data-checked])]:ring-inset"
+                >
+                  <span>{option}</span>
+                  {option === tag && (
+                    <button
+                      type="button"
+                      className="group relative h-3.5 w-3.5 rounded-sm hover:bg-indigo-600/20"
+                      onClick={() => setTag(null)}
+                    >
+                      <span className="sr-only">Remove</span>
+                      <svg
+                        viewBox="0 0 14 14"
+                        className="h-3.5 w-3.5 stroke-indigo-700/50 group-hover:stroke-indigo-700/75"
                       >
-                        <span className="sr-only">Remove</span>
-                        <svg
-                          viewBox="0 0 14 14"
-                          className="h-3.5 w-3.5 stroke-indigo-700/50 group-hover:stroke-indigo-700/75"
-                        >
-                          <path d="M4 4l6 6m0-6l-6 6" />
-                        </svg>
-                        <span className="absolute -inset-1" />
-                      </button>
-                    )}
-                  </Radio>
-                ))}
+                        <path d="M4 4l6 6m0-6l-6 6" />
+                      </svg>
+                      <span className="absolute -inset-1" />
+                    </button>
+                  )}
+                </Radio>
+              ))}
             </RadioGroup>
           </div>
         </DisclosurePanel>

@@ -1,17 +1,22 @@
-import { NotificationItem } from '@/lib/types'
-import { FollowNotification } from './follow-notification'
-import { ArtworkLikeNotification } from './artwork-like-notification'
-import { ArtworkCommentNotification } from './artwork-comment-notification'
-import { ArtistVerificationResponseNotification } from './artist-verification-response notification'
+import FollowNotification from './follow-notification'
+import ArtworkLikeNotification from './artwork-like-notification'
+import ArtworkCommentNotification from './artwork-comment-notification'
+import ArtistVerificationResponseNotification from './artist-verification-response notification'
+import { NotificationItem } from '@/types/models/notification'
 
-export function Notification({
-  notification,
-}: {
+type NotificationProps = {
+  token: string
   notification: NotificationItem
-}) {
+}
+
+export default function Notification({
+  token,
+  notification,
+}: NotificationProps) {
   if (notification.type === 'follow' && 'follower' in notification.data) {
     return (
       <FollowNotification
+        token={token}
         id={notification.id}
         username={notification.data.follower.username}
         fullName={`${notification.data.follower.first_name} ${notification.data.follower.last_name}`}
@@ -24,6 +29,7 @@ export function Notification({
   if (notification.type === 'artwork-like' && 'liker' in notification.data) {
     return (
       <ArtworkLikeNotification
+        token={token}
         id={notification.id}
         likerUsername={notification.data.liker.username}
         likerFullName={`${notification.data.liker.first_name} ${notification.data.liker.last_name}`}
@@ -41,6 +47,7 @@ export function Notification({
   ) {
     return (
       <ArtworkCommentNotification
+        token={token}
         id={notification.id}
         commenterUsername={notification.data.commenter.username}
         commenterFullName={`${notification.data.commenter.first_name} ${notification.data.commenter.last_name}`}
@@ -59,6 +66,7 @@ export function Notification({
   ) {
     return (
       <ArtistVerificationResponseNotification
+        token={token}
         notificationId={notification.id}
         id={notification.data.id}
         reason={notification.data.reason}

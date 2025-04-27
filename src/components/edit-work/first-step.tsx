@@ -3,11 +3,10 @@
 import {
   useDeleteArtworkPhoto,
   useUploadArtworkPhotos,
-} from '@/api/artwork-photos/artwork-photos'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
+} from '@/hooks/artwork-photos'
 import { MAX_FILE_SIZE } from '@/lib/constants'
-import { Tag } from '@/lib/types'
-import { onError } from '@/lib/utils'
+import { authHeader, onError, turnBlobToFile } from '@/lib/utils'
+import { Tag } from '@/types/misc'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
@@ -15,42 +14,33 @@ import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 export type FirstStepProps = {
+  token: string
   artwork: {
-    id: number
+    id: string
     title: string
     description: string
     status: string
     publishedAt: string
     mainPhotoUrl: string
     photos: {
-      id: number
+      id: string
       path: string
     }[]
     tags: {
-      id: number
+      id: string
       name: Tag
     }[]
   }
 }
 
-export function FirstStep({ artwork }: FirstStepProps) {
+export default function FirstStep({ token, artwork }: FirstStepProps) {
   const queryClient = useQueryClient()
 
-  const token = useGetAuthenticatedUserToken()
+  const authConfig = authHeader(token)
 
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+  const uploadArtworkPhotosMutation = useUploadArtworkPhotos(authConfig)
 
-  const uploadArtworkPhotosMutation = useUploadArtworkPhotos(axiosConfig)
-
-  const deleteArtworkPhotoMutation = useDeleteArtworkPhoto(axiosConfig)
+  const deleteArtworkPhotoMutation = useDeleteArtworkPhoto(authConfig)
 
   const onDrop = useCallback(
     (acceptedFiles: Blob[]) => {
@@ -62,7 +52,7 @@ export function FirstStep({ artwork }: FirstStepProps) {
         {
           artworkId: artwork.id,
           data: {
-            photos: acceptedFiles,
+            photos: acceptedFiles.map((file) => turnBlobToFile(file)),
           },
         },
         {
@@ -89,10 +79,10 @@ export function FirstStep({ artwork }: FirstStepProps) {
     maxSize: MAX_FILE_SIZE,
   })
 
-  const handleRemovePhoto = (photo: { id: number; path: string }) => {
+  const handleRemovePhoto = (photo: { id: string; path: string }) => {
     deleteArtworkPhotoMutation.mutate(
       {
-        artworkPhotoId: photo.id!,
+        artworkPhotoId: photo.id,
       },
       {
         onError,

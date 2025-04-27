@@ -12,7 +12,7 @@ export type ArtworkModel = BaseModel & {
   user_id: string
   artwork_likes_count: number
   artwork_comments_count: number
-  artwork_main_photo_path?: string
+  artwork_main_photo_path: string
 }
 
 export type Artwork = ArtworkModel & {

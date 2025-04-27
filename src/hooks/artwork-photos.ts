@@ -6,22 +6,29 @@ import type {
   UseMutationResult,
 } from '@tanstack/react-query'
 
-type DeleteArtworkPhoto200 = NoContentApiResponse
-type DeleteArtworkPhoto401 = UnauthenticatedApiResponse
-type DeleteArtworkPhoto403 = UnauthorizedApiResponse
-type DeleteArtworkPhoto404 = NotFoundApiResponse
-type ReplaceArtworkPhotoPath200 = NoContentApiResponse
-type ReplaceArtworkPhotoPath401 = UnauthenticatedApiResponse
-type ReplaceArtworkPhotoPath403 = UnauthorizedApiResponse
-type ReplaceArtworkPhotoPath404 = NotFoundApiResponse
-type ReplaceArtworkPhotoPathBody = z.infer<typeof replaceArtworkPhotoPathBody>
-type SetArtworkPhotoAsMain200 = ApiResource<ArtworkPhoto>
-type SetArtworkPhotoAsMain401 = UnauthenticatedApiResponse
-type SetArtworkPhotoAsMain404 = NotFoundApiResponse
-type UploadArtworkPhotos200 = ApiResource<ArtworkPhoto>
-type UploadArtworkPhotos401 = UnauthenticatedApiResponse
-type UploadArtworkPhotos404 = NotFoundApiResponse
-type UploadArtworkPhotosBody = z.infer<typeof uploadArtworkPhotosBody>
+export type DeleteArtworkPhoto200 = NoContentApiResponse
+export type DeleteArtworkPhoto401 = UnauthenticatedApiResponse
+export type DeleteArtworkPhoto403 = UnauthorizedApiResponse
+export type DeleteArtworkPhoto404 = NotFoundApiResponse
+
+export type ReplaceArtworkPhotoPath200 = NoContentApiResponse
+export type ReplaceArtworkPhotoPath401 = UnauthenticatedApiResponse
+export type ReplaceArtworkPhotoPath403 = UnauthorizedApiResponse
+export type ReplaceArtworkPhotoPath404 = NotFoundApiResponse
+export type ReplaceArtworkPhotoPathBody = z.infer<
+  typeof replaceArtworkPhotoPathBody
+>
+
+export type SetArtworkPhotoAsMain200 = ApiResource<ArtworkPhotoModel>
+export type SetArtworkPhotoAsMain401 = UnauthenticatedApiResponse
+export type SetArtworkPhotoAsMain403 = UnauthorizedApiResponse
+export type SetArtworkPhotoAsMain404 = NotFoundApiResponse
+
+export type UploadArtworkPhotos200 = ApiResource<ArtworkPhotoModel>
+export type UploadArtworkPhotos401 = UnauthenticatedApiResponse
+export type UploadArtworkPhotos403 = UnauthorizedApiResponse
+export type UploadArtworkPhotos404 = NotFoundApiResponse
+export type UploadArtworkPhotosBody = z.infer<typeof uploadArtworkPhotosBody>
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType, BodyType } from '@/lib/axios'
@@ -37,7 +44,7 @@ import {
   uploadArtworkPhotosBody,
 } from '@/schemas/artwork-photos'
 import { z } from 'zod'
-import { ArtworkPhoto } from '@/types/models/artwork-photo'
+import { ArtworkPhotoModel } from '@/types/models/artwork-photo'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
@@ -69,7 +76,9 @@ export const uploadArtworkPhotos = (
 }
 
 export const getUploadArtworkPhotosMutationOptions = <
-  TError = ErrorType<UploadArtworkPhotos401 | string | UploadArtworkPhotos404>,
+  TError = ErrorType<
+    UploadArtworkPhotos401 | UploadArtworkPhotos403 | UploadArtworkPhotos404
+  >,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -157,7 +166,9 @@ export const setArtworkPhotoAsMain = (
 
 export const getSetArtworkPhotoAsMainMutationOptions = <
   TError = ErrorType<
-    SetArtworkPhotoAsMain401 | string | SetArtworkPhotoAsMain404
+    | SetArtworkPhotoAsMain401
+    | SetArtworkPhotoAsMain403
+    | SetArtworkPhotoAsMain404
   >,
   TContext = unknown,
 >(options?: {

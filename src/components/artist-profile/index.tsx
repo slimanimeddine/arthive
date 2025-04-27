@@ -1,9 +1,14 @@
 'use client'
 
-import { ArtworksDisplay } from './artworks-display'
-import { ArtistInformation } from './artist-information'
+import ArtworksDisplay from './artworks-display'
+import ArtistInformation from './artist-information'
 
-export function ArtistProfile({ username }: { username: string }) {
+type ArtistProfileProps = {
+  token: string | undefined
+  username: string
+}
+
+export default function ArtistProfile({ token, username }: ArtistProfileProps) {
   return (
     <main>
       <div className="mx-auto max-w-7xl px-2 py-8 sm:px-2 lg:px-4">
@@ -11,7 +16,10 @@ export function ArtistProfile({ username }: { username: string }) {
           {/* artist information */}
           <div className="lg:col-start-3 lg:row-end-1">
             <h2 className="sr-only">Summary</h2>
-            <ArtistInformation username={username} />
+            <ArtistInformation
+              token={token}
+              username={username}
+            />
           </div>
 
           {/* artworks */}

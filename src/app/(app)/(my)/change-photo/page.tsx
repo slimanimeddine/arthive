@@ -1,5 +1,7 @@
-import { ChangePhotoForm } from '@/components/change-photo/change-photo-form'
+import ChangePhotoForm from '@/components/change-photo/change-photo-form'
+import { verifyAuth } from '@/lib/dal'
 
-export default function Page() {
-  return <ChangePhotoForm />
+export default async function Page() {
+  const { token } = await verifyAuth()
+  return <ChangePhotoForm token={token} />
 }

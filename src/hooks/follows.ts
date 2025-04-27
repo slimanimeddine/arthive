@@ -14,21 +14,25 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-type CheckIfAuthenticatedUserIsFollowing200 = SuccessApiResponse<boolean>
-type CheckIfAuthenticatedUserIsFollowing401 = UnauthenticatedApiResponse
-type CheckIfAuthenticatedUserIsFollowing404 = NotFoundApiResponse
-type FollowUser200 = ApiResource<Follow>
-type FollowUser401 = UnauthenticatedApiResponse
-type FollowUser403 = UnauthorizedApiResponse
-type FollowUser404 = NotFoundApiResponse
-type ListAuthenticatedUserFollowers200 = PaginatedApiResponse<User>
-type ListAuthenticatedUserFollowers401 = UnauthenticatedApiResponse
-type ListAuthenticatedUserFollowing200 = PaginatedApiResponse<User>
-type ListAuthenticatedUserFollowing401 = UnauthenticatedApiResponse
-type UnfollowUser200 = NoContentApiResponse
-type UnfollowUser401 = UnauthenticatedApiResponse
-type UnfollowUser403 = UnauthorizedApiResponse
-type UnfollowUser404 = NotFoundApiResponse
+export type CheckIfAuthenticatedUserIsFollowing200 = SuccessApiResponse<boolean>
+export type CheckIfAuthenticatedUserIsFollowing401 = UnauthenticatedApiResponse
+export type CheckIfAuthenticatedUserIsFollowing404 = NotFoundApiResponse
+
+export type FollowUser200 = ApiResource<FollowModel>
+export type FollowUser401 = UnauthenticatedApiResponse
+export type FollowUser403 = UnauthorizedApiResponse
+export type FollowUser404 = NotFoundApiResponse
+
+export type ListAuthenticatedUserFollowers200 = ApiResource<UserModel[]>
+export type ListAuthenticatedUserFollowers401 = UnauthenticatedApiResponse
+
+export type ListAuthenticatedUserFollowing200 = ApiResource<UserModel[]>
+export type ListAuthenticatedUserFollowing401 = UnauthenticatedApiResponse
+
+export type UnfollowUser200 = NoContentApiResponse
+export type UnfollowUser401 = UnauthenticatedApiResponse
+export type UnfollowUser403 = UnauthorizedApiResponse
+export type UnfollowUser404 = NotFoundApiResponse
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
@@ -36,13 +40,12 @@ import {
   ApiResource,
   NoContentApiResponse,
   NotFoundApiResponse,
-  PaginatedApiResponse,
   SuccessApiResponse,
   UnauthenticatedApiResponse,
   UnauthorizedApiResponse,
 } from '@/types/api-responses'
-import { Follow } from '@/types/models/follow'
-import { User } from '@/types/models/user'
+import { FollowModel } from '@/types/models/follow'
+import { UserModel } from '@/types/models/user'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 

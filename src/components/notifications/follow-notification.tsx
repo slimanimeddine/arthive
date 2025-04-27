@@ -4,25 +4,27 @@ import Link from 'next/link'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { classNames } from '@/lib/utils'
-import { useMarkNotificationRead } from '@/hooks/use-mark-notification-read'
+import { useMarkNotificationRead } from '@/hooks/mark-notification-as-read'
 dayjs.extend(relativeTime)
 
 type FollowNotificationProps = {
+  token: string
   id: string
   username: string
   fullName: string
   createdAt: string
-  readAt?: string
+  readAt: string | undefined
 }
 
-export function FollowNotification({
+export default function FollowNotification({
+  token,
   id,
   username,
   fullName,
   createdAt,
   readAt,
 }: FollowNotificationProps) {
-  const { markAsRead } = useMarkNotificationRead(id, readAt)
+  const { markAsRead } = useMarkNotificationRead(token, id, readAt)
 
   return (
     <div

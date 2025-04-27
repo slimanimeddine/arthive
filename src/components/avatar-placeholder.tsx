@@ -4,7 +4,7 @@ type AvatarPlaceholderProps = {
   size: 6 | 8 | 10 | 12 | 14
 }
 
-export function AvatarPlaceholder({ size }: AvatarPlaceholderProps) {
+export default function AvatarPlaceholder({ size }: AvatarPlaceholderProps) {
   let sizeClass = ''
 
   switch (size) {

@@ -14,19 +14,26 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-type CheckIfAuthenticatedUserIsFavoriting200 = SuccessApiResponse<boolean>
-type CheckIfAuthenticatedUserIsFavoriting401 = UnauthenticatedApiResponse
-type CheckIfAuthenticatedUserIsFavoriting404 = NotFoundApiResponse
-type ListAuthenticatedUserFavoriteArtworks200 = PaginatedApiResponse<Artwork>
-type ListAuthenticatedUserFavoriteArtworks401 = UnauthenticatedApiResponse
-type MarkArtworkAsFavorite200 = ApiResource<Favorite>
-type MarkArtworkAsFavorite401 = UnauthenticatedApiResponse
-type MarkArtworkAsFavorite403 = UnauthorizedApiResponse
-type MarkArtworkAsFavorite404 = NotFoundApiResponse
-type RemoveArtworkFromFavorites200 = NoContentApiResponse
-type RemoveArtworkFromFavorites401 = UnauthenticatedApiResponse
-type RemoveArtworkFromFavorites403 = UnauthorizedApiResponse
-type RemoveArtworkFromFavorites404 = NotFoundApiResponse
+export type CheckIfAuthenticatedUserIsFavoriting200 =
+  SuccessApiResponse<boolean>
+export type CheckIfAuthenticatedUserIsFavoriting401 = UnauthenticatedApiResponse
+export type CheckIfAuthenticatedUserIsFavoriting404 = NotFoundApiResponse
+
+export type ListAuthenticatedUserFavoriteArtworks200 = ApiResource<
+  ArtworkModel[]
+>
+export type ListAuthenticatedUserFavoriteArtworks401 =
+  UnauthenticatedApiResponse
+
+export type MarkArtworkAsFavorite200 = ApiResource<FavoriteModel>
+export type MarkArtworkAsFavorite401 = UnauthenticatedApiResponse
+export type MarkArtworkAsFavorite403 = UnauthorizedApiResponse
+export type MarkArtworkAsFavorite404 = NotFoundApiResponse
+
+export type RemoveArtworkFromFavorites200 = NoContentApiResponse
+export type RemoveArtworkFromFavorites401 = UnauthenticatedApiResponse
+export type RemoveArtworkFromFavorites403 = UnauthorizedApiResponse
+export type RemoveArtworkFromFavorites404 = NotFoundApiResponse
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
@@ -34,13 +41,12 @@ import {
   ApiResource,
   NoContentApiResponse,
   NotFoundApiResponse,
-  PaginatedApiResponse,
   SuccessApiResponse,
   UnauthenticatedApiResponse,
   UnauthorizedApiResponse,
 } from '@/types/api-responses'
-import { Artwork } from '@/types/models/artwork'
-import { Favorite } from '@/types/models/favorite'
+import { ArtworkModel } from '@/types/models/artwork'
+import { FavoriteModel } from '@/types/models/favorite'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 

@@ -1,19 +1,18 @@
 'use client'
-import { getCroppedImg, onError } from '@/lib/utils'
+import { authHeader, getCroppedImg, onError, turnBlobToFile } from '@/lib/utils'
 import Image from 'next/image'
 import { useCallback, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 import { FirstStepProps } from './first-step'
 import { useQueryClient } from '@tanstack/react-query'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
 import {
   useReplaceArtworkPhotoPath,
   useSetArtworkPhotoAsMain,
-} from '@/api/artwork-photos/artwork-photos'
+} from '@/hooks/artwork-photos'
 
 type SecondStepProps = FirstStepProps
 
-export function SecondStep({ artwork }: SecondStepProps) {
+export default function SecondStep({ token, artwork }: SecondStepProps) {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
 
@@ -23,7 +22,7 @@ export function SecondStep({ artwork }: SecondStepProps) {
 
   const [mainPhoto, setMainPhoto] = useState<
     | {
-        id: number
+        id: string
         path: string
       }
     | undefined
@@ -33,22 +32,9 @@ export function SecondStep({ artwork }: SecondStepProps) {
 
   const queryClient = useQueryClient()
 
-  const token = useGetAuthenticatedUserToken()
-
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        },
-      }
-    : undefined
-
-  const setArtworkPhotoAsMainMutation = useSetArtworkPhotoAsMain(axiosConfig)
-  const replaceArtworkPhotoPathMutation =
-    useReplaceArtworkPhotoPath(axiosConfig)
+  const authConfig = authHeader(token)
+  const setArtworkPhotoAsMainMutation = useSetArtworkPhotoAsMain(authConfig)
+  const replaceArtworkPhotoPathMutation = useReplaceArtworkPhotoPath(authConfig)
 
   const onCropComplete = useCallback(
     async (croppedArea: Area, croppedAreaPixels: Area) => {
@@ -69,7 +55,7 @@ export function SecondStep({ artwork }: SecondStepProps) {
         {
           artworkPhotoId: mainPhoto.id,
           data: {
-            photo: croppedMainPhoto,
+            photo: turnBlobToFile(croppedMainPhoto),
           },
         },
         {

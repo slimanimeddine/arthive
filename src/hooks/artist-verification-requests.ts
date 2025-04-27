@@ -15,23 +15,27 @@ import type {
 } from '@tanstack/react-query'
 import { z } from 'zod'
 
-type ListArtistVerificationRequests200 =
+export type ListArtistVerificationRequests200 =
   PaginatedApiResponse<ArtistVerificationRequest>
-type ListArtistVerificationRequests401 = UnauthenticatedApiResponse
-type ListArtistVerificationRequestsParams = {
+export type ListArtistVerificationRequests401 = UnauthenticatedApiResponse
+export type ListArtistVerificationRequestsParams = {
   perPage?: number
 }
-type ReviewArtistVerificationRequest200 = ApiResource<ArtistVerificationRequest>
-type ReviewArtistVerificationRequest401 = UnauthenticatedApiResponse
-type ReviewArtistVerificationRequest403 = UnauthorizedApiResponse
-type ReviewArtistVerificationRequest404 = NotFoundApiResponse
-type ReviewArtistVerificationRequestBody = z.infer<
+
+export type ReviewArtistVerificationRequest200 =
+  ApiResource<ArtistVerificationRequestModel>
+export type ReviewArtistVerificationRequest401 = UnauthenticatedApiResponse
+export type ReviewArtistVerificationRequest403 = UnauthorizedApiResponse
+export type ReviewArtistVerificationRequest404 = NotFoundApiResponse
+export type ReviewArtistVerificationRequestBody = z.infer<
   typeof reviewArtistVerificationRequestBody
 >
-type SubmitArtistVerificationRequest200 = ApiResource<ArtistVerificationRequest>
-type SubmitArtistVerificationRequest400 = ErrorApiResponse
-type SubmitArtistVerificationRequest401 = UnauthenticatedApiResponse
-type SubmitArtistVerificationRequest403 = UnauthenticatedApiResponse
+
+export type SubmitArtistVerificationRequest200 =
+  ApiResource<ArtistVerificationRequestModel>
+export type SubmitArtistVerificationRequest400 = ErrorApiResponse
+export type SubmitArtistVerificationRequest401 = UnauthenticatedApiResponse
+export type SubmitArtistVerificationRequest403 = UnauthorizedApiResponse
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType, BodyType } from '@/lib/axios'
@@ -43,7 +47,10 @@ import {
   UnauthenticatedApiResponse,
   UnauthorizedApiResponse,
 } from '@/types/api-responses'
-import { ArtistVerificationRequest } from '@/types/models/artist-verification-request'
+import {
+  ArtistVerificationRequest,
+  ArtistVerificationRequestModel,
+} from '@/types/models/artist-verification-request'
 import { reviewArtistVerificationRequestBody } from '@/schemas/artist-verification-requests'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]

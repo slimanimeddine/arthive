@@ -1,5 +1,8 @@
-import { Index } from '@/components/favorites'
+import Index from '@/components/favorites'
+import { verifyAuth } from '@/lib/dal'
 
-export default function Page() {
-  return <Index />
+export default async function Page() {
+  const { token } = await verifyAuth()
+
+  return <Index token={token} />
 }

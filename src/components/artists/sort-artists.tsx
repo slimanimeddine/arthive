@@ -5,7 +5,7 @@ const sortOptions = [
   { id: 2, value: 'new', label: 'New' },
 ]
 
-export function SortArtists() {
+export default function SortArtists() {
   const [, setArtistSort] = useQueryState('artistSort')
 
   return (

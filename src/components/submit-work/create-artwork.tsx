@@ -1,13 +1,17 @@
 'use client'
 
-import { FirstStep } from './first-step'
-import { SecondStep } from './second-step'
-import { ThirdStep } from './third-step'
-import { FourthStep } from './fourth-step'
+import FirstStep from './first-step'
+import SecondStep from './second-step'
+import ThirdStep from './third-step'
+import FourthStep from './fourth-step'
 import useArtworkStore from '@/stores/artwork-store'
 import { classNames } from '@/lib/utils'
 
-export function CreateArtwork() {
+type CreateArtworkProps = {
+  token: string
+}
+
+export default function CreateArtwork({ token }: CreateArtworkProps) {
   const { step, setStep, isStepValid } = useArtworkStore()
 
   const renderStep = () => {
@@ -17,9 +21,9 @@ export function CreateArtwork() {
       case 2:
         return <SecondStep />
       case 3:
-        return <ThirdStep />
+        return <ThirdStep token={token} />
       case 4:
-        return <FourthStep />
+        return <FourthStep token={token} />
       default:
         return null
     }

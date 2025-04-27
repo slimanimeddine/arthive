@@ -11,23 +11,24 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-type ListTags200 = PaginatedApiResponse<Tag>
-type ListUserArtworkTags200 = SuccessApiResponse<
+export type ListTags200 = ApiResource<TagModel>
+
+export type ListUserArtworkTags200 = SuccessApiResponse<
   {
     id: string
     name: string
   }[]
 >
-type ListUserArtworkTags404 = NotFoundApiResponse
+export type ListUserArtworkTags404 = NotFoundApiResponse
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
 import {
+  ApiResource,
   NotFoundApiResponse,
-  PaginatedApiResponse,
   SuccessApiResponse,
 } from '@/types/api-responses'
-import { Tag } from '@/types/models/tag'
+import { TagModel } from '@/types/models/tag'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 

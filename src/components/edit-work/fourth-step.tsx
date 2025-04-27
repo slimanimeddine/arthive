@@ -1,29 +1,16 @@
 'use client'
 
-import { usePublishArtwork } from '@/api/artworks/artworks'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { onError } from '@/lib/utils'
+import { authHeader, onError } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { FirstStepProps } from './first-step'
+import { usePublishArtwork } from '@/hooks/artworks'
 
 type FourthStepProps = FirstStepProps
 
-export function FourthStep({ artwork }: FourthStepProps) {
-  const token = useGetAuthenticatedUserToken()
-
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
-
-  const publishArtworkMutation = usePublishArtwork(axiosConfig)
+export default function FourthStep({ token, artwork }: FourthStepProps) {
+  const publishArtworkMutation = usePublishArtwork(authHeader(token))
 
   const queryClient = useQueryClient()
 

@@ -1,8 +1,8 @@
-import { Tag } from '@/lib/types'
+import { Tag } from '@/types/misc'
 import { create } from 'zustand'
 
 type Photo = {
-  id: number
+  id: string
   path: string
 }
 
@@ -15,11 +15,11 @@ interface EditArtworkState {
   title: string
   description: string
   status: 'draft' | 'published'
-  id?: number
+  id?: string
 
   setStep: (step: number) => void
   addPhotos: (newPhotos: Photo[]) => void
-  removePhoto: (photoId: number) => void
+  removePhoto: (photoId: string) => void
   removeMainPhoto: () => void
   removeCroppedMainPhoto: () => void
   setMainPhoto: (photo: string) => void
@@ -28,7 +28,7 @@ interface EditArtworkState {
   setTitle: (title: string) => void
   setDescription: (description: string) => void
   setStatus: (status: 'draft' | 'published') => void
-  setId: (id: number) => void
+  setId: (id: string) => void
 
   setToDefault: () => void
 

@@ -3,19 +3,21 @@ import Link from 'next/link'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { classNames } from '@/lib/utils'
-import { useMarkNotificationRead } from '@/hooks/use-mark-notification-read'
+import { useMarkNotificationRead } from '@/hooks/mark-notification-as-read'
 dayjs.extend(relativeTime)
 
 type ArtworkLikeNotificationProps = {
+  token: string
   id: string
   likerUsername: string
   likerFullName: string
-  artworkId: number
+  artworkId: string
   artworkTitle: string
   createdAt: string
-  readAt?: string
+  readAt: string | undefined
 }
-export function ArtworkLikeNotification({
+export default function ArtworkLikeNotification({
+  token,
   id,
   likerUsername,
   likerFullName,
@@ -24,7 +26,7 @@ export function ArtworkLikeNotification({
   createdAt,
   readAt,
 }: ArtworkLikeNotificationProps) {
-  const { markAsRead } = useMarkNotificationRead(id, readAt)
+  const { markAsRead } = useMarkNotificationRead(token, id, readAt)
 
   return (
     <div

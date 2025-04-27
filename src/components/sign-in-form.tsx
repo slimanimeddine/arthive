@@ -1,55 +1,34 @@
 'use client'
 import { signInBody } from '@/schemas/authentication'
-import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import { useSignIn } from '@/api/authentication/authentication'
-import { useCreateSession } from '@/hooks/session/use-create-session'
-import { useQueryClient } from '@tanstack/react-query'
 import { onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
-import axios from '@/lib/axios'
+import { SignInBody, useSignIn } from '@/hooks/authentication'
+import { createSession } from '@/actions/session'
 
-type SignInBody = zod.infer<typeof signInBody>
-
-export function SignInForm() {
+export default function SignInForm() {
   const { handleSubmit, register, formState, reset } = useForm<SignInBody>({
     resolver: zodResolver(signInBody),
   })
 
   const signInMutation = useSignIn()
 
-  const createSessionMutation = useCreateSession()
-  const queryClient = useQueryClient()
-
   const router = useRouter()
 
-  async function onSubmit(data: SignInBody) {
-    const csrf = () => axios.get('/sanctum/csrf-cookie')
-    await csrf()
+  function onSubmit(data: SignInBody) {
     signInMutation.mutate(
       {
         data,
       },
       {
-        onError: (error) => onError(error),
+        onError,
         onSuccess: async (data) => {
           reset()
-          createSessionMutation.mutate(
-            {
-              id: data.data.data!.id!,
-              token: data.data.data!.token!,
-            },
-            {
-              onError: (error) => onError(error),
-              onSuccess: () => {
-                toast.success('User signed in successfully!')
-                router.push('/')
-                queryClient.invalidateQueries({ queryKey: ['session'] })
-              },
-            }
-          )
+          await createSession(data.data.id, data.data.token)
+          toast.success('User signed in successfully!')
+          router.push('/')
         },
       }
     )

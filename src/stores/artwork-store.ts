@@ -1,4 +1,4 @@
-import { Tag } from '@/lib/types'
+import { Tag } from '@/types/misc'
 import { create } from 'zustand'
 
 interface ArtworkState {
@@ -10,7 +10,7 @@ interface ArtworkState {
   title: string
   description: string
   status: 'draft' | 'published'
-  id?: number
+  id?: string
 
   setStep: (step: number) => void
   addPhotos: (newPhotos: Blob[]) => void
@@ -23,7 +23,7 @@ interface ArtworkState {
   setTitle: (title: string) => void
   setDescription: (description: string) => void
   setStatus: (status: 'draft' | 'published') => void
-  setId: (id: number) => void
+  setId: (id: string) => void
 
   setToDefault: () => void
 

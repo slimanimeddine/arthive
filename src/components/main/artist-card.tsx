@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { CheckBadgeIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
 import { fileUrl } from '@/lib/utils'
-import { AvatarPlaceholder } from '../avatar-placeholder'
+import AvatarPlaceholder from '../avatar-placeholder'
 
 type ArtistCardProps = {
   fullName: string
@@ -12,7 +12,7 @@ type ArtistCardProps = {
   verified: boolean
 }
 
-export function ArtistCard({
+export default function ArtistCard({
   fullName,
   country,
   profilePictureUrl,

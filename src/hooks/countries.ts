@@ -11,11 +11,11 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-type ListCountries200 = PaginatedApiResponse<CountryModel>
+export type ListCountries200 = ApiResource<CountryModel[]>
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
-import { PaginatedApiResponse } from '@/types/api-responses'
+import { ApiResource } from '@/types/api-responses'
 import { CountryModel } from '@/types/models/country'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]

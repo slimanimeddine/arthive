@@ -1,30 +1,9 @@
-import { useListTags } from '@/api/artwork-tags/artwork-tags'
+import { TAGS } from '@/lib/constants'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'nuqs'
 
-export function ArtistCategoryFilter() {
+export default function ArtistCategoryFilter() {
   const [category, setCategory] = useQueryState('category')
-
-  const tagsQuery = useListTags()
-
-  if (tagsQuery.isPending) {
-    return <p className="mt-2 text-sm text-gray-700">loading...</p>
-  }
-
-  if (tagsQuery.isError) {
-    return (
-      <p className="mt-2 text-sm text-red-700">
-        We&apos;re sorry, something went wrong.
-      </p>
-    )
-  }
-
-  const tagsQueryData = tagsQuery.data!.data.data!
-
-  const categories = tagsQueryData.map((tag) => ({
-    id: tag.id!,
-    title: tag.name!,
-  }))
 
   return (
     <div className="mt-1 space-y-2">
@@ -60,30 +39,22 @@ export function ArtistCategoryFilter() {
 
         <div className="border-t border-gray-200 bg-white overflow-y-scroll h-48">
           <div className="space-y-1 border-t border-gray-200 p-4">
-            {tagsQuery.isSuccess && categories.length === 0 && (
-              <p className="mt-2 text-sm text-gray-700">
-                No categories were found
-              </p>
-            )}
-
-            {tagsQuery.isSuccess &&
-              categories.length > 0 &&
-              categories.map((c) => (
-                <div
-                  key={c.id}
-                  className="flex items-center"
-                >
-                  <input
-                    type="radio"
-                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    onChange={() => setCategory(c.title)}
-                    checked={c.title === category}
-                  />
-                  <label className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                    {c.title}
-                  </label>
-                </div>
-              ))}
+            {TAGS.map((tag) => (
+              <div
+                key={tag}
+                className="flex items-center"
+              >
+                <input
+                  type="radio"
+                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                  onChange={() => setCategory(tag)}
+                  checked={tag === category}
+                />
+                <label className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                  {tag}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
       </details>

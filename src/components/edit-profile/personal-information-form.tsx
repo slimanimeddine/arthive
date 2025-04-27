@@ -1,15 +1,15 @@
 'use client'
-import { SelectCountry } from './select-country'
-import { z as zod } from 'zod'
+import SelectCountry from './select-country'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { updateAuthenticatedUserBody } from '@/schemas/users'
-import { useUpdateAuthenticatedUser } from '@/api/users/users'
-import { classNames, onError } from '@/lib/utils'
+import { authHeader, classNames, onError } from '@/lib/utils'
 import toast from 'react-hot-toast'
-
-type UpdateAuthenticatedUserBody = zod.infer<typeof updateAuthenticatedUserBody>
+import {
+  UpdateAuthenticatedUserBody,
+  useUpdateAuthenticatedUser,
+} from '@/hooks/users'
 
 type PersonalInformationFormProps = {
   username: string
@@ -21,7 +21,7 @@ type PersonalInformationFormProps = {
   token: string
 }
 
-export function PersonalInformationForm({
+export default function PersonalInformationForm({
   username,
   first_name,
   last_name,
@@ -30,16 +30,6 @@ export function PersonalInformationForm({
   bio,
   token,
 }: PersonalInformationFormProps) {
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
-
   const queryClient = useQueryClient()
 
   const { handleSubmit, register, formState, control } =
@@ -55,8 +45,9 @@ export function PersonalInformationForm({
       },
     })
 
-  const updateAuthenticatedUserMutation =
-    useUpdateAuthenticatedUser(axiosConfig)
+  const updateAuthenticatedUserMutation = useUpdateAuthenticatedUser(
+    authHeader(token)
+  )
 
   function onSubmit(data: UpdateAuthenticatedUserBody) {
     updateAuthenticatedUserMutation.mutate(

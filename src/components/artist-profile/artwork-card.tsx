@@ -3,14 +3,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 type ArtworkCardProps = {
-  id: number
+  id: string
   title: string
   mainPhotoUrl: string
   likesCount: number
   commentsCount: number
 }
 
-export function ArtworkCard({
+export default function ArtworkCard({
   id,
   title,
   mainPhotoUrl,

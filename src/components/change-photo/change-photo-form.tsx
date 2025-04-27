@@ -1,30 +1,30 @@
 'use client'
-import { useUpdateAuthenticatedUser } from '@/api/users/users'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
+import { useUpdateAuthenticatedUser } from '@/hooks/users'
 import { MAX_FILE_SIZE } from '@/lib/constants'
-import { classNames, getCroppedImg, getUrlFromBlob, onError } from '@/lib/utils'
+import {
+  authHeader,
+  classNames,
+  getCroppedImg,
+  getUrlFromBlob,
+  onError,
+  turnBlobToFile,
+} from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Cropper, { Area } from 'react-easy-crop'
 import toast from 'react-hot-toast'
 
-export function ChangePhotoForm() {
-  const token = useGetAuthenticatedUserToken()
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+type ChangePhotoFormProps = {
+  token: string
+}
 
+export default function ChangePhotoForm({ token }: ChangePhotoFormProps) {
   const queryClient = useQueryClient()
 
-  const updateAuthenticatedUserMutation =
-    useUpdateAuthenticatedUser(axiosConfig)
+  const updateAuthenticatedUserMutation = useUpdateAuthenticatedUser(
+    authHeader(token)
+  )
 
   const [file, setFile] = useState<string>()
   const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -71,7 +71,7 @@ export function ChangePhotoForm() {
       updateAuthenticatedUserMutation.mutate(
         {
           data: {
-            photo: croppedImage,
+            photo: turnBlobToFile(croppedImage),
           },
         },
         {

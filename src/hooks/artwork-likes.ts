@@ -14,26 +14,30 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-type CheckIfAuthenticatedUserIsLiking200 = SuccessApiResponse<boolean>
-type CheckIfAuthenticatedUserIsLiking401 = UnauthenticatedApiResponse
-type CheckIfAuthenticatedUserIsLiking404 = NotFoundApiResponse
-type LikeArtwork200 = ApiResource<ArtworkLike>
-type LikeArtwork401 = UnauthenticatedApiResponse
-type LikeArtwork403 = UnauthorizedApiResponse
-type LikeArtwork404 = NotFoundApiResponse
-type ListUserReceivedLikesCountByTag200 = SuccessApiResponse<
+export type CheckIfAuthenticatedUserIsLiking200 = SuccessApiResponse<boolean>
+export type CheckIfAuthenticatedUserIsLiking401 = UnauthenticatedApiResponse
+export type CheckIfAuthenticatedUserIsLiking404 = NotFoundApiResponse
+
+export type LikeArtwork200 = ApiResource<ArtworkLikeModel>
+export type LikeArtwork401 = UnauthenticatedApiResponse
+export type LikeArtwork403 = UnauthorizedApiResponse
+export type LikeArtwork404 = NotFoundApiResponse
+
+export type ListUserReceivedLikesCountByTag200 = SuccessApiResponse<
   {
     tag_name: string
     total_likes: number
   }[]
 >
-type ListUserReceivedLikesCountByTag404 = NotFoundApiResponse
-type ShowUserReceivedLikesCount200 = SuccessApiResponse<number>
-type ShowUserReceivedLikesCount404 = NotFoundApiResponse
-type UnlikeArtwork200 = NoContentApiResponse
-type UnlikeArtwork401 = UnauthenticatedApiResponse
-type UnlikeArtwork403 = UnauthorizedApiResponse
-type UnlikeArtwork404 = NotFoundApiResponse
+export type ListUserReceivedLikesCountByTag404 = NotFoundApiResponse
+
+export type ShowUserReceivedLikesCount200 = SuccessApiResponse<number>
+export type ShowUserReceivedLikesCount404 = NotFoundApiResponse
+
+export type UnlikeArtwork200 = NoContentApiResponse
+export type UnlikeArtwork401 = UnauthenticatedApiResponse
+export type UnlikeArtwork403 = UnauthorizedApiResponse
+export type UnlikeArtwork404 = NotFoundApiResponse
 
 import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
@@ -45,7 +49,7 @@ import {
   UnauthenticatedApiResponse,
   UnauthorizedApiResponse,
 } from '@/types/api-responses'
-import { ArtworkLike } from '@/types/models/artwork-like'
+import { ArtworkLikeModel } from '@/types/models/artwork-like'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
@@ -58,7 +62,7 @@ export const listUserReceivedLikesCountByTag = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<ListUserReceivedLikesCountByTag200 | void>(
+  return customInstance<ListUserReceivedLikesCountByTag200>(
     {
       url: `/api/v1/users/${username}/artwork-likes/received/count/by-tag`,
       method: 'GET',

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useCallback, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 
-export function SecondStep() {
+export default function SecondStep() {
   const { photos, mainPhoto, setMainPhoto, setCroppedMainPhoto } =
     useArtworkStore()
   const [crop, setCrop] = useState({ x: 0, y: 0 })

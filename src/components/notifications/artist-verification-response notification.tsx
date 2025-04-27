@@ -1,4 +1,4 @@
-import { useMarkNotificationRead } from '@/hooks/use-mark-notification-read'
+import { useMarkNotificationRead } from '@/hooks/mark-notification-as-read'
 import { classNames } from '@/lib/utils'
 import { CheckIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import dayjs from 'dayjs'
@@ -6,23 +6,23 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
 
 type ArtistVerificationResponseNotificationProps = {
+  token: string
   notificationId: string
-  id: number
+  id: string
   status: 'approved' | 'rejected'
   reason?: string
   createdAt: string
-  readAt?: string
+  readAt: string | undefined
 }
 
-export function ArtistVerificationResponseNotification({
+export default function ArtistVerificationResponseNotification({
+  token,
   notificationId,
-  id,
   status,
-  reason,
   createdAt,
   readAt,
 }: ArtistVerificationResponseNotificationProps) {
-  const { markAsRead } = useMarkNotificationRead(notificationId, readAt)
+  const { markAsRead } = useMarkNotificationRead(token, notificationId, readAt)
 
   return (
     <div

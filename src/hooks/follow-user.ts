@@ -1,38 +1,28 @@
+import { authHeader, onError } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 import {
   useCheckIfAuthenticatedUserIsFollowing,
   useFollowUser,
   useUnfollowUser,
-} from '@/api/follows/follows'
-import { useGetAuthenticatedUserToken } from '@/hooks/use-get-authenticated-user-token'
-import { onError } from '@/lib/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
+} from './follows'
 
-export function useFollowUserAction(userId: number) {
-  const token = useGetAuthenticatedUserToken()
+export function useFollowUserAction(token: string | undefined, userId: string) {
   const router = useRouter()
   const queryClient = useQueryClient()
 
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
+  const authConfig = token ? authHeader(token!) : undefined
 
   const isFollowingQuery = useCheckIfAuthenticatedUserIsFollowing(
     userId,
-    axiosConfig
+    authConfig
   )
 
-  const isFollowing = isFollowingQuery.data?.data.data
+  const isFollowing = isFollowingQuery.data?.data
 
-  const followUserMutation = useFollowUser(axiosConfig)
-  const unfollowUserMutation = useUnfollowUser(axiosConfig)
+  const followUserMutation = useFollowUser(authConfig)
+  const unfollowUserMutation = useUnfollowUser(authConfig)
 
   const invalidateFollowQueries = () => {
     queryClient.invalidateQueries({
@@ -72,6 +62,5 @@ export function useFollowUserAction(userId: number) {
     isFollowing,
     isLoading: isFollowingQuery.isLoading,
     handleFollowToggle,
-    token,
   }
 }

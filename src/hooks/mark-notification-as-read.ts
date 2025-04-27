@@ -1,33 +1,24 @@
-import { useMarkNotificationAsRead } from '@/api/notifications/notifications'
 import { useQueryClient } from '@tanstack/react-query'
-import { useGetAuthenticatedUserToken } from './use-get-authenticated-user-token'
 import toast from 'react-hot-toast'
-import { onError } from '@/lib/utils'
+import { authHeader, onError } from '@/lib/utils'
+import { useMarkNotificationAsRead } from './notifications'
 
 export function useMarkNotificationRead(
+  token: string,
   notificationId: string,
-  readAt?: string
+  readAt: string | undefined
 ) {
-  const token = useGetAuthenticatedUserToken()
   const queryClient = useQueryClient()
 
-  const axiosConfig = token
-    ? {
-        axios: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      }
-    : undefined
-
-  const markAsReadMutation = useMarkNotificationAsRead(axiosConfig)
+  const markNotificationAsReadMutation = useMarkNotificationAsRead(
+    authHeader(token)
+  )
 
   function markAsRead() {
     if (readAt) {
       return
     }
-    markAsReadMutation.mutate(
+    markNotificationAsReadMutation.mutate(
       {
         notificationId,
       },
