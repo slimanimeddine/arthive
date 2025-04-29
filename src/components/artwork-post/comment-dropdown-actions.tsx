@@ -1,12 +1,12 @@
 'use client'
 
+import { useDeleteArtworkComment } from '@/hooks/artwork-comments'
+import { authHeader, onError } from '@/lib/utils'
+import { useEditCommentStore } from '@/stores/edit-comment-store'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
-import { authHeader, onError } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { useEditCommentStore } from '@/stores/edit-comment-store'
-import { useDeleteArtworkComment } from '@/hooks/artwork-comments'
 
 type CommentDropdownActionsProps = {
   token: string | undefined
@@ -24,10 +24,10 @@ export default function CommentDropdownActions({
 
   const authConfig = token ? authHeader(token!) : undefined
 
-  const deleteCommentMutation = useDeleteArtworkComment(authConfig)
+  const deleteArtworkCommentMutation = useDeleteArtworkComment(authConfig)
 
   function onDelete() {
-    deleteCommentMutation.mutate(
+    deleteArtworkCommentMutation.mutate(
       {
         artworkCommentId: commentId,
       },
@@ -43,6 +43,7 @@ export default function CommentDropdownActions({
     )
   }
 
+  const isDisabled = deleteArtworkCommentMutation.isPending || !token
   return (
     <Menu
       as="div"
@@ -73,6 +74,7 @@ export default function CommentDropdownActions({
           </MenuItem>
           <MenuItem>
             <button
+              disabled={isDisabled}
               onClick={onDelete}
               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 w-full text-left"
             >

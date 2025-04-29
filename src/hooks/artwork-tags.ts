@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -10,6 +9,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 export type ListTags200 = ApiResource<TagModel>
 
@@ -21,8 +21,8 @@ export type ListUserArtworkTags200 = SuccessApiResponse<
 >
 export type ListUserArtworkTags404 = NotFoundApiResponse
 
-import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
+import { customInstance } from '@/lib/axios'
 import {
   ApiResource,
   NotFoundApiResponse,
@@ -267,7 +267,9 @@ export const getListTagsQueryOptions = <
     Awaited<ReturnType<typeof listTags>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type ListTagsQueryResult = NonNullable<

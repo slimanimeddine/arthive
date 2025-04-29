@@ -1,14 +1,14 @@
-import { updateArtworkCommentBody } from '@/schemas/artwork-comments'
-import { useEditCommentStore } from '@/stores/edit-comment-store'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { useQueryClient } from '@tanstack/react-query'
-import { authHeader, onError } from '@/lib/utils'
-import toast from 'react-hot-toast'
 import {
   UpdateArtworkCommentBody,
   useUpdateArtworkComment,
 } from '@/hooks/artwork-comments'
+import { authHeader, onError } from '@/lib/utils'
+import { updateArtworkCommentBody } from '@/schemas/artwork-comments'
+import { useEditCommentStore } from '@/stores/edit-comment-store'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 type EditCommentProps = {
   token: string | undefined
@@ -34,10 +34,10 @@ export default function EditComment({
 
   const authConfig = token ? authHeader(token!) : undefined
 
-  const updateArtworkComment = useUpdateArtworkComment(authConfig)
+  const updateArtworkCommentMutation = useUpdateArtworkComment(authConfig)
 
   function onSubmit(data: UpdateArtworkCommentBody) {
-    updateArtworkComment.mutate(
+    updateArtworkCommentMutation.mutate(
       {
         artworkCommentId: commentId,
         data,
@@ -57,7 +57,7 @@ export default function EditComment({
   }
 
   const isDisabled =
-    formState.isSubmitting || updateArtworkComment.isPending || !token
+    formState.isSubmitting || updateArtworkCommentMutation.isPending || !token
 
   return (
     <form

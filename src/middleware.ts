@@ -1,6 +1,6 @@
-import { NextResponse, NextRequest } from 'next/server'
-import { cookies } from 'next/headers'
 import { decrypt } from '@/lib/encryption'
+import { cookies } from 'next/headers'
+import { NextRequest, NextResponse } from 'next/server'
 
 const protectedRoutes = [
   '/change-photo',

@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -13,6 +12,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export type CreateArtwork200 = ApiResource<ArtworkModel>
 export type CreateArtwork401 = UnauthenticatedApiResponse
@@ -76,8 +76,9 @@ export type UpdateArtworkDraft403 = UnauthorizedApiResponse
 export type UpdateArtworkDraft404 = NotFoundApiResponse
 export type UpdateArtworkDraftBody = z.infer<typeof updateArtworkDraftBody>
 
+import type { BodyType, ErrorType } from '@/lib/axios'
 import { customInstance } from '@/lib/axios'
-import type { ErrorType, BodyType } from '@/lib/axios'
+import { createArtworkBody, updateArtworkDraftBody } from '@/schemas/artworks'
 import {
   ApiResource,
   NoContentApiResponse,
@@ -86,10 +87,9 @@ import {
   UnauthenticatedApiResponse,
   UnauthorizedApiResponse,
 } from '@/types/api-responses'
-import { z } from 'zod'
-import { createArtworkBody, updateArtworkDraftBody } from '@/schemas/artworks'
-import { Artwork, ArtworkModel } from '@/types/models/artwork'
 import { Tag } from '@/types/misc'
+import { Artwork, ArtworkModel } from '@/types/models/artwork'
+import { z } from 'zod'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
@@ -143,7 +143,9 @@ export const getListPublishedArtworksQueryOptions = <
     Awaited<ReturnType<typeof listPublishedArtworks>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type ListPublishedArtworksQueryResult = NonNullable<
@@ -822,7 +824,9 @@ export const getListAuthenticatedUserArtworksQueryOptions = <
     Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type ListAuthenticatedUserArtworksQueryResult = NonNullable<

@@ -1,13 +1,13 @@
-import { HandThumbUpIcon } from '@heroicons/react/24/outline'
-import { authHeader, classNames, matchQueryStatus, onError } from '@/lib/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
 import {
   useCheckIfAuthenticatedUserIsLiking,
   useLikeArtwork,
   useUnlikeArtwork,
 } from '@/hooks/artwork-likes'
+import { authHeader, classNames, matchQueryStatus, onError } from '@/lib/utils'
+import { HandThumbUpIcon } from '@heroicons/react/24/outline'
+import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 type LikeButtonProps = {
   token: string | undefined
@@ -60,7 +60,7 @@ export default function LikeButton({ token, artworkId }: LikeButtonProps) {
   if (!token) {
     return (
       <button
-        className="cursor-not-allowed flex items-center justify-center rounded-full p-2 transition-colors bg-gray-200 text-gray-700"
+        className="flex items-center justify-center rounded-full p-2 transition-colors bg-gray-200 text-gray-700"
         onClick={() => router.push('/sign-in')}
       >
         <HandThumbUpIcon className="h-6 w-6" />
@@ -77,8 +77,8 @@ export default function LikeButton({ token, artworkId }: LikeButtonProps) {
         loading...
       </button>
     ),
-    Errored: <button></button>,
-    Empty: <button></button>,
+    Errored: <span className="text-xs text-red-700">error</span>,
+    Empty: <span></span>,
     Success: ({ data }) => {
       const isLiking = data.data
       return (

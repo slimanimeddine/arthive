@@ -1,19 +1,19 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { UpdateArtworkDraftBody, useUpdateArtworkDraft } from '@/hooks/artworks'
 import { TAGS } from '@/lib/constants'
 import { authHeader, onError } from '@/lib/utils'
-import toast from 'react-hot-toast'
-import { useQueryClient } from '@tanstack/react-query'
-import { FirstStepProps } from './first-step'
-import { UpdateArtworkDraftBody, useUpdateArtworkDraft } from '@/hooks/artworks'
 import { updateArtworkDraftBody } from '@/schemas/artworks'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { FirstStepProps } from './first-step'
 
 type ThirdStepProps = FirstStepProps
 
 export default function ThirdStep({ token, artwork }: ThirdStepProps) {
-  const updateArtworkMutation = useUpdateArtworkDraft(authHeader(token))
+  const updateArtworkDraftMutation = useUpdateArtworkDraft(authHeader(token))
 
   const queryClient = useQueryClient()
 
@@ -37,7 +37,7 @@ export default function ThirdStep({ token, artwork }: ThirdStepProps) {
       tags: data.tags,
     }
 
-    updateArtworkMutation.mutate(
+    updateArtworkDraftMutation.mutate(
       {
         artworkId: artwork.id,
         data: dataObj,

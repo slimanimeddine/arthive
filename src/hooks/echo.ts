@@ -2,8 +2,8 @@
 import Echo from 'laravel-echo'
 import { useEffect, useState } from 'react'
 
-import Pusher from 'pusher-js'
 import { AXIOS_INSTANCE } from '@/lib/axios'
+import Pusher from 'pusher-js'
 
 interface Authorizer {
   authorize: (socketId: string, callback: CallableFunction) => void

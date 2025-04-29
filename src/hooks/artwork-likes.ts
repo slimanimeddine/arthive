@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -13,6 +12,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export type CheckIfAuthenticatedUserIsLiking200 = SuccessApiResponse<boolean>
 export type CheckIfAuthenticatedUserIsLiking401 = UnauthenticatedApiResponse
@@ -39,8 +39,8 @@ export type UnlikeArtwork401 = UnauthenticatedApiResponse
 export type UnlikeArtwork403 = UnauthorizedApiResponse
 export type UnlikeArtwork404 = NotFoundApiResponse
 
-import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
+import { customInstance } from '@/lib/axios'
 import {
   ApiResource,
   NoContentApiResponse,
@@ -712,7 +712,9 @@ export const getCheckIfAuthenticatedUserIsLikingQueryOptions = <
     Awaited<ReturnType<typeof checkIfAuthenticatedUserIsLiking>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type CheckIfAuthenticatedUserIsLikingQueryResult = NonNullable<

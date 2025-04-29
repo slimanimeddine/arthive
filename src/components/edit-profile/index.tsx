@@ -1,21 +1,21 @@
 'use client'
-import PersonalInformationForm from './personal-information-form'
+import { useShowAuthenticatedUser } from '@/hooks/users'
+import { authHeader, matchQueryStatus } from '@/lib/utils'
+import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
 import ChangePasswordForm from './change-password-form'
 import EmailVerificationForm from './email-verification-form'
-import { authHeader, matchQueryStatus } from '@/lib/utils'
-import { useShowAuthenticatedUser } from '@/hooks/users'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
-import EmptyUI from '../empty-ui'
+import PersonalInformationForm from './personal-information-form'
 
 type IndexProps = {
   token: string
 }
 
 export function Index({ token }: IndexProps) {
-  const authenticatedUserQuery = useShowAuthenticatedUser(authHeader(token))
+  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authHeader(token))
 
-  return matchQueryStatus(authenticatedUserQuery, {
+  return matchQueryStatus(showAuthenticatedUserQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,

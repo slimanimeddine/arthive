@@ -20,8 +20,17 @@ export const updateAuthenticatedUserBody = zod.object({
       'Username can only contain letters, numbers, dashes, and underscores'
     )
     .optional(),
-  first_name: zod.string().max(255).optional(),
-  last_name: zod.string().max(255).optional(),
+  first_name: zod
+    .string()
+    .max(255)
+    .regex(/^[A-Za-z]+$/, 'First name can only contain letters')
+    .optional(),
+  last_name: zod
+    .string()
+    .max(255)
+    .regex(/^[A-Za-z]+$/, 'Last name can only contain letters')
+
+    .optional(),
   email: zod.string().email().optional(),
   country: zod.string().optional(),
   bio: zod

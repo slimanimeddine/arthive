@@ -1,5 +1,4 @@
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { useQueryState, parseAsString } from 'nuqs'
+import { parseAsString, useQueryState } from 'nuqs'
 
 export function SearchInput() {
   const [searchQuery, setSearchQuery] = useQueryState(

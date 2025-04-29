@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -13,6 +12,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export type CheckIfUnreadNotificationsExist200 = SuccessApiResponse<{
   exists: boolean
@@ -20,7 +20,7 @@ export type CheckIfUnreadNotificationsExist200 = SuccessApiResponse<{
 export type CheckIfUnreadNotificationsExist401 = UnauthenticatedApiResponse
 
 export type ListAuthenticatedUserNotifications200 =
-  SuccessApiResponse<PaginatedNotificationResponse>
+  PaginatedNotificationResponse
 export type ListAuthenticatedUserNotifications400 = ErrorApiResponse
 export type ListAuthenticatedUserNotifications401 = UnauthenticatedApiResponse
 export type ListAuthenticatedUserNotificationsParams = {
@@ -41,8 +41,8 @@ export type MarkNotificationAsRead200 = NoContentApiResponse
 export type MarkNotificationAsRead401 = UnauthenticatedApiResponse
 export type MarkNotificationAsRead404 = NotFoundApiResponse
 
-import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
+import { customInstance } from '@/lib/axios'
 import {
   ErrorApiResponse,
   NoContentApiResponse,
@@ -499,7 +499,9 @@ export const getCheckIfUnreadNotificationsExistQueryOptions = <
     Awaited<ReturnType<typeof checkIfUnreadNotificationsExist>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type CheckIfUnreadNotificationsExistQueryResult = NonNullable<

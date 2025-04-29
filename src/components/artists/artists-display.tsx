@@ -1,24 +1,24 @@
 'use client'
-import { ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import ArtistCard from './artist-card'
-import Pagination from '../pagination'
-import { useState } from 'react'
+import { useListUsers } from '@/hooks/users'
+import { matchQueryStatus } from '@/lib/utils'
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
-  TransitionChild,
   DialogTitle,
+  TransitionChild,
 } from '@headlessui/react'
-import SortArtists from './sort-artists'
+import { ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
+import Pagination from '../pagination'
+import ArtistCard from './artist-card'
 import ArtistCategoryFilter from './artist-category-filter'
 import ArtistCountryFilter from './artist-country-filter'
-import { useSearchParams } from 'next/navigation'
-import { useListUsers } from '@/hooks/users'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
-import EmptyUI from '../empty-ui'
-import { matchQueryStatus } from '@/lib/utils'
+import SortArtists from './sort-artists'
 
 type ArtistsDisplayProps = {
   token: string | undefined

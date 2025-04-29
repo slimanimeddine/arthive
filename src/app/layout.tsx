@@ -1,9 +1,9 @@
-import type { Metadata } from 'next'
-import './globals.css'
-import { Inter } from 'next/font/google'
-import { Toaster } from 'react-hot-toast'
 import TanQueryClientProvider from '@/providers/query-client-provider'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
+import { Toaster } from 'react-hot-toast'
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 

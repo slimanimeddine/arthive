@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -13,6 +12,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export type ListUsers200 = PaginatedApiResponse<
   Omit<
@@ -54,8 +54,9 @@ export type UpdateAuthenticatedUserBody = z.infer<
   typeof updateAuthenticatedUserBody
 >
 
+import type { BodyType, ErrorType } from '@/lib/axios'
 import { customInstance } from '@/lib/axios'
-import type { ErrorType, BodyType } from '@/lib/axios'
+import { updateAuthenticatedUserBody } from '@/schemas/users'
 import {
   ApiResource,
   NotFoundApiResponse,
@@ -65,7 +66,6 @@ import {
 } from '@/types/api-responses'
 import { User, UserModel } from '@/types/models/user'
 import { z } from 'zod'
-import { updateAuthenticatedUserBody } from '@/schemas/users'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
@@ -112,7 +112,9 @@ export const getShowAuthenticatedUserQueryOptions = <
     Awaited<ReturnType<typeof showAuthenticatedUser>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type ShowAuthenticatedUserQueryResult = NonNullable<
@@ -412,7 +414,9 @@ export const getListUsersQueryOptions = <
     Awaited<ReturnType<typeof listUsers>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type ListUsersQueryResult = NonNullable<

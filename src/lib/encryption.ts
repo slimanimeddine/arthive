@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
+import 'server-only'
 import { SessionPayload } from '../types/misc'
 
 const secretKey = process.env.SESSION_SECRET

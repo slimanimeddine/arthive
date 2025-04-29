@@ -1,5 +1,5 @@
 import { fileUrl } from '@/lib/utils'
-import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import AvatarPlaceholder from '../avatar-placeholder'

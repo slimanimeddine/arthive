@@ -1,13 +1,13 @@
 'use client'
-import ArtworkCard from './artwork-card'
-import { useSearchParams } from 'next/navigation'
-import { fileUrl, matchQueryStatus } from '@/lib/utils'
-import Pagination from '../pagination'
-import SortFilterArtworks from '../artworks/sort-filter-artworks'
 import { useListUserPublishedArtworks } from '@/hooks/artworks'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
+import { fileUrl, matchQueryStatus } from '@/lib/utils'
+import { useSearchParams } from 'next/navigation'
+import SortFilterArtworks from '../artworks/sort-filter-artworks'
 import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
+import Pagination from '../pagination'
+import ArtworkCard from './artwork-card'
 
 type ArtworksDisplayProps = {
   username: string
@@ -27,9 +27,12 @@ export default function ArtworksDisplay({ username }: ArtworksDisplayProps) {
     ...(page && { page }),
   }
 
-  const artworksQuery = useListUserPublishedArtworks(username, queryParams)
+  const listUserPublishedArtworksQuery = useListUserPublishedArtworks(
+    username,
+    queryParams
+  )
 
-  return matchQueryStatus(artworksQuery, {
+  return matchQueryStatus(listUserPublishedArtworksQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,

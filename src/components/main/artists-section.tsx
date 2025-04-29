@@ -1,11 +1,11 @@
 'use client'
-import Link from 'next/link'
-import ArtistCard from './artist-card'
 import { useListUsers } from '@/hooks/users'
 import { matchQueryStatus } from '@/lib/utils'
+import Link from 'next/link'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
 import LoadingUI from '../loading-ui'
+import ArtistCard from './artist-card'
 
 type ArtistsSectionProps = {
   title: string
@@ -16,11 +16,11 @@ export default function ArtistsSection({
   title,
   viewMoreLink,
 }: ArtistsSectionProps) {
-  const artistsQuery = useListUsers({
+  const listUsersQuery = useListUsers({
     'filter[verified]': true,
   })
 
-  return matchQueryStatus(artistsQuery, {
+  return matchQueryStatus(listUsersQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,

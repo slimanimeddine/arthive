@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -13,6 +12,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export type CheckIfAuthenticatedUserIsFollowing200 = SuccessApiResponse<boolean>
 export type CheckIfAuthenticatedUserIsFollowing401 = UnauthenticatedApiResponse
@@ -34,8 +34,8 @@ export type UnfollowUser401 = UnauthenticatedApiResponse
 export type UnfollowUser403 = UnauthorizedApiResponse
 export type UnfollowUser404 = NotFoundApiResponse
 
-import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
+import { customInstance } from '@/lib/axios'
 import {
   ApiResource,
   NoContentApiResponse,
@@ -93,7 +93,9 @@ export const getListAuthenticatedUserFollowersQueryOptions = <
     Awaited<ReturnType<typeof listAuthenticatedUserFollowers>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type ListAuthenticatedUserFollowersQueryResult = NonNullable<
@@ -276,7 +278,9 @@ export const getListAuthenticatedUserFollowingQueryOptions = <
     Awaited<ReturnType<typeof listAuthenticatedUserFollowing>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type ListAuthenticatedUserFollowingQueryResult = NonNullable<
@@ -650,7 +654,9 @@ export const getCheckIfAuthenticatedUserIsFollowingQueryOptions = <
     Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFollowing>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type CheckIfAuthenticatedUserIsFollowingQueryResult = NonNullable<

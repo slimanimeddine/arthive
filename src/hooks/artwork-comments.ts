@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
 import type {
   MutationFunction,
   QueryClient,
   UseMutationOptions,
   UseMutationResult,
 } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 export type DeleteArtworkComment200 = NoContentApiResponse
 export type DeleteArtworkComment401 = UnauthenticatedApiResponse
@@ -23,8 +23,12 @@ export type UpdateArtworkComment403 = UnauthorizedApiResponse
 export type UpdateArtworkComment404 = NotFoundApiResponse
 export type UpdateArtworkCommentBody = z.infer<typeof updateArtworkCommentBody>
 
+import type { BodyType, ErrorType } from '@/lib/axios'
 import { customInstance } from '@/lib/axios'
-import type { ErrorType, BodyType } from '@/lib/axios'
+import {
+  postArtworkCommentBody,
+  updateArtworkCommentBody,
+} from '@/schemas/artwork-comments'
 import {
   ApiResource,
   NoContentApiResponse,
@@ -32,12 +36,8 @@ import {
   UnauthenticatedApiResponse,
   UnauthorizedApiResponse,
 } from '@/types/api-responses'
-import { z } from 'zod'
-import {
-  postArtworkCommentBody,
-  updateArtworkCommentBody,
-} from '@/schemas/artwork-comments'
 import { ArtworkCommentModel } from '@/types/models/artwork-comment'
+import { z } from 'zod'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 

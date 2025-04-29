@@ -1,14 +1,14 @@
 'use client'
-import Link from 'next/link'
-import { ArtworkCard } from '../artwork-card'
-import { fileUrl, matchQueryStatus } from '@/lib/utils'
 import {
   ListPublishedArtworksParams,
   useListPublishedArtworks,
 } from '@/hooks/artworks'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
+import { fileUrl, matchQueryStatus } from '@/lib/utils'
+import Link from 'next/link'
+import { ArtworkCard } from '../artwork-card'
 import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
 
 type ArtworksSectionProps = {
   title: string
@@ -21,12 +21,12 @@ export default function ArtworksSection({
   viewMoreLink,
   sort,
 }: ArtworksSectionProps) {
-  const artworksQuery = useListPublishedArtworks({
+  const listPublishedArtworksQuery = useListPublishedArtworks({
     sort,
     perPage: 4,
   })
 
-  return matchQueryStatus(artworksQuery, {
+  return matchQueryStatus(listPublishedArtworksQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,

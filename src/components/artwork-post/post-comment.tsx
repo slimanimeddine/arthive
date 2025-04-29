@@ -1,14 +1,14 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { useQueryClient } from '@tanstack/react-query'
-import { authHeader, onError } from '@/lib/utils'
-import toast from 'react-hot-toast'
-import { postArtworkCommentBody } from '@/schemas/artwork-comments'
-import { useEffect } from 'react'
 import {
   PostArtworkCommentBody,
   usePostArtworkComment,
 } from '@/hooks/artwork-comments'
+import { authHeader, onError } from '@/lib/utils'
+import { postArtworkCommentBody } from '@/schemas/artwork-comments'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 type PostCommentProps = {
   token: string | undefined
@@ -31,10 +31,10 @@ export default function PostComment({ token, artworkId }: PostCommentProps) {
 
   const authConfig = token ? authHeader(token!) : undefined
 
-  const postArtworkComment = usePostArtworkComment(authConfig)
+  const postArtworkCommentMutation = usePostArtworkComment(authConfig)
 
   function onSubmit(data: PostArtworkCommentBody) {
-    postArtworkComment.mutate(
+    postArtworkCommentMutation.mutate(
       {
         artworkId,
         data,
@@ -53,7 +53,7 @@ export default function PostComment({ token, artworkId }: PostCommentProps) {
   }
 
   const isDisabled =
-    formState.isSubmitting || postArtworkComment.isPending || !token
+    formState.isSubmitting || postArtworkCommentMutation.isPending || !token
 
   return (
     <form

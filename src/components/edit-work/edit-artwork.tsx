@@ -1,15 +1,15 @@
 'use client'
 
+import { useShowAuthenticatedUserArtwork } from '@/hooks/artworks'
+import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
+import { Tag } from '@/types/misc'
+import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
 import FirstStep from './first-step'
+import FourthStep from './fourth-step'
 import SecondStep from './second-step'
 import ThirdStep from './third-step'
-import FourthStep from './fourth-step'
-import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
-import { useShowAuthenticatedUserArtwork } from '@/hooks/artworks'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
-import EmptyUI from '../empty-ui'
-import { Tag } from '@/types/misc'
 
 type EditArtworkProps = {
   token: string
@@ -17,9 +17,12 @@ type EditArtworkProps = {
 }
 
 export default function EditArtwork({ token, id }: EditArtworkProps) {
-  const artworkQuery = useShowAuthenticatedUserArtwork(id, authHeader(token))
+  const showAuthenticatedUserArtworkQuery = useShowAuthenticatedUserArtwork(
+    id,
+    authHeader(token)
+  )
 
-  return matchQueryStatus(artworkQuery, {
+  return matchQueryStatus(showAuthenticatedUserArtworkQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,

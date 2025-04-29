@@ -1,15 +1,15 @@
 'use client'
-import SelectCountry from './select-country'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { useQueryClient } from '@tanstack/react-query'
-import { updateAuthenticatedUserBody } from '@/schemas/users'
-import { authHeader, classNames, onError } from '@/lib/utils'
-import toast from 'react-hot-toast'
 import {
   UpdateAuthenticatedUserBody,
   useUpdateAuthenticatedUser,
 } from '@/hooks/users'
+import { authHeader, classNames, getDirtyValues, onError } from '@/lib/utils'
+import { updateAuthenticatedUserBody } from '@/schemas/users'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import SelectCountry from './select-country'
 
 type PersonalInformationFormProps = {
   username: string
@@ -50,9 +50,11 @@ export default function PersonalInformationForm({
   )
 
   function onSubmit(data: UpdateAuthenticatedUserBody) {
+    const dirtyValues = getDirtyValues(formState.dirtyFields, data)
+    console.log('data', dirtyValues)
     updateAuthenticatedUserMutation.mutate(
       {
-        data,
+        data: dirtyValues,
       },
       {
         onError,

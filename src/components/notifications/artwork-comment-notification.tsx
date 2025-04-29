@@ -1,9 +1,9 @@
+import { useMarkNotificationRead } from '@/hooks/mark-notification-as-read'
+import { classNames } from '@/lib/utils'
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/20/solid'
-import Link from 'next/link'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { classNames } from '@/lib/utils'
-import { useMarkNotificationRead } from '@/hooks/mark-notification-as-read'
+import Link from 'next/link'
 dayjs.extend(relativeTime)
 
 type ArtworkCommentNotificationProps = {

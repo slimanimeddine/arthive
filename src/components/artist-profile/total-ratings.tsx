@@ -1,18 +1,19 @@
 import { useShowUserReceivedLikesCount } from '@/hooks/artwork-likes'
 import { matchQueryStatus } from '@/lib/utils'
 import { StarIcon } from '@heroicons/react/24/solid'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
 import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
 
 type TotalRatingsProps = {
   username: string
 }
 
 export default function TotalRatings({ username }: TotalRatingsProps) {
-  const likesCountTotalQuery = useShowUserReceivedLikesCount(username)
+  const showUserReceivedLikesCountQuery =
+    useShowUserReceivedLikesCount(username)
 
-  return matchQueryStatus(likesCountTotalQuery, {
+  return matchQueryStatus(showUserReceivedLikesCountQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,

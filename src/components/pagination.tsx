@@ -4,7 +4,7 @@ import {
   ArrowLongRightIcon,
 } from '@heroicons/react/20/solid'
 import Link from 'next/link'
-import { useQueryState, parseAsInteger } from 'nuqs'
+import { parseAsInteger, useQueryState } from 'nuqs'
 
 interface PaginationProps {
   links: LinksField

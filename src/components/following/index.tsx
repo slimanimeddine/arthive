@@ -1,20 +1,22 @@
 'use client'
 
-import { authHeader, matchQueryStatus } from '@/lib/utils'
-import ArtistCard from '../main/artist-card'
 import { useListAuthenticatedUserFollowing } from '@/hooks/follows'
+import { authHeader, matchQueryStatus } from '@/lib/utils'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
 import LoadingUI from '../loading-ui'
+import ArtistCard from '../main/artist-card'
 
 type IndexProps = {
   token: string
 }
 
 export default function Index({ token }: IndexProps) {
-  const followingQuery = useListAuthenticatedUserFollowing(authHeader(token))
+  const listAuthenticatedUserFollowingQuery = useListAuthenticatedUserFollowing(
+    authHeader(token)
+  )
 
-  return matchQueryStatus(followingQuery, {
+  return matchQueryStatus(listAuthenticatedUserFollowingQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,
@@ -38,24 +40,16 @@ export default function Index({ token }: IndexProps) {
               </h2>
             </div>
 
-            {followingQuery.isSuccess && following.length === 0 && (
-              <p className="mt-2 text-sm text-gray-700">
-                No following were found
-              </p>
-            )}
-
-            {followingQuery.isSuccess && following.length > 0 && (
-              <ul
-                role="list"
-                className="divide-y divide-gray-100"
-              >
-                {following.map((follower) => (
-                  <li key={follower.id}>
-                    <ArtistCard {...follower} />
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul
+              role="list"
+              className="divide-y divide-gray-100"
+            >
+              {following.map((follower) => (
+                <li key={follower.id}>
+                  <ArtistCard {...follower} />
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       )

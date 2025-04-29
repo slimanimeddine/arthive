@@ -1,20 +1,22 @@
 'use client'
 
 import { useListAuthenticatedUserFollowers } from '@/hooks/follows'
-import ArtistCard from '../main/artist-card'
 import { authHeader, matchQueryStatus } from '@/lib/utils'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
 import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
+import ArtistCard from '../main/artist-card'
 
 type IndexProps = {
   token: string
 }
 
 export default function Index({ token }: IndexProps) {
-  const followersQuery = useListAuthenticatedUserFollowers(authHeader(token))
+  const listAuthenticatedUserFollowersQuery = useListAuthenticatedUserFollowers(
+    authHeader(token)
+  )
 
-  return matchQueryStatus(followersQuery, {
+  return matchQueryStatus(listAuthenticatedUserFollowersQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,
@@ -38,24 +40,16 @@ export default function Index({ token }: IndexProps) {
               </h2>
             </div>
 
-            {followersQuery.isSuccess && followers.length === 0 && (
-              <p className="mt-2 text-sm text-gray-700">
-                No followers were found
-              </p>
-            )}
-
-            {followersQuery.isSuccess && followers.length > 0 && (
-              <ul
-                role="list"
-                className="divide-y divide-gray-100"
-              >
-                {followers.map((follower) => (
-                  <li key={follower.id}>
-                    <ArtistCard {...follower} />
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul
+              role="list"
+              className="divide-y divide-gray-100"
+            >
+              {followers.map((follower) => (
+                <li key={follower.id}>
+                  <ArtistCard {...follower} />
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       )

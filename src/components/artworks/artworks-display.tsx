@@ -1,13 +1,13 @@
 'use client'
+import { useListPublishedArtworks } from '@/hooks/artworks'
+import { fileUrl, matchQueryStatus } from '@/lib/utils'
 import { useSearchParams } from 'next/navigation'
 import { ArtworkCard } from '../artwork-card'
+import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
 import Pagination from '../pagination'
 import SortFilterArtworks from './sort-filter-artworks'
-import { fileUrl, matchQueryStatus } from '@/lib/utils'
-import { useListPublishedArtworks } from '@/hooks/artworks'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
-import EmptyUI from '../empty-ui'
 
 export default function ArtworksDisplay() {
   const searchParams = useSearchParams()

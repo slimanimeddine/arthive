@@ -1,13 +1,14 @@
 'use client'
+
+import { useShowUser } from '@/hooks/users'
 import { fileUrl, matchQueryStatus } from '@/lib/utils'
 import { CheckBadgeIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
-import RatingsByTag from './ratings-by-tag'
-import FollowButton from './follow-button'
-import { useShowUser } from '@/hooks/users'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
 import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
+import FollowButton from './follow-button'
+import RatingsByTag from './ratings-by-tag'
 
 type ArtistInformationProps = {
   token: string | undefined
@@ -18,24 +19,22 @@ export default function ArtistInformation({
   token,
   username,
 }: ArtistInformationProps) {
-  const artistInformationQuery = useShowUser(username)
+  const showUserQuery = useShowUser(username)
 
-  return matchQueryStatus(artistInformationQuery, {
+  return matchQueryStatus(showUserQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,
     Success: ({ data }) => {
-      const artistInformationData = data.data
-
       const artistInformation = {
-        id: artistInformationData.id,
-        fullName: `${artistInformationData.first_name} ${artistInformationData.last_name}`,
-        username: artistInformationData.username,
-        description: artistInformationData.bio,
-        profilePictureUrl: fileUrl(artistInformationData.photo),
-        country: artistInformationData.country,
-        dateJoined: artistInformationData.created_at,
-        verified: artistInformationData.artist_verified_at ? true : false,
+        id: data.data.id,
+        fullName: `${data.data.first_name} ${data.data.last_name}`,
+        username: data.data.username,
+        description: data.data.bio,
+        profilePictureUrl: fileUrl(data.data.photo),
+        country: data.data.country,
+        dateJoined: data.data.created_at,
+        verified: data.data.artist_verified_at ? true : false,
       }
 
       return (
@@ -110,7 +109,7 @@ export default function ArtistInformation({
                     Country
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                    {artistInformationData.country ?? 'Unknown'}
+                    {data.data.country ?? 'Unknown'}
                   </dd>
                 </div>
                 <div>

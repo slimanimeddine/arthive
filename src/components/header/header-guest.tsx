@@ -1,4 +1,5 @@
 'use client'
+import { classNames } from '@/lib/utils'
 import {
   Disclosure,
   DisclosureButton,
@@ -6,10 +7,9 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import Logo from '../logo'
 import { SearchInput } from './search-input'
-import { usePathname } from 'next/navigation'
-import { classNames } from '@/lib/utils'
 
 const navigation = [
   { name: 'Artists', href: '/artists' },

@@ -1,7 +1,7 @@
 'use client'
 
-import ArtworksDisplay from './artworks-display'
 import ArtistInformation from './artist-information'
+import ArtworksDisplay from './artworks-display'
 
 type ArtistProfileProps = {
   token: string | undefined

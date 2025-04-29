@@ -1,11 +1,11 @@
 'use client'
 
+import { useListAuthenticatedUserFavoriteArtworks } from '@/hooks/favorites'
 import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
 import ArtworkCard from '../artist-profile/artwork-card'
-import { useListAuthenticatedUserFavoriteArtworks } from '@/hooks/favorites'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
 import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
 
 type IndexProps = {
   token: string

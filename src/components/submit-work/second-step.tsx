@@ -39,9 +39,7 @@ export default function SecondStep() {
               width={96}
               height={96}
               onClick={() => setMainPhoto(photo)}
-              className={`w-24 h-24 object-cover rounded-md cursor-pointer ${
-                mainPhoto === photo ? 'border-2 border-indigo-500' : ''
-              }`}
+              className={`w-24 h-24 object-cover rounded-md cursor-pointer ${mainPhoto === photo ? 'border-2 border-indigo-500' : ''}`}
             />
           ))}
         </div>

@@ -1,8 +1,8 @@
-import FollowNotification from './follow-notification'
-import ArtworkLikeNotification from './artwork-like-notification'
-import ArtworkCommentNotification from './artwork-comment-notification'
-import ArtistVerificationResponseNotification from './artist-verification-response notification'
 import { NotificationItem } from '@/types/models/notification'
+import ArtistVerificationResponseNotification from './artist-verification-response notification'
+import ArtworkCommentNotification from './artwork-comment-notification'
+import ArtworkLikeNotification from './artwork-like-notification'
+import FollowNotification from './follow-notification'
 
 type NotificationProps = {
   token: string

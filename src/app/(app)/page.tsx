@@ -1,9 +1,9 @@
 import ArtistsSection from '@/components/main/artists-section'
-import Introduction from '@/components/main/introduction'
 import ArtworksSection from '@/components/main/artworks-section'
-import { QueryClient } from '@tanstack/react-query'
+import Introduction from '@/components/main/introduction'
 import { prefetchListPublishedArtworks } from '@/hooks/artworks'
 import { prefetchListUsers } from '@/hooks/users'
+import { QueryClient } from '@tanstack/react-query'
 
 export default async function Page() {
   const queryClient = new QueryClient()

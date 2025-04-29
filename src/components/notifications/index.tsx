@@ -1,21 +1,21 @@
 'use client'
-import Notification from './notification'
-import Pagination from '../pagination'
-import { useSearchParams } from 'next/navigation'
-import { CheckIcon } from '@heroicons/react/20/solid'
-import toast from 'react-hot-toast'
-import { useQueryClient } from '@tanstack/react-query'
-import { authHeader, matchQueryStatus, onError } from '@/lib/utils'
 import { useEcho } from '@/hooks/echo'
-import { useEffect } from 'react'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
-import EmptyUI from '../empty-ui'
 import {
   useListAuthenticatedUserNotifications,
   useMarkAllNotificationsAsRead,
 } from '@/hooks/notifications'
+import { authHeader, matchQueryStatus, onError } from '@/lib/utils'
 import { NotificationData, NotificationType } from '@/types/models/notification'
+import { CheckIcon } from '@heroicons/react/20/solid'
+import { useQueryClient } from '@tanstack/react-query'
+import { useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
+import toast from 'react-hot-toast'
+import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
+import Pagination from '../pagination'
+import Notification from './notification'
 
 type IndexProps = {
   token: string
@@ -35,15 +35,14 @@ export default function Index({ token, userId }: IndexProps) {
 
   const authConfig = authHeader(token)
 
-  const notificationsQuery = useListAuthenticatedUserNotifications(
-    queryParams,
-    authConfig
-  )
+  const listAuthenticatedUserNotificationsQuery =
+    useListAuthenticatedUserNotifications(queryParams, authConfig)
 
-  const markAllReadMutation = useMarkAllNotificationsAsRead(authConfig)
+  const markAllNotificationsAsReadMutation =
+    useMarkAllNotificationsAsRead(authConfig)
 
   function markAllRead() {
-    markAllReadMutation.mutate(undefined, {
+    markAllNotificationsAsReadMutation.mutate(undefined, {
       onError,
       onSuccess: () => {
         toast.success('Notifications were marked as read')
@@ -72,12 +71,12 @@ export default function Index({ token, userId }: IndexProps) {
     }
   }, [echo, queryClient, userId])
 
-  return matchQueryStatus(notificationsQuery, {
+  return matchQueryStatus(listAuthenticatedUserNotificationsQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,
     Success: ({ data }) => {
-      const notificationsQueryData = data.data.data
+      const notificationsQueryData = data.data
 
       const notifications = notificationsQueryData.map((notification) => ({
         id: notification.id,
@@ -89,21 +88,21 @@ export default function Index({ token, userId }: IndexProps) {
       }))
 
       const links = {
-        first: data.data.first_page_url,
-        last: data.data.last_page_url,
-        prev: data.data.prev_page_url,
-        next: data.data.next_page_url,
+        first: data.first_page_url,
+        last: data.last_page_url,
+        prev: data.prev_page_url,
+        next: data.next_page_url,
       }
 
       const meta = {
-        current_page: data.data.current_page,
-        from: data.data.from,
-        last_page: data.data.last_page,
-        links: data.data.links,
-        path: data.data.path,
-        per_page: data.data.per_page,
-        to: data.data.to,
-        total: data.data.total,
+        current_page: data.current_page,
+        from: data.from,
+        last_page: data.last_page,
+        links: data.links,
+        path: data.path,
+        per_page: data.per_page,
+        to: data.to,
+        total: data.total,
       }
 
       return (

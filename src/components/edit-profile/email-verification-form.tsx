@@ -1,15 +1,15 @@
 'use client'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { useQueryClient } from '@tanstack/react-query'
-import { authHeader, classNames, onError } from '@/lib/utils'
-import toast from 'react-hot-toast'
-import { verifyEmailCodeBody } from '@/schemas/authentication'
 import {
   useSendEmailVerificationCode,
   useVerifyEmailCode,
   VerifyEmailCodeBody,
 } from '@/hooks/authentication'
+import { authHeader, classNames, onError } from '@/lib/utils'
+import { verifyEmailCodeBody } from '@/schemas/authentication'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 type EmailVerificationFormProps = {
   token: string

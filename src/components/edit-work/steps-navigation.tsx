@@ -1,7 +1,7 @@
 'use client'
 import { classNames } from '@/lib/utils'
-import { CheckIcon } from '@heroicons/react/20/solid'
 import useArtworkStore from '@/stores/artwork-store'
+import { CheckIcon } from '@heroicons/react/20/solid'
 
 export default function StepsNavigation() {
   const { step: currentStep, setStep, isStepValid } = useArtworkStore()
@@ -9,12 +9,10 @@ export default function StepsNavigation() {
   const steps = [
     {
       name: 'Step 1',
-      href: '#',
       status: currentStep > 1 ? 'complete' : 'current',
     },
     {
       name: 'Step 2',
-      href: '#',
       status:
         currentStep > 2
           ? 'complete'
@@ -24,7 +22,6 @@ export default function StepsNavigation() {
     },
     {
       name: 'Step 3',
-      href: '#',
       status:
         currentStep > 3
           ? 'complete'
@@ -34,7 +31,6 @@ export default function StepsNavigation() {
     },
     {
       name: 'Step 4',
-      href: '#',
       status: currentStep === 4 ? 'current' : 'upcoming',
     },
   ]

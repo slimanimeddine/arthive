@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
 import type {
   MutationFunction,
   QueryClient,
   UseMutationOptions,
   UseMutationResult,
 } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 export type AdminSignIn200 = SignIn200
 export type AdminSignIn401 = SignIn401
@@ -59,16 +59,8 @@ export type VerifyForgotPasswordCodeBody = z.infer<
   typeof verifyForgotPasswordCodeBody
 >
 
+import type { BodyType, ErrorType } from '@/lib/axios'
 import { customInstance } from '@/lib/axios'
-import type { ErrorType, BodyType } from '@/lib/axios'
-import {
-  ErrorApiResponse,
-  NoContentApiResponse,
-  NotFoundApiResponse,
-  SuccessApiResponse,
-  UnauthenticatedApiResponse,
-} from '@/types/api-responses'
-import { z } from 'zod'
 import {
   changePasswordBody,
   resetPasswordBody,
@@ -78,6 +70,14 @@ import {
   verifyEmailCodeBody,
   verifyForgotPasswordCodeBody,
 } from '@/schemas/authentication'
+import {
+  ErrorApiResponse,
+  NoContentApiResponse,
+  NotFoundApiResponse,
+  SuccessApiResponse,
+  UnauthenticatedApiResponse,
+} from '@/types/api-responses'
+import { z } from 'zod'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 

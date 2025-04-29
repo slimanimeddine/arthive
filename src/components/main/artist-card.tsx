@@ -1,7 +1,7 @@
-import Link from 'next/link'
+import { fileUrl } from '@/lib/utils'
 import { CheckBadgeIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
-import { fileUrl } from '@/lib/utils'
+import Link from 'next/link'
 import AvatarPlaceholder from '../avatar-placeholder'
 
 type ArtistCardProps = {

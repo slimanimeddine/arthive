@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
 import type {
   MutationFunction,
   QueryClient,
   UseMutationOptions,
   UseMutationResult,
 } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 export type DeleteArtworkPhoto200 = NoContentApiResponse
 export type DeleteArtworkPhoto401 = UnauthenticatedApiResponse
@@ -30,8 +30,12 @@ export type UploadArtworkPhotos403 = UnauthorizedApiResponse
 export type UploadArtworkPhotos404 = NotFoundApiResponse
 export type UploadArtworkPhotosBody = z.infer<typeof uploadArtworkPhotosBody>
 
+import type { BodyType, ErrorType } from '@/lib/axios'
 import { customInstance } from '@/lib/axios'
-import type { ErrorType, BodyType } from '@/lib/axios'
+import {
+  replaceArtworkPhotoPathBody,
+  uploadArtworkPhotosBody,
+} from '@/schemas/artwork-photos'
 import {
   ApiResource,
   NoContentApiResponse,
@@ -39,12 +43,8 @@ import {
   UnauthenticatedApiResponse,
   UnauthorizedApiResponse,
 } from '@/types/api-responses'
-import {
-  replaceArtworkPhotoPathBody,
-  uploadArtworkPhotosBody,
-} from '@/schemas/artwork-photos'
-import { z } from 'zod'
 import { ArtworkPhotoModel } from '@/types/models/artwork-photo'
+import { z } from 'zod'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 

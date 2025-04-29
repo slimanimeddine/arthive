@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import Image from 'next/image'
-import AvatarPlaceholder from '../avatar-placeholder'
 import Link from 'next/link'
+import { useState } from 'react'
+import AvatarPlaceholder from '../avatar-placeholder'
 
 type Like = {
   id: string

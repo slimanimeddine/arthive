@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -13,6 +12,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export type CheckIfAuthenticatedUserIsFavoriting200 =
   SuccessApiResponse<boolean>
@@ -35,8 +35,8 @@ export type RemoveArtworkFromFavorites401 = UnauthenticatedApiResponse
 export type RemoveArtworkFromFavorites403 = UnauthorizedApiResponse
 export type RemoveArtworkFromFavorites404 = NotFoundApiResponse
 
-import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
+import { customInstance } from '@/lib/axios'
 import {
   ApiResource,
   NoContentApiResponse,
@@ -493,7 +493,9 @@ export const getCheckIfAuthenticatedUserIsFavoritingQueryOptions = <
     Awaited<ReturnType<typeof checkIfAuthenticatedUserIsFavoriting>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type CheckIfAuthenticatedUserIsFavoritingQueryResult = NonNullable<

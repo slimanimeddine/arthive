@@ -1,9 +1,9 @@
 import 'server-only'
 
-import { cache } from 'react'
-import { redirect } from 'next/navigation'
-import { type Session } from '@/types/misc'
 import { getSession } from '@/actions/session'
+import { type Session } from '@/types/misc'
+import { redirect } from 'next/navigation'
+import { cache } from 'react'
 
 export const verifyAuth = cache(async () => {
   const session = (await getSession()) as Session

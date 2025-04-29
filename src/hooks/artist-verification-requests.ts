@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -13,6 +12,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
 export type ListArtistVerificationRequests200 =
@@ -37,8 +37,9 @@ export type SubmitArtistVerificationRequest400 = ErrorApiResponse
 export type SubmitArtistVerificationRequest401 = UnauthenticatedApiResponse
 export type SubmitArtistVerificationRequest403 = UnauthorizedApiResponse
 
+import type { BodyType, ErrorType } from '@/lib/axios'
 import { customInstance } from '@/lib/axios'
-import type { ErrorType, BodyType } from '@/lib/axios'
+import { reviewArtistVerificationRequestBody } from '@/schemas/artist-verification-requests'
 import {
   ApiResource,
   ErrorApiResponse,
@@ -51,7 +52,6 @@ import {
   ArtistVerificationRequest,
   ArtistVerificationRequestModel,
 } from '@/types/models/artist-verification-request'
-import { reviewArtistVerificationRequestBody } from '@/schemas/artist-verification-requests'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
@@ -114,7 +114,9 @@ export const getListArtistVerificationRequestsQueryOptions = <
     Awaited<ReturnType<typeof listArtistVerificationRequests>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type ListArtistVerificationRequestsQueryResult = NonNullable<

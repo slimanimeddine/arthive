@@ -1,19 +1,19 @@
 'use client'
 
+import { useShowPublishedArtwork } from '@/hooks/artworks'
+import { fileUrl, matchQueryStatus } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-import PostComment from './post-comment'
-import Comment from './comment'
-import { fileUrl, matchQueryStatus } from '@/lib/utils'
 import AvatarPlaceholder from '../avatar-placeholder'
-import LikedByModal from './liked-by-modal'
+import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
+import Comment from './comment'
+import FavoriteButton from './favorite-button'
 import FollowButton from './follow-button'
 import LikeButton from './like-button'
-import FavoriteButton from './favorite-button'
-import { useShowPublishedArtwork } from '@/hooks/artworks'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
-import EmptyUI from '../empty-ui'
+import LikedByModal from './liked-by-modal'
+import PostComment from './post-comment'
 
 type ArtworkPostProps = {
   id: string

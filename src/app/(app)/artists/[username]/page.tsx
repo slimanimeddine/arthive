@@ -8,6 +8,7 @@ export default async function Page({
 }) {
   const username = (await params).username
   const { token } = await getAuth()
+
   return (
     <ArtistProfile
       token={token}

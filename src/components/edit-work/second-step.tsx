@@ -1,14 +1,14 @@
 'use client'
-import { authHeader, getCroppedImg, onError, turnBlobToFile } from '@/lib/utils'
-import Image from 'next/image'
-import { useCallback, useState } from 'react'
-import Cropper, { Area } from 'react-easy-crop'
-import { FirstStepProps } from './first-step'
-import { useQueryClient } from '@tanstack/react-query'
 import {
   useReplaceArtworkPhotoPath,
   useSetArtworkPhotoAsMain,
 } from '@/hooks/artwork-photos'
+import { authHeader, getCroppedImg, onError, turnBlobToFile } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
+import Image from 'next/image'
+import { useCallback, useState } from 'react'
+import Cropper, { Area } from 'react-easy-crop'
+import { FirstStepProps } from './first-step'
 
 type SecondStepProps = FirstStepProps
 

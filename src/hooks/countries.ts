@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -10,11 +9,12 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 export type ListCountries200 = ApiResource<CountryModel[]>
 
-import { customInstance } from '@/lib/axios'
 import type { ErrorType } from '@/lib/axios'
+import { customInstance } from '@/lib/axios'
 import { ApiResource } from '@/types/api-responses'
 import { CountryModel } from '@/types/models/country'
 
@@ -59,7 +59,9 @@ export const getListCountriesQueryOptions = <
     Awaited<ReturnType<typeof listCountries>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 }
 
 export type ListCountriesQueryResult = NonNullable<

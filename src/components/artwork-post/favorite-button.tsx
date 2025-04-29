@@ -1,14 +1,14 @@
 import { BookmarkIcon } from '@heroicons/react/24/outline'
 
-import { authHeader, classNames, matchQueryStatus, onError } from '@/lib/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
 import {
   useCheckIfAuthenticatedUserIsFavoriting,
   useMarkArtworkAsFavorite,
   useRemoveArtworkFromFavorites,
 } from '@/hooks/favorites'
+import { authHeader, classNames, matchQueryStatus, onError } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 type FavoriteButtonProps = {
   token: string | undefined
@@ -27,15 +27,16 @@ export default function FavoriteButton({
   const checkIfAuthenticatedUserIsFavoritingQuery =
     useCheckIfAuthenticatedUserIsFavoriting(artworkId, authConfig)
 
-  const favoriteArtworkMutation = useMarkArtworkAsFavorite(authConfig)
-  const unfavoriteArtworkMutation = useRemoveArtworkFromFavorites(authConfig)
+  const markArtworkAsFavoriteMutation = useMarkArtworkAsFavorite(authConfig)
+  const removeArtworkFromFavoritesMutation =
+    useRemoveArtworkFromFavorites(authConfig)
 
   const invalidateFavoriteQueries = () => {
     queryClient.invalidateQueries({
       queryKey: ['/api/v1/users/me/favorites/artworks'],
     })
     queryClient.invalidateQueries({
-      queryKey: [`artworks/${artworkId}/favorites/is-favoriting`],
+      queryKey: [`/api/v1/artworks/${artworkId}/favorites/is-favoriting`],
     })
   }
 
@@ -45,8 +46,8 @@ export default function FavoriteButton({
     }
 
     const mutation = isCurrentlyFavoriting
-      ? unfavoriteArtworkMutation
-      : favoriteArtworkMutation
+      ? removeArtworkFromFavoritesMutation
+      : markArtworkAsFavoriteMutation
 
     mutation.mutate(
       { artworkId },
@@ -67,7 +68,7 @@ export default function FavoriteButton({
   if (!token) {
     return (
       <button
-        className="cursor-not-allowed flex items-center justify-center rounded-full p-2 transition-colors bg-gray-200 text-gray-700"
+        className="flex items-center justify-center rounded-full p-2 transition-colors bg-gray-200 text-gray-700"
         onClick={() => router.push('/sign-in')}
       >
         <BookmarkIcon className="h-6 w-6" />
@@ -84,8 +85,8 @@ export default function FavoriteButton({
         loading...
       </button>
     ),
-    Errored: <button></button>,
-    Empty: <button></button>,
+    Errored: <span className="text-xs text-red-700">error</span>,
+    Empty: <span></span>,
     Success: ({ data }) => {
       const isFavoriting = data.data
       return (

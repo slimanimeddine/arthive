@@ -1,20 +1,20 @@
 'use client'
+import { useCheckIfUnreadNotificationsExist } from '@/hooks/notifications'
+import { useShowAuthenticatedUser } from '@/hooks/users'
+import { authHeader, classNames, fileUrl, matchQueryStatus } from '@/lib/utils'
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import AvatarPlaceholder from '../avatar-placeholder'
 import Logo from '../logo'
 import ProfileDropdown from './profile-dropdown'
 import { SearchInput } from './search-input'
-import { usePathname } from 'next/navigation'
-import { authHeader, classNames, fileUrl, matchQueryStatus } from '@/lib/utils'
-import AvatarPlaceholder from '../avatar-placeholder'
-import { useShowAuthenticatedUser } from '@/hooks/users'
-import { useCheckIfUnreadNotificationsExist } from '@/hooks/notifications'
 
 const navigation = [
   { name: 'Artists', href: '/artists' },
@@ -27,13 +27,11 @@ const userNavigation = [
   { name: 'Sign out', href: '/sign-out' },
 ]
 
-type UnreadNotificationIndicatorProps = {
+type NotificationIconProps = {
   token: string
 }
 
-function UnreadNotificationIndicator({
-  token,
-}: UnreadNotificationIndicatorProps) {
+function NotificationIcon({ token }: NotificationIconProps) {
   const authConfig = authHeader(token)
 
   const checkIfUnreadNotificationsExistQuery =
@@ -46,13 +44,19 @@ function UnreadNotificationIndicator({
     Success: ({ data }) => {
       if (!data.data.exists) return <></>
       return (
-        <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-indigo-600 ring-2 ring-white" />
+        <span className="relative inline-block">
+          <BellIcon
+            aria-hidden="true"
+            className="h-6 w-6"
+          />
+          <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-indigo-600 ring-2 ring-white" />
+        </span>
       )
     },
   })
 }
 
-type HeaderAuthProps = UnreadNotificationIndicatorProps
+type HeaderAuthProps = NotificationIconProps
 
 export default function HeaderAuth({ token }: HeaderAuthProps) {
   const authConfig = authHeader(token)
@@ -60,6 +64,7 @@ export default function HeaderAuth({ token }: HeaderAuthProps) {
   const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig)
 
   const pathname = usePathname()
+
   return (
     <Disclosure
       as="nav"
@@ -116,13 +121,7 @@ export default function HeaderAuth({ token }: HeaderAuthProps) {
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>
-              <span className="relative inline-block">
-                <BellIcon
-                  aria-hidden="true"
-                  className="h-6 w-6"
-                />
-                <UnreadNotificationIndicator token={token} />
-              </span>
+              <NotificationIcon token={token} />
             </Link>
             {matchQueryStatus(showAuthenticatedUserQuery, {
               Loading: <span className="text-xs text-gray-700">...</span>,
@@ -205,13 +204,7 @@ export default function HeaderAuth({ token }: HeaderAuthProps) {
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>
-              <span className="relative inline-block">
-                <BellIcon
-                  aria-hidden="true"
-                  className="h-6 w-6"
-                />
-                <UnreadNotificationIndicator token={token} />
-              </span>
+              <NotificationIcon token={token} />
             </Link>
           </div>
           <div className="mt-3 space-y-1">

@@ -1,11 +1,11 @@
 'use client'
 
+import { classNames } from '@/lib/utils'
+import useArtworkStore from '@/stores/artwork-store'
 import FirstStep from './first-step'
+import FourthStep from './fourth-step'
 import SecondStep from './second-step'
 import ThirdStep from './third-step'
-import FourthStep from './fourth-step'
-import useArtworkStore from '@/stores/artwork-store'
-import { classNames } from '@/lib/utils'
 
 type CreateArtworkProps = {
   token: string

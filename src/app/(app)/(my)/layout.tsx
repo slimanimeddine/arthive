@@ -1,5 +1,6 @@
 'use client'
 
+import { classNames } from '@/lib/utils'
 import {
   BellIcon,
   BookmarkIcon,
@@ -10,9 +11,8 @@ import {
   UserPlusIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
-import { classNames } from '@/lib/utils'
-import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const secondaryNavigation = [
   {

@@ -1,7 +1,7 @@
 'use client'
 
-import HeaderGuest from './header-guest'
 import HeaderAuth from './header-auth'
+import HeaderGuest from './header-guest'
 
 type HeaderProps = {
   isAuth: boolean

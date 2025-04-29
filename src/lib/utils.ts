@@ -1,12 +1,9 @@
-import axios, { isAxiosError } from 'axios'
-import toast from 'react-hot-toast'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type UseQueryResult } from '@tanstack/react-query'
-import { JSX } from 'react'
+import axios, { isAxiosError } from 'axios'
 import { notFound } from 'next/navigation'
-
-export function isOneOf<T>(value: T, options: readonly T[]): boolean {
-  return options.includes(value)
-}
+import { JSX } from 'react'
+import toast from 'react-hot-toast'
 
 export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -82,17 +79,8 @@ export function matchQueryStatus<T>(
   }
 
   if (query.isError) {
-    if (isAxiosError(query.error)) {
-      const codes = [400, 401, 403, 422, 429]
-
-      if (query.error.response?.status === 404) {
-        notFound()
-      } else if (isOneOf(query.error.response?.status, codes)) {
-        throw new Error(
-          query.error.response?.data.message ||
-            'Something went wrong, please try again later'
-        )
-      }
+    if (isAxiosError(query.error) && query.error.response?.status === 404) {
+      notFound()
     }
 
     if (typeof Errored === 'function') {
@@ -163,4 +151,32 @@ export async function getCroppedImg(
 export function getUrlFromBlob(blob: Blob | null): string {
   if (!blob) return ''
   return URL.createObjectURL(blob)
+}
+
+export type DirtyFieldsType =
+  | boolean
+  | null
+  | {
+      [key: string]: DirtyFieldsType
+    }
+  | DirtyFieldsType[]
+
+export function getDirtyValues<T extends Record<string, any>>(
+  dirtyFields: Partial<Record<keyof T, DirtyFieldsType>>,
+  values: T
+): Partial<T> {
+  const dirtyValues = Object.keys(dirtyFields).reduce((prev, key) => {
+    const value = dirtyFields[key]
+    if (!value) {
+      return prev
+    }
+    const isObject = typeof value === 'object'
+    const isArray = Array.isArray(value)
+    const nestedValue =
+      isObject && !isArray
+        ? getDirtyValues(value as Record<string, any>, values[key])
+        : values[key]
+    return { ...prev, [key]: isArray ? values[key] : nestedValue }
+  }, {} as Partial<T>)
+  return dirtyValues
 }

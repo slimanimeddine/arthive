@@ -1,19 +1,19 @@
 'use client'
 
-import { authHeader, fileUrl, matchQueryStatus, onError } from '@/lib/utils'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import Pagination from '../pagination'
-import { useQueryClient } from '@tanstack/react-query'
-import toast from 'react-hot-toast'
-import LoadingUI from '../loading-ui'
-import ErrorUI from '../error-ui'
-import EmptyUI from '../empty-ui'
 import {
   useDeleteArtwork,
   useListAuthenticatedUserArtworks,
 } from '@/hooks/artworks'
+import { authHeader, fileUrl, matchQueryStatus, onError } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import toast from 'react-hot-toast'
+import EmptyUI from '../empty-ui'
+import ErrorUI from '../error-ui'
+import LoadingUI from '../loading-ui'
+import Pagination from '../pagination'
 
 type IndexProps = {
   token: string
@@ -33,7 +33,7 @@ export default function Index({ token }: IndexProps) {
     ...(page && { page }),
   }
 
-  const artworksQuery = useListAuthenticatedUserArtworks(
+  const listAuthenticatedUserArtworksQuery = useListAuthenticatedUserArtworks(
     queryParams,
     authConfig
   )
@@ -64,7 +64,7 @@ export default function Index({ token }: IndexProps) {
     }
   }
 
-  return matchQueryStatus(artworksQuery, {
+  return matchQueryStatus(listAuthenticatedUserArtworksQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI />,
