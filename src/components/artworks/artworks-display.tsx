@@ -28,7 +28,7 @@ export default function ArtworksDisplay() {
   return matchQueryStatus(listPublishedArtworksQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'No artworks was found'} />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,

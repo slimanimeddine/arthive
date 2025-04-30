@@ -67,7 +67,7 @@ export default function Index({ token }: IndexProps) {
   return matchQueryStatus(listAuthenticatedUserArtworksQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'You have not submitted any artworks'} />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,

@@ -6,7 +6,6 @@ import { useEditCommentStore } from '@/stores/edit-comment-store'
 import Image from 'next/image'
 import Link from 'next/link'
 import AvatarPlaceholder from '../avatar-placeholder'
-import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
 import LoadingUI from '../loading-ui'
 import CommentDropdownActions from './comment-dropdown-actions'
@@ -80,7 +79,7 @@ export default function Comment({
           matchQueryStatus(showAuthenticatedUserQuery, {
             Loading: <LoadingUI />,
             Errored: <ErrorUI />,
-            Empty: <EmptyUI />,
+            Empty: <span></span>,
             Success: ({ data }) => {
               const isOwner = data.data.id === user.id
 
@@ -102,7 +101,7 @@ export default function Comment({
         matchQueryStatus(showAuthenticatedUserQuery, {
           Loading: <LoadingUI />,
           Errored: <ErrorUI />,
-          Empty: <EmptyUI />,
+          Empty: <span></span>,
           Success: ({ data }) => {
             const isOwner = data.data.id === user.id
 

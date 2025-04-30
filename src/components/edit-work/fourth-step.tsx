@@ -6,10 +6,12 @@ import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { FirstStepProps } from './first-step'
+import { useRouter } from 'next/navigation'
 
 type FourthStepProps = FirstStepProps
 
 export default function FourthStep({ token, artwork }: FourthStepProps) {
+  const router = useRouter()
   const publishArtworkMutation = usePublishArtwork(authHeader(token))
 
   const queryClient = useQueryClient()
@@ -31,6 +33,7 @@ export default function FourthStep({ token, artwork }: FourthStepProps) {
               queryKey: ['/api/v1/users/me/artworks'],
             })
             toast.success('Artwork draft published successfully!')
+            router.push('/my-artworks')
           },
         }
       )

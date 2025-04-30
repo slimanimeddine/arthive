@@ -35,7 +35,7 @@ export default function ArtworksDisplay({ username }: ArtworksDisplayProps) {
   return matchQueryStatus(listUserPublishedArtworksQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'Artist has no artworks'} />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,

@@ -1,7 +1,6 @@
 'use client'
 import { useShowAuthenticatedUser } from '@/hooks/users'
 import { authHeader, matchQueryStatus } from '@/lib/utils'
-import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
 import LoadingUI from '../loading-ui'
 import ChangePasswordForm from './change-password-form'
@@ -18,7 +17,7 @@ export function Index({ token }: IndexProps) {
   return matchQueryStatus(showAuthenticatedUserQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <span></span>,
     Success: ({ data }) => {
       return (
         <div className="flex flex-col justify-start gap-y-6">

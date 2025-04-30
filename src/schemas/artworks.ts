@@ -77,9 +77,18 @@ export const createArtworkBody = zod.object({
  * @summary Update Artwork Draft
  */
 export const updateArtworkDraftBody = zod.object({
-  title: zod.string().max(255).optional(),
+  title: zod
+    .string()
+    .min(3, {
+      message: 'Title is too short',
+    })
+    .max(255)
+    .optional(),
   description: zod
     .string()
+    .min(1, {
+      message: 'Description cannot be empty',
+    })
     .optional()
     .refine(
       (value) => {

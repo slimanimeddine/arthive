@@ -19,7 +19,7 @@ export default function Index({ token }: IndexProps) {
   return matchQueryStatus(artworksQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'You have no bookmarked artworks'} />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,

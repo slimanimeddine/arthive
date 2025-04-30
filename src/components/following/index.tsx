@@ -19,7 +19,7 @@ export default function Index({ token }: IndexProps) {
   return matchQueryStatus(listAuthenticatedUserFollowingQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'You are not following anybody'} />,
     Success: ({ data }) => {
       const following = data.data.map((follower) => ({
         id: follower.id!,

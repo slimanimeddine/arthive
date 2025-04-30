@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { useCallback, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 import { FirstStepProps } from './first-step'
+import toast from 'react-hot-toast'
 
 type SecondStepProps = FirstStepProps
 
@@ -49,7 +50,26 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
     [artwork.mainPhotoUrl, mainPhoto]
   )
 
-  function handleSetAsMainPhoto() {
+  function handleSetMainPhoto() {
+    if (mainPhoto) {
+      setArtworkPhotoAsMainMutation.mutate(
+        {
+          artworkPhotoId: mainPhoto.id,
+        },
+        {
+          onError,
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
+            })
+            toast.success('Main photo set successfully')
+          },
+        }
+      )
+    }
+  }
+
+  function handleCropMainPhoto() {
     if (mainPhoto && croppedMainPhoto) {
       replaceArtworkPhotoPathMutation.mutate(
         {
@@ -65,19 +85,7 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
             })
 
-            setArtworkPhotoAsMainMutation.mutate(
-              {
-                artworkPhotoId: mainPhoto.id,
-              },
-              {
-                onError,
-                onSuccess: () => {
-                  queryClient.invalidateQueries({
-                    queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
-                  })
-                },
-              }
-            )
+            toast.success('Main photo cropped successfully')
           },
         }
       )
@@ -109,17 +117,18 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
           ))}
         </div>
       </div>
+      <button
+        type="button"
+        disabled={!mainPhoto}
+        onClick={handleSetMainPhoto}
+        className="mt-6 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors"
+      >
+        Set selected photo as main
+      </button>
       {mainPhoto?.path && (
         <div className="mt-6">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold mb-2">Crop Main Photo:</h3>
-            <button
-              type="button"
-              onClick={handleSetAsMainPhoto}
-              className="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-            >
-              Set as Main Photo
-            </button>
           </div>
           <div className="relative w-full h-96 overflow-hidden rounded-md">
             <Cropper
@@ -134,6 +143,14 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
           </div>
         </div>
       )}
+      <button
+        type="button"
+        disabled={!croppedMainPhoto}
+        onClick={handleCropMainPhoto}
+        className="mt-6 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors"
+      >
+        Crop main photo
+      </button>
     </div>
   )
 }

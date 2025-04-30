@@ -42,14 +42,15 @@ function NotificationIcon({ token }: NotificationIconProps) {
     Errored: <span className="text-xs text-red-700">err</span>,
     Empty: <></>,
     Success: ({ data }) => {
-      if (!data.data.exists) return <></>
       return (
         <span className="relative inline-block">
           <BellIcon
             aria-hidden="true"
             className="h-6 w-6"
           />
-          <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-indigo-600 ring-2 ring-white" />
+          {data.data.exists && (
+            <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-indigo-600 ring-2 ring-white" />
+          )}
         </span>
       )
     },

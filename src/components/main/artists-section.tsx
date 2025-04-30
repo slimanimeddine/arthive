@@ -23,7 +23,7 @@ export default function ArtistsSection({
   return matchQueryStatus(listUsersQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'No artists was found'} />,
     Success: ({ data }) => {
       const artists = data.data.map((artist) => ({
         id: artist.id!,

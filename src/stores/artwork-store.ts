@@ -94,7 +94,7 @@ const useArtworkStore = create<ArtworkState>((set, get) => ({
           categories.length <= 3
         )
       case 4:
-        return true
+        return false
       default:
         return false
     }

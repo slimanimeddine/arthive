@@ -1,7 +1,6 @@
 import { useShowUserReceivedLikesCount } from '@/hooks/artwork-likes'
 import { matchQueryStatus } from '@/lib/utils'
 import { StarIcon } from '@heroicons/react/24/solid'
-import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
 import LoadingUI from '../loading-ui'
 
@@ -16,7 +15,7 @@ export default function TotalRatings({ username }: TotalRatingsProps) {
   return matchQueryStatus(showUserReceivedLikesCountQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <span></span>,
     Success: ({ data }) => {
       return (
         <div className="flex items-center justify-between">

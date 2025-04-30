@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { QueryResult } from '@/types/misc'
 import { type UseQueryResult } from '@tanstack/react-query'
 import axios, { isAxiosError } from 'axios'
 import { notFound } from 'next/navigation'
@@ -39,7 +40,7 @@ export function turnBlobToFile(blob: Blob) {
   })
 }
 
-export function matchQueryStatus<T>(
+export function matchQueryStatus<T extends QueryResult<unknown>>(
   query: UseQueryResult<T>,
   options: {
     Loading: JSX.Element
@@ -52,7 +53,7 @@ export function matchQueryStatus<T>(
     ) => JSX.Element
   }
 ): JSX.Element
-export function matchQueryStatus<T>(
+export function matchQueryStatus<T extends QueryResult<unknown>>(
   query: UseQueryResult<T>,
   options: {
     Loading: JSX.Element
@@ -60,7 +61,7 @@ export function matchQueryStatus<T>(
     Success: (data: UseQueryResult<T>) => JSX.Element
   }
 ): JSX.Element
-export function matchQueryStatus<T>(
+export function matchQueryStatus<T extends QueryResult<unknown>>(
   query: UseQueryResult<T>,
   {
     Loading,
@@ -92,7 +93,7 @@ export function matchQueryStatus<T>(
   const isEmpty =
     query.data === undefined ||
     query.data === null ||
-    (Array.isArray(query.data) && query.data.length === 0)
+    (Array.isArray(query.data?.data) && query.data?.data.length === 0)
 
   if (isEmpty && Empty) {
     return Empty

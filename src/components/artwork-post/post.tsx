@@ -26,7 +26,7 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
   return matchQueryStatus(showPublishedArtworkQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'No artwork data was found'} />,
     Success: ({ data }) => {
       const artworkData = data.data
 

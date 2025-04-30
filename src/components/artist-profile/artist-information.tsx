@@ -24,7 +24,7 @@ export default function ArtistInformation({
   return matchQueryStatus(showUserQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'Artist has no data'} />,
     Success: ({ data }) => {
       const artistInformation = {
         id: data.data.id,

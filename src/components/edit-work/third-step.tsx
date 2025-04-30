@@ -2,7 +2,7 @@
 
 import { UpdateArtworkDraftBody, useUpdateArtworkDraft } from '@/hooks/artworks'
 import { TAGS } from '@/lib/constants'
-import { authHeader, onError } from '@/lib/utils'
+import { authHeader, getDirtyValues, onError } from '@/lib/utils'
 import { updateArtworkDraftBody } from '@/schemas/artworks'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
@@ -17,30 +17,24 @@ export default function ThirdStep({ token, artwork }: ThirdStepProps) {
 
   const queryClient = useQueryClient()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<UpdateArtworkDraftBody>({
-    resolver: zodResolver(updateArtworkDraftBody),
-    defaultValues: {
-      title: artwork.title,
-      description: artwork.description,
-      tags: artwork.tags.map((item) => item.name),
-    },
-  })
+  const { register, handleSubmit, formState } = useForm<UpdateArtworkDraftBody>(
+    {
+      resolver: zodResolver(updateArtworkDraftBody),
+      defaultValues: {
+        title: artwork.title,
+        description: artwork.description,
+        tags: artwork.tags.map((item) => item.name),
+      },
+    }
+  )
 
   const onSubmit = (data: UpdateArtworkDraftBody) => {
-    const dataObj = {
-      title: data.title,
-      description: data.description,
-      tags: data.tags,
-    }
+    const dirtyValues = getDirtyValues(formState.dirtyFields, data)
 
     updateArtworkDraftMutation.mutate(
       {
         artworkId: artwork.id,
-        data: dataObj,
+        data: dirtyValues,
       },
       {
         onError,
@@ -58,6 +52,12 @@ export default function ThirdStep({ token, artwork }: ThirdStepProps) {
     )
   }
 
+  const isDisabled =
+    formState.isSubmitting ||
+    updateArtworkDraftMutation.isPending ||
+    !token ||
+    !formState.isDirty
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -72,8 +72,10 @@ export default function ThirdStep({ token, artwork }: ThirdStepProps) {
           {...register('title')}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
-        {errors.title && (
-          <p className="text-red-500 text-sm">{errors.title.message}</p>
+        {formState.errors.title && (
+          <p className="text-red-500 text-sm">
+            {formState.errors.title.message}
+          </p>
         )}
       </div>
       <div className="mb-4">
@@ -85,8 +87,10 @@ export default function ThirdStep({ token, artwork }: ThirdStepProps) {
           rows={4}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
-        {errors.description && (
-          <p className="text-red-500 text-sm">{errors.description.message}</p>
+        {formState.errors.description && (
+          <p className="text-red-500 text-sm">
+            {formState.errors.description.message}
+          </p>
         )}
       </div>
       <div className="mb-4">
@@ -107,12 +111,15 @@ export default function ThirdStep({ token, artwork }: ThirdStepProps) {
             </option>
           ))}
         </select>
-        {errors.tags && (
-          <p className="text-red-500 text-sm">{errors.tags.message}</p>
+        {formState.errors.tags && (
+          <p className="text-red-500 text-sm">
+            {formState.errors.tags.message}
+          </p>
         )}
       </div>
       <button
         type="submit"
+        disabled={isDisabled}
         className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors"
       >
         Update Draft

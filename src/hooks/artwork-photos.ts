@@ -59,8 +59,8 @@ export const uploadArtworkPhotos = (
   signal?: AbortSignal
 ) => {
   const formData = new FormData()
-  uploadArtworkPhotosBody.photos.forEach((value) =>
-    formData.append('photos', value)
+  uploadArtworkPhotosBody.photos.forEach((value, index) =>
+    formData.append(`photos[${index}]`, value)
   )
 
   return customInstance<UploadArtworkPhotos200>(
@@ -349,7 +349,7 @@ export const replaceArtworkPhotoPath = (
   return customInstance<ReplaceArtworkPhotoPath200>(
     {
       url: `/api/v1/artwork-photos/${artworkPhotoId}/path`,
-      method: 'PUT',
+      method: 'POST',
       headers: { 'Content-Type': 'multipart/form-data' },
       data: formData,
     },

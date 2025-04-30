@@ -1,4 +1,9 @@
 'use client'
-export default function EmptyUI() {
-  return <p className="mt-2 text-sm text-gray-700">No data found</p>
+
+type EmptyUIProps = {
+  message: string
+}
+
+export default function EmptyUI({ message }: EmptyUIProps) {
+  return <p className="mt-2 text-sm text-gray-700">{message}</p>
 }

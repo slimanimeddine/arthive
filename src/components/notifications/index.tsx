@@ -74,7 +74,7 @@ export default function Index({ token, userId }: IndexProps) {
   return matchQueryStatus(listAuthenticatedUserNotificationsQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'You have not received any notifications'} />,
     Success: ({ data }) => {
       const notificationsQueryData = data.data
 

@@ -1,7 +1,6 @@
 import { useListUserReceivedLikesCountByTag } from '@/hooks/artwork-likes'
 import { matchQueryStatus } from '@/lib/utils'
 import { HeartIcon } from '@heroicons/react/24/outline'
-import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
 import LoadingUI from '../loading-ui'
 import TotalRatings from './total-ratings'
@@ -17,7 +16,7 @@ export default function RatingsByTag({ username }: RatingsByTagProps) {
   return matchQueryStatus(listUserReceivedLikesCountByTagQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <span></span>,
     Success: ({ data }) => {
       const likesCountByTag = data.data.map((item) => ({
         tag: item.tag_name,

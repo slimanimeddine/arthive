@@ -46,7 +46,7 @@ export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
   return matchQueryStatus(listUsersQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI />,
+    Empty: <EmptyUI message={'No artist was found'} />,
     Success: ({ data }) => {
       const artists = data.data.map((artist) => ({
         id: artist.id,

@@ -51,7 +51,6 @@ export default function PersonalInformationForm({
 
   function onSubmit(data: UpdateAuthenticatedUserBody) {
     const dirtyValues = getDirtyValues(formState.dirtyFields, data)
-    console.log('data', dirtyValues)
     updateAuthenticatedUserMutation.mutate(
       {
         data: dirtyValues,

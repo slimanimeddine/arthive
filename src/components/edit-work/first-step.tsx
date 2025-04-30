@@ -12,6 +12,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
+import toast from 'react-hot-toast'
 
 export type FirstStepProps = {
   token: string
@@ -61,6 +62,7 @@ export default function FirstStep({ token, artwork }: FirstStepProps) {
             queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
             })
+            toast.success('Photos uploaded successfully')
           },
         }
       )
@@ -90,6 +92,7 @@ export default function FirstStep({ token, artwork }: FirstStepProps) {
           queryClient.invalidateQueries({
             queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
           })
+          toast.success('Photo removed successfully')
         },
       }
     )
