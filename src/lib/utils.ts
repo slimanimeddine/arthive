@@ -181,3 +181,23 @@ export function getDirtyValues<T extends Record<string, any>>(
   }, {} as Partial<T>)
   return dirtyValues
 }
+
+export function addOrdinalSuffix(num: number): string {
+  const remainder100 = num % 100
+  const remainder10 = num % 10
+
+  if (remainder100 >= 11 && remainder100 <= 13) {
+    return `${num}th`
+  }
+
+  switch (remainder10) {
+    case 1:
+      return `${num}st`
+    case 2:
+      return `${num}nd`
+    case 3:
+      return `${num}rd`
+    default:
+      return `${num}th`
+  }
+}

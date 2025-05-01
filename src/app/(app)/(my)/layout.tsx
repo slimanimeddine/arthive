@@ -5,6 +5,7 @@ import {
   BellIcon,
   BookmarkIcon,
   CameraIcon,
+  CheckBadgeIcon,
   FolderIcon,
   PlusCircleIcon,
   UserCircleIcon,
@@ -39,6 +40,11 @@ const secondaryNavigation = [
   { name: 'Favorites', href: '/favorites', icon: BookmarkIcon },
   { name: 'Followers', href: '/followers', icon: UsersIcon },
   { name: 'Following', href: '/following', icon: UserPlusIcon },
+  {
+    name: 'Become Verified',
+    href: '/become-verified',
+    icon: CheckBadgeIcon,
+  },
 ]
 
 export default function Layout({
