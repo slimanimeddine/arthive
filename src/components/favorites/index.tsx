@@ -2,10 +2,10 @@
 
 import { useListAuthenticatedUserFavoriteArtworks } from '@/hooks/favorites'
 import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
-import LoadingUI from './loading-ui'
-import ErrorUI from './error-ui'
-import EmptyUI from './empty-ui'
-import ArtworkCard from './artist-profile/artwork-card'
+import ErrorUI from '../error-ui'
+import EmptyUI from '../empty-ui'
+import ArtworkCard from '../artist-profile/artwork-card'
+import FavoritesSkeleton from './favorites-skeleton'
 
 type FavoritesProps = {
   token: string
@@ -17,7 +17,7 @@ export default function Favorites({ token }: FavoritesProps) {
   )
 
   return matchQueryStatus(artworksQuery, {
-    Loading: <LoadingUI />,
+    Loading: <FavoritesSkeleton />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI message={'You have no bookmarked artworks'} />,
     Success: ({ data }) => {

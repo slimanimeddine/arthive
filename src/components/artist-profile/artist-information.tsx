@@ -6,9 +6,9 @@ import { CheckBadgeIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
 import FollowButton from './follow-button'
 import RatingsByTag from './ratings-by-tag'
+import ArtistInformationSkeleton from './artist-information-skeleton'
 
 type ArtistInformationProps = {
   token: string | undefined
@@ -22,7 +22,7 @@ export default function ArtistInformation({
   const showUserQuery = useShowUser(username)
 
   return matchQueryStatus(showUserQuery, {
-    Loading: <LoadingUI />,
+    Loading: <ArtistInformationSkeleton />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI message={'Artist has no data'} />,
     Success: ({ data }) => {

@@ -4,8 +4,8 @@ import { matchQueryStatus } from '@/lib/utils'
 import Link from 'next/link'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
 import ArtistCard from './artist-card'
+import ArtistsSectionSkeleton from './artists-section-skeleton'
 
 type ArtistsSectionProps = {
   title: string
@@ -21,7 +21,7 @@ export default function ArtistsSection({
   })
 
   return matchQueryStatus(listUsersQuery, {
-    Loading: <LoadingUI />,
+    Loading: <ArtistsSectionSkeleton />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI message={'No artists was found'} />,
     Success: ({ data }) => {

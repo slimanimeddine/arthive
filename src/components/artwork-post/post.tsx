@@ -7,13 +7,13 @@ import Link from 'next/link'
 import AvatarPlaceholder from '../avatar-placeholder'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
 import Comment from './comment'
 import FavoriteButton from './favorite-button'
 import FollowButton from './follow-button'
 import LikeButton from './like-button'
 import LikedByModal from './liked-by-modal'
 import PostComment from './post-comment'
+import ArtworkPostSkeleton from '../ui-skeletons/artwork-post-skeleton'
 
 type ArtworkPostProps = {
   id: string
@@ -24,7 +24,7 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
   const showPublishedArtworkQuery = useShowPublishedArtwork(id)
 
   return matchQueryStatus(showPublishedArtworkQuery, {
-    Loading: <LoadingUI />,
+    Loading: <ArtworkPostSkeleton />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI message={'No artwork data was found'} />,
     Success: ({ data }) => {

@@ -5,9 +5,9 @@ import { useSearchParams } from 'next/navigation'
 import { ArtworkCard } from '../artwork-card'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
 import Pagination from '../pagination'
 import SortFilterArtworks from './sort-filter-artworks'
+import ArtworksDisplaySkeleton from './artworks-display-skeleton'
 
 export default function ArtworksDisplay() {
   const searchParams = useSearchParams()
@@ -26,7 +26,7 @@ export default function ArtworksDisplay() {
   const listPublishedArtworksQuery = useListPublishedArtworks(queryParams)
 
   return matchQueryStatus(listPublishedArtworksQuery, {
-    Loading: <LoadingUI />,
+    Loading: <ArtworksDisplaySkeleton />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI message={'No artworks was found'} />,
     Success: ({ data }) => {

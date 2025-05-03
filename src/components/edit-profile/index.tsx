@@ -2,10 +2,10 @@
 import { useShowAuthenticatedUser } from '@/hooks/users'
 import { authHeader, matchQueryStatus } from '@/lib/utils'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
 import ChangePasswordForm from './change-password-form'
 import EmailVerificationForm from './email-verification-form'
 import PersonalInformationForm from './personal-information-form'
+import LoadingSpinner from '../loading-spinner'
 
 type EditProfileProps = {
   token: string
@@ -15,7 +15,7 @@ export default function EditProfile({ token }: EditProfileProps) {
   const showAuthenticatedUserQuery = useShowAuthenticatedUser(authHeader(token))
 
   return matchQueryStatus(showAuthenticatedUserQuery, {
-    Loading: <LoadingUI />,
+    Loading: <LoadingSpinner />,
     Errored: <ErrorUI />,
     Empty: <span></span>,
     Success: ({ data }) => {

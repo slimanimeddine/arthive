@@ -4,13 +4,13 @@ import { useShowAuthenticatedUserArtwork } from '@/hooks/artworks'
 import { authHeader, classNames, fileUrl, matchQueryStatus } from '@/lib/utils'
 import { Tag } from '@/types/misc'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
 import FirstStep from './first-step'
 import FourthStep from './fourth-step'
 import SecondStep from './second-step'
 import ThirdStep from './third-step'
 import Link from 'next/link'
 import { useState } from 'react'
+import LoadingSpinner from '../loading-spinner'
 
 type EditArtworkProps = {
   token: string
@@ -38,7 +38,7 @@ export default function EditArtwork({ token, id }: EditArtworkProps) {
   }
 
   return matchQueryStatus(showAuthenticatedUserArtworkQuery, {
-    Loading: <LoadingUI />,
+    Loading: <LoadingSpinner />,
     Errored: <ErrorUI />,
     Empty: <span></span>,
     Success: ({ data }) => {

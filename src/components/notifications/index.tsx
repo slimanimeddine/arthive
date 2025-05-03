@@ -13,9 +13,9 @@ import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
 import Pagination from '../pagination'
 import Notification from './notification'
+import NotificationsSkeleton from './notifications-skeleton'
 
 type NotificationsProps = {
   token: string
@@ -72,7 +72,7 @@ export default function Notifications({ token, userId }: NotificationsProps) {
   }, [echo, queryClient, userId])
 
   return matchQueryStatus(listAuthenticatedUserNotificationsQuery, {
-    Loading: <LoadingUI />,
+    Loading: <NotificationsSkeleton />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI message={'You have not received any notifications'} />,
     Success: ({ data }) => {
@@ -107,7 +107,7 @@ export default function Notifications({ token, userId }: NotificationsProps) {
 
       return (
         <div className="bg-white">
-          <div className="mx-auto max-w-2xl py-4 sm:py-8 lg:max-w-7xl">
+          <div className="mx-auto max-w-2xl lg:max-w-7xl">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-x-1">
                 Notifications

@@ -5,9 +5,9 @@ import { useSearchParams } from 'next/navigation'
 import SortFilterArtworks from '../artworks/sort-filter-artworks'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
 import Pagination from '../pagination'
 import ArtworkCard from './artwork-card'
+import ArtworksDisplaySkeleton from './artworks-display-skeleton'
 
 type ArtworksDisplayProps = {
   username: string
@@ -33,7 +33,7 @@ export default function ArtworksDisplay({ username }: ArtworksDisplayProps) {
   )
 
   return matchQueryStatus(listUserPublishedArtworksQuery, {
-    Loading: <LoadingUI />,
+    Loading: <ArtworksDisplaySkeleton />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI message={'Artist has no artworks'} />,
     Success: ({ data }) => {

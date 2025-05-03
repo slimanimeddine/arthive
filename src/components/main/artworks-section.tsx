@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { ArtworkCard } from '../artwork-card'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
+import ArtworksSectionSkeleton from './artworks-section-skeleton'
 
 type ArtworksSectionProps = {
   title: string
@@ -27,7 +27,7 @@ export default function ArtworksSection({
   })
 
   return matchQueryStatus(listPublishedArtworksQuery, {
-    Loading: <LoadingUI />,
+    Loading: <ArtworksSectionSkeleton />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI message={'No artworks was found'} />,
     Success: ({ data }) => {

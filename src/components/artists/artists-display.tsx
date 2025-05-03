@@ -13,12 +13,12 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import EmptyUI from '../empty-ui'
 import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
 import Pagination from '../pagination'
 import ArtistCard from './artist-card'
 import ArtistCategoryFilter from './artist-category-filter'
 import ArtistCountryFilter from './artist-country-filter'
 import SortArtists from './sort-artists'
+import ArtistsDisplaySkeleton from './artists-display-skeleton'
 
 type ArtistsDisplayProps = {
   token: string | undefined
@@ -44,7 +44,7 @@ export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
   const listUsersQuery = useListUsers(queryParams)
 
   return matchQueryStatus(listUsersQuery, {
-    Loading: <LoadingUI />,
+    Loading: <ArtistsDisplaySkeleton />,
     Errored: <ErrorUI />,
     Empty: <EmptyUI message={'No artist was found'} />,
     Success: ({ data }) => {
