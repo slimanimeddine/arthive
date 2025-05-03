@@ -8,6 +8,7 @@ import {
   CheckBadgeIcon,
   FolderIcon,
   PlusCircleIcon,
+  TrashIcon,
   UserCircleIcon,
   UserPlusIcon,
   UsersIcon,
@@ -44,6 +45,11 @@ const secondaryNavigation = [
     name: 'Become Verified',
     href: '/become-verified',
     icon: CheckBadgeIcon,
+  },
+  {
+    name: 'Delete Account',
+    href: '/delete-account',
+    icon: TrashIcon,
   },
 ]
 

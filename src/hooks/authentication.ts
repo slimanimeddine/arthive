@@ -17,6 +17,8 @@ export type ChangePasswordBody = z.infer<typeof changePasswordBody>
 
 export type DeleteUser200 = NoContentApiResponse
 export type DeleteUser401 = UnauthenticatedApiResponse
+export type DeleteUser400 = ErrorApiResponse
+export type DeleteUserBody = z.infer<typeof deleteUserBody>
 
 export type ResetPassword200 = NoContentApiResponse
 export type ResetPassword400 = ErrorApiResponse
@@ -63,6 +65,7 @@ import type { BodyType, ErrorType } from '@/lib/axios'
 import { customInstance } from '@/lib/axios'
 import {
   changePasswordBody,
+  deleteUserBody,
   resetPasswordBody,
   sendForgotPasswordCodeBody,
   signInBody,
@@ -898,88 +901,7 @@ export const useResetPassword = <
 
   return useMutation(mutationOptions, queryClient)
 }
-/**
- * Deletes the authenticated user
- * @summary Delete User
- */
-export const deleteUser = (
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<DeleteUser200>(
-    { url: `/api/v1/users/me`, method: 'DELETE' },
-    options
-  )
-}
 
-export const getDeleteUserMutationOptions = <
-  TError = ErrorType<DeleteUser401>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteUser>>,
-    TError,
-    void,
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteUser>>,
-  TError,
-  void,
-  TContext
-> => {
-  const mutationKey = ['deleteUser']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteUser>>,
-    void
-  > = () => {
-    return deleteUser(requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type DeleteUserMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteUser>>
->
-
-export type DeleteUserMutationError = ErrorType<DeleteUser401>
-
-/**
- * @summary Delete User
- */
-export const useDeleteUser = <
-  TError = ErrorType<DeleteUser401>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteUser>>,
-      TError,
-      void,
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof deleteUser>>,
-  TError,
-  void,
-  TContext
-> => {
-  const mutationOptions = getDeleteUserMutationOptions(options)
-
-  return useMutation(mutationOptions, queryClient)
-}
 /**
  * Signs in an admin user and returns an auth token
  * @summary Admin Sign In
@@ -1069,6 +991,97 @@ export const useAdminSignIn = <
   TContext
 > => {
   const mutationOptions = getAdminSignInMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Deletes the authenticated user
+ * @summary Delete User
+ */
+export const deleteUser = (
+  deleteUserBody: BodyType<DeleteUserBody>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<DeleteUser200>(
+    {
+      url: `/api/v1/users/me`,
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      data: deleteUserBody,
+    },
+    options
+  )
+}
+
+export const getDeleteUserMutationOptions = <
+  TError = ErrorType<DeleteUser400 | DeleteUser401>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteUser>>,
+    TError,
+    { data: BodyType<DeleteUserBody> },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteUser>>,
+  TError,
+  { data: BodyType<DeleteUserBody> },
+  TContext
+> => {
+  const mutationKey = ['deleteUser']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteUser>>,
+    { data: BodyType<DeleteUserBody> }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return deleteUser(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteUser>>
+>
+export type DeleteUserMutationBody = BodyType<DeleteUserBody>
+export type DeleteUserMutationError = ErrorType<DeleteUser400 | DeleteUser401>
+
+/**
+ * @summary Delete User
+ */
+export const useDeleteUser = <
+  TError = ErrorType<DeleteUser400 | DeleteUser401>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteUser>>,
+      TError,
+      { data: BodyType<DeleteUserBody> },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteUser>>,
+  TError,
+  { data: BodyType<DeleteUserBody> },
+  TContext
+> => {
+  const mutationOptions = getDeleteUserMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }

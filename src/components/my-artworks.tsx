@@ -10,16 +10,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
-import Pagination from '../pagination'
+import EmptyUI from './empty-ui'
+import ErrorUI from './error-ui'
+import LoadingUI from './loading-ui'
+import Pagination from './pagination'
 
-type IndexProps = {
+type MyArtworksProps = {
   token: string
 }
 
-export default function Index({ token }: IndexProps) {
+export default function MyArtworks({ token }: MyArtworksProps) {
   const queryClient = useQueryClient()
   const authConfig = authHeader(token)
   const searchParams = useSearchParams()

@@ -1,8 +1,8 @@
-import Index from '@/components/my-artworks'
+import MyArtworks from '@/components/my-artworks'
 import { verifyAuth } from '@/lib/dal'
 
 export default async function Page() {
   const { token } = await verifyAuth()
 
-  return <Index token={token} />
+  return <MyArtworks token={token} />
 }

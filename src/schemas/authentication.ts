@@ -102,3 +102,11 @@ export const resetPasswordBody = zod
       path: ['new_password_confirmation'],
     }
   )
+
+/**
+ * Deletes the authenticated user
+ * @summary Delete User
+ */
+export const deleteUserBody = zod.object({
+  password: zod.string().min(8),
+})

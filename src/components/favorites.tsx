@@ -2,16 +2,16 @@
 
 import { useListAuthenticatedUserFavoriteArtworks } from '@/hooks/favorites'
 import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
-import ArtworkCard from '../artist-profile/artwork-card'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
+import LoadingUI from './loading-ui'
+import ErrorUI from './error-ui'
+import EmptyUI from './empty-ui'
+import ArtworkCard from './artist-profile/artwork-card'
 
-type IndexProps = {
+type FavoritesProps = {
   token: string
 }
 
-export default function Index({ token }: IndexProps) {
+export default function Favorites({ token }: FavoritesProps) {
   const artworksQuery = useListAuthenticatedUserFavoriteArtworks(
     authHeader(token)
   )

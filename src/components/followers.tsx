@@ -2,16 +2,16 @@
 
 import { useListAuthenticatedUserFollowers } from '@/hooks/follows'
 import { authHeader, matchQueryStatus } from '@/lib/utils'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
-import ArtistCard from '../main/artist-card'
+import EmptyUI from './empty-ui'
+import ErrorUI from './error-ui'
+import LoadingUI from './loading-ui'
+import ArtistCard from './main/artist-card'
 
-type IndexProps = {
+type FollowersProps = {
   token: string
 }
 
-export default function Index({ token }: IndexProps) {
+export default function Followers({ token }: FollowersProps) {
   const listAuthenticatedUserFollowersQuery = useListAuthenticatedUserFollowers(
     authHeader(token)
   )

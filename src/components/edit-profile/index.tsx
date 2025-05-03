@@ -7,11 +7,11 @@ import ChangePasswordForm from './change-password-form'
 import EmailVerificationForm from './email-verification-form'
 import PersonalInformationForm from './personal-information-form'
 
-type IndexProps = {
+type EditProfileProps = {
   token: string
 }
 
-export function Index({ token }: IndexProps) {
+export default function EditProfile({ token }: EditProfileProps) {
   const showAuthenticatedUserQuery = useShowAuthenticatedUser(authHeader(token))
 
   return matchQueryStatus(showAuthenticatedUserQuery, {

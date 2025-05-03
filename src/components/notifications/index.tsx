@@ -17,12 +17,12 @@ import LoadingUI from '../loading-ui'
 import Pagination from '../pagination'
 import Notification from './notification'
 
-type IndexProps = {
+type NotificationsProps = {
   token: string
   userId: string
 }
 
-export default function Index({ token, userId }: IndexProps) {
+export default function Notifications({ token, userId }: NotificationsProps) {
   const searchParams = useSearchParams()
   const queryClient = useQueryClient()
 

@@ -9,11 +9,11 @@ import ErrorUI from '../error-ui'
 import Verified from './verified'
 import Link from 'next/link'
 
-type IndexProps = {
+type BecomeVerifiedProps = {
   token: string
 }
 
-export default function Index({ token }: IndexProps) {
+export default function BecomeVerified({ token }: BecomeVerifiedProps) {
   const authConfig = authHeader(token)
   const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig)
 
