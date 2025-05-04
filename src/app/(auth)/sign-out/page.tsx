@@ -1,5 +1,11 @@
 import SignOutButton from '@/components/sign-out-button'
 import { verifyAuth } from '@/lib/dal'
+import seo from '@/lib/seo'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  ...seo('Sign Out', 'Sign out of your account on ArtHive'),
+}
 
 export default async function Page() {
   const auth = await verifyAuth()

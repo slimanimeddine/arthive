@@ -3,7 +3,16 @@ import ArtworksSection from '@/components/main/artworks-section'
 import Introduction from '@/components/main/introduction'
 import { prefetchListPublishedArtworks } from '@/hooks/artworks'
 import { prefetchListUsers } from '@/hooks/users'
+import seo from '@/lib/seo'
 import { QueryClient } from '@tanstack/react-query'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  ...seo(
+    'Welcome',
+    'Welcome to ArtHive, the platform for traditional artists and art lovers.'
+  ),
+}
 
 export default async function Page() {
   const queryClient = new QueryClient()

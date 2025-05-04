@@ -1,13 +1,28 @@
 import ArtworkPost from '@/components/artwork-post/post'
-import { prefetchShowPublishedArtwork } from '@/hooks/artworks'
+import {
+  prefetchShowPublishedArtwork,
+  showPublishedArtwork,
+} from '@/hooks/artworks'
 import { getAuth } from '@/lib/dal'
+import seo from '@/lib/seo'
 import { QueryClient } from '@tanstack/react-query'
+import { Metadata } from 'next'
 
-export default async function Page({
-  params,
-}: {
+type Props = {
   params: Promise<{ id: string }>
-}) {
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params
+
+  const artwork = await showPublishedArtwork(id)
+
+  return {
+    ...seo(artwork.data.title, artwork.data.description),
+  }
+}
+
+export default async function Page({ params }: Props) {
   const id = (await params).id
   const { token } = await getAuth()
   const queryClient = new QueryClient()
