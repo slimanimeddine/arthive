@@ -1,6 +1,9 @@
 import Favorites from '@/components/favorites'
+import { prefetchListAuthenticatedUserFavoriteArtworks } from '@/hooks/favorites'
 import { verifyAuth } from '@/lib/dal'
 import seo from '@/lib/seo'
+import { authHeader } from '@/lib/utils'
+import { QueryClient } from '@tanstack/react-query'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -9,6 +12,12 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const { token } = await verifyAuth()
+  const queryClient = new QueryClient()
+
+  await prefetchListAuthenticatedUserFavoriteArtworks(
+    queryClient,
+    authHeader(token)
+  )
 
   return <Favorites token={token} />
 }
