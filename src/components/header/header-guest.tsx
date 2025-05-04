@@ -9,7 +9,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Logo from '../logo'
-import { SearchInput } from './search-input'
+import SearchComponent from './search-input'
 
 const navigation = [
   { name: 'Artists', href: '/artists' },
@@ -52,7 +52,7 @@ export default function HeaderGuest() {
             </div>
           </div>
           <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
-            <SearchInput />
+            <SearchComponent />
           </div>
           <div className="flex items-center lg:hidden">
             {/* Mobile menu button */}

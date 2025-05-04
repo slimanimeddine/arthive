@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation'
 import AvatarPlaceholder from '../avatar-placeholder'
 import Logo from '../logo'
 import ProfileDropdown from './profile-dropdown'
-import { SearchInput } from './search-input'
+import SearchComponent from './search-input'
 
 const navigation = [
   { name: 'Artists', href: '/artists' },
@@ -98,7 +98,7 @@ export default function HeaderAuth({ token }: HeaderAuthProps) {
             </div>
           </div>
           <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
-            <SearchInput />
+            <SearchComponent />
           </div>
           <div className="flex items-center lg:hidden">
             {/* Mobile menu button */}

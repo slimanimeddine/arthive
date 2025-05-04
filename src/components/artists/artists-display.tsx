@@ -32,6 +32,7 @@ export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
   const artistSort = searchParams.get('artistSort')
   const category = searchParams.get('category')
   const country = searchParams.get('country')
+  const searchQuery = searchParams.get('searchQuery')
 
   const queryParams: Record<string, string> = {
     include: 'publishedArtworks',
@@ -39,6 +40,7 @@ export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
     ...(category && { 'filter[tag]': category }),
     ...(artistSort && { sort: artistSort }),
     ...(page && { page }),
+    ...(searchQuery && { searchQuery }),
   }
 
   const listUsersQuery = useListUsers(queryParams)

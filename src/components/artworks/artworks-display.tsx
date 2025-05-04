@@ -15,12 +15,14 @@ export default function ArtworksDisplay() {
   const page = searchParams.get('page')
   const artworkSort = searchParams.get('artworkSort')
   const tag = searchParams.get('tag')
+  const searchQuery = searchParams.get('searchQuery')
 
   const queryParams: Record<string, string> = {
     perPage: '12',
     ...(tag && { 'filter[tag]': tag }),
     ...(artworkSort && { sort: artworkSort }),
     ...(page && { page }),
+    ...(searchQuery && { searchQuery }),
   }
 
   const listPublishedArtworksQuery = useListPublishedArtworks(queryParams)
