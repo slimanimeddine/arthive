@@ -87,17 +87,17 @@ Follow these instructions to run this project locally on your machine
 
 3. Copy the following env variables to `.env.local`:
 
-```
-SESSION_SECRET=yoursecret
-NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+   ```sh
+   SESSION_SECRET=yoursecret
+   NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
 
-NEXT_PUBLIC_REVERB_APP_ID=
-NEXT_PUBLIC_REVERB_APP_KEY=
-NEXT_PUBLIC_REVERB_APP_SECRET=
-NEXT_PUBLIC_REVERB_HOST=
-NEXT_PUBLIC_REVERB_PORT=
-NEXT_PUBLIC_REVERB_SCHEME=
-```
+   NEXT_PUBLIC_REVERB_APP_ID=
+   NEXT_PUBLIC_REVERB_APP_KEY=
+   NEXT_PUBLIC_REVERB_APP_SECRET=
+   NEXT_PUBLIC_REVERB_HOST=
+   NEXT_PUBLIC_REVERB_PORT=
+   NEXT_PUBLIC_REVERB_SCHEME=
+   ```
 
 4. Start the Next.js development server:
 
