@@ -1,41 +1,46 @@
 'use client'
-import { createSession } from '@/actions/session'
-import { SignInBody, useSignIn } from '@/hooks/authentication'
+import { ResetPasswordBody, useResetPassword } from '@/hooks/authentication'
 import { onError } from '@/lib/utils'
-import { signInBody } from '@/schemas/authentication'
+import { resetPasswordBody } from '@/schemas/authentication'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-export default function SignInForm() {
-  const { handleSubmit, register, formState, reset } = useForm<SignInBody>({
-    resolver: zodResolver(signInBody),
-  })
+type ResetPasswordFormProps = {
+  token: string
+}
 
-  const signInMutation = useSignIn()
+export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
+  const { handleSubmit, register, formState, reset } =
+    useForm<ResetPasswordBody>({
+      resolver: zodResolver(resetPasswordBody),
+      defaultValues: {
+        token,
+      },
+    })
 
   const router = useRouter()
 
-  function onSubmit(data: SignInBody) {
-    signInMutation.mutate(
+  const resetPasswordMutation = useResetPassword()
+
+  function onSubmit(data: ResetPasswordBody) {
+    resetPasswordMutation.mutate(
       {
         data,
       },
       {
         onError,
-        onSuccess: async (data) => {
+        onSuccess: () => {
+          toast.success('Password reset successfully!')
           reset()
-          await createSession(data.data.id, data.data.token)
-          toast.success('User signed in successfully!')
-          router.push('/')
+          router.push('/sign-in')
         },
       }
     )
   }
 
-  const isDisabled = formState.isSubmitting || signInMutation.isPending
+  const isDisabled = formState.isSubmitting || resetPasswordMutation.isPending
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -64,22 +69,12 @@ export default function SignInForm() {
       </div>
 
       <div>
-        <div className="flex items-center justify-between">
-          <label
-            htmlFor="password"
-            className="block text-sm/6 font-medium text-gray-900"
-          >
-            Password
-          </label>
-          <div className="text-sm">
-            <Link
-              href="/forgot-password"
-              className="font-semibold text-indigo-600 hover:text-indigo-500"
-            >
-              Forgot password?
-            </Link>
-          </div>
-        </div>
+        <label
+          htmlFor="password"
+          className="block text-sm/6 font-medium text-gray-900"
+        >
+          New password
+        </label>
         <div className="mt-2">
           <input
             id="password"
@@ -96,12 +91,34 @@ export default function SignInForm() {
       </div>
 
       <div>
+        <label
+          htmlFor="password_confirmation"
+          className="block text-sm/6 font-medium text-gray-900"
+        >
+          New password confirmation
+        </label>
+        <div className="mt-2">
+          <input
+            id="password_confirmation"
+            type="password"
+            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            {...register('password_confirmation')}
+          />
+          {formState.errors.password_confirmation && (
+            <p className="mt-2 text-sm text-red-600">
+              {formState.errors.password_confirmation.message}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div>
         <button
           disabled={isDisabled}
           type="submit"
           className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Sign in
+          Reset password
         </button>
       </div>
     </form>

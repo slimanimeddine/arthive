@@ -1,10 +1,18 @@
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
 } from '@tanstack/react-query'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export type SignUp200 = NoContentApiResponse
 export type SignUpBody = z.infer<typeof signUpBody>
@@ -40,11 +48,23 @@ export type VerifyEmail200 = NoContentApiResponse
 export type VerifyEmail401 = UnauthenticatedApiResponse
 export type VerifyEmail403 = UnauthorizedApiResponse
 
+export type ResetPassword200 = NoContentApiResponse
+export type ResetPassword400 = ErrorApiResponse
+export type ResetPasswordBody = z.infer<typeof resetPasswordBody>
+
+export type SendPasswordResetLink200 = NoContentApiResponse
+export type SendPasswordResetLink400 = ErrorApiResponse
+export type SendPasswordResetLinkBody = z.infer<
+  typeof sendPasswordResetLinkBody
+>
+
 import type { BodyType, ErrorType } from '@/lib/axios'
 import { customInstance } from '@/lib/axios'
 import {
   changePasswordBody,
   deleteUserBody,
+  resetPasswordBody,
+  sendPasswordResetLinkBody,
   signInBody,
   signUpBody,
 } from '@/schemas/authentication'
@@ -607,83 +627,171 @@ export const verifyEmail = (
   signal?: AbortSignal
 ) => {
   return customInstance<VerifyEmail200>(
-    { url: `/api/v1/email/verify/${id}/${hash}`, method: 'POST', signal },
+    { url: `/api/v1/email/verify/${id}/${hash}`, method: 'GET', signal },
     options
   )
 }
 
-export const getVerifyEmailMutationOptions = <
-  TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof verifyEmail>>,
-    TError,
-    { id: string; hash: string },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof verifyEmail>>,
-  TError,
-  { id: string; hash: string },
-  TContext
-> => {
-  const mutationKey = ['verifyEmail']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof verifyEmail>>,
-    { id: string; hash: string }
-  > = (props) => {
-    const { id, hash } = props ?? {}
-
-    return verifyEmail(id, hash, requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
+export const getVerifyEmailQueryKey = (id: string, hash: string) => {
+  return [`/api/v1/email/verify/${id}/${hash}`] as const
 }
 
-export type VerifyEmailMutationResult = NonNullable<
+export const getVerifyEmailQueryOptions = <
+  TData = Awaited<ReturnType<typeof verifyEmail>>,
+  TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
+>(
+  id: string,
+  hash: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customInstance>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getVerifyEmailQueryKey(id, hash)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyEmail>>> = ({
+    signal,
+  }) => verifyEmail(id, hash, requestOptions, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(id && hash),
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof verifyEmail>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type VerifyEmailQueryResult = NonNullable<
   Awaited<ReturnType<typeof verifyEmail>>
 >
+export type VerifyEmailQueryError = ErrorType<VerifyEmail401 | VerifyEmail403>
 
-export type VerifyEmailMutationError = ErrorType<
-  VerifyEmail401 | VerifyEmail403
->
-
-/**
- * @summary Verify Email
- */
-export const useVerifyEmail = <
+export function useVerifyEmail<
+  TData = Awaited<ReturnType<typeof verifyEmail>>,
   TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
-  TContext = unknown,
 >(
+  id: string,
+  hash: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof verifyEmail>>,
+          TError,
+          Awaited<ReturnType<typeof verifyEmail>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useVerifyEmail<
+  TData = Awaited<ReturnType<typeof verifyEmail>>,
+  TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
+>(
+  id: string,
+  hash: string,
   options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof verifyEmail>>,
-      TError,
-      { id: string; hash: string },
-      TContext
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof verifyEmail>>,
+          TError,
+          Awaited<ReturnType<typeof verifyEmail>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useVerifyEmail<
+  TData = Awaited<ReturnType<typeof verifyEmail>>,
+  TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
+>(
+  id: string,
+  hash: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
     >
     request?: SecondParameter<typeof customInstance>
   },
   queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof verifyEmail>>,
-  TError,
-  { id: string; hash: string },
-  TContext
-> => {
-  const mutationOptions = getVerifyEmailMutationOptions(options)
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Verify Email
+ */
 
-  return useMutation(mutationOptions, queryClient)
+export function useVerifyEmail<
+  TData = Awaited<ReturnType<typeof verifyEmail>>,
+  TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
+>(
+  id: string,
+  hash: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getVerifyEmailQueryOptions(id, hash, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Verify Email
+ */
+export const prefetchVerifyEmail = async <
+  TData = Awaited<ReturnType<typeof verifyEmail>>,
+  TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
+>(
+  queryClient: QueryClient,
+  id: string,
+  hash: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customInstance>
+  }
+): Promise<QueryClient> => {
+  const queryOptions = getVerifyEmailQueryOptions(id, hash, options)
+
+  await queryClient.prefetchQuery(queryOptions)
+
+  return queryClient
 }
 
 /**
@@ -767,6 +875,192 @@ export const useResendEmailVerification = <
   TContext
 > => {
   const mutationOptions = getResendEmailVerificationMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Sends a password reset link to the user's email
+ * @summary Send Password Reset Link
+ */
+export const sendPasswordResetLink = (
+  sendPasswordResetLinkBody: BodyType<SendPasswordResetLinkBody>,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<SendPasswordResetLink200>(
+    {
+      url: `/api/v1/forgot-password`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: sendPasswordResetLinkBody,
+      signal,
+    },
+    options
+  )
+}
+
+export const getSendPasswordResetLinkMutationOptions = <
+  TError = ErrorType<SendPasswordResetLink400>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sendPasswordResetLink>>,
+    TError,
+    { data: BodyType<SendPasswordResetLinkBody> },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sendPasswordResetLink>>,
+  TError,
+  { data: BodyType<SendPasswordResetLinkBody> },
+  TContext
+> => {
+  const mutationKey = ['sendPasswordResetLink']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sendPasswordResetLink>>,
+    { data: BodyType<SendPasswordResetLinkBody> }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return sendPasswordResetLink(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type SendPasswordResetLinkMutationResult = NonNullable<
+  Awaited<ReturnType<typeof sendPasswordResetLink>>
+>
+export type SendPasswordResetLinkMutationBody =
+  BodyType<SendPasswordResetLinkBody>
+export type SendPasswordResetLinkMutationError = ErrorType<string>
+
+/**
+ * @summary Send Password Reset Link
+ */
+export const useSendPasswordResetLink = <
+  TError = ErrorType<string>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof sendPasswordResetLink>>,
+      TError,
+      { data: BodyType<SendPasswordResetLinkBody> },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof sendPasswordResetLink>>,
+  TError,
+  { data: BodyType<SendPasswordResetLinkBody> },
+  TContext
+> => {
+  const mutationOptions = getSendPasswordResetLinkMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+/**
+ * Resets the password of the user
+ * @summary Reset Password
+ */
+export const resetPassword = (
+  resetPasswordBody: BodyType<ResetPasswordBody>,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<ResetPassword200>(
+    {
+      url: `/api/v1/reset-password`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: resetPasswordBody,
+      signal,
+    },
+    options
+  )
+}
+
+export const getResetPasswordMutationOptions = <
+  TError = ErrorType<ResetPassword400>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof resetPassword>>,
+    TError,
+    { data: BodyType<ResetPasswordBody> },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof resetPassword>>,
+  TError,
+  { data: BodyType<ResetPasswordBody> },
+  TContext
+> => {
+  const mutationKey = ['resetPassword']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof resetPassword>>,
+    { data: BodyType<ResetPasswordBody> }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return resetPassword(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type ResetPasswordMutationResult = NonNullable<
+  Awaited<ReturnType<typeof resetPassword>>
+>
+export type ResetPasswordMutationBody = BodyType<ResetPasswordBody>
+export type ResetPasswordMutationError = ErrorType<string>
+
+/**
+ * @summary Reset Password
+ */
+export const useResetPassword = <
+  TError = ErrorType<string>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof resetPassword>>,
+      TError,
+      { data: BodyType<ResetPasswordBody> },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof resetPassword>>,
+  TError,
+  { data: BodyType<ResetPasswordBody> },
+  TContext
+> => {
+  const mutationOptions = getResetPasswordMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }
