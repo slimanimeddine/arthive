@@ -6,9 +6,22 @@ import type {
 } from '@tanstack/react-query'
 import { useMutation } from '@tanstack/react-query'
 
+export type SignUp200 = NoContentApiResponse
+export type SignUpBody = z.infer<typeof signUpBody>
+
+export type SignIn200 = SuccessApiResponse<{
+  token: string
+  id: string
+}>
+export type SignIn401 = ErrorApiResponse<401>
+export type SignInBody = z.infer<typeof signInBody>
+
 export type AdminSignIn200 = SignIn200
 export type AdminSignIn401 = SignIn401
 export type AdminSignInBody = SignInBody
+
+export type SignOut200 = NoContentApiResponse
+export type SignOut401 = UnauthenticatedApiResponse
 
 export type ChangePassword200 = NoContentApiResponse
 export type ChangePassword401 = UnauthenticatedApiResponse
@@ -20,65 +33,27 @@ export type DeleteUser401 = UnauthenticatedApiResponse
 export type DeleteUser400 = ErrorApiResponse
 export type DeleteUserBody = z.infer<typeof deleteUserBody>
 
-export type ResetPassword200 = NoContentApiResponse
-export type ResetPassword400 = ErrorApiResponse
-export type ResetPassword404 = NotFoundApiResponse
-export type ResetPasswordBody = z.infer<typeof resetPasswordBody>
+export type ResendEmailVerification200 = NoContentApiResponse
+export type ResendEmailVerification401 = UnauthenticatedApiResponse
 
-export type SendEmailVerificationCode200 = NoContentApiResponse
-export type SendEmailVerificationCode400 = ErrorApiResponse
-export type SendEmailVerificationCode401 = UnauthenticatedApiResponse
-
-export type SendForgotPasswordCode200 = NoContentApiResponse
-export type SendForgotPasswordCodeBody = z.infer<
-  typeof sendForgotPasswordCodeBody
->
-
-export type SignIn200 = SuccessApiResponse<{
-  token: string
-  id: string
-}>
-export type SignIn401 = ErrorApiResponse<401>
-export type SignInBody = z.infer<typeof signInBody>
-
-export type SignOut200 = NoContentApiResponse
-export type SignOut401 = UnauthenticatedApiResponse
-
-export type SignUp200 = NoContentApiResponse
-export type SignUpBody = z.infer<typeof signUpBody>
-
-export type VerifyEmailCode200 = NoContentApiResponse
-export type VerifyEmailCode400 = ErrorApiResponse
-export type VerifyEmailCode401 = UnauthenticatedApiResponse
-export type VerifyEmailCodeBody = z.infer<typeof verifyEmailCodeBody>
-
-export type VerifyForgotPasswordCode200 = SuccessApiResponse<{
-  token: string
-}>
-export type VerifyForgotPasswordCode400 = ErrorApiResponse
-export type VerifyForgotPasswordCode404 = NotFoundApiResponse
-export type VerifyForgotPasswordCodeBody = z.infer<
-  typeof verifyForgotPasswordCodeBody
->
+export type VerifyEmail200 = NoContentApiResponse
+export type VerifyEmail401 = UnauthenticatedApiResponse
+export type VerifyEmail403 = UnauthorizedApiResponse
 
 import type { BodyType, ErrorType } from '@/lib/axios'
 import { customInstance } from '@/lib/axios'
 import {
   changePasswordBody,
   deleteUserBody,
-  resetPasswordBody,
-  sendForgotPasswordCodeBody,
   signInBody,
   signUpBody,
-  verifyEmailCodeBody,
-  verifyForgotPasswordCodeBody,
 } from '@/schemas/authentication'
 import {
   ErrorApiResponse,
   NoContentApiResponse,
-  NotFoundApiResponse,
   SuccessApiResponse,
   UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from '@/types/api-responses'
 import { z } from 'zod'
 
@@ -436,471 +411,6 @@ export const useChangePassword = <
 
   return useMutation(mutationOptions, queryClient)
 }
-/**
- * Sends a verification code to the authenticated user's email
- * @summary Send Email Verification Code
- */
-export const sendEmailVerificationCode = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
-) => {
-  return customInstance<SendEmailVerificationCode200>(
-    { url: `/api/v1/email-verification/send`, method: 'POST', signal },
-    options
-  )
-}
-
-export const getSendEmailVerificationCodeMutationOptions = <
-  TError = ErrorType<
-    SendEmailVerificationCode400 | SendEmailVerificationCode401
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof sendEmailVerificationCode>>,
-    TError,
-    void,
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof sendEmailVerificationCode>>,
-  TError,
-  void,
-  TContext
-> => {
-  const mutationKey = ['sendEmailVerificationCode']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof sendEmailVerificationCode>>,
-    void
-  > = () => {
-    return sendEmailVerificationCode(requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type SendEmailVerificationCodeMutationResult = NonNullable<
-  Awaited<ReturnType<typeof sendEmailVerificationCode>>
->
-
-export type SendEmailVerificationCodeMutationError = ErrorType<
-  SendEmailVerificationCode400 | SendEmailVerificationCode401
->
-
-/**
- * @summary Send Email Verification Code
- */
-export const useSendEmailVerificationCode = <
-  TError = ErrorType<
-    SendEmailVerificationCode400 | SendEmailVerificationCode401
-  >,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof sendEmailVerificationCode>>,
-      TError,
-      void,
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof sendEmailVerificationCode>>,
-  TError,
-  void,
-  TContext
-> => {
-  const mutationOptions = getSendEmailVerificationCodeMutationOptions(options)
-
-  return useMutation(mutationOptions, queryClient)
-}
-/**
- * Verifies the email verification code
- * @summary Verify Email Code
- */
-export const verifyEmailCode = (
-  verifyEmailCodeBody: BodyType<VerifyEmailCodeBody>,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
-) => {
-  return customInstance<VerifyEmailCode200>(
-    {
-      url: `/api/v1/email-verification/verify`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: verifyEmailCodeBody,
-      signal,
-    },
-    options
-  )
-}
-
-export const getVerifyEmailCodeMutationOptions = <
-  TError = ErrorType<VerifyEmailCode400 | VerifyEmailCode401>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof verifyEmailCode>>,
-    TError,
-    { data: BodyType<VerifyEmailCodeBody> },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof verifyEmailCode>>,
-  TError,
-  { data: BodyType<VerifyEmailCodeBody> },
-  TContext
-> => {
-  const mutationKey = ['verifyEmailCode']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof verifyEmailCode>>,
-    { data: BodyType<VerifyEmailCodeBody> }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return verifyEmailCode(data, requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type VerifyEmailCodeMutationResult = NonNullable<
-  Awaited<ReturnType<typeof verifyEmailCode>>
->
-export type VerifyEmailCodeMutationBody = BodyType<VerifyEmailCodeBody>
-export type VerifyEmailCodeMutationError = ErrorType<
-  VerifyEmailCode400 | VerifyEmailCode401
->
-
-/**
- * @summary Verify Email Code
- */
-export const useVerifyEmailCode = <
-  TError = ErrorType<VerifyEmailCode400 | VerifyEmailCode401>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof verifyEmailCode>>,
-      TError,
-      { data: BodyType<VerifyEmailCodeBody> },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof verifyEmailCode>>,
-  TError,
-  { data: BodyType<VerifyEmailCodeBody> },
-  TContext
-> => {
-  const mutationOptions = getVerifyEmailCodeMutationOptions(options)
-
-  return useMutation(mutationOptions, queryClient)
-}
-/**
- * Sends a forgot password code to the user's email
- * @summary Send Forgot Password Code
- */
-export const sendForgotPasswordCode = (
-  sendForgotPasswordCodeBody: BodyType<SendForgotPasswordCodeBody>,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
-) => {
-  return customInstance<SendForgotPasswordCode200>(
-    {
-      url: `/api/v1/forgot-password-code/send`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: sendForgotPasswordCodeBody,
-      signal,
-    },
-    options
-  )
-}
-
-export const getSendForgotPasswordCodeMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof sendForgotPasswordCode>>,
-    TError,
-    { data: BodyType<SendForgotPasswordCodeBody> },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof sendForgotPasswordCode>>,
-  TError,
-  { data: BodyType<SendForgotPasswordCodeBody> },
-  TContext
-> => {
-  const mutationKey = ['sendForgotPasswordCode']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof sendForgotPasswordCode>>,
-    { data: BodyType<SendForgotPasswordCodeBody> }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return sendForgotPasswordCode(data, requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type SendForgotPasswordCodeMutationResult = NonNullable<
-  Awaited<ReturnType<typeof sendForgotPasswordCode>>
->
-export type SendForgotPasswordCodeMutationBody =
-  BodyType<SendForgotPasswordCodeBody>
-export type SendForgotPasswordCodeMutationError = ErrorType<unknown>
-
-/**
- * @summary Send Forgot Password Code
- */
-export const useSendForgotPasswordCode = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof sendForgotPasswordCode>>,
-      TError,
-      { data: BodyType<SendForgotPasswordCodeBody> },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof sendForgotPasswordCode>>,
-  TError,
-  { data: BodyType<SendForgotPasswordCodeBody> },
-  TContext
-> => {
-  const mutationOptions = getSendForgotPasswordCodeMutationOptions(options)
-
-  return useMutation(mutationOptions, queryClient)
-}
-/**
- * Verifies the forgot password code sent to the user's email
- * @summary Verify Forgot Password Code
- */
-export const verifyForgotPasswordCode = (
-  verifyForgotPasswordCodeBody: BodyType<VerifyForgotPasswordCodeBody>,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
-) => {
-  return customInstance<VerifyForgotPasswordCode200>(
-    {
-      url: `/api/v1/forgot-password-code/verify`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: verifyForgotPasswordCodeBody,
-      signal,
-    },
-    options
-  )
-}
-
-export const getVerifyForgotPasswordCodeMutationOptions = <
-  TError = ErrorType<VerifyForgotPasswordCode400 | VerifyForgotPasswordCode404>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof verifyForgotPasswordCode>>,
-    TError,
-    { data: BodyType<VerifyForgotPasswordCodeBody> },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof verifyForgotPasswordCode>>,
-  TError,
-  { data: BodyType<VerifyForgotPasswordCodeBody> },
-  TContext
-> => {
-  const mutationKey = ['verifyForgotPasswordCode']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof verifyForgotPasswordCode>>,
-    { data: BodyType<VerifyForgotPasswordCodeBody> }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return verifyForgotPasswordCode(data, requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type VerifyForgotPasswordCodeMutationResult = NonNullable<
-  Awaited<ReturnType<typeof verifyForgotPasswordCode>>
->
-export type VerifyForgotPasswordCodeMutationBody =
-  BodyType<VerifyForgotPasswordCodeBody>
-export type VerifyForgotPasswordCodeMutationError = ErrorType<
-  VerifyForgotPasswordCode400 | VerifyForgotPasswordCode404
->
-
-/**
- * @summary Verify Forgot Password Code
- */
-export const useVerifyForgotPasswordCode = <
-  TError = ErrorType<VerifyForgotPasswordCode400 | VerifyForgotPasswordCode404>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof verifyForgotPasswordCode>>,
-      TError,
-      { data: BodyType<VerifyForgotPasswordCodeBody> },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof verifyForgotPasswordCode>>,
-  TError,
-  { data: BodyType<VerifyForgotPasswordCodeBody> },
-  TContext
-> => {
-  const mutationOptions = getVerifyForgotPasswordCodeMutationOptions(options)
-
-  return useMutation(mutationOptions, queryClient)
-}
-/**
- * Resets the user's password
- * @summary Reset Password
- */
-export const resetPassword = (
-  resetPasswordBody: BodyType<ResetPasswordBody>,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
-) => {
-  return customInstance<ResetPassword200>(
-    {
-      url: `/api/v1/password/reset`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: resetPasswordBody,
-      signal,
-    },
-    options
-  )
-}
-
-export const getResetPasswordMutationOptions = <
-  TError = ErrorType<ResetPassword400 | ResetPassword404>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof resetPassword>>,
-    TError,
-    { data: BodyType<ResetPasswordBody> },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof resetPassword>>,
-  TError,
-  { data: BodyType<ResetPasswordBody> },
-  TContext
-> => {
-  const mutationKey = ['resetPassword']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof resetPassword>>,
-    { data: BodyType<ResetPasswordBody> }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return resetPassword(data, requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type ResetPasswordMutationResult = NonNullable<
-  Awaited<ReturnType<typeof resetPassword>>
->
-export type ResetPasswordMutationBody = BodyType<ResetPasswordBody>
-export type ResetPasswordMutationError = ErrorType<
-  ResetPassword400 | ResetPassword404
->
-
-/**
- * @summary Reset Password
- */
-export const useResetPassword = <
-  TError = ErrorType<ResetPassword400 | ResetPassword404>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof resetPassword>>,
-      TError,
-      { data: BodyType<ResetPasswordBody> },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof resetPassword>>,
-  TError,
-  { data: BodyType<ResetPasswordBody> },
-  TContext
-> => {
-  const mutationOptions = getResetPasswordMutationOptions(options)
-
-  return useMutation(mutationOptions, queryClient)
-}
 
 /**
  * Signs in an admin user and returns an auth token
@@ -1082,6 +592,181 @@ export const useDeleteUser = <
   TContext
 > => {
   const mutationOptions = getDeleteUserMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Verifies the email of the authenticated user
+ * @summary Verify Email
+ */
+export const verifyEmail = (
+  id: string,
+  hash: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<VerifyEmail200>(
+    { url: `/api/v1/email/verify/${id}/${hash}`, method: 'POST', signal },
+    options
+  )
+}
+
+export const getVerifyEmailMutationOptions = <
+  TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof verifyEmail>>,
+    TError,
+    { id: string; hash: string },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof verifyEmail>>,
+  TError,
+  { id: string; hash: string },
+  TContext
+> => {
+  const mutationKey = ['verifyEmail']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof verifyEmail>>,
+    { id: string; hash: string }
+  > = (props) => {
+    const { id, hash } = props ?? {}
+
+    return verifyEmail(id, hash, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type VerifyEmailMutationResult = NonNullable<
+  Awaited<ReturnType<typeof verifyEmail>>
+>
+
+export type VerifyEmailMutationError = ErrorType<
+  VerifyEmail401 | VerifyEmail403
+>
+
+/**
+ * @summary Verify Email
+ */
+export const useVerifyEmail = <
+  TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof verifyEmail>>,
+      TError,
+      { id: string; hash: string },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof verifyEmail>>,
+  TError,
+  { id: string; hash: string },
+  TContext
+> => {
+  const mutationOptions = getVerifyEmailMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Resends the email verification notification to the authenticated user
+ * @summary Resend Email Verification
+ */
+export const resendEmailVerification = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<ResendEmailVerification200>(
+    { url: `/api/v1/email/verification-notification`, method: 'POST', signal },
+    options
+  )
+}
+
+export const getResendEmailVerificationMutationOptions = <
+  TError = ErrorType<ResendEmailVerification401>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof resendEmailVerification>>,
+    TError,
+    void,
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof resendEmailVerification>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationKey = ['resendEmailVerification']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof resendEmailVerification>>,
+    void
+  > = () => {
+    return resendEmailVerification(requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type ResendEmailVerificationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof resendEmailVerification>>
+>
+
+export type ResendEmailVerificationMutationError =
+  ErrorType<ResendEmailVerification401>
+
+/**
+ * @summary Resend Email Verification
+ */
+export const useResendEmailVerification = <
+  TError = ErrorType<ResendEmailVerification401>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof resendEmailVerification>>,
+      TError,
+      void,
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof resendEmailVerification>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationOptions = getResendEmailVerificationMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }
