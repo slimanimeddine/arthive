@@ -62,6 +62,13 @@ export type NotFoundApiResponse = ErrorApiResponse<404>
 
 export type TooManyRequestsApiResponse = ErrorApiResponse<429>
 
+export type UnprocessableEntityApiResponse<T> = {
+  message: string
+  errors: {
+    [K in keyof T]?: string[]
+  }
+}
+
 export type NotificationResponse = {
   id: string
   type: string

@@ -11,7 +11,7 @@ export function classNames(...classes: string[]) {
 }
 
 export function onError(error: Error) {
-  if (axios.isAxiosError(error) && error.response) {
+  if (axios.isAxiosError(error) && error.response && error.status !== 422) {
     toast.error(`${error.response.data.message || 'Something went wrong'}`)
   } else {
     toast.error(`${error.message}`)

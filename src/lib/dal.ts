@@ -19,7 +19,7 @@ export const getAuth = cache(async () => {
   const session = (await getSession()) as Session
 
   if (!(session?.id && session?.token)) {
-    return { isAuth: true, id: undefined, token: undefined }
+    return { isAuth: false, id: undefined, token: undefined }
   }
 
   return { isAuth: true, id: session.id, token: session.token }
