@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/slimanimeddine/arthive">
-    <img src="public/logoipsum-333.png" alt="Logo" width="260" height="120">
+    <img src="public/arthive-logo.svg" alt="Logo" width="260" height="120">
   </a>
 
   <h3 align="center">Arthive Frontend</h3>
@@ -20,6 +20,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
+        <li><a href="#other-parts">Other Parts</a></li>
         <li><a href="#features">Features</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
@@ -39,6 +40,11 @@
 ## About The Project
 
 This project is a modern frontend application built with Next.js and TypeScript that brings to life a Traditional Artworks Showcase platform. Powered by the [Arthive REST API](https://github.com/slimanimeddine/arthive-backend), it provides an intuitive and visually stunning interface for artists to present their work and for art enthusiasts to discover and interact with beautiful creations.
+
+### Other Parts
+
+- [Backend](https://github.com/slimanimeddine/arthive-backend)
+- [Admin Panel](https://github.com/slimanimeddine/arthive-admin)
 
 ### Features
 
