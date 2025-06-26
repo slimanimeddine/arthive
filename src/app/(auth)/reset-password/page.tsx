@@ -3,7 +3,7 @@ import ResetPasswordForm from '@/components/reset-password-form'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-type SearchParams = { [key: string]: string }
+type SearchParams = Promise<{ [key: string]: string }>
 
 export default async function Page({
   searchParams,
