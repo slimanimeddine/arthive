@@ -1,24 +1,22 @@
-import { useMarkNotificationRead } from '@/hooks/mark-notification-as-read'
-import { classNames } from '@/lib/utils'
-import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/20/solid'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import Link from 'next/link'
-dayjs.extend(relativeTime)
+import { useMarkNotificationRead } from "@/hooks/mark-notification-as-read";
+import { classNames } from "@/lib/utils";
+import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/20/solid";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import Link from "next/link";
+dayjs.extend(relativeTime);
 
 type ArtworkCommentNotificationProps = {
-  token: string
-  id: string
-  commenterUsername: string
-  commenterFullName: string
-  artworkId: string
-  artworkTitle: string
-  commentId: string
-  createdAt: string
-  readAt: string | undefined
-}
+  id: string;
+  commenterUsername: string;
+  commenterFullName: string;
+  artworkId: string;
+  artworkTitle: string;
+  commentId: string;
+  createdAt: string;
+  readAt: string | undefined;
+};
 export default function ArtworkCommentNotification({
-  token,
   id,
   commenterUsername,
   commenterFullName,
@@ -28,16 +26,16 @@ export default function ArtworkCommentNotification({
   createdAt,
   readAt,
 }: ArtworkCommentNotificationProps) {
-  const { markAsRead } = useMarkNotificationRead(token, id, readAt)
+  const { markAsRead } = useMarkNotificationRead(id, readAt);
 
   return (
     <div
       onClick={markAsRead}
       className={classNames(
-        'relative p-2',
+        "relative p-2",
         readAt
-          ? ''
-          : 'bg-indigo-200 hover:bg-indigo-100 rounded-lg cursor-pointer'
+          ? ""
+          : "cursor-pointer rounded-lg bg-indigo-200 hover:bg-indigo-100",
       )}
     >
       <div className="relative flex space-x-3">
@@ -57,8 +55,8 @@ export default function ArtworkCommentNotification({
                 className="font-medium text-gray-900"
               >
                 {commenterFullName}
-              </Link>{' '}
-              commented on your artwork{' '}
+              </Link>{" "}
+              commented on your artwork{" "}
               <Link
                 href={{
                   pathname: `/artworks/${artworkId}`,
@@ -67,14 +65,14 @@ export default function ArtworkCommentNotification({
                 className="font-medium text-gray-900"
               >
                 {artworkTitle}
-              </Link>{' '}
+              </Link>{" "}
             </p>
           </div>
-          <div className="whitespace-nowrap text-right text-sm text-gray-500">
+          <div className="text-right text-sm whitespace-nowrap text-gray-500">
             <span>{dayjs(createdAt).fromNow()}</span>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

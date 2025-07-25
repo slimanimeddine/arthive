@@ -1,37 +1,37 @@
 import {
-  PostArtworkCommentBody,
+  type PostArtworkCommentBody,
   usePostArtworkComment,
-} from '@/hooks/artwork-comments'
-import { authHeader, onError } from '@/lib/utils'
-import { postArtworkCommentBody } from '@/schemas/artwork-comments'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+} from "@/hooks/artwork-comments";
+import { authHeader, onError } from "@/lib/utils";
+import { postArtworkCommentBody } from "@/schemas/artwork-comments";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 type PostCommentProps = {
-  token: string | undefined
-  artworkId: string
-}
+  token: string | undefined;
+  artworkId: string;
+};
 
 export default function PostComment({ token, artworkId }: PostCommentProps) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const { handleSubmit, register, formState, reset, clearErrors } =
     useForm<PostArtworkCommentBody>({
       resolver: zodResolver(postArtworkCommentBody),
-    })
+    });
 
   useEffect(() => {
     setTimeout(() => {
-      clearErrors('comment_text')
-    }, 6000)
-  }, [clearErrors, formState.errors.comment_text])
+      clearErrors("comment_text");
+    }, 6000);
+  }, [clearErrors, formState.errors.comment_text]);
 
-  const authConfig = token ? authHeader(token!) : undefined
+  const authConfig = token ? authHeader(token) : undefined;
 
-  const postArtworkCommentMutation = usePostArtworkComment(authConfig)
+  const postArtworkCommentMutation = usePostArtworkComment(authConfig);
 
   function onSubmit(data: PostArtworkCommentBody) {
     postArtworkCommentMutation.mutate(
@@ -42,38 +42,32 @@ export default function PostComment({ token, artworkId }: PostCommentProps) {
       {
         onError,
         onSuccess: () => {
-          reset()
+          reset();
           queryClient.invalidateQueries({
             queryKey: [`/api/v1/artworks/${artworkId}`],
-          })
-          toast.success('Comment posted successfully!')
+          });
+          toast.success("Comment posted successfully!");
         },
-      }
-    )
+      },
+    );
   }
 
   const isDisabled =
-    formState.isSubmitting || postArtworkCommentMutation.isPending || !token
+    formState.isSubmitting || postArtworkCommentMutation.isPending || !token;
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="mb-6"
-    >
-      <div className="py-2 px-4 mb-2 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-        <label
-          htmlFor="comment"
-          className="sr-only"
-        >
+    <form onSubmit={handleSubmit(onSubmit)} className="mb-6">
+      <div className="mb-2 rounded-lg rounded-t-lg border border-gray-200 bg-white px-4 py-2 dark:border-gray-700 dark:bg-gray-800">
+        <label htmlFor="comment" className="sr-only">
           Your comment
         </label>
         <textarea
           id="comment"
           rows={6}
-          className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+          className="w-full border-0 px-0 text-sm text-gray-900 focus:ring-0 focus:outline-none dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
           placeholder="Write a comment..."
-          defaultValue={''}
-          {...register('comment_text')}
+          defaultValue={""}
+          {...register("comment_text")}
         />
       </div>
       {formState.errors.comment_text && (
@@ -84,10 +78,10 @@ export default function PostComment({ token, artworkId }: PostCommentProps) {
       <button
         disabled={isDisabled}
         type="submit"
-        className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center rounded-lg transition bg-indigo-700 text-white hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-900"
+        className="inline-flex items-center rounded-lg bg-indigo-700 px-4 py-2.5 text-center text-xs font-medium text-white transition hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-900"
       >
         Post comment
       </button>
     </form>
-  )
+  );
 }

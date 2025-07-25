@@ -1,54 +1,60 @@
-'use client'
+"use client";
 import {
   useReplaceArtworkPhotoPath,
   useSetArtworkPhotoAsMain,
-} from '@/hooks/artwork-photos'
-import { authHeader, getCroppedImg, onError, turnBlobToFile } from '@/lib/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import Image from 'next/image'
-import { useCallback, useState } from 'react'
-import Cropper, { Area } from 'react-easy-crop'
-import { FirstStepProps } from './first-step'
-import toast from 'react-hot-toast'
+} from "@/hooks/artwork-photos";
+import {
+  authHeader,
+  getCroppedImg,
+  onError,
+  turnBlobToFile,
+} from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import { useCallback, useState } from "react";
+import Cropper, { type Area } from "react-easy-crop";
+import { type FirstStepProps } from "./first-step";
+import toast from "react-hot-toast";
 
-type SecondStepProps = FirstStepProps
+type SecondStepProps = FirstStepProps;
 
 export default function SecondStep({ token, artwork }: SecondStepProps) {
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
 
   const defaultMainPhoto = artwork.photos.find(
-    (photo) => photo.path === artwork.mainPhotoUrl
-  )
+    (photo) => photo.path === artwork.mainPhotoUrl,
+  );
 
   const [mainPhoto, setMainPhoto] = useState<
     | {
-        id: string
-        path: string
+        id: string;
+        path: string;
       }
     | undefined
-  >(defaultMainPhoto)
+  >(defaultMainPhoto);
 
-  const [croppedMainPhoto, setCroppedMainPhoto] = useState<Blob | null>(null)
+  const [croppedMainPhoto, setCroppedMainPhoto] = useState<Blob | null>(null);
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
-  const authConfig = authHeader(token)
-  const setArtworkPhotoAsMainMutation = useSetArtworkPhotoAsMain(authConfig)
-  const replaceArtworkPhotoPathMutation = useReplaceArtworkPhotoPath(authConfig)
+  const authConfig = authHeader(token);
+  const setArtworkPhotoAsMainMutation = useSetArtworkPhotoAsMain(authConfig);
+  const replaceArtworkPhotoPathMutation =
+    useReplaceArtworkPhotoPath(authConfig);
 
   const onCropComplete = useCallback(
     async (croppedArea: Area, croppedAreaPixels: Area) => {
-      if (!mainPhoto) return
+      if (!mainPhoto) return;
       const croppedImage = await getCroppedImg(
         artwork.mainPhotoUrl,
-        croppedAreaPixels
-      )
+        croppedAreaPixels,
+      );
 
-      setCroppedMainPhoto(croppedImage)
+      setCroppedMainPhoto(croppedImage);
     },
-    [artwork.mainPhotoUrl, mainPhoto]
-  )
+    [artwork.mainPhotoUrl, mainPhoto],
+  );
 
   function handleSetMainPhoto() {
     if (mainPhoto) {
@@ -61,11 +67,11 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
           onSuccess: () => {
             queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
-            })
-            toast.success('Main photo set successfully')
+            });
+            toast.success("Main photo set successfully");
           },
-        }
-      )
+        },
+      );
     }
   }
 
@@ -83,22 +89,22 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
           onSuccess: () => {
             queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
-            })
+            });
 
-            toast.success('Main photo cropped successfully')
+            toast.success("Main photo cropped successfully");
           },
-        }
-      )
+        },
+      );
     }
   }
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">
+    <div className="rounded-lg bg-white p-6 shadow-md">
+      <h2 className="mb-4 text-2xl font-bold">
         Step 2: Select Main Photo & Crop
       </h2>
       <div>
-        <h3 className="text-lg font-semibold mb-2">Select Main Photo:</h3>
+        <h3 className="mb-2 text-lg font-semibold">Select Main Photo:</h3>
         <div className="flex flex-wrap gap-2">
           {artwork.photos.map((photo) => (
             <Image
@@ -108,10 +114,10 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
               width={96}
               height={96}
               onClick={() => setMainPhoto(photo)}
-              className={`w-24 h-24 object-cover rounded-md cursor-pointer ${
+              className={`h-24 w-24 cursor-pointer rounded-md object-cover ${
                 mainPhoto?.path === photo.path
-                  ? 'border-2 border-indigo-500'
-                  : ''
+                  ? "border-2 border-indigo-500"
+                  : ""
               }`}
             />
           ))}
@@ -121,16 +127,16 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
         type="button"
         disabled={!mainPhoto}
         onClick={handleSetMainPhoto}
-        className="mt-6 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors"
+        className="mt-6 rounded-md bg-indigo-500 px-4 py-2 text-white transition-colors hover:bg-indigo-600"
       >
         Set selected photo as main
       </button>
       {mainPhoto?.path && (
         <div className="mt-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold mb-2">Crop Main Photo:</h3>
+            <h3 className="mb-2 text-lg font-semibold">Crop Main Photo:</h3>
           </div>
-          <div className="relative w-full h-96 overflow-hidden rounded-md">
+          <div className="relative h-96 w-full overflow-hidden rounded-md">
             <Cropper
               image={mainPhoto?.path}
               crop={crop}
@@ -147,10 +153,10 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
         type="button"
         disabled={!croppedMainPhoto}
         onClick={handleCropMainPhoto}
-        className="mt-6 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors"
+        className="mt-6 rounded-md bg-indigo-500 px-4 py-2 text-white transition-colors hover:bg-indigo-600"
       >
         Crop main photo
       </button>
     </div>
-  )
+  );
 }

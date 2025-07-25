@@ -1,27 +1,30 @@
-'use client'
-import { InformationCircleIcon } from '@heroicons/react/20/solid'
-import LoadingUI from './loading-ui'
-import ErrorUI from './error-ui'
-import { useShowAuthenticatedUser } from '@/hooks/users'
-import { authHeader, matchQueryStatus, onError } from '@/lib/utils'
-import { useResendEmailVerification } from '@/hooks/authentication'
-import toast from 'react-hot-toast'
+"use client";
+import { InformationCircleIcon } from "@heroicons/react/20/solid";
+import LoadingUI from "./loading-ui";
+import ErrorUI from "./error-ui";
+import { useShowAuthenticatedUser } from "@/hooks/users";
+import { authHeader, matchQueryStatus, onError } from "@/lib/utils";
+import { useResendEmailVerification } from "@/hooks/authentication";
+import toast from "react-hot-toast";
+import { useSession } from "@/hooks/session";
 
-export default function EmailNotVerifiedAlert({ token }: { token: string }) {
-  const authConfig = authHeader(token)
-  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig)
-  const resendEmailVerificationMutation = useResendEmailVerification(authConfig)
+export default function EmailNotVerifiedAlert() {
+  const { token } = useSession();
+  const authConfig = authHeader(token);
+  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig);
+  const resendEmailVerificationMutation =
+    useResendEmailVerification(authConfig);
 
   function handleResendEmailVerification() {
     resendEmailVerificationMutation.mutate(undefined, {
       onError,
       onSuccess: () => {
-        toast.success('Verification email sent successfully!')
+        toast.success("Verification email sent successfully!");
       },
-    })
+    });
   }
 
-  const isDisabled = resendEmailVerificationMutation.isPending || !token
+  const isDisabled = resendEmailVerificationMutation.isPending || !token;
 
   return matchQueryStatus(showAuthenticatedUserQuery, {
     Loading: <LoadingUI />,
@@ -29,7 +32,7 @@ export default function EmailNotVerifiedAlert({ token }: { token: string }) {
     Empty: <span></span>,
     Success: ({ data }) => {
       if (data.data.email_verified_at) {
-        return <span></span>
+        return <span></span>;
       }
       return (
         <div className="rounded-md bg-blue-50 p-4">
@@ -44,12 +47,12 @@ export default function EmailNotVerifiedAlert({ token }: { token: string }) {
               <p className="text-sm text-blue-700">
                 Your email address is not verified.
               </p>
-              <p className="mt-3 text-sm md:ml-6 md:mt-0">
+              <p className="mt-3 text-sm md:mt-0 md:ml-6">
                 <button
                   type="button"
                   onClick={handleResendEmailVerification}
                   disabled={isDisabled}
-                  className="whitespace-nowrap font-medium text-blue-700 hover:text-blue-600"
+                  className="font-medium whitespace-nowrap text-blue-700 hover:text-blue-600"
                 >
                   Send verification email
                   <span aria-hidden="true"> &rarr;</span>
@@ -58,7 +61,7 @@ export default function EmailNotVerifiedAlert({ token }: { token: string }) {
             </div>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

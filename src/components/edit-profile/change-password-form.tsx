@@ -1,25 +1,28 @@
-'use client'
-import { ChangePasswordBody, useChangePassword } from '@/hooks/authentication'
-import { authHeader, classNames, onError } from '@/lib/utils'
-import { changePasswordBody } from '@/schemas/authentication'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+"use client";
+import {
+  type ChangePasswordBody,
+  useChangePassword,
+} from "@/hooks/authentication";
+import { authHeader, classNames, onError } from "@/lib/utils";
+import { changePasswordBody } from "@/schemas/authentication";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 type ChangePasswordFormProps = {
-  token: string
-}
+  token: string;
+};
 
 export default function ChangePasswordForm({ token }: ChangePasswordFormProps) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const { handleSubmit, register, formState, reset } =
     useForm<ChangePasswordBody>({
       resolver: zodResolver(changePasswordBody),
-    })
+    });
 
-  const changePasswordMutation = useChangePassword(authHeader(token))
+  const changePasswordMutation = useChangePassword(authHeader(token));
 
   function onSubmit(data: ChangePasswordBody) {
     changePasswordMutation.mutate(
@@ -29,19 +32,19 @@ export default function ChangePasswordForm({ token }: ChangePasswordFormProps) {
       {
         onError,
         onSuccess: () => {
-          toast.success('Password updated successfully!')
-          queryClient.invalidateQueries({ queryKey: ['/api/v1/users/me'] })
-          reset()
+          toast.success("Password updated successfully!");
+          queryClient.invalidateQueries({ queryKey: ["/api/v1/users/me"] });
+          reset();
         },
-      }
-    )
+      },
+    );
   }
 
   const isDisabled =
     formState.isSubmitting ||
     changePasswordMutation.isPending ||
     !token ||
-    !formState.isDirty
+    !formState.isDirty;
 
   return (
     <form
@@ -64,7 +67,7 @@ export default function ChangePasswordForm({ token }: ChangePasswordFormProps) {
               <input
                 type="password"
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                {...register('current_password')}
+                {...register("current_password")}
               />
             </div>
             {formState.errors.current_password && (
@@ -85,7 +88,7 @@ export default function ChangePasswordForm({ token }: ChangePasswordFormProps) {
               <input
                 type="password"
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                {...register('new_password')}
+                {...register("new_password")}
               />
             </div>
             {formState.errors.new_password && (
@@ -106,7 +109,7 @@ export default function ChangePasswordForm({ token }: ChangePasswordFormProps) {
               <input
                 type="password"
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                {...register('new_password_confirmation')}
+                {...register("new_password_confirmation")}
               />
             </div>
             {formState.errors.new_password_confirmation && (
@@ -122,13 +125,13 @@ export default function ChangePasswordForm({ token }: ChangePasswordFormProps) {
           type="submit"
           disabled={isDisabled}
           className={classNames(
-            'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
-            isDisabled ? 'cursor-not-allowed' : 'hover:bg-indigo-500'
+            "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+            isDisabled ? "cursor-not-allowed" : "hover:bg-indigo-500",
           )}
         >
           Save
         </button>
       </div>
     </form>
-  )
+  );
 }

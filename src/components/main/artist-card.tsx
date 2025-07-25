@@ -1,16 +1,16 @@
-import { fileUrl } from '@/lib/utils'
-import { CheckBadgeIcon } from '@heroicons/react/20/solid'
-import Image from 'next/image'
-import Link from 'next/link'
-import AvatarPlaceholder from '../avatar-placeholder'
+import { fileUrl } from "@/lib/utils";
+import { CheckBadgeIcon } from "@heroicons/react/20/solid";
+import Image from "next/image";
+import Link from "next/link";
+import AvatarPlaceholder from "../avatar-placeholder";
 
 type ArtistCardProps = {
-  fullName: string
-  country: string | undefined
-  username: string
-  profilePictureUrl: string | undefined
-  verified: boolean
-}
+  fullName: string;
+  country: string | undefined;
+  username: string;
+  profilePictureUrl: string | undefined;
+  verified: boolean;
+};
 
 export default function ArtistCard({
   fullName,
@@ -34,8 +34,8 @@ export default function ArtistCard({
           <AvatarPlaceholder size={12} />
         )}
         <div className="min-w-0 flex-auto">
-          <p className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-            {fullName}{' '}
+          <p className="inline-flex items-center gap-x-1 text-sm leading-6 font-semibold text-gray-900">
+            {fullName}{" "}
             {verified && <CheckBadgeIcon className="h-4 w-4 text-green-500" />}
           </p>
           <p className="mt-1 truncate text-xs leading-5 text-gray-500">
@@ -45,10 +45,10 @@ export default function ArtistCard({
       </div>
       <Link
         href={`/artists/${username}`}
-        className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
       >
         View
       </Link>
     </div>
-  )
+  );
 }

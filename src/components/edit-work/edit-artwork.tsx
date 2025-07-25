@@ -1,48 +1,48 @@
-'use client'
+"use client";
 
-import { useShowAuthenticatedUserArtwork } from '@/hooks/artworks'
-import { authHeader, classNames, fileUrl, matchQueryStatus } from '@/lib/utils'
-import { Tag } from '@/types/misc'
-import ErrorUI from '../error-ui'
-import FirstStep from './first-step'
-import FourthStep from './fourth-step'
-import SecondStep from './second-step'
-import ThirdStep from './third-step'
-import Link from 'next/link'
-import { useState } from 'react'
-import LoadingSpinner from '../loading-spinner'
+import { useShowAuthenticatedUserArtwork } from "@/hooks/artworks";
+import { authHeader, classNames, fileUrl, matchQueryStatus } from "@/lib/utils";
+import { type Tag } from "@/types/misc";
+import ErrorUI from "../error-ui";
+import FirstStep from "./first-step";
+import FourthStep from "./fourth-step";
+import SecondStep from "./second-step";
+import ThirdStep from "./third-step";
+import Link from "next/link";
+import { useState } from "react";
+import LoadingSpinner from "../loading-spinner";
 
 type EditArtworkProps = {
-  token: string
-  id: string
-}
+  token: string;
+  id: string;
+};
 
 export default function EditArtwork({ token, id }: EditArtworkProps) {
   const showAuthenticatedUserArtworkQuery = useShowAuthenticatedUserArtwork(
     id,
-    authHeader(token)
-  )
+    authHeader(token),
+  );
 
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(1);
 
   const handleNext = () => {
     if (step < 4) {
-      setStep(step + 1)
+      setStep(step + 1);
     }
-  }
+  };
 
   const handleBack = () => {
     if (step > 1) {
-      setStep(step - 1)
+      setStep(step - 1);
     }
-  }
+  };
 
   return matchQueryStatus(showAuthenticatedUserArtworkQuery, {
     Loading: <LoadingSpinner />,
     Errored: <ErrorUI />,
     Empty: <span></span>,
     Success: ({ data }) => {
-      const artworkData = data.data
+      const artworkData = data.data;
 
       const artwork = {
         id: artworkData.id,
@@ -51,7 +51,7 @@ export default function EditArtwork({ token, id }: EditArtworkProps) {
         status: artworkData.status,
         publishedAt: artworkData.created_at,
         mainPhotoUrl: fileUrl(artworkData.artwork_main_photo_path)!,
-        photos: artworkData.artwork_photos!.map((photo) => ({
+        photos: artworkData.artwork_photos.map((photo) => ({
           id: photo.id,
           path: fileUrl(photo.path)!,
         })),
@@ -59,44 +59,24 @@ export default function EditArtwork({ token, id }: EditArtworkProps) {
           id: tag.id,
           name: tag.name as Tag,
         })),
-      }
+      };
 
       const renderStep = () => {
         switch (step) {
           case 1:
-            return (
-              <FirstStep
-                token={token}
-                artwork={artwork}
-              />
-            )
+            return <FirstStep token={token} artwork={artwork} />;
           case 2:
-            return (
-              <SecondStep
-                token={token}
-                artwork={artwork}
-              />
-            )
+            return <SecondStep token={token} artwork={artwork} />;
           case 3:
-            return (
-              <ThirdStep
-                token={token}
-                artwork={artwork}
-              />
-            )
+            return <ThirdStep token={token} artwork={artwork} />;
           case 4:
-            return (
-              <FourthStep
-                token={token}
-                artwork={artwork}
-              />
-            )
+            return <FourthStep token={token} artwork={artwork} />;
           default:
-            return null
+            return null;
         }
-      }
+      };
 
-      if (artworkData.status !== 'draft') {
+      if (artworkData.status !== "draft") {
         return (
           <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
             <div className="text-center">
@@ -113,23 +93,23 @@ export default function EditArtwork({ token, id }: EditArtworkProps) {
               </div>
             </div>
           </main>
-        )
+        );
       }
 
       return (
-        <div className="p-8 max-w-4xl mx-auto bg-gray-100 min-h-screen">
-          <h1 className="text-3xl font-bold text-center mb-8">Edit Artwork</h1>
+        <div className="mx-auto min-h-screen max-w-4xl bg-gray-100 p-8">
+          <h1 className="mb-8 text-center text-3xl font-bold">Edit Artwork</h1>
 
           {renderStep()}
 
-          <div className="flex justify-between mt-6">
+          <div className="mt-6 flex justify-between">
             <button
               onClick={handleBack}
               className={classNames(
-                'px-4 py-2 text-white rounded-md transition-colors',
+                "rounded-md px-4 py-2 text-white transition-colors",
                 step === 1
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-gray-500 hover:bg-gray-600'
+                  ? "cursor-not-allowed bg-gray-400"
+                  : "bg-gray-500 hover:bg-gray-600",
               )}
               disabled={step === 1} // Disable "Back" on the first step
             >
@@ -138,18 +118,18 @@ export default function EditArtwork({ token, id }: EditArtworkProps) {
             <button
               onClick={handleNext}
               className={classNames(
-                'px-4 py-2 text-white rounded-md transition-colors',
+                "rounded-md px-4 py-2 text-white transition-colors",
                 step < 4
-                  ? 'bg-indigo-500 hover:bg-indigo-600'
-                  : 'bg-gray-400 cursor-not-allowed'
+                  ? "bg-indigo-500 hover:bg-indigo-600"
+                  : "cursor-not-allowed bg-gray-400",
               )}
               disabled={step === 4} // Disable "Next" if the current step is not valid
             >
-              {step === 4 ? 'Finish' : 'Next'}
+              {step === 4 ? "Finish" : "Next"}
             </button>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

@@ -1,54 +1,54 @@
-'use client'
-import { useListUsers } from '@/hooks/users'
-import { matchQueryStatus } from '@/lib/utils'
+"use client";
+import { useListUsers } from "@/hooks/users";
+import { matchQueryStatus } from "@/lib/utils";
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
   TransitionChild,
-} from '@headlessui/react'
-import { ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import Pagination from '../pagination'
-import ArtistCard from './artist-card'
-import ArtistCategoryFilter from './artist-category-filter'
-import ArtistCountryFilter from './artist-country-filter'
-import SortArtists from './sort-artists'
-import ArtistsDisplaySkeleton from './artists-display-skeleton'
+} from "@headlessui/react";
+import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import EmptyUI from "../empty-ui";
+import ErrorUI from "../error-ui";
+import Pagination from "../pagination";
+import ArtistCard from "./artist-card";
+import ArtistCategoryFilter from "./artist-category-filter";
+import ArtistCountryFilter from "./artist-country-filter";
+import SortArtists from "./sort-artists";
+import ArtistsDisplaySkeleton from "./artists-display-skeleton";
 
 type ArtistsDisplayProps = {
-  token: string | undefined
-}
+  token: string | undefined;
+};
 
 export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
-  const [open, setOpen] = useState(false)
-  const searchParams = useSearchParams()
+  const [open, setOpen] = useState(false);
+  const searchParams = useSearchParams();
 
-  const page = searchParams.get('page')
-  const artistSort = searchParams.get('artistSort')
-  const category = searchParams.get('category')
-  const country = searchParams.get('country')
-  const searchQuery = searchParams.get('searchQuery')
+  const page = searchParams.get("page");
+  const artistSort = searchParams.get("artistSort");
+  const category = searchParams.get("category");
+  const country = searchParams.get("country");
+  const searchQuery = searchParams.get("searchQuery");
 
   const queryParams: Record<string, string> = {
-    include: 'publishedArtworks',
-    ...(country && { 'filter[country]': country }),
-    ...(category && { 'filter[tag]': category }),
+    include: "publishedArtworks",
+    ...(country && { "filter[country]": country }),
+    ...(category && { "filter[tag]": category }),
     ...(artistSort && { sort: artistSort }),
     ...(page && { page }),
     ...(searchQuery && { searchQuery }),
-  }
+  };
 
-  const listUsersQuery = useListUsers(queryParams)
+  const listUsersQuery = useListUsers(queryParams);
 
   return matchQueryStatus(listUsersQuery, {
     Loading: <ArtistsDisplaySkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'No artist was found'} />,
+    Empty: <EmptyUI message={"No artist was found"} />,
     Success: ({ data }) => {
       const artists = data.data.map((artist) => ({
         id: artist.id,
@@ -61,18 +61,14 @@ export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
           id: artwork.id,
           mainPhotoUrl: artwork.artwork_main_photo_path,
         })),
-      }))
+      }));
 
-      const links = data.links
-      const meta = data.meta
+      const links = data.links;
+      const meta = data.meta;
 
       return (
         <>
-          <Dialog
-            open={open}
-            onClose={setOpen}
-            className="relative z-10"
-          >
+          <Dialog open={open} onClose={setOpen} className="relative z-10">
             <DialogBackdrop
               transition
               className="fixed inset-0 bg-gray-500/75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
@@ -86,18 +82,15 @@ export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
                     className="pointer-events-auto relative w-screen max-w-xs transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
                   >
                     <TransitionChild>
-                      <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 duration-500 ease-in-out data-[closed]:opacity-0 sm:-ml-10 sm:pr-4">
+                      <div className="absolute top-0 left-0 -ml-8 flex pt-4 pr-2 duration-500 ease-in-out data-[closed]:opacity-0 sm:-ml-10 sm:pr-4">
                         <button
                           type="button"
                           onClick={() => setOpen(false)}
-                          className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                          className="relative rounded-md text-gray-300 hover:text-white focus:ring-2 focus:ring-white focus:outline-none"
                         >
                           <span className="absolute -inset-2.5" />
                           <span className="sr-only">Close panel</span>
-                          <XMarkIcon
-                            aria-hidden="true"
-                            className="size-6"
-                          />
+                          <XMarkIcon aria-hidden="true" className="size-6" />
                         </button>
                       </div>
                     </TransitionChild>
@@ -108,7 +101,7 @@ export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
                         </DialogTitle>
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                        <div className=" space-y-4">
+                        <div className="space-y-4">
                           <SortArtists />
 
                           <div>
@@ -150,29 +143,23 @@ export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
               </div>
 
               <div className="lg:col-span-3">
-                <ul className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2 mb-8">
+                <ul className="mb-8 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
                   {artists.map((artist) => (
                     <li key={artist.id}>
-                      <ArtistCard
-                        {...artist}
-                        token={token}
-                      />
+                      <ArtistCard {...artist} token={token} />
                     </li>
                   ))}
                 </ul>
                 {meta.total > 10 && (
                   <div className="pt-8">
-                    <Pagination
-                      links={links}
-                      meta={meta}
-                    />
+                    <Pagination links={links} meta={meta} />
                   </div>
                 )}
               </div>
             </div>
           </div>
         </>
-      )
+      );
     },
-  })
+  });
 }

@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { classNames } from '@/lib/utils'
+import { classNames } from "@/lib/utils";
 import {
   BellIcon,
   BookmarkIcon,
@@ -12,53 +12,53 @@ import {
   UserCircleIcon,
   UserPlusIcon,
   UsersIcon,
-} from '@heroicons/react/24/outline'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const secondaryNavigation = [
   {
-    name: 'Edit Profile',
-    href: '/edit-profile',
+    name: "Edit Profile",
+    href: "/edit-profile",
     icon: UserCircleIcon,
   },
-  { name: 'Notifications', href: '/notifications', icon: BellIcon },
+  { name: "Notifications", href: "/notifications", icon: BellIcon },
   {
-    name: 'Change Photo',
-    href: '/change-photo',
+    name: "Change Photo",
+    href: "/change-photo",
     icon: CameraIcon,
   },
   {
-    name: 'Submit Work',
-    href: '/submit-work',
+    name: "Submit Work",
+    href: "/submit-work",
     icon: PlusCircleIcon,
   },
   {
-    name: 'My Artworks',
-    href: '/my-artworks',
+    name: "My Artworks",
+    href: "/my-artworks",
     icon: FolderIcon,
   },
-  { name: 'Favorites', href: '/favorites', icon: BookmarkIcon },
-  { name: 'Followers', href: '/followers', icon: UsersIcon },
-  { name: 'Following', href: '/following', icon: UserPlusIcon },
+  { name: "Favorites", href: "/favorites", icon: BookmarkIcon },
+  { name: "Followers", href: "/followers", icon: UsersIcon },
+  { name: "Following", href: "/following", icon: UserPlusIcon },
   {
-    name: 'Become Verified',
-    href: '/become-verified',
+    name: "Become Verified",
+    href: "/become-verified",
     icon: CheckBadgeIcon,
   },
   {
-    name: 'Delete Account',
-    href: '/delete-account',
+    name: "Delete Account",
+    href: "/delete-account",
     icon: TrashIcon,
   },
-]
+];
 
 export default function Layout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-  const pathname = usePathname()
+  const pathname = usePathname();
   return (
     <div className="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8">
       <h1 className="sr-only">General Settings</h1>
@@ -72,18 +72,18 @@ export default function Layout({
                   href={item.href}
                   className={classNames(
                     item.href === pathname
-                      ? 'bg-gray-50 text-indigo-600'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
-                    'group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm font-semibold leading-6'
+                      ? "bg-gray-50 text-indigo-600"
+                      : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
+                    "group flex gap-x-3 rounded-md py-2 pr-3 pl-2 text-sm leading-6 font-semibold",
                   )}
                 >
                   <item.icon
                     aria-hidden="true"
                     className={classNames(
                       item.href === pathname
-                        ? 'text-indigo-600'
-                        : 'text-gray-400 group-hover:text-indigo-600',
-                      'h-6 w-6 shrink-0'
+                        ? "text-indigo-600"
+                        : "text-gray-400 group-hover:text-indigo-600",
+                      "h-6 w-6 shrink-0",
                     )}
                   />
                   {item.name}
@@ -100,5 +100,5 @@ export default function Layout({
         </div>
       </main>
     </div>
-  )
+  );
 }

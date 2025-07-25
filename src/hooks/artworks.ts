@@ -11,87 +11,90 @@ import type {
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
-} from '@tanstack/react-query'
-import { useMutation, useQuery } from '@tanstack/react-query'
+} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-export type CreateArtwork200 = ApiResource<ArtworkModel>
-export type CreateArtwork401 = UnauthenticatedApiResponse
-export type CreateArtwork403 = UnauthorizedApiResponse
-export type CreateArtworkBody = z.infer<typeof createArtworkBody>
+export type CreateArtwork200 = ApiResource<ArtworkModel>;
+export type CreateArtwork401 = UnauthenticatedApiResponse;
+export type CreateArtwork403 = UnauthorizedApiResponse;
+export type CreateArtworkBody = z.infer<typeof createArtworkBody>;
 
-export type DeleteArtwork200 = NoContentApiResponse
-export type DeleteArtwork401 = UnauthenticatedApiResponse
-export type DeleteArtwork403 = UnauthorizedApiResponse
-export type DeleteArtwork404 = NotFoundApiResponse
+export type DeleteArtwork200 = NoContentApiResponse;
+export type DeleteArtwork401 = UnauthenticatedApiResponse;
+export type DeleteArtwork403 = UnauthorizedApiResponse;
+export type DeleteArtwork404 = NotFoundApiResponse;
 
 export type ListAuthenticatedUserArtworks200 =
-  PaginatedApiResponse<ArtworkModel>
-export type ListAuthenticatedUserArtworks401 = UnauthenticatedApiResponse
+  PaginatedApiResponse<ArtworkModel>;
+export type ListAuthenticatedUserArtworks401 = UnauthenticatedApiResponse;
 export type ListAuthenticatedUserArtworksParams = {
-  'filter[status]'?: 'draft' | 'published'
-  page?: number
-  perPage?: number
-}
+  "filter[status]"?: "draft" | "published";
+  page?: number;
+  perPage?: number;
+};
 
 export type ListPublishedArtworks200 = PaginatedApiResponse<
   Omit<
     Artwork,
-    'artwork_photos' | 'artwork_comments' | 'artwork_likes' | 'tags'
+    "artwork_photos" | "artwork_comments" | "artwork_likes" | "tags"
   >
->
+>;
 export type ListPublishedArtworksParams = {
-  'filter[tag]'?: string
-  searchQuery?: string
-  sort?: 'rising' | 'new' | 'popular' | 'trending'
-  page?: number
-  perPage?: number
-}
+  "filter[tag]"?: string;
+  searchQuery?: string;
+  sort?: "rising" | "new" | "popular" | "trending";
+  page?: number;
+  perPage?: number;
+};
 
-export type ListUserPublishedArtworks200 = PaginatedApiResponse<ArtworkModel>
-export type ListUserPublishedArtworks404 = NotFoundApiResponse
+export type ListUserPublishedArtworks200 = PaginatedApiResponse<ArtworkModel>;
+export type ListUserPublishedArtworks404 = NotFoundApiResponse;
 export type ListUserPublishedArtworksParams = {
-  'filter[tag]'?: Tag
-  sort?: 'rising' | 'new' | 'popular' | 'trending'
-  page?: number
-  perPage?: number
-}
+  "filter[tag]"?: Tag;
+  sort?: "rising" | "new" | "popular" | "trending";
+  page?: number;
+  perPage?: number;
+};
 
-export type PublishArtwork200 = ApiResource<Artwork>
-export type PublishArtwork401 = UnauthenticatedApiResponse
-export type PublishArtwork403 = UnauthorizedApiResponse
-export type PublishArtwork404 = NotFoundApiResponse
+export type PublishArtwork200 = ApiResource<Artwork>;
+export type PublishArtwork401 = UnauthenticatedApiResponse;
+export type PublishArtwork403 = UnauthorizedApiResponse;
+export type PublishArtwork404 = NotFoundApiResponse;
 
 export type ShowAuthenticatedUserArtwork200 = ApiResource<
-  Omit<Artwork, 'artwork_comments' | 'artwork_likes' | 'user'>
->
-export type ShowAuthenticatedUserArtwork401 = UnauthenticatedApiResponse
-export type ShowAuthenticatedUserArtwork404 = NotFoundApiResponse
+  Omit<Artwork, "artwork_comments" | "artwork_likes" | "user">
+>;
+export type ShowAuthenticatedUserArtwork401 = UnauthenticatedApiResponse;
+export type ShowAuthenticatedUserArtwork404 = NotFoundApiResponse;
 
-export type ShowPublishedArtwork200 = ApiResource<Artwork>
-export type ShowPublishedArtwork404 = NotFoundApiResponse
+export type ShowPublishedArtwork200 = ApiResource<Artwork>;
+export type ShowPublishedArtwork404 = NotFoundApiResponse;
 
-export type UpdateArtworkDraft200 = ApiResource<ArtworkModel>
-export type UpdateArtworkDraft401 = UnauthenticatedApiResponse
-export type UpdateArtworkDraft403 = UnauthorizedApiResponse
-export type UpdateArtworkDraft404 = NotFoundApiResponse
-export type UpdateArtworkDraftBody = z.infer<typeof updateArtworkDraftBody>
+export type UpdateArtworkDraft200 = ApiResource<ArtworkModel>;
+export type UpdateArtworkDraft401 = UnauthenticatedApiResponse;
+export type UpdateArtworkDraft403 = UnauthorizedApiResponse;
+export type UpdateArtworkDraft404 = NotFoundApiResponse;
+export type UpdateArtworkDraftBody = z.infer<typeof updateArtworkDraftBody>;
 
-import type { BodyType, ErrorType } from '@/lib/axios'
-import { customInstance } from '@/lib/axios'
-import { createArtworkBody, updateArtworkDraftBody } from '@/schemas/artworks'
+import type { BodyType, ErrorType } from "@/lib/axios";
+import { customInstance } from "@/lib/axios";
 import {
-  ApiResource,
-  NoContentApiResponse,
-  NotFoundApiResponse,
-  PaginatedApiResponse,
-  UnauthenticatedApiResponse,
-  UnauthorizedApiResponse,
-} from '@/types/api-responses'
-import { Tag } from '@/types/misc'
-import { Artwork, ArtworkModel } from '@/types/models/artwork'
-import { z } from 'zod'
+  type createArtworkBody,
+  type updateArtworkDraftBody,
+} from "@/schemas/artworks";
+import {
+  type ApiResource,
+  type NoContentApiResponse,
+  type NotFoundApiResponse,
+  type PaginatedApiResponse,
+  type UnauthenticatedApiResponse,
+  type UnauthorizedApiResponse,
+} from "@/types/api-responses";
+import { type Tag } from "@/types/misc";
+import { type Artwork, type ArtworkModel } from "@/types/models/artwork";
+import { type z } from "zod";
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
  * Retrieve a list of all published artworks
@@ -100,19 +103,19 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 export const listPublishedArtworks = (
   params?: ListPublishedArtworksParams,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ListPublishedArtworks200>(
-    { url: `/api/v1/artworks`, method: 'GET', params, signal },
-    options
-  )
-}
+    { url: `/api/v1/artworks`, method: "GET", params, signal },
+    options,
+  );
+};
 
 export const getListPublishedArtworksQueryKey = (
-  params?: ListPublishedArtworksParams
+  params?: ListPublishedArtworksParams,
 ) => {
-  return [`/api/v1/artworks`, ...(params ? [params] : [])] as const
-}
+  return [`/api/v1/artworks`, ...(params ? [params] : [])] as const;
+};
 
 export const getListPublishedArtworksQueryOptions = <
   TData = Awaited<ReturnType<typeof listPublishedArtworks>>,
@@ -126,32 +129,32 @@ export const getListPublishedArtworksQueryOptions = <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getListPublishedArtworksQueryKey(params)
+    queryOptions?.queryKey ?? getListPublishedArtworksQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof listPublishedArtworks>>
-  > = ({ signal }) => listPublishedArtworks(params, requestOptions, signal)
+  > = ({ signal }) => listPublishedArtworks(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listPublishedArtworks>>,
     TError,
     TData
   > & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
-}
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
 
 export type ListPublishedArtworksQueryResult = NonNullable<
   Awaited<ReturnType<typeof listPublishedArtworks>>
->
-export type ListPublishedArtworksQueryError = ErrorType<unknown>
+>;
+export type ListPublishedArtworksQueryError = ErrorType<unknown>;
 
 export function useListPublishedArtworks<
   TData = Awaited<ReturnType<typeof listPublishedArtworks>>,
@@ -172,14 +175,14 @@ export function useListPublishedArtworks<
           TError,
           Awaited<ReturnType<typeof listPublishedArtworks>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListPublishedArtworks<
   TData = Awaited<ReturnType<typeof listPublishedArtworks>>,
   TError = ErrorType<unknown>,
@@ -199,14 +202,14 @@ export function useListPublishedArtworks<
           TError,
           Awaited<ReturnType<typeof listPublishedArtworks>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListPublishedArtworks<
   TData = Awaited<ReturnType<typeof listPublishedArtworks>>,
   TError = ErrorType<unknown>,
@@ -219,13 +222,13 @@ export function useListPublishedArtworks<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List Published Artworks
  */
@@ -242,23 +245,23 @@ export function useListPublishedArtworks<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getListPublishedArtworksQueryOptions(params, options)
+  const queryOptions = getListPublishedArtworksQueryOptions(params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -277,16 +280,16 @@ export const prefetchListPublishedArtworks = async <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
-  const queryOptions = getListPublishedArtworksQueryOptions(params, options)
+  const queryOptions = getListPublishedArtworksQueryOptions(params, options);
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};
 
 /**
  * Create a new artwork
@@ -295,30 +298,30 @@ export const prefetchListPublishedArtworks = async <
 export const createArtwork = (
   createArtworkBody: BodyType<CreateArtworkBody>,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
-  const formData = new FormData()
-  formData.append('title', createArtworkBody.title)
-  formData.append('description', createArtworkBody.description)
+  const formData = new FormData();
+  formData.append("title", createArtworkBody.title);
+  formData.append("description", createArtworkBody.description);
   createArtworkBody.tags.forEach((value, index) =>
-    formData.append(`tags[${index}]`, value)
-  )
+    formData.append(`tags[${index}]`, value),
+  );
   createArtworkBody.photos.forEach((value, index) => {
-    formData.append(`photos[${index}][file]`, value.file)
-    formData.append(`photos[${index}][is_main]`, value.is_main ? '1' : '0')
-  })
+    formData.append(`photos[${index}][file]`, value.file);
+    formData.append(`photos[${index}][is_main]`, value.is_main ? "1" : "0");
+  });
 
   return customInstance<CreateArtwork200>(
     {
       url: `/api/v1/artworks`,
-      method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data' },
+      method: "POST",
+      headers: { "Content-Type": "multipart/form-data" },
       data: formData,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getCreateArtworkMutationOptions = <
   TError = ErrorType<CreateArtwork401 | CreateArtwork403>,
@@ -329,42 +332,42 @@ export const getCreateArtworkMutationOptions = <
     TError,
     { data: BodyType<CreateArtworkBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof createArtwork>>,
   TError,
   { data: BodyType<CreateArtworkBody> },
   TContext
 > => {
-  const mutationKey = ['createArtwork']
+  const mutationKey = ["createArtwork"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof createArtwork>>,
     { data: BodyType<CreateArtworkBody> }
   > = (props) => {
-    const { data } = props ?? {}
+    const { data } = props ?? {};
 
-    return createArtwork(data, requestOptions)
-  }
+    return createArtwork(data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type CreateArtworkMutationResult = NonNullable<
   Awaited<ReturnType<typeof createArtwork>>
->
-export type CreateArtworkMutationBody = BodyType<CreateArtworkBody>
+>;
+export type CreateArtworkMutationBody = BodyType<CreateArtworkBody>;
 export type CreateArtworkMutationError = ErrorType<
   CreateArtwork401 | CreateArtwork403
->
+>;
 
 /**
  * @summary Create Artwork
@@ -379,20 +382,20 @@ export const useCreateArtwork = <
       TError,
       { data: BodyType<CreateArtworkBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof createArtwork>>,
   TError,
   { data: BodyType<CreateArtworkBody> },
   TContext
 > => {
-  const mutationOptions = getCreateArtworkMutationOptions(options)
+  const mutationOptions = getCreateArtworkMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Retrieve a single published artwork by id
  * @summary Show Published Artwork
@@ -400,17 +403,17 @@ export const useCreateArtwork = <
 export const showPublishedArtwork = (
   artworkId: string,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ShowPublishedArtwork200>(
-    { url: `/api/v1/artworks/${artworkId}`, method: 'GET', signal },
-    options
-  )
-}
+    { url: `/api/v1/artworks/${artworkId}`, method: "GET", signal },
+    options,
+  );
+};
 
 export const getShowPublishedArtworkQueryKey = (artworkId: string) => {
-  return [`/api/v1/artworks/${artworkId}`] as const
-}
+  return [`/api/v1/artworks/${artworkId}`] as const;
+};
 
 export const getShowPublishedArtworkQueryOptions = <
   TData = Awaited<ReturnType<typeof showPublishedArtwork>>,
@@ -424,18 +427,18 @@ export const getShowPublishedArtworkQueryOptions = <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getShowPublishedArtworkQueryKey(artworkId)
+    queryOptions?.queryKey ?? getShowPublishedArtworkQueryKey(artworkId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof showPublishedArtwork>>
-  > = ({ signal }) => showPublishedArtwork(artworkId, requestOptions, signal)
+  > = ({ signal }) => showPublishedArtwork(artworkId, requestOptions, signal);
 
   return {
     queryKey,
@@ -446,13 +449,13 @@ export const getShowPublishedArtworkQueryOptions = <
     Awaited<ReturnType<typeof showPublishedArtwork>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
 export type ShowPublishedArtworkQueryResult = NonNullable<
   Awaited<ReturnType<typeof showPublishedArtwork>>
->
-export type ShowPublishedArtworkQueryError = ErrorType<ShowPublishedArtwork404>
+>;
+export type ShowPublishedArtworkQueryError = ErrorType<ShowPublishedArtwork404>;
 
 export function useShowPublishedArtwork<
   TData = Awaited<ReturnType<typeof showPublishedArtwork>>,
@@ -473,14 +476,14 @@ export function useShowPublishedArtwork<
           TError,
           Awaited<ReturnType<typeof showPublishedArtwork>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useShowPublishedArtwork<
   TData = Awaited<ReturnType<typeof showPublishedArtwork>>,
   TError = ErrorType<ShowPublishedArtwork404>,
@@ -500,14 +503,14 @@ export function useShowPublishedArtwork<
           TError,
           Awaited<ReturnType<typeof showPublishedArtwork>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useShowPublishedArtwork<
   TData = Awaited<ReturnType<typeof showPublishedArtwork>>,
   TError = ErrorType<ShowPublishedArtwork404>,
@@ -520,13 +523,13 @@ export function useShowPublishedArtwork<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Show Published Artwork
  */
@@ -543,23 +546,23 @@ export function useShowPublishedArtwork<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getShowPublishedArtworkQueryOptions(artworkId, options)
+  const queryOptions = getShowPublishedArtworkQueryOptions(artworkId, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -578,16 +581,16 @@ export const prefetchShowPublishedArtwork = async <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
-  const queryOptions = getShowPublishedArtworkQueryOptions(artworkId, options)
+  const queryOptions = getShowPublishedArtworkQueryOptions(artworkId, options);
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};
 
 /**
  * Update an artwork draft
@@ -596,18 +599,18 @@ export const prefetchShowPublishedArtwork = async <
 export const updateArtworkDraft = (
   artworkId: string,
   updateArtworkDraftBody?: BodyType<UpdateArtworkDraftBody>,
-  options?: SecondParameter<typeof customInstance>
+  options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<UpdateArtworkDraft200>(
     {
       url: `/api/v1/artworks/${artworkId}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       data: updateArtworkDraftBody,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getUpdateArtworkDraftMutationOptions = <
   TError = ErrorType<
@@ -620,42 +623,42 @@ export const getUpdateArtworkDraftMutationOptions = <
     TError,
     { artworkId: string; data: BodyType<UpdateArtworkDraftBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof updateArtworkDraft>>,
   TError,
   { artworkId: string; data: BodyType<UpdateArtworkDraftBody> },
   TContext
 > => {
-  const mutationKey = ['updateArtworkDraft']
+  const mutationKey = ["updateArtworkDraft"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof updateArtworkDraft>>,
     { artworkId: string; data: BodyType<UpdateArtworkDraftBody> }
   > = (props) => {
-    const { artworkId, data } = props ?? {}
+    const { artworkId, data } = props ?? {};
 
-    return updateArtworkDraft(artworkId, data, requestOptions)
-  }
+    return updateArtworkDraft(artworkId, data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type UpdateArtworkDraftMutationResult = NonNullable<
   Awaited<ReturnType<typeof updateArtworkDraft>>
->
-export type UpdateArtworkDraftMutationBody = BodyType<UpdateArtworkDraftBody>
+>;
+export type UpdateArtworkDraftMutationBody = BodyType<UpdateArtworkDraftBody>;
 export type UpdateArtworkDraftMutationError = ErrorType<
   UpdateArtworkDraft401 | UpdateArtworkDraft403 | UpdateArtworkDraft404
->
+>;
 
 /**
  * @summary Update Artwork Draft
@@ -672,33 +675,33 @@ export const useUpdateArtworkDraft = <
       TError,
       { artworkId: string; data: BodyType<UpdateArtworkDraftBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof updateArtworkDraft>>,
   TError,
   { artworkId: string; data: BodyType<UpdateArtworkDraftBody> },
   TContext
 > => {
-  const mutationOptions = getUpdateArtworkDraftMutationOptions(options)
+  const mutationOptions = getUpdateArtworkDraftMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Delete an artwork
  * @summary Delete Artwork
  */
 export const deleteArtwork = (
   artworkId: string,
-  options?: SecondParameter<typeof customInstance>
+  options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<DeleteArtwork200>(
-    { url: `/api/v1/artworks/${artworkId}`, method: 'DELETE' },
-    options
-  )
-}
+    { url: `/api/v1/artworks/${artworkId}`, method: "DELETE" },
+    options,
+  );
+};
 
 export const getDeleteArtworkMutationOptions = <
   TError = ErrorType<DeleteArtwork401 | DeleteArtwork403 | DeleteArtwork404>,
@@ -709,42 +712,42 @@ export const getDeleteArtworkMutationOptions = <
     TError,
     { artworkId: string },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof deleteArtwork>>,
   TError,
   { artworkId: string },
   TContext
 > => {
-  const mutationKey = ['deleteArtwork']
+  const mutationKey = ["deleteArtwork"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof deleteArtwork>>,
     { artworkId: string }
   > = (props) => {
-    const { artworkId } = props ?? {}
+    const { artworkId } = props ?? {};
 
-    return deleteArtwork(artworkId, requestOptions)
-  }
+    return deleteArtwork(artworkId, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type DeleteArtworkMutationResult = NonNullable<
   Awaited<ReturnType<typeof deleteArtwork>>
->
+>;
 
 export type DeleteArtworkMutationError = ErrorType<
   DeleteArtwork401 | DeleteArtwork403 | DeleteArtwork404
->
+>;
 
 /**
  * @summary Delete Artwork
@@ -759,20 +762,20 @@ export const useDeleteArtwork = <
       TError,
       { artworkId: string },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof deleteArtwork>>,
   TError,
   { artworkId: string },
   TContext
 > => {
-  const mutationOptions = getDeleteArtworkMutationOptions(options)
+  const mutationOptions = getDeleteArtworkMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Retrieve a list of artworks published or drafts by the currently authenticated user
  * @summary List Authenticated User Artworks
@@ -780,19 +783,19 @@ export const useDeleteArtwork = <
 export const listAuthenticatedUserArtworks = (
   params?: ListAuthenticatedUserArtworksParams,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ListAuthenticatedUserArtworks200>(
-    { url: `/api/v1/users/me/artworks`, method: 'GET', params, signal },
-    options
-  )
-}
+    { url: `/api/v1/users/me/artworks`, method: "GET", params, signal },
+    options,
+  );
+};
 
 export const getListAuthenticatedUserArtworksQueryKey = (
-  params?: ListAuthenticatedUserArtworksParams
+  params?: ListAuthenticatedUserArtworksParams,
 ) => {
-  return [`/api/v1/users/me/artworks`, ...(params ? [params] : [])] as const
-}
+  return [`/api/v1/users/me/artworks`, ...(params ? [params] : [])] as const;
+};
 
 export const getListAuthenticatedUserArtworksQueryOptions = <
   TData = Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>,
@@ -806,34 +809,34 @@ export const getListAuthenticatedUserArtworksQueryOptions = <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getListAuthenticatedUserArtworksQueryKey(params)
+    queryOptions?.queryKey ?? getListAuthenticatedUserArtworksQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>
   > = ({ signal }) =>
-    listAuthenticatedUserArtworks(params, requestOptions, signal)
+    listAuthenticatedUserArtworks(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>,
     TError,
     TData
   > & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
-}
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
 
 export type ListAuthenticatedUserArtworksQueryResult = NonNullable<
   Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>
->
+>;
 export type ListAuthenticatedUserArtworksQueryError =
-  ErrorType<ListAuthenticatedUserArtworks401>
+  ErrorType<ListAuthenticatedUserArtworks401>;
 
 export function useListAuthenticatedUserArtworks<
   TData = Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>,
@@ -854,14 +857,14 @@ export function useListAuthenticatedUserArtworks<
           TError,
           Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListAuthenticatedUserArtworks<
   TData = Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>,
   TError = ErrorType<ListAuthenticatedUserArtworks401>,
@@ -881,14 +884,14 @@ export function useListAuthenticatedUserArtworks<
           TError,
           Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListAuthenticatedUserArtworks<
   TData = Awaited<ReturnType<typeof listAuthenticatedUserArtworks>>,
   TError = ErrorType<ListAuthenticatedUserArtworks401>,
@@ -901,13 +904,13 @@ export function useListAuthenticatedUserArtworks<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List Authenticated User Artworks
  */
@@ -924,26 +927,26 @@ export function useListAuthenticatedUserArtworks<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getListAuthenticatedUserArtworksQueryOptions(
     params,
-    options
-  )
+    options,
+  );
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -962,19 +965,19 @@ export const prefetchListAuthenticatedUserArtworks = async <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
   const queryOptions = getListAuthenticatedUserArtworksQueryOptions(
     params,
-    options
-  )
+    options,
+  );
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};
 
 /**
  * Retrieve a single artwork published or draft by the currently authenticated user
@@ -983,17 +986,17 @@ export const prefetchListAuthenticatedUserArtworks = async <
 export const showAuthenticatedUserArtwork = (
   artworkId: string,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ShowAuthenticatedUserArtwork200>(
-    { url: `/api/v1/users/me/artworks/${artworkId}`, method: 'GET', signal },
-    options
-  )
-}
+    { url: `/api/v1/users/me/artworks/${artworkId}`, method: "GET", signal },
+    options,
+  );
+};
 
 export const getShowAuthenticatedUserArtworkQueryKey = (artworkId: string) => {
-  return [`/api/v1/users/me/artworks/${artworkId}`] as const
-}
+  return [`/api/v1/users/me/artworks/${artworkId}`] as const;
+};
 
 export const getShowAuthenticatedUserArtworkQueryOptions = <
   TData = Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
@@ -1009,19 +1012,20 @@ export const getShowAuthenticatedUserArtworkQueryOptions = <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getShowAuthenticatedUserArtworkQueryKey(artworkId)
+    queryOptions?.queryKey ??
+    getShowAuthenticatedUserArtworkQueryKey(artworkId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>
   > = ({ signal }) =>
-    showAuthenticatedUserArtwork(artworkId, requestOptions, signal)
+    showAuthenticatedUserArtwork(artworkId, requestOptions, signal);
 
   return {
     queryKey,
@@ -1032,15 +1036,15 @@ export const getShowAuthenticatedUserArtworkQueryOptions = <
     Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
 export type ShowAuthenticatedUserArtworkQueryResult = NonNullable<
   Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>
->
+>;
 export type ShowAuthenticatedUserArtworkQueryError = ErrorType<
   ShowAuthenticatedUserArtwork401 | ShowAuthenticatedUserArtwork404
->
+>;
 
 export function useShowAuthenticatedUserArtwork<
   TData = Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
@@ -1063,14 +1067,14 @@ export function useShowAuthenticatedUserArtwork<
           TError,
           Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useShowAuthenticatedUserArtwork<
   TData = Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
   TError = ErrorType<
@@ -1092,14 +1096,14 @@ export function useShowAuthenticatedUserArtwork<
           TError,
           Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useShowAuthenticatedUserArtwork<
   TData = Awaited<ReturnType<typeof showAuthenticatedUserArtwork>>,
   TError = ErrorType<
@@ -1114,13 +1118,13 @@ export function useShowAuthenticatedUserArtwork<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Show Authenticated User Artwork
  */
@@ -1139,26 +1143,26 @@ export function useShowAuthenticatedUserArtwork<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getShowAuthenticatedUserArtworkQueryOptions(
     artworkId,
-    options
-  )
+    options,
+  );
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -1179,19 +1183,19 @@ export const prefetchShowAuthenticatedUserArtwork = async <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
   const queryOptions = getShowAuthenticatedUserArtworkQueryOptions(
     artworkId,
-    options
-  )
+    options,
+  );
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};
 
 /**
  * Retrieve a list of artworks published by a user
@@ -1201,28 +1205,28 @@ export const listUserPublishedArtworks = (
   username: string,
   params?: ListUserPublishedArtworksParams,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ListUserPublishedArtworks200>(
     {
       url: `/api/v1/users/${username}/artworks`,
-      method: 'GET',
+      method: "GET",
       params,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getListUserPublishedArtworksQueryKey = (
   username: string,
-  params?: ListUserPublishedArtworksParams
+  params?: ListUserPublishedArtworksParams,
 ) => {
   return [
     `/api/v1/users/${username}/artworks`,
     ...(params ? [params] : []),
-  ] as const
-}
+  ] as const;
+};
 
 export const getListUserPublishedArtworksQueryOptions = <
   TData = Awaited<ReturnType<typeof listUserPublishedArtworks>>,
@@ -1237,20 +1241,20 @@ export const getListUserPublishedArtworksQueryOptions = <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ??
-    getListUserPublishedArtworksQueryKey(username, params)
+    getListUserPublishedArtworksQueryKey(username, params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof listUserPublishedArtworks>>
   > = ({ signal }) =>
-    listUserPublishedArtworks(username, params, requestOptions, signal)
+    listUserPublishedArtworks(username, params, requestOptions, signal);
 
   return {
     queryKey,
@@ -1261,14 +1265,14 @@ export const getListUserPublishedArtworksQueryOptions = <
     Awaited<ReturnType<typeof listUserPublishedArtworks>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
 export type ListUserPublishedArtworksQueryResult = NonNullable<
   Awaited<ReturnType<typeof listUserPublishedArtworks>>
->
+>;
 export type ListUserPublishedArtworksQueryError =
-  ErrorType<ListUserPublishedArtworks404>
+  ErrorType<ListUserPublishedArtworks404>;
 
 export function useListUserPublishedArtworks<
   TData = Awaited<ReturnType<typeof listUserPublishedArtworks>>,
@@ -1290,14 +1294,14 @@ export function useListUserPublishedArtworks<
           TError,
           Awaited<ReturnType<typeof listUserPublishedArtworks>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListUserPublishedArtworks<
   TData = Awaited<ReturnType<typeof listUserPublishedArtworks>>,
   TError = ErrorType<ListUserPublishedArtworks404>,
@@ -1318,14 +1322,14 @@ export function useListUserPublishedArtworks<
           TError,
           Awaited<ReturnType<typeof listUserPublishedArtworks>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListUserPublishedArtworks<
   TData = Awaited<ReturnType<typeof listUserPublishedArtworks>>,
   TError = ErrorType<ListUserPublishedArtworks404>,
@@ -1339,13 +1343,13 @@ export function useListUserPublishedArtworks<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List User Published Artworks
  */
@@ -1363,27 +1367,27 @@ export function useListUserPublishedArtworks<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getListUserPublishedArtworksQueryOptions(
     username,
     params,
-    options
-  )
+    options,
+  );
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -1403,20 +1407,20 @@ export const prefetchListUserPublishedArtworks = async <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
   const queryOptions = getListUserPublishedArtworksQueryOptions(
     username,
     params,
-    options
-  )
+    options,
+  );
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};
 
 /**
  * Publish an artwork draft
@@ -1424,13 +1428,13 @@ export const prefetchListUserPublishedArtworks = async <
  */
 export const publishArtwork = (
   artworkId: string,
-  options?: SecondParameter<typeof customInstance>
+  options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<PublishArtwork200>(
-    { url: `/api/v1/artworks/${artworkId}/publish`, method: 'PUT' },
-    options
-  )
-}
+    { url: `/api/v1/artworks/${artworkId}/publish`, method: "PUT" },
+    options,
+  );
+};
 
 export const getPublishArtworkMutationOptions = <
   TError = ErrorType<PublishArtwork401 | PublishArtwork403 | PublishArtwork404>,
@@ -1441,42 +1445,42 @@ export const getPublishArtworkMutationOptions = <
     TError,
     { artworkId: string },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof publishArtwork>>,
   TError,
   { artworkId: string },
   TContext
 > => {
-  const mutationKey = ['publishArtwork']
+  const mutationKey = ["publishArtwork"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof publishArtwork>>,
     { artworkId: string }
   > = (props) => {
-    const { artworkId } = props ?? {}
+    const { artworkId } = props ?? {};
 
-    return publishArtwork(artworkId, requestOptions)
-  }
+    return publishArtwork(artworkId, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type PublishArtworkMutationResult = NonNullable<
   Awaited<ReturnType<typeof publishArtwork>>
->
+>;
 
 export type PublishArtworkMutationError = ErrorType<
   PublishArtwork401 | PublishArtwork403 | PublishArtwork404
->
+>;
 
 /**
  * @summary Publish Artwork
@@ -1491,17 +1495,17 @@ export const usePublishArtwork = <
       TError,
       { artworkId: string },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof publishArtwork>>,
   TError,
   { artworkId: string },
   TContext
 > => {
-  const mutationOptions = getPublishArtworkMutationOptions(options)
+  const mutationOptions = getPublishArtworkMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};

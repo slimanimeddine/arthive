@@ -1,26 +1,31 @@
-import 'server-only'
+import "server-only";
 
-import { getSession } from '@/actions/session'
-import { type Session } from '@/types/misc'
-import { redirect } from 'next/navigation'
-import { cache } from 'react'
+import { getSession } from "@/actions/session";
+import { redirect } from "next/navigation";
+import { cache } from "react";
 
 export const verifyAuth = cache(async () => {
-  const session = (await getSession()) as Session
-
+  const session = await getSession();
+  if (!session) {
+    redirect("/sign-in");
+  }
   if (!(session?.id && session?.token)) {
-    redirect('/sign-in')
+    redirect("/sign-in");
   }
 
-  return { isAuth: true, id: session.id, token: session.token }
-})
+  return { isAuth: true, id: session.id, token: session.token };
+});
 
 export const getAuth = cache(async () => {
-  const session = (await getSession()) as Session
+  const session = await getSession();
 
-  if (!(session?.id && session?.token)) {
-    return { isAuth: false, id: undefined, token: undefined }
+  if (!session) {
+    return { isAuth: false, id: undefined, token: undefined };
   }
 
-  return { isAuth: true, id: session.id, token: session.token }
-})
+  if (!(session?.id && session?.token)) {
+    return { isAuth: false, id: undefined, token: undefined };
+  }
+
+  return { isAuth: true, id: session.id, token: session.token };
+});

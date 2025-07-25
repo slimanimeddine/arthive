@@ -1,20 +1,20 @@
-'use client'
-import { SignUpBody, useSignUp } from '@/hooks/authentication'
-import { onError } from '@/lib/utils'
-import { signUpBody } from '@/schemas/authentication'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+"use client";
+import { type SignUpBody, useSignUp } from "@/hooks/authentication";
+import { onError } from "@/lib/utils";
+import { signUpBody } from "@/schemas/authentication";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export default function SignUpForm() {
   const { handleSubmit, register, formState, reset } = useForm<SignUpBody>({
     resolver: zodResolver(signUpBody),
-  })
+  });
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const signUpMutation = useSignUp()
+  const signUpMutation = useSignUp();
 
   function onSubmit(data: SignUpBody) {
     signUpMutation.mutate(
@@ -24,20 +24,17 @@ export default function SignUpForm() {
       {
         onError,
         onSuccess: () => {
-          toast.success('Account created successfully!')
-          reset()
-          router.back()
+          toast.success("Account created successfully!");
+          reset();
+          router.back();
         },
-      }
-    )
+      },
+    );
   }
 
-  const isDisabled = formState.isSubmitting || signUpMutation.isPending
+  const isDisabled = formState.isSubmitting || signUpMutation.isPending;
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
         <label
           htmlFor="username"
@@ -50,7 +47,7 @@ export default function SignUpForm() {
             id="username"
             type="text"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-            {...register('username')}
+            {...register("username")}
           />
           {formState.errors.username && (
             <p className="mt-2 text-sm text-red-600">
@@ -72,7 +69,7 @@ export default function SignUpForm() {
             id="email"
             type="email"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-            {...register('email')}
+            {...register("email")}
           />
           {formState.errors.email && (
             <p className="mt-2 text-sm text-red-600">
@@ -94,7 +91,7 @@ export default function SignUpForm() {
             id="password"
             type="password"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-            {...register('password')}
+            {...register("password")}
           />
           {formState.errors.password && (
             <p className="mt-2 text-sm text-red-600">
@@ -116,7 +113,7 @@ export default function SignUpForm() {
             id="password-confirmation"
             type="password"
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-            {...register('password_confirmation')}
+            {...register("password_confirmation")}
           />
           {formState.errors.password_confirmation && (
             <p className="mt-2 text-sm text-red-600">
@@ -136,5 +133,5 @@ export default function SignUpForm() {
         </button>
       </div>
     </form>
-  )
+  );
 }

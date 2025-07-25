@@ -1,4 +1,4 @@
-import ArtworkCardSkeleton from '../ui-skeletons/artwork-card-skeleton'
+import ArtworkCardSkeleton from "../ui-skeletons/artwork-card-skeleton";
 
 export default function ArtworksSectionSkeleton() {
   return (
@@ -14,5 +14,5 @@ export default function ArtworksSectionSkeleton() {
         ))}
       </ul>
     </div>
-  )
+  );
 }

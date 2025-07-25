@@ -1,36 +1,36 @@
-'use client'
-import { useListPublishedArtworks } from '@/hooks/artworks'
-import { fileUrl, matchQueryStatus } from '@/lib/utils'
-import { useSearchParams } from 'next/navigation'
-import { ArtworkCard } from '../artwork-card'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import Pagination from '../pagination'
-import SortFilterArtworks from './sort-filter-artworks'
-import ArtworksDisplaySkeleton from './artworks-display-skeleton'
+"use client";
+import { useListPublishedArtworks } from "@/hooks/artworks";
+import { fileUrl, matchQueryStatus } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import { ArtworkCard } from "../artwork-card";
+import EmptyUI from "../empty-ui";
+import ErrorUI from "../error-ui";
+import Pagination from "../pagination";
+import SortFilterArtworks from "./sort-filter-artworks";
+import ArtworksDisplaySkeleton from "./artworks-display-skeleton";
 
 export default function ArtworksDisplay() {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
-  const page = searchParams.get('page')
-  const artworkSort = searchParams.get('artworkSort')
-  const tag = searchParams.get('tag')
-  const searchQuery = searchParams.get('searchQuery')
+  const page = searchParams.get("page");
+  const artworkSort = searchParams.get("artworkSort");
+  const tag = searchParams.get("tag");
+  const searchQuery = searchParams.get("searchQuery");
 
   const queryParams: Record<string, string> = {
-    perPage: '12',
-    ...(tag && { 'filter[tag]': tag }),
+    perPage: "12",
+    ...(tag && { "filter[tag]": tag }),
     ...(artworkSort && { sort: artworkSort }),
     ...(page && { page }),
     ...(searchQuery && { searchQuery }),
-  }
+  };
 
-  const listPublishedArtworksQuery = useListPublishedArtworks(queryParams)
+  const listPublishedArtworksQuery = useListPublishedArtworks(queryParams);
 
   return matchQueryStatus(listPublishedArtworksQuery, {
     Loading: <ArtworksDisplaySkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'No artworks was found'} />,
+    Empty: <EmptyUI message={"No artworks was found"} />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,
@@ -41,9 +41,9 @@ export default function ArtworksDisplay() {
         artistUsername: artwork.user.username,
         artistFullName: `${artwork.user.first_name} ${artwork.user.last_name}`,
         artistProfilePictureUrl: fileUrl(artwork.user.photo),
-      }))
-      const links = data.links
-      const meta = data.meta
+      }));
+      const links = data.links;
+      const meta = data.meta;
       return (
         <div className="flex flex-col">
           <div className="pt-8">
@@ -62,15 +62,12 @@ export default function ArtworksDisplay() {
                 ))}
               </ul>
               <div className="py-8">
-                <Pagination
-                  links={links}
-                  meta={meta}
-                />
+                <Pagination links={links} meta={meta} />
               </div>
             </div>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

@@ -1,25 +1,23 @@
-'use client'
+"use client";
 
-import { useListAuthenticatedUserFavoriteArtworks } from '@/hooks/favorites'
-import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
-import ErrorUI from '../error-ui'
-import EmptyUI from '../empty-ui'
-import ArtworkCard from '../artist-profile/artwork-card'
-import FavoritesSkeleton from './favorites-skeleton'
+import { useListAuthenticatedUserFavoriteArtworks } from "@/hooks/favorites";
+import { authHeader, fileUrl, matchQueryStatus } from "@/lib/utils";
+import ErrorUI from "../error-ui";
+import EmptyUI from "../empty-ui";
+import ArtworkCard from "../artist-profile/artwork-card";
+import FavoritesSkeleton from "./favorites-skeleton";
+import { useSession } from "@/hooks/session";
 
-type FavoritesProps = {
-  token: string
-}
-
-export default function Favorites({ token }: FavoritesProps) {
+export default function Favorites() {
+  const { token } = useSession();
   const artworksQuery = useListAuthenticatedUserFavoriteArtworks(
-    authHeader(token)
-  )
+    authHeader(token),
+  );
 
   return matchQueryStatus(artworksQuery, {
     Loading: <FavoritesSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'You have no bookmarked artworks'} />,
+    Empty: <EmptyUI message={"You have no bookmarked artworks"} />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,
@@ -27,14 +25,14 @@ export default function Favorites({ token }: FavoritesProps) {
         mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
         likesCount: artwork.artwork_likes_count,
         commentsCount: artwork.artwork_comments_count,
-      }))
+      }));
 
       return (
         <div className="bg-white">
           <div className="mx-auto max-w-2xl lg:max-w-7xl">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-x-1">
-                Favorites |{' '}
+              <h2 className="flex items-center gap-x-1 text-2xl font-bold tracking-tight text-gray-900">
+                Favorites |{" "}
                 <span className="text-lg">
                   {artworks.length} saved artworks
                 </span>
@@ -53,7 +51,7 @@ export default function Favorites({ token }: FavoritesProps) {
             </ul>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

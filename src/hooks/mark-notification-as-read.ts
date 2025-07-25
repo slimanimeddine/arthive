@@ -1,22 +1,23 @@
-import { authHeader, onError } from '@/lib/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import toast from 'react-hot-toast'
-import { useMarkNotificationAsRead } from './notifications'
+import { authHeader, onError } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { useMarkNotificationAsRead } from "./notifications";
+import { useSession } from "./session";
 
 export function useMarkNotificationRead(
-  token: string,
   notificationId: string,
-  readAt: string | undefined
+  readAt: string | undefined,
 ) {
-  const queryClient = useQueryClient()
+  const { token } = useSession();
+  const queryClient = useQueryClient();
 
   const markNotificationAsReadMutation = useMarkNotificationAsRead(
-    authHeader(token)
-  )
+    authHeader(token),
+  );
 
   function markAsRead() {
     if (readAt) {
-      return
+      return;
     }
     markNotificationAsReadMutation.mutate(
       {
@@ -25,16 +26,16 @@ export function useMarkNotificationRead(
       {
         onError,
         onSuccess: () => {
-          toast.success('Notification was marked as read')
-          queryClient.invalidateQueries({
+          toast.success("Notification was marked as read");
+          void queryClient.invalidateQueries({
             queryKey: [`/api/v1/users/me/notifications`],
-          })
+          });
         },
-      }
-    )
+      },
+    );
   }
 
   return {
     markAsRead,
-  }
+  };
 }

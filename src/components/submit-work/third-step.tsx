@@ -1,27 +1,25 @@
-'use client'
+"use client";
 
-import { useCreateArtwork } from '@/hooks/artworks'
-import { TAGS } from '@/lib/constants'
-import { authHeader, onError } from '@/lib/utils'
-import { createArtworkBody } from '@/schemas/artworks'
-import useArtworkStore from '@/stores/artwork-store'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { z } from 'zod'
+import { useCreateArtwork } from "@/hooks/artworks";
+import { useSession } from "@/hooks/session";
+import { TAGS } from "@/lib/constants";
+import { authHeader, onError } from "@/lib/utils";
+import { createArtworkBody } from "@/schemas/artworks";
+import useArtworkStore from "@/stores/artwork-store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { type z } from "zod";
 
-const schema = createArtworkBody.omit({ photos: true })
-type FormData = z.infer<typeof schema>
+const schema = createArtworkBody.omit({ photos: true });
+type FormData = z.infer<typeof schema>;
 
-type ThirdStepProps = {
-  token: string
-}
+export default function ThirdStep() {
+  const { token } = useSession();
+  const createArtworkMutation = useCreateArtwork(authHeader(token));
 
-export default function ThirdStep({ token }: ThirdStepProps) {
-  const createArtworkMutation = useCreateArtwork(authHeader(token))
-
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const {
     photos,
@@ -34,7 +32,7 @@ export default function ThirdStep({ token }: ThirdStepProps) {
     setTitle,
     setDescription,
     setId,
-  } = useArtworkStore()
+  } = useArtworkStore();
 
   const {
     register,
@@ -43,22 +41,22 @@ export default function ThirdStep({ token }: ThirdStepProps) {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { title, description, tags: categories },
-  })
+  });
 
   const onSubmit = (data: FormData) => {
-    setTitle(data.title)
-    setDescription(data.description)
-    setCategories(data.tags)
+    setTitle(data.title);
+    setDescription(data.description);
+    setCategories(data.tags);
 
     const dataObj = {
       title: data.title,
       description: data.description,
       tags: data.tags,
       photos: photos.map((item) => ({
-        file: item === mainPhoto ? (croppedMainPhoto as Blob) : item,
+        file: item === mainPhoto ? croppedMainPhoto! : item,
         is_main: item === mainPhoto,
       })),
-    }
+    };
 
     createArtworkMutation.mutate(
       {
@@ -67,75 +65,72 @@ export default function ThirdStep({ token }: ThirdStepProps) {
       {
         onError,
         onSuccess: (data) => {
-          setId(data.data.id)
-          queryClient.invalidateQueries({
-            queryKey: ['/api/v1/users/me/artworks'],
-          })
-          toast.success('Artwork draft created successfully!')
+          setId(data.data.id);
+          void queryClient.invalidateQueries({
+            queryKey: ["/api/v1/users/me/artworks"],
+          });
+          toast.success("Artwork draft created successfully!");
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="p-6 bg-white rounded-lg shadow-md"
+      className="rounded-lg bg-white p-6 shadow-md"
     >
-      <h2 className="text-2xl font-bold mb-4">Step 3: Fill Details</h2>
+      <h2 className="mb-4 text-2xl font-bold">Step 3: Fill Details</h2>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="mb-1 block text-sm font-medium text-gray-700">
           Title:
         </label>
         <input
-          {...register('title')}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          {...register("title")}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
         />
         {errors.title && (
-          <p className="text-red-500 text-sm">{errors.title.message}</p>
+          <p className="text-sm text-red-500">{errors.title.message}</p>
         )}
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="mb-1 block text-sm font-medium text-gray-700">
           Description:
         </label>
         <textarea
-          {...register('description')}
+          {...register("description")}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
         />
         {errors.description && (
-          <p className="text-red-500 text-sm">{errors.description.message}</p>
+          <p className="text-sm text-red-500">{errors.description.message}</p>
         )}
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="mb-1 block text-sm font-medium text-gray-700">
           Categories:
         </label>
         <select
           multiple
-          {...register('tags')}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          {...register("tags")}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
         >
           {TAGS.map((tag) => (
-            <option
-              value={tag}
-              key={tag}
-            >
+            <option value={tag} key={tag}>
               {tag}
             </option>
           ))}
         </select>
         {errors.tags && (
-          <p className="text-red-500 text-sm">{errors.tags.message}</p>
+          <p className="text-sm text-red-500">{errors.tags.message}</p>
         )}
       </div>
       <button
         type="submit"
-        className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors"
+        className="rounded-md bg-indigo-500 px-4 py-2 text-white transition-colors hover:bg-indigo-600"
       >
         Save as Draft
       </button>
     </form>
-  )
+  );
 }

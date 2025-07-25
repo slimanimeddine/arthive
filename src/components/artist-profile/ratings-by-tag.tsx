@@ -1,17 +1,17 @@
-import { useListUserReceivedLikesCountByTag } from '@/hooks/artwork-likes'
-import { matchQueryStatus } from '@/lib/utils'
-import { HeartIcon } from '@heroicons/react/24/outline'
-import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
-import TotalRatings from './total-ratings'
+import { useListUserReceivedLikesCountByTag } from "@/hooks/artwork-likes";
+import { matchQueryStatus } from "@/lib/utils";
+import { HeartIcon } from "@heroicons/react/24/outline";
+import ErrorUI from "../error-ui";
+import LoadingUI from "../loading-ui";
+import TotalRatings from "./total-ratings";
 
 type RatingsByTagProps = {
-  username: string
-}
+  username: string;
+};
 
 export default function RatingsByTag({ username }: RatingsByTagProps) {
   const listUserReceivedLikesCountByTagQuery =
-    useListUserReceivedLikesCountByTag(username)
+    useListUserReceivedLikesCountByTag(username);
 
   return matchQueryStatus(listUserReceivedLikesCountByTagQuery, {
     Loading: <LoadingUI />,
@@ -21,7 +21,7 @@ export default function RatingsByTag({ username }: RatingsByTagProps) {
       const likesCountByTag = data.data.map((item) => ({
         tag: item.tag_name,
         likesCount: item.total_likes,
-      }))
+      }));
 
       return (
         <div>
@@ -35,7 +35,7 @@ export default function RatingsByTag({ username }: RatingsByTagProps) {
                 <dt className="text-gray-500">{item.tag}</dt>
                 <div className="flex items-center gap-x-1">
                   <HeartIcon className="h-5 w-5" />
-                  <span className="text-sm text-gray-900 font-medium">
+                  <span className="text-sm font-medium text-gray-900">
                     {item.likesCount}
                   </span>
                 </div>
@@ -43,7 +43,7 @@ export default function RatingsByTag({ username }: RatingsByTagProps) {
             ))}
           </dl>
         </div>
-      )
+      );
     },
-  })
+  });
 }

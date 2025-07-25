@@ -1,20 +1,20 @@
-'use client'
+"use client";
 import {
-  ListPublishedArtworksParams,
+  type ListPublishedArtworksParams,
   useListPublishedArtworks,
-} from '@/hooks/artworks'
-import { fileUrl, matchQueryStatus } from '@/lib/utils'
-import Link from 'next/link'
-import { ArtworkCard } from '../artwork-card'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import ArtworksSectionSkeleton from './artworks-section-skeleton'
+} from "@/hooks/artworks";
+import { fileUrl, matchQueryStatus } from "@/lib/utils";
+import Link from "next/link";
+import { ArtworkCard } from "../artwork-card";
+import EmptyUI from "../empty-ui";
+import ErrorUI from "../error-ui";
+import ArtworksSectionSkeleton from "./artworks-section-skeleton";
 
 type ArtworksSectionProps = {
-  title: string
-  viewMoreLink: string
-  sort: ListPublishedArtworksParams['sort']
-}
+  title: string;
+  viewMoreLink: string;
+  sort: ListPublishedArtworksParams["sort"];
+};
 
 export default function ArtworksSection({
   title,
@@ -24,12 +24,12 @@ export default function ArtworksSection({
   const listPublishedArtworksQuery = useListPublishedArtworks({
     sort,
     perPage: 4,
-  })
+  });
 
   return matchQueryStatus(listPublishedArtworksQuery, {
     Loading: <ArtworksSectionSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'No artworks was found'} />,
+    Empty: <EmptyUI message={"No artworks was found"} />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,
@@ -40,7 +40,7 @@ export default function ArtworksSection({
         artistUsername: artwork.user.username,
         artistFullName: `${artwork.user.first_name} ${artwork.user.last_name}`,
         artistProfilePictureUrl: fileUrl(artwork.user.photo),
-      }))
+      }));
       return (
         <div className="bg-white">
           <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
@@ -68,7 +68,7 @@ export default function ArtworksSection({
             </ul>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

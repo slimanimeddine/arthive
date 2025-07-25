@@ -3,43 +3,43 @@ import type {
   QueryClient,
   UseMutationOptions,
   UseMutationResult,
-} from '@tanstack/react-query'
-import { useMutation } from '@tanstack/react-query'
+} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
-export type DeleteArtworkComment200 = NoContentApiResponse
-export type DeleteArtworkComment401 = UnauthenticatedApiResponse
-export type DeleteArtworkComment403 = UnauthorizedApiResponse
-export type DeleteArtworkComment404 = NotFoundApiResponse
+export type DeleteArtworkComment200 = NoContentApiResponse;
+export type DeleteArtworkComment401 = UnauthenticatedApiResponse;
+export type DeleteArtworkComment403 = UnauthorizedApiResponse;
+export type DeleteArtworkComment404 = NotFoundApiResponse;
 
-export type PostArtworkComment200 = ApiResource<ArtworkCommentModel>
-export type PostArtworkComment401 = UnauthenticatedApiResponse
-export type PostArtworkComment403 = UnauthorizedApiResponse
-export type PostArtworkComment404 = NotFoundApiResponse
-export type PostArtworkCommentBody = z.infer<typeof postArtworkCommentBody>
+export type PostArtworkComment200 = ApiResource<ArtworkCommentModel>;
+export type PostArtworkComment401 = UnauthenticatedApiResponse;
+export type PostArtworkComment403 = UnauthorizedApiResponse;
+export type PostArtworkComment404 = NotFoundApiResponse;
+export type PostArtworkCommentBody = z.infer<typeof postArtworkCommentBody>;
 
-export type UpdateArtworkComment200 = ApiResource<ArtworkCommentModel>
-export type UpdateArtworkComment401 = UnauthenticatedApiResponse
-export type UpdateArtworkComment403 = UnauthorizedApiResponse
-export type UpdateArtworkComment404 = NotFoundApiResponse
-export type UpdateArtworkCommentBody = z.infer<typeof updateArtworkCommentBody>
+export type UpdateArtworkComment200 = ApiResource<ArtworkCommentModel>;
+export type UpdateArtworkComment401 = UnauthenticatedApiResponse;
+export type UpdateArtworkComment403 = UnauthorizedApiResponse;
+export type UpdateArtworkComment404 = NotFoundApiResponse;
+export type UpdateArtworkCommentBody = z.infer<typeof updateArtworkCommentBody>;
 
-import type { BodyType, ErrorType } from '@/lib/axios'
-import { customInstance } from '@/lib/axios'
+import type { BodyType, ErrorType } from "@/lib/axios";
+import { customInstance } from "@/lib/axios";
 import {
-  postArtworkCommentBody,
-  updateArtworkCommentBody,
-} from '@/schemas/artwork-comments'
+  type postArtworkCommentBody,
+  type updateArtworkCommentBody,
+} from "@/schemas/artwork-comments";
 import {
-  ApiResource,
-  NoContentApiResponse,
-  NotFoundApiResponse,
-  UnauthenticatedApiResponse,
-  UnauthorizedApiResponse,
-} from '@/types/api-responses'
-import { ArtworkCommentModel } from '@/types/models/artwork-comment'
-import { z } from 'zod'
+  type ApiResource,
+  type NoContentApiResponse,
+  type NotFoundApiResponse,
+  type UnauthenticatedApiResponse,
+  type UnauthorizedApiResponse,
+} from "@/types/api-responses";
+import { type ArtworkCommentModel } from "@/types/models/artwork-comment";
+import { type z } from "zod";
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
  * Post a comment on an artwork
@@ -49,19 +49,19 @@ export const postArtworkComment = (
   artworkId: string,
   postArtworkCommentBody: BodyType<PostArtworkCommentBody>,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<PostArtworkComment200>(
     {
       url: `/api/v1/artworks/${artworkId}/artwork-comments`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: postArtworkCommentBody,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getPostArtworkCommentMutationOptions = <
   TError = ErrorType<
@@ -74,42 +74,42 @@ export const getPostArtworkCommentMutationOptions = <
     TError,
     { artworkId: string; data: BodyType<PostArtworkCommentBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof postArtworkComment>>,
   TError,
   { artworkId: string; data: BodyType<PostArtworkCommentBody> },
   TContext
 > => {
-  const mutationKey = ['postArtworkComment']
+  const mutationKey = ["postArtworkComment"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof postArtworkComment>>,
     { artworkId: string; data: BodyType<PostArtworkCommentBody> }
   > = (props) => {
-    const { artworkId, data } = props ?? {}
+    const { artworkId, data } = props ?? {};
 
-    return postArtworkComment(artworkId, data, requestOptions)
-  }
+    return postArtworkComment(artworkId, data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type PostArtworkCommentMutationResult = NonNullable<
   Awaited<ReturnType<typeof postArtworkComment>>
->
-export type PostArtworkCommentMutationBody = BodyType<PostArtworkCommentBody>
+>;
+export type PostArtworkCommentMutationBody = BodyType<PostArtworkCommentBody>;
 export type PostArtworkCommentMutationError = ErrorType<
   PostArtworkComment401 | PostArtworkComment403 | PostArtworkComment404
->
+>;
 
 /**
  * @summary Post Artwork Comment
@@ -126,33 +126,33 @@ export const usePostArtworkComment = <
       TError,
       { artworkId: string; data: BodyType<PostArtworkCommentBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof postArtworkComment>>,
   TError,
   { artworkId: string; data: BodyType<PostArtworkCommentBody> },
   TContext
 > => {
-  const mutationOptions = getPostArtworkCommentMutationOptions(options)
+  const mutationOptions = getPostArtworkCommentMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Delete a comment on an artwork
  * @summary Delete Artwork Comment
  */
 export const deleteArtworkComment = (
   artworkCommentId: string,
-  options?: SecondParameter<typeof customInstance>
+  options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<DeleteArtworkComment200>(
-    { url: `/api/v1/artwork-comments/${artworkCommentId}`, method: 'DELETE' },
-    options
-  )
-}
+    { url: `/api/v1/artwork-comments/${artworkCommentId}`, method: "DELETE" },
+    options,
+  );
+};
 
 export const getDeleteArtworkCommentMutationOptions = <
   TError = ErrorType<
@@ -165,42 +165,42 @@ export const getDeleteArtworkCommentMutationOptions = <
     TError,
     { artworkCommentId: string },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof deleteArtworkComment>>,
   TError,
   { artworkCommentId: string },
   TContext
 > => {
-  const mutationKey = ['deleteArtworkComment']
+  const mutationKey = ["deleteArtworkComment"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof deleteArtworkComment>>,
     { artworkCommentId: string }
   > = (props) => {
-    const { artworkCommentId } = props ?? {}
+    const { artworkCommentId } = props ?? {};
 
-    return deleteArtworkComment(artworkCommentId, requestOptions)
-  }
+    return deleteArtworkComment(artworkCommentId, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type DeleteArtworkCommentMutationResult = NonNullable<
   Awaited<ReturnType<typeof deleteArtworkComment>>
->
+>;
 
 export type DeleteArtworkCommentMutationError = ErrorType<
   DeleteArtworkComment401 | DeleteArtworkComment403 | DeleteArtworkComment404
->
+>;
 
 /**
  * @summary Delete Artwork Comment
@@ -217,20 +217,20 @@ export const useDeleteArtworkComment = <
       TError,
       { artworkCommentId: string },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof deleteArtworkComment>>,
   TError,
   { artworkCommentId: string },
   TContext
 > => {
-  const mutationOptions = getDeleteArtworkCommentMutationOptions(options)
+  const mutationOptions = getDeleteArtworkCommentMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Update a comment on an artwork
  * @summary Update Artwork Comment
@@ -238,18 +238,18 @@ export const useDeleteArtworkComment = <
 export const updateArtworkComment = (
   artworkCommentId: string,
   updateArtworkCommentBody: BodyType<UpdateArtworkCommentBody>,
-  options?: SecondParameter<typeof customInstance>
+  options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<UpdateArtworkComment200>(
     {
       url: `/api/v1/artwork-comments/${artworkCommentId}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       data: updateArtworkCommentBody,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getUpdateArtworkCommentMutationOptions = <
   TError = ErrorType<
@@ -262,43 +262,43 @@ export const getUpdateArtworkCommentMutationOptions = <
     TError,
     { artworkCommentId: string; data: BodyType<UpdateArtworkCommentBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof updateArtworkComment>>,
   TError,
   { artworkCommentId: string; data: BodyType<UpdateArtworkCommentBody> },
   TContext
 > => {
-  const mutationKey = ['updateArtworkComment']
+  const mutationKey = ["updateArtworkComment"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof updateArtworkComment>>,
     { artworkCommentId: string; data: BodyType<UpdateArtworkCommentBody> }
   > = (props) => {
-    const { artworkCommentId, data } = props ?? {}
+    const { artworkCommentId, data } = props ?? {};
 
-    return updateArtworkComment(artworkCommentId, data, requestOptions)
-  }
+    return updateArtworkComment(artworkCommentId, data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type UpdateArtworkCommentMutationResult = NonNullable<
   Awaited<ReturnType<typeof updateArtworkComment>>
->
+>;
 export type UpdateArtworkCommentMutationBody =
-  BodyType<UpdateArtworkCommentBody>
+  BodyType<UpdateArtworkCommentBody>;
 export type UpdateArtworkCommentMutationError = ErrorType<
   UpdateArtworkComment401 | UpdateArtworkComment403 | UpdateArtworkComment404
->
+>;
 
 /**
  * @summary Update Artwork Comment
@@ -315,17 +315,17 @@ export const useUpdateArtworkComment = <
       TError,
       { artworkCommentId: string; data: BodyType<UpdateArtworkCommentBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof updateArtworkComment>>,
   TError,
   { artworkCommentId: string; data: BodyType<UpdateArtworkCommentBody> },
   TContext
 > => {
-  const mutationOptions = getUpdateArtworkCommentMutationOptions(options)
+  const mutationOptions = getUpdateArtworkCommentMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};

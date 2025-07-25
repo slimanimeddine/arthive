@@ -1,11 +1,11 @@
-import ArtworkCardSkeleton from '../ui-skeletons/artwork-card-skeleton'
+import ArtworkCardSkeleton from "../ui-skeletons/artwork-card-skeleton";
 
 export default function FavoritesSkeleton() {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl lg:max-w-7xl">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-x-1">
+          <h2 className="flex items-center gap-x-1 text-2xl font-bold tracking-tight text-gray-900">
             Favorites
           </h2>
         </div>
@@ -22,5 +22,5 @@ export default function FavoritesSkeleton() {
         </ul>
       </div>
     </div>
-  )
+  );
 }

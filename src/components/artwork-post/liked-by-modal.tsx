@@ -1,26 +1,26 @@
-'use client'
+"use client";
 
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useState } from 'react'
-import AvatarPlaceholder from '../avatar-placeholder'
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import AvatarPlaceholder from "../avatar-placeholder";
 
 type Like = {
-  id: string
+  id: string;
   user: {
-    fullName: string
-    username: string
-    profilePictureUrl: string | undefined
-  }
-}
+    fullName: string;
+    username: string;
+    profilePictureUrl: string | undefined;
+  };
+};
 
 type LikedByModalProps = {
-  likes: Like[]
-}
+  likes: Like[];
+};
 
 export default function LikedByModal({ likes }: LikedByModalProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -28,11 +28,7 @@ export default function LikedByModal({ likes }: LikedByModalProps) {
         <span className="font-semibold">Others</span>
       </button>
 
-      <Dialog
-        open={open}
-        onClose={setOpen}
-        className="relative z-10"
-      >
+      <Dialog open={open} onClose={setOpen} className="relative z-10">
         <DialogBackdrop
           transition
           className="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
@@ -47,7 +43,7 @@ export default function LikedByModal({ likes }: LikedByModalProps) {
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <ul
                   role="list"
-                  className="divide-y divide-gray-100 max-h-96 h-2/3 overflow-y-scroll"
+                  className="h-2/3 max-h-96 divide-y divide-gray-100 overflow-y-scroll"
                 >
                   {likes.map((like) => (
                     <li key={like.id}>
@@ -67,7 +63,7 @@ export default function LikedByModal({ likes }: LikedByModalProps) {
                           <AvatarPlaceholder size={12} />
                         )}
                         <div className="min-w-0">
-                          <p className="text-sm font-semibold leading-6 text-gray-900">
+                          <p className="text-sm leading-6 font-semibold text-gray-900">
                             {like.user.fullName}
                           </p>
                         </div>
@@ -81,5 +77,5 @@ export default function LikedByModal({ likes }: LikedByModalProps) {
         </div>
       </Dialog>
     </>
-  )
+  );
 }

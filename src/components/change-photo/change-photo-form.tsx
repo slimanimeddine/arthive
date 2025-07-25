@@ -1,6 +1,7 @@
-'use client'
-import { useUpdateAuthenticatedUser } from '@/hooks/users'
-import { MAX_FILE_SIZE } from '@/lib/constants'
+"use client";
+import { useSession } from "@/hooks/session";
+import { useUpdateAuthenticatedUser } from "@/hooks/users";
+import { MAX_FILE_SIZE } from "@/lib/constants";
 import {
   authHeader,
   classNames,
@@ -8,63 +9,60 @@ import {
   getUrlFromBlob,
   onError,
   turnBlobToFile,
-} from '@/lib/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
-import Cropper, { Area } from 'react-easy-crop'
-import toast from 'react-hot-toast'
+} from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import Cropper, { type Area } from "react-easy-crop";
+import toast from "react-hot-toast";
 
-type ChangePhotoFormProps = {
-  token: string
-}
-
-export default function ChangePhotoForm({ token }: ChangePhotoFormProps) {
-  const queryClient = useQueryClient()
+export default function ChangePhotoForm() {
+  const { token } = useSession();
+  const queryClient = useQueryClient();
 
   const updateAuthenticatedUserMutation = useUpdateAuthenticatedUser(
-    authHeader(token)
-  )
+    authHeader(token),
+  );
 
-  const [file, setFile] = useState<string>()
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
-  const [rotation, setRotation] = useState(0)
-  const [croppedImage, setCroppedImage] = useState<Blob | null>(null)
+  const [file, setFile] = useState<string>();
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
+  const [croppedImage, setCroppedImage] = useState<Blob | null>(null);
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: { 'image/*': ['.png', '.jpeg', '.jpg', '.webp'] },
+    accept: { "image/*": [".png", ".jpeg", ".jpg", ".webp"] },
     maxFiles: 1,
     multiple: false,
     maxSize: MAX_FILE_SIZE,
     onDrop: (acceptedFiles) => {
-      const image = getUrlFromBlob(acceptedFiles[0])
-      setFile(image)
+      const image = getUrlFromBlob(acceptedFiles[0]);
+      setFile(image);
     },
-  })
+  });
 
   const onCropComplete = useCallback(
     async (croppedArea: Area, croppedAreaPixels: Area) => {
-      if (!file) return
+      if (!file) return;
       const croppedImage = await getCroppedImg(
         file,
         croppedAreaPixels,
-        rotation
-      )
-      setCroppedImage(croppedImage)
+        rotation,
+      );
+      setCroppedImage(croppedImage);
     },
-    [file, rotation]
-  )
+    [file, rotation],
+  );
 
   const resetModifications = () => {
-    setCrop({ x: 0, y: 0 })
-    setZoom(1)
-    setRotation(0)
-  }
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setRotation(0);
+  };
 
   const cancelEditing = () => {
-    setFile(undefined)
-  }
+    setFile(undefined);
+  };
 
   function onUpload() {
     if (croppedImage) {
@@ -77,16 +75,18 @@ export default function ChangePhotoForm({ token }: ChangePhotoFormProps) {
         {
           onError,
           onSuccess: () => {
-            toast.success('Profile picture changed successfully!')
-            queryClient.invalidateQueries({ queryKey: ['/api/v1/users/me'] })
-            setFile(undefined)
+            toast.success("Profile picture changed successfully!");
+            void queryClient.invalidateQueries({
+              queryKey: ["/api/v1/users/me"],
+            });
+            setFile(undefined);
           },
-        }
-      )
+        },
+      );
     }
   }
 
-  const isDisabled = !croppedImage || updateAuthenticatedUserMutation.isPending
+  const isDisabled = !croppedImage || updateAuthenticatedUserMutation.isPending;
   return (
     <div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
       <div className="px-4 py-6 sm:p-8">
@@ -96,7 +96,7 @@ export default function ChangePhotoForm({ token }: ChangePhotoFormProps) {
         <div className="mt-10 grid max-w-full grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="col-span-full">
             {file ? (
-              <div className="relative w-full h-48 sm:h-96 rounded-lg overflow-hidden">
+              <div className="relative h-48 w-full overflow-hidden rounded-lg sm:h-96">
                 <Cropper
                   image={file}
                   crop={crop}
@@ -112,7 +112,7 @@ export default function ChangePhotoForm({ token }: ChangePhotoFormProps) {
             ) : (
               <div
                 {...getRootProps()}
-                className="border-2 border-dashed border-gray-300 p-8 text-center cursor-pointer hover:border-indigo-500 transition-colors"
+                className="cursor-pointer border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-indigo-500"
               >
                 <input {...getInputProps()} />
                 <p className="text-gray-600">
@@ -123,33 +123,33 @@ export default function ChangePhotoForm({ token }: ChangePhotoFormProps) {
           </div>
 
           {file && (
-            <div className="col-span-full flex flex-row items-center justify-center space-x-4 mt-4">
+            <div className="col-span-full mt-4 flex flex-row items-center justify-center space-x-4">
               <span className="isolate inline-flex rounded-md shadow-sm">
                 <button
                   type="button"
                   onClick={() => setZoom((prev) => Math.min(prev + 0.2, 3))}
-                  className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                  className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-10"
                 >
                   Zoom in
                 </button>
                 <button
                   type="button"
                   onClick={() => setZoom((prev) => Math.max(prev - 0.2, 1))}
-                  className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                  className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-10"
                 >
                   Zoom out
                 </button>
                 <button
                   type="button"
                   onClick={() => setRotation((prev) => prev + 90)}
-                  className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                  className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-10"
                 >
                   Rotate
                 </button>
                 <button
                   type="button"
                   onClick={resetModifications}
-                  className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                  className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-10"
                 >
                   Reset
                 </button>
@@ -163,7 +163,7 @@ export default function ChangePhotoForm({ token }: ChangePhotoFormProps) {
           <button
             type="button"
             onClick={cancelEditing}
-            className="relative -ml-px inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            className="relative -ml-px inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-10"
           >
             Cancel
           </button>
@@ -173,13 +173,13 @@ export default function ChangePhotoForm({ token }: ChangePhotoFormProps) {
           onClick={onUpload}
           disabled={isDisabled}
           className={classNames(
-            'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
-            isDisabled ? 'cursor-not-allowed' : 'hover:bg-indigo-500'
+            "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+            isDisabled ? "cursor-not-allowed" : "hover:bg-indigo-500",
           )}
         >
           Upload
         </button>
       </div>
     </div>
-  )
+  );
 }

@@ -1,17 +1,14 @@
-'use client'
+"use client";
 
-import { usePublishArtwork } from '@/hooks/artworks'
-import { authHeader, getUrlFromBlob, onError } from '@/lib/utils'
-import useArtworkStore from '@/stores/artwork-store'
-import { useQueryClient } from '@tanstack/react-query'
-import Image from 'next/image'
-import toast from 'react-hot-toast'
+import { usePublishArtwork } from "@/hooks/artworks";
+import { useSession } from "@/hooks/session";
+import { authHeader, getUrlFromBlob, onError } from "@/lib/utils";
+import useArtworkStore from "@/stores/artwork-store";
+import { useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import toast from "react-hot-toast";
 
-type FourthStepProps = {
-  token: string
-}
-
-export default function FourthStep({ token }: FourthStepProps) {
+export default function FourthStep() {
   const {
     photos,
     mainPhoto,
@@ -22,19 +19,21 @@ export default function FourthStep({ token }: FourthStepProps) {
     setStatus,
     id,
     setToDefault,
-  } = useArtworkStore()
+  } = useArtworkStore();
 
-  const publishArtworkMutation = usePublishArtwork(authHeader(token))
+  const { token } = useSession();
 
-  const queryClient = useQueryClient()
+  const publishArtworkMutation = usePublishArtwork(authHeader(token));
+
+  const queryClient = useQueryClient();
 
   const handlePublish = () => {
     if (
       window.confirm(
-        'Once you publish your artwork you cannot modify it anymore. Do you want to proceed?'
+        "Once you publish your artwork you cannot modify it anymore. Do you want to proceed?",
       )
     ) {
-      setStatus('published')
+      setStatus("published");
 
       publishArtworkMutation.mutate(
         {
@@ -43,41 +42,41 @@ export default function FourthStep({ token }: FourthStepProps) {
         {
           onError,
           onSuccess: () => {
-            queryClient.invalidateQueries({
-              queryKey: ['/api/v1/users/me/artworks'],
-            })
-            toast.success('Artwork draft published successfully!')
-            setToDefault()
+            void queryClient.invalidateQueries({
+              queryKey: ["/api/v1/users/me/artworks"],
+            });
+            toast.success("Artwork draft published successfully!");
+            setToDefault();
           },
-        }
-      )
+        },
+      );
     }
-  }
+  };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Step 4: Preview & Publish</h2>
+    <div className="rounded-lg bg-white p-6 shadow-md">
+      <h2 className="mb-4 text-2xl font-bold">Step 4: Preview & Publish</h2>
       <div>
-        <h3 className="text-lg font-semibold mb-2">Main Photo:</h3>
+        <h3 className="mb-2 text-lg font-semibold">Main Photo:</h3>
         <Image
           src={
-            getUrlFromBlob(croppedMainPhoto) || getUrlFromBlob(mainPhoto) || ''
+            getUrlFromBlob(croppedMainPhoto) || getUrlFromBlob(mainPhoto) || ""
           }
           alt="Main Photo"
-          className="w-48 h-48 object-cover rounded-md"
+          className="h-48 w-48 rounded-md object-cover"
           width={192}
           height={192}
         />
       </div>
       <div className="mt-4">
-        <h3 className="text-lg font-semibold mb-2">Other Photos:</h3>
+        <h3 className="mb-2 text-lg font-semibold">Other Photos:</h3>
         <div className="flex flex-wrap gap-2">
           {photos.map((photo, index) => (
             <Image
               key={index}
               src={getUrlFromBlob(photo)}
               alt={`Uploaded ${index}`}
-              className="w-24 h-24 object-cover rounded-md"
+              className="h-24 w-24 rounded-md object-cover"
               width={96}
               height={96}
             />
@@ -85,7 +84,7 @@ export default function FourthStep({ token }: FourthStepProps) {
         </div>
       </div>
       <div className="mt-4">
-        <h3 className="text-lg font-semibold mb-2">Details:</h3>
+        <h3 className="mb-2 text-lg font-semibold">Details:</h3>
         <p className="text-gray-700">
           <strong>Title:</strong> {title}
         </p>
@@ -93,15 +92,15 @@ export default function FourthStep({ token }: FourthStepProps) {
           <strong>Description:</strong> {description}
         </p>
         <p className="text-gray-700">
-          <strong>Categories:</strong> {categories.join(', ')}
+          <strong>Categories:</strong> {categories.join(", ")}
         </p>
       </div>
       <button
         onClick={handlePublish}
-        className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
+        className="mt-4 rounded-md bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600"
       >
         Publish
       </button>
     </div>
-  )
+  );
 }

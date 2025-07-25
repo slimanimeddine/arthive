@@ -1,33 +1,32 @@
-import { useMarkNotificationRead } from '@/hooks/mark-notification-as-read'
-import { classNames } from '@/lib/utils'
+import { useMarkNotificationRead } from "@/hooks/mark-notification-as-read";
+import { classNames } from "@/lib/utils";
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
-} from '@headlessui/react'
+} from "@headlessui/react";
 import {
   CheckIcon,
   ExclamationTriangleIcon,
   XMarkIcon,
-} from '@heroicons/react/20/solid'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import { useState } from 'react'
-dayjs.extend(relativeTime)
+} from "@heroicons/react/20/solid";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { useState } from "react";
+dayjs.extend(relativeTime);
 
 type ArtistVerificationResponseNotificationProps = {
-  token: string
-  notificationId: string
-  id: string
-  status: 'approved' | 'rejected'
-  reason?: string
-  createdAt: string
-  readAt: string | undefined
-}
+  notificationId: string;
+  id: string;
+  status: "approved" | "rejected";
+  reason?: string;
+  createdAt: string;
+  readAt: string | undefined;
+};
 
 function RejectionReasonModal({ reason }: { reason: string }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   return (
     <>
       <button
@@ -36,11 +35,7 @@ function RejectionReasonModal({ reason }: { reason: string }) {
       >
         for this reason
       </button>
-      <Dialog
-        open={open}
-        onClose={setOpen}
-        className="relative z-10"
-      >
+      <Dialog open={open} onClose={setOpen} className="relative z-10">
         <DialogBackdrop
           transition
           className="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
@@ -78,64 +73,57 @@ function RejectionReasonModal({ reason }: { reason: string }) {
         </div>
       </Dialog>
     </>
-  )
+  );
 }
 
 export default function ArtistVerificationResponseNotification({
-  token,
   notificationId,
   status,
   reason,
   createdAt,
   readAt,
 }: ArtistVerificationResponseNotificationProps) {
-  const { markAsRead } = useMarkNotificationRead(token, notificationId, readAt)
+  const { markAsRead } = useMarkNotificationRead(notificationId, readAt);
 
   return (
     <div
       onClick={markAsRead}
       className={classNames(
-        'relative p-2',
+        "relative p-2",
         readAt
-          ? ''
-          : 'bg-indigo-200 hover:bg-indigo-100 rounded-lg cursor-pointer'
+          ? ""
+          : "cursor-pointer rounded-lg bg-indigo-200 hover:bg-indigo-100",
       )}
     >
       <div className="relative flex space-x-3">
         <div>
           <span
             className={classNames(
-              'flex h-8 w-8 items-center justify-center rounded-full',
-              status === 'approved' ? 'bg-green-500' : 'bg-red-500'
+              "flex h-8 w-8 items-center justify-center rounded-full",
+              status === "approved" ? "bg-green-500" : "bg-red-500",
             )}
           >
-            {status === 'approved' ? (
-              <CheckIcon
-                aria-hidden="true"
-                className="h-5 w-5 text-white"
-              />
+            {status === "approved" ? (
+              <CheckIcon aria-hidden="true" className="h-5 w-5 text-white" />
             ) : (
-              <XMarkIcon
-                aria-hidden="true"
-                className="h-5 w-5 text-white"
-              />
+              <XMarkIcon aria-hidden="true" className="h-5 w-5 text-white" />
             )}
           </span>
         </div>
         <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
           <div>
             <p className="text-sm text-gray-500">
-              Your verification request was {status}{' '}
-              {status === 'rejected' && (
+              Your verification request was {status}{" "}
+              {status === "rejected" && (
                 <RejectionReasonModal reason={reason!} />
               )}
             </p>
           </div>
-          <div className="whitespace-nowrap text-right text-sm text-gray-500">
+          <div className="text-right text-sm whitespace-nowrap text-gray-500">
             <span>{dayjs(createdAt).fromNow()}</span>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

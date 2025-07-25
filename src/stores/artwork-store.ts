@@ -1,33 +1,33 @@
-import { Tag } from '@/types/misc'
-import { create } from 'zustand'
+import { type Tag } from "@/types/misc";
+import { create } from "zustand";
 
 interface ArtworkState {
-  step: number
-  photos: Blob[]
-  mainPhoto: Blob | null
-  croppedMainPhoto: Blob | null
-  categories: Tag[]
-  title: string
-  description: string
-  status: 'draft' | 'published'
-  id?: string
+  step: number;
+  photos: Blob[];
+  mainPhoto: Blob | null;
+  croppedMainPhoto: Blob | null;
+  categories: Tag[];
+  title: string;
+  description: string;
+  status: "draft" | "published";
+  id?: string;
 
-  setStep: (step: number) => void
-  addPhotos: (newPhotos: Blob[]) => void
-  removePhoto: (photoToRemove: Blob) => void
-  removeMainPhoto: () => void
-  removeCroppedMainPhoto: () => void
-  setMainPhoto: (photo: Blob | null) => void
-  setCroppedMainPhoto: (croppedPhoto: Blob | null) => void
-  setCategories: (categories: Tag[]) => void
-  setTitle: (title: string) => void
-  setDescription: (description: string) => void
-  setStatus: (status: 'draft' | 'published') => void
-  setId: (id: string) => void
+  setStep: (step: number) => void;
+  addPhotos: (newPhotos: Blob[]) => void;
+  removePhoto: (photoToRemove: Blob) => void;
+  removeMainPhoto: () => void;
+  removeCroppedMainPhoto: () => void;
+  setMainPhoto: (photo: Blob | null) => void;
+  setCroppedMainPhoto: (croppedPhoto: Blob | null) => void;
+  setCategories: (categories: Tag[]) => void;
+  setTitle: (title: string) => void;
+  setDescription: (description: string) => void;
+  setStatus: (status: "draft" | "published") => void;
+  setId: (id: string) => void;
 
-  setToDefault: () => void
+  setToDefault: () => void;
 
-  isStepValid: () => boolean
+  isStepValid: () => boolean;
 }
 
 const useArtworkStore = create<ArtworkState>((set, get) => ({
@@ -36,9 +36,9 @@ const useArtworkStore = create<ArtworkState>((set, get) => ({
   mainPhoto: null,
   croppedMainPhoto: null,
   categories: [],
-  title: '',
-  description: '',
-  status: 'draft',
+  title: "",
+  description: "",
+  status: "draft",
   id: undefined,
 
   setStep: (step) => set({ step }),
@@ -65,9 +65,9 @@ const useArtworkStore = create<ArtworkState>((set, get) => ({
       mainPhoto: null,
       croppedMainPhoto: null,
       categories: [],
-      title: '',
-      description: '',
-      status: 'draft',
+      title: "",
+      description: "",
+      status: "draft",
     }),
 
   isStepValid: () => {
@@ -79,26 +79,26 @@ const useArtworkStore = create<ArtworkState>((set, get) => ({
       categories,
       title,
       description,
-    } = get()
+    } = get();
 
     switch (step) {
       case 1:
-        return photos.length > 0 && photos.length <= 10
+        return photos.length > 0 && photos.length <= 10;
       case 2:
-        return !!mainPhoto && !!croppedMainPhoto
+        return !!mainPhoto && !!croppedMainPhoto;
       case 3:
         return (
           title.trim().length >= 3 &&
           description.trim().length >= 10 &&
           categories.length > 0 &&
           categories.length <= 3
-        )
+        );
       case 4:
-        return false
+        return false;
       default:
-        return false
+        return false;
     }
   },
-}))
+}));
 
-export default useArtworkStore
+export default useArtworkStore;

@@ -1,18 +1,18 @@
-import { ChatBubbleOvalLeftIcon, HeartIcon } from '@heroicons/react/24/outline'
-import Image from 'next/image'
-import Link from 'next/link'
-import AvatarPlaceholder from './avatar-placeholder'
+import { ChatBubbleOvalLeftIcon, HeartIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
+import Link from "next/link";
+import AvatarPlaceholder from "./avatar-placeholder";
 
 type ArtworkCardProps = {
-  id: string
-  title: string
-  mainPhotoUrl: string
-  likesCount: number
-  commentsCount: number
-  artistUsername: string
-  artistFullName: string
-  artistProfilePictureUrl: string | undefined
-}
+  id: string;
+  title: string;
+  mainPhotoUrl: string;
+  likesCount: number;
+  commentsCount: number;
+  artistUsername: string;
+  artistFullName: string;
+  artistProfilePictureUrl: string | undefined;
+};
 
 export function ArtworkCard({
   id,
@@ -38,24 +38,21 @@ export function ArtworkCard({
             width={280}
             height={196}
           />
-          <button
-            type="button"
-            className="absolute inset-0 focus:outline-none"
-          >
+          <button type="button" className="absolute inset-0 focus:outline-none">
             <span className="sr-only">View details for {title}</span>
           </button>
         </Link>
         <Link
           href={`/artworks/${id}`}
-          className="flex items-center justify-between mt-2"
+          className="mt-2 flex items-center justify-between"
         >
           <p className="pointer-events-none block truncate text-sm font-medium text-gray-900">
-            {title ?? ''}
+            {title ?? ""}
           </p>
           <div className="flex items-center justify-end gap-x-2">
             <div className="flex items-center gap-x-[1px]">
               <HeartIcon className="h-4 w-4" />
-              <span className="text-sm ">{likesCount}</span>
+              <span className="text-sm">{likesCount}</span>
             </div>
             <div className="flex items-center gap-x-[1px]">
               <ChatBubbleOvalLeftIcon className="h-4 w-4" />
@@ -65,7 +62,7 @@ export function ArtworkCard({
         </Link>
         <Link
           href={`/artists/${artistUsername}`}
-          className="flex items-center space-x-3 mt-2"
+          className="mt-2 flex items-center space-x-3"
         >
           <div className="flex-shrink-0">
             {artistProfilePictureUrl ? (
@@ -88,5 +85,5 @@ export function ArtworkCard({
         </Link>
       </div>
     </div>
-  )
+  );
 }

@@ -67,6 +67,7 @@ These are the main technologies I have used to build this app, for a complete li
 - [Axios](https://axios-http.com/docs/intro)
 - [nuqs](https://nuqs.47ng.com/)
 - [Orval](https://orval.dev/)
+- [T3 Env](https://env.t3.gg/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -1,38 +1,38 @@
-'use client'
-import { useListUsers } from '@/hooks/users'
-import { matchQueryStatus } from '@/lib/utils'
-import Link from 'next/link'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import ArtistCard from './artist-card'
-import ArtistsSectionSkeleton from './artists-section-skeleton'
+"use client";
+import { useListUsers } from "@/hooks/users";
+import { matchQueryStatus } from "@/lib/utils";
+import Link from "next/link";
+import EmptyUI from "../empty-ui";
+import ErrorUI from "../error-ui";
+import ArtistCard from "./artist-card";
+import ArtistsSectionSkeleton from "./artists-section-skeleton";
 
 type ArtistsSectionProps = {
-  title: string
-  viewMoreLink: string
-}
+  title: string;
+  viewMoreLink: string;
+};
 
 export default function ArtistsSection({
   title,
   viewMoreLink,
 }: ArtistsSectionProps) {
   const listUsersQuery = useListUsers({
-    'filter[verified]': true,
-  })
+    "filter[verified]": true,
+  });
 
   return matchQueryStatus(listUsersQuery, {
     Loading: <ArtistsSectionSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'No artists was found'} />,
+    Empty: <EmptyUI message={"No artists was found"} />,
     Success: ({ data }) => {
       const artists = data.data.map((artist) => ({
-        id: artist.id!,
+        id: artist.id,
         fullName: `${artist.first_name} ${artist.last_name}`,
-        username: artist.username!,
+        username: artist.username,
         country: artist.country,
         profilePictureUrl: artist.photo,
         verified: artist.artist_verified_at ? true : false,
-      }))
+      }));
       return (
         <div className="bg-white">
           <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
@@ -48,10 +48,7 @@ export default function ArtistsSection({
               </Link>
             </div>
 
-            <ul
-              role="list"
-              className="divide-y divide-gray-100"
-            >
+            <ul role="list" className="divide-y divide-gray-100">
               {artists.map((artist) => (
                 <li key={artist.id}>
                   <ArtistCard {...artist} />
@@ -60,7 +57,7 @@ export default function ArtistsSection({
             </ul>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

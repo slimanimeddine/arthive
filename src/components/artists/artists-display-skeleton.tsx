@@ -1,4 +1,4 @@
-import ArtistCardSkeleton from '../ui-skeletons/artist-card-skeleton'
+import ArtistCardSkeleton from "../ui-skeletons/artist-card-skeleton";
 
 function SortArtists() {
   return (
@@ -10,14 +10,11 @@ function SortArtists() {
         Sort By
       </label>
 
-      <select
-        id="SortBy"
-        className="mt-1 rounded border-gray-300 text-sm"
-      >
+      <select id="SortBy" className="mt-1 rounded border-gray-300 text-sm">
         <option value="">Select</option>
       </select>
     </div>
-  )
+  );
 }
 
 function Filter({ type }: { type: string }) {
@@ -31,7 +28,7 @@ function Filter({ type }: { type: string }) {
         </summary>
       </details>
     </div>
-  )
+  );
 }
 
 export default function ArtistsDisplaySkeleton() {
@@ -48,7 +45,7 @@ export default function ArtistsDisplaySkeleton() {
         </div>
 
         <div className="lg:col-span-3">
-          <ul className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2 mb-8">
+          <ul className="mb-8 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
             {[...Array(10).keys()]?.map((item) => (
               <li key={item}>
                 <ArtistCardSkeleton />
@@ -58,5 +55,5 @@ export default function ArtistsDisplaySkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
 }

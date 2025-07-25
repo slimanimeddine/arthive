@@ -1,18 +1,18 @@
-'use client'
-import { useShowAuthenticatedUser } from '@/hooks/users'
-import { authHeader, matchQueryStatus } from '@/lib/utils'
-import ErrorUI from '../error-ui'
-import ChangePasswordForm from './change-password-form'
-import PersonalInformationForm from './personal-information-form'
-import LoadingSpinner from '../loading-spinner'
-import EmailNotVerifiedAlert from '../email-not-verified-alert'
+"use client";
+import { useShowAuthenticatedUser } from "@/hooks/users";
+import { authHeader, matchQueryStatus } from "@/lib/utils";
+import ErrorUI from "../error-ui";
+import ChangePasswordForm from "./change-password-form";
+import PersonalInformationForm from "./personal-information-form";
+import LoadingSpinner from "../loading-spinner";
+import EmailNotVerifiedAlert from "../email-not-verified-alert";
+import { useSession } from "@/hooks/session";
 
-type EditProfileProps = {
-  token: string
-}
-
-export default function EditProfile({ token }: EditProfileProps) {
-  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authHeader(token))
+export default function EditProfile() {
+  const { token } = useSession();
+  const showAuthenticatedUserQuery = useShowAuthenticatedUser(
+    authHeader(token),
+  );
 
   return matchQueryStatus(showAuthenticatedUserQuery, {
     Loading: <LoadingSpinner />,
@@ -33,7 +33,7 @@ export default function EditProfile({ token }: EditProfileProps) {
           />
           <ChangePasswordForm token={token} />
         </div>
-      )
+      );
     },
-  })
+  });
 }

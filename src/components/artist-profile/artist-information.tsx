@@ -1,30 +1,30 @@
-'use client'
+"use client";
 
-import { useShowUser } from '@/hooks/users'
-import { fileUrl, matchQueryStatus } from '@/lib/utils'
-import { CheckBadgeIcon } from '@heroicons/react/20/solid'
-import Image from 'next/image'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import FollowButton from './follow-button'
-import RatingsByTag from './ratings-by-tag'
-import ArtistInformationSkeleton from './artist-information-skeleton'
+import { useShowUser } from "@/hooks/users";
+import { fileUrl, matchQueryStatus } from "@/lib/utils";
+import { CheckBadgeIcon } from "@heroicons/react/20/solid";
+import Image from "next/image";
+import EmptyUI from "../empty-ui";
+import ErrorUI from "../error-ui";
+import FollowButton from "./follow-button";
+import RatingsByTag from "./ratings-by-tag";
+import ArtistInformationSkeleton from "./artist-information-skeleton";
 
 type ArtistInformationProps = {
-  token: string | undefined
-  username: string
-}
+  token: string | undefined;
+  username: string;
+};
 
 export default function ArtistInformation({
   token,
   username,
 }: ArtistInformationProps) {
-  const showUserQuery = useShowUser(username)
+  const showUserQuery = useShowUser(username);
 
   return matchQueryStatus(showUserQuery, {
     Loading: <ArtistInformationSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'Artist has no data'} />,
+    Empty: <EmptyUI message={"Artist has no data"} />,
     Success: ({ data }) => {
       const artistInformation = {
         id: data.data.id,
@@ -35,7 +35,7 @@ export default function ArtistInformation({
         country: data.data.country,
         dateJoined: data.data.created_at,
         verified: data.data.artist_verified_at ? true : false,
-      }
+      };
 
       return (
         <div className="flex h-full flex-col overflow-y-scroll bg-white">
@@ -48,7 +48,7 @@ export default function ArtistInformation({
                       <Image
                         alt=""
                         src={artistInformation.profilePictureUrl}
-                        className="absolute h-full w-full object-cover rounded-lg"
+                        className="absolute h-full w-full rounded-lg object-cover"
                         height={600}
                         width={800}
                       />
@@ -56,7 +56,7 @@ export default function ArtistInformation({
                   ) : (
                     <div
                       className={
-                        'inline-block overflow-hidden rounded-lg bg-gray-100 w-[400px] h-[200px] xs:w-full'
+                        "xs:w-full inline-block h-[200px] w-[400px] overflow-hidden rounded-lg bg-gray-100"
                       }
                     >
                       <svg
@@ -84,7 +84,7 @@ export default function ArtistInformation({
                         @{artistInformation.username}
                       </p>
                     </div>
-                    <div className="mt-5 flex flex-wrap space-y-3 sm:space-x-3 sm:space-y-0">
+                    <div className="mt-5 flex flex-wrap space-y-3 sm:space-y-0 sm:space-x-3">
                       <FollowButton
                         token={token}
                         userId={artistInformation.id}
@@ -94,14 +94,14 @@ export default function ArtistInformation({
                 </div>
               </div>
             </div>
-            <div className="px-4 pb-5 pt-5 sm:px-0 sm:pt-0">
+            <div className="px-4 pt-5 pb-5 sm:px-0 sm:pt-0">
               <dl className="space-y-8 px-4 sm:space-y-6 sm:px-6">
                 <div>
                   <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
                     Bio
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                    <p>{artistInformation.description ?? 'Unknown'}</p>
+                    <p>{artistInformation.description ?? "Unknown"}</p>
                   </dd>
                 </div>
                 <div>
@@ -109,7 +109,7 @@ export default function ArtistInformation({
                     Country
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                    {data.data.country ?? 'Unknown'}
+                    {data.data.country ?? "Unknown"}
                   </dd>
                 </div>
                 <div>
@@ -127,7 +127,7 @@ export default function ArtistInformation({
             </div>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

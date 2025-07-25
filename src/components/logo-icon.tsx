@@ -40,5 +40,5 @@ export default function LogoIcon() {
         fill="#7B19D8"
       />
     </svg>
-  )
+  );
 }

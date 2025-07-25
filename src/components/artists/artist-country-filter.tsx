@@ -1,9 +1,9 @@
-import { COUNTRIES } from '@/lib/constants'
-import { ChevronDownIcon } from '@heroicons/react/24/outline'
-import { useQueryState } from 'nuqs'
+import { COUNTRIES } from "@/lib/constants";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { useQueryState } from "nuqs";
 
 export default function ArtistCountryFilter() {
-  const [country, setCountry] = useQueryState('country')
+  const [country, setCountry] = useQueryState("country");
 
   return (
     <div className="mt-1 space-y-2">
@@ -37,20 +37,17 @@ export default function ArtistCountryFilter() {
           </span>
         </summary>
 
-        <div className="border-t border-gray-200 bg-white overflow-y-scroll h-48">
+        <div className="h-48 overflow-y-scroll border-t border-gray-200 bg-white">
           <div className="space-y-1 border-t border-gray-200 p-4">
             {COUNTRIES.map((c) => (
-              <div
-                key={c}
-                className="flex items-center"
-              >
+              <div key={c} className="flex items-center">
                 <input
                   type="radio"
                   onChange={() => setCountry(c)}
                   checked={c === country}
                   className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                 />
-                <label className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                <label className="ml-3 block text-sm leading-6 font-medium text-gray-900">
                   {c}
                 </label>
               </div>
@@ -59,5 +56,5 @@ export default function ArtistCountryFilter() {
         </div>
       </details>
     </div>
-  )
+  );
 }

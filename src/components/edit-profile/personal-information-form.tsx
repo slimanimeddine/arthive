@@ -1,25 +1,25 @@
-'use client'
+"use client";
 import {
-  UpdateAuthenticatedUserBody,
+  type UpdateAuthenticatedUserBody,
   useUpdateAuthenticatedUser,
-} from '@/hooks/users'
-import { authHeader, classNames, getDirtyValues, onError } from '@/lib/utils'
-import { updateAuthenticatedUserBody } from '@/schemas/users'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import SelectCountry from './select-country'
+} from "@/hooks/users";
+import { authHeader, classNames, getDirtyValues, onError } from "@/lib/utils";
+import { updateAuthenticatedUserBody } from "@/schemas/users";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import SelectCountry from "./select-country";
 
 type PersonalInformationFormProps = {
-  username: string
-  first_name?: string
-  last_name?: string
-  email: string
-  country?: string
-  bio?: string
-  token: string
-}
+  username: string;
+  first_name?: string;
+  last_name?: string;
+  email: string;
+  country?: string;
+  bio?: string;
+  token: string;
+};
 
 export default function PersonalInformationForm({
   username,
@@ -30,7 +30,7 @@ export default function PersonalInformationForm({
   bio,
   token,
 }: PersonalInformationFormProps) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const { handleSubmit, register, formState, control } =
     useForm<UpdateAuthenticatedUserBody>({
@@ -40,17 +40,17 @@ export default function PersonalInformationForm({
         first_name,
         last_name,
         email,
-        country: country ?? '',
+        country: country ?? "",
         bio,
       },
-    })
+    });
 
   const updateAuthenticatedUserMutation = useUpdateAuthenticatedUser(
-    authHeader(token)
-  )
+    authHeader(token),
+  );
 
   function onSubmit(data: UpdateAuthenticatedUserBody) {
-    const dirtyValues = getDirtyValues(formState.dirtyFields, data)
+    const dirtyValues = getDirtyValues(formState.dirtyFields, data);
     updateAuthenticatedUserMutation.mutate(
       {
         data: dirtyValues,
@@ -58,18 +58,18 @@ export default function PersonalInformationForm({
       {
         onError,
         onSuccess: () => {
-          toast.success('Personal Information updated successfully!')
-          queryClient.invalidateQueries({ queryKey: ['/api/v1/users/me'] })
+          toast.success("Personal Information updated successfully!");
+          queryClient.invalidateQueries({ queryKey: ["/api/v1/users/me"] });
         },
-      }
-    )
+      },
+    );
   }
 
   const isDisabled =
     formState.isSubmitting ||
     updateAuthenticatedUserMutation.isPending ||
     !token ||
-    !formState.isDirty
+    !formState.isDirty;
 
   return (
     <form
@@ -88,20 +88,20 @@ export default function PersonalInformationForm({
           <div className="sm:col-span-4">
             <label
               htmlFor="username"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm leading-6 font-medium text-gray-900"
             >
               Useranme
             </label>
             <div className="mt-2">
-              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">
+              <div className="flex rounded-md shadow-sm ring-1 ring-gray-300 ring-inset focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-inset sm:max-w-md">
+                <span className="flex items-center pl-3 text-gray-500 select-none sm:text-sm">
                   http://arthive.com/artists/
                 </span>
                 <input
                   type="text"
                   placeholder="johndoe"
                   className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  {...register('username')}
+                  {...register("username")}
                 />
               </div>
               {formState.errors.username && (
@@ -123,7 +123,7 @@ export default function PersonalInformationForm({
               <input
                 type="text"
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                {...register('first_name')}
+                {...register("first_name")}
               />
             </div>
             {formState.errors.first_name && (
@@ -144,7 +144,7 @@ export default function PersonalInformationForm({
               <input
                 type="text"
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                {...register('last_name')}
+                {...register("last_name")}
               />
             </div>
             {formState.errors.last_name && (
@@ -164,7 +164,7 @@ export default function PersonalInformationForm({
             <div className="mt-2">
               <input
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                {...register('email')}
+                {...register("email")}
               />
             </div>
             {formState.errors.email && (
@@ -177,16 +177,16 @@ export default function PersonalInformationForm({
           <div className="col-span-full">
             <label
               htmlFor="about"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm leading-6 font-medium text-gray-900"
             >
               About
             </label>
             <div className="mt-2">
               <textarea
                 rows={3}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                defaultValue={''}
-                {...register('bio')}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
+                defaultValue={""}
+                {...register("bio")}
               />
             </div>
             {formState.errors.bio && (
@@ -199,10 +199,7 @@ export default function PersonalInformationForm({
               Write a few sentences about yourself.
             </p>
           </div>
-          <SelectCountry
-            name="country"
-            control={control}
-          />
+          <SelectCountry name="country" control={control} />
         </div>
       </div>
       <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
@@ -210,13 +207,13 @@ export default function PersonalInformationForm({
           type="submit"
           disabled={isDisabled}
           className={classNames(
-            'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
-            isDisabled ? 'cursor-not-allowed' : 'hover:bg-indigo-500'
+            "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+            isDisabled ? "cursor-not-allowed" : "hover:bg-indigo-500",
           )}
         >
           Save
         </button>
       </div>
     </form>
-  )
+  );
 }

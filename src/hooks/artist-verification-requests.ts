@@ -11,54 +11,54 @@ import type {
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
-} from '@tanstack/react-query'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { z } from 'zod'
+} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { type z } from "zod";
 
 export type GetAuthenticatedUserArtistVerificationRequests200 =
-  PaginatedApiResponse<ArtistVerificationRequestModel>
+  PaginatedApiResponse<ArtistVerificationRequestModel>;
 export type GetAuthenticatedUserArtistVerificationRequests401 =
-  UnauthenticatedApiResponse
+  UnauthenticatedApiResponse;
 
 export type ListArtistVerificationRequests200 =
-  PaginatedApiResponse<ArtistVerificationRequest>
-export type ListArtistVerificationRequests401 = UnauthenticatedApiResponse
+  PaginatedApiResponse<ArtistVerificationRequest>;
+export type ListArtistVerificationRequests401 = UnauthenticatedApiResponse;
 export type ListArtistVerificationRequestsParams = {
-  perPage?: number
-}
+  perPage?: number;
+};
 
 export type ReviewArtistVerificationRequest200 =
-  ApiResource<ArtistVerificationRequestModel>
-export type ReviewArtistVerificationRequest401 = UnauthenticatedApiResponse
-export type ReviewArtistVerificationRequest403 = UnauthorizedApiResponse
-export type ReviewArtistVerificationRequest404 = NotFoundApiResponse
+  ApiResource<ArtistVerificationRequestModel>;
+export type ReviewArtistVerificationRequest401 = UnauthenticatedApiResponse;
+export type ReviewArtistVerificationRequest403 = UnauthorizedApiResponse;
+export type ReviewArtistVerificationRequest404 = NotFoundApiResponse;
 export type ReviewArtistVerificationRequestBody = z.infer<
   typeof reviewArtistVerificationRequestBody
->
+>;
 
 export type SubmitArtistVerificationRequest200 =
-  ApiResource<ArtistVerificationRequestModel>
-export type SubmitArtistVerificationRequest400 = ErrorApiResponse
-export type SubmitArtistVerificationRequest401 = UnauthenticatedApiResponse
-export type SubmitArtistVerificationRequest403 = UnauthorizedApiResponse
+  ApiResource<ArtistVerificationRequestModel>;
+export type SubmitArtistVerificationRequest400 = ErrorApiResponse;
+export type SubmitArtistVerificationRequest401 = UnauthenticatedApiResponse;
+export type SubmitArtistVerificationRequest403 = UnauthorizedApiResponse;
 
-import type { BodyType, ErrorType } from '@/lib/axios'
-import { customInstance } from '@/lib/axios'
-import { reviewArtistVerificationRequestBody } from '@/schemas/artist-verification-requests'
+import type { BodyType, ErrorType } from "@/lib/axios";
+import { customInstance } from "@/lib/axios";
+import { type reviewArtistVerificationRequestBody } from "@/schemas/artist-verification-requests";
 import {
-  ApiResource,
-  ErrorApiResponse,
-  NotFoundApiResponse,
-  PaginatedApiResponse,
-  UnauthenticatedApiResponse,
-  UnauthorizedApiResponse,
-} from '@/types/api-responses'
+  type ApiResource,
+  type ErrorApiResponse,
+  type NotFoundApiResponse,
+  type PaginatedApiResponse,
+  type UnauthenticatedApiResponse,
+  type UnauthorizedApiResponse,
+} from "@/types/api-responses";
 import {
-  ArtistVerificationRequest,
-  ArtistVerificationRequestModel,
-} from '@/types/models/artist-verification-request'
+  type ArtistVerificationRequest,
+  type ArtistVerificationRequestModel,
+} from "@/types/models/artist-verification-request";
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
  * Retrieve a list of artist verification requests submitted by artists.
@@ -67,27 +67,27 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 export const listArtistVerificationRequests = (
   params?: ListArtistVerificationRequestsParams,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ListArtistVerificationRequests200>(
     {
       url: `/api/v1/artist-verification-requests`,
-      method: 'GET',
+      method: "GET",
       params,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getListArtistVerificationRequestsQueryKey = (
-  params?: ListArtistVerificationRequestsParams
+  params?: ListArtistVerificationRequestsParams,
 ) => {
   return [
     `/api/v1/artist-verification-requests`,
     ...(params ? [params] : []),
-  ] as const
-}
+  ] as const;
+};
 
 export const getListArtistVerificationRequestsQueryOptions = <
   TData = Awaited<ReturnType<typeof listArtistVerificationRequests>>,
@@ -101,34 +101,34 @@ export const getListArtistVerificationRequestsQueryOptions = <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getListArtistVerificationRequestsQueryKey(params)
+    queryOptions?.queryKey ?? getListArtistVerificationRequestsQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof listArtistVerificationRequests>>
   > = ({ signal }) =>
-    listArtistVerificationRequests(params, requestOptions, signal)
+    listArtistVerificationRequests(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listArtistVerificationRequests>>,
     TError,
     TData
   > & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
-}
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
 
 export type ListArtistVerificationRequestsQueryResult = NonNullable<
   Awaited<ReturnType<typeof listArtistVerificationRequests>>
->
+>;
 export type ListArtistVerificationRequestsQueryError =
-  ErrorType<ListArtistVerificationRequests401>
+  ErrorType<ListArtistVerificationRequests401>;
 
 export function useListArtistVerificationRequests<
   TData = Awaited<ReturnType<typeof listArtistVerificationRequests>>,
@@ -149,14 +149,14 @@ export function useListArtistVerificationRequests<
           TError,
           Awaited<ReturnType<typeof listArtistVerificationRequests>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListArtistVerificationRequests<
   TData = Awaited<ReturnType<typeof listArtistVerificationRequests>>,
   TError = ErrorType<ListArtistVerificationRequests401>,
@@ -176,14 +176,14 @@ export function useListArtistVerificationRequests<
           TError,
           Awaited<ReturnType<typeof listArtistVerificationRequests>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListArtistVerificationRequests<
   TData = Awaited<ReturnType<typeof listArtistVerificationRequests>>,
   TError = ErrorType<ListArtistVerificationRequests401>,
@@ -196,13 +196,13 @@ export function useListArtistVerificationRequests<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List Artist Verification Requests
  */
@@ -219,26 +219,26 @@ export function useListArtistVerificationRequests<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getListArtistVerificationRequestsQueryOptions(
     params,
-    options
-  )
+    options,
+  );
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -257,19 +257,19 @@ export const prefetchListArtistVerificationRequests = async <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
   const queryOptions = getListArtistVerificationRequestsQueryOptions(
     params,
-    options
-  )
+    options,
+  );
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};
 
 /**
  * Submits an artist verification request
@@ -277,17 +277,17 @@ export const prefetchListArtistVerificationRequests = async <
  */
 export const submitArtistVerificationRequest = (
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<SubmitArtistVerificationRequest200>(
     {
       url: `/api/v1/users/me/artist-verification-requests`,
-      method: 'POST',
+      method: "POST",
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getSubmitArtistVerificationRequestMutationOptions = <
   TError = ErrorType<
@@ -302,42 +302,42 @@ export const getSubmitArtistVerificationRequestMutationOptions = <
     TError,
     void,
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof submitArtistVerificationRequest>>,
   TError,
   void,
   TContext
 > => {
-  const mutationKey = ['submitArtistVerificationRequest']
+  const mutationKey = ["submitArtistVerificationRequest"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof submitArtistVerificationRequest>>,
     void
   > = () => {
-    return submitArtistVerificationRequest(requestOptions)
-  }
+    return submitArtistVerificationRequest(requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type SubmitArtistVerificationRequestMutationResult = NonNullable<
   Awaited<ReturnType<typeof submitArtistVerificationRequest>>
->
+>;
 
 export type SubmitArtistVerificationRequestMutationError = ErrorType<
   | SubmitArtistVerificationRequest400
   | SubmitArtistVerificationRequest401
   | SubmitArtistVerificationRequest403
->
+>;
 
 /**
  * @summary Submit Artist Verification Request
@@ -356,10 +356,10 @@ export const useSubmitArtistVerificationRequest = <
       TError,
       void,
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof submitArtistVerificationRequest>>,
   TError,
@@ -367,10 +367,10 @@ export const useSubmitArtistVerificationRequest = <
   TContext
 > => {
   const mutationOptions =
-    getSubmitArtistVerificationRequestMutationOptions(options)
+    getSubmitArtistVerificationRequestMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Reviews an artist verification request
  * @summary Review Artist Verification Request
@@ -378,18 +378,18 @@ export const useSubmitArtistVerificationRequest = <
 export const reviewArtistVerificationRequest = (
   artistVerificationRequestId: string,
   reviewArtistVerificationRequestBody?: BodyType<ReviewArtistVerificationRequestBody>,
-  options?: SecondParameter<typeof customInstance>
+  options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<ReviewArtistVerificationRequest200>(
     {
       url: `/api/v1/artist-verification-requests/${artistVerificationRequestId}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       data: reviewArtistVerificationRequestBody,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getReviewArtistVerificationRequestMutationOptions = <
   TError = ErrorType<
@@ -403,59 +403,59 @@ export const getReviewArtistVerificationRequestMutationOptions = <
     Awaited<ReturnType<typeof reviewArtistVerificationRequest>>,
     TError,
     {
-      artistVerificationRequestId: string
-      data: BodyType<ReviewArtistVerificationRequestBody>
+      artistVerificationRequestId: string;
+      data: BodyType<ReviewArtistVerificationRequestBody>;
     },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof reviewArtistVerificationRequest>>,
   TError,
   {
-    artistVerificationRequestId: string
-    data: BodyType<ReviewArtistVerificationRequestBody>
+    artistVerificationRequestId: string;
+    data: BodyType<ReviewArtistVerificationRequestBody>;
   },
   TContext
 > => {
-  const mutationKey = ['reviewArtistVerificationRequest']
+  const mutationKey = ["reviewArtistVerificationRequest"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof reviewArtistVerificationRequest>>,
     {
-      artistVerificationRequestId: string
-      data: BodyType<ReviewArtistVerificationRequestBody>
+      artistVerificationRequestId: string;
+      data: BodyType<ReviewArtistVerificationRequestBody>;
     }
   > = (props) => {
-    const { artistVerificationRequestId, data } = props ?? {}
+    const { artistVerificationRequestId, data } = props ?? {};
 
     return reviewArtistVerificationRequest(
       artistVerificationRequestId,
       data,
-      requestOptions
-    )
-  }
+      requestOptions,
+    );
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type ReviewArtistVerificationRequestMutationResult = NonNullable<
   Awaited<ReturnType<typeof reviewArtistVerificationRequest>>
->
+>;
 export type ReviewArtistVerificationRequestMutationBody =
-  BodyType<ReviewArtistVerificationRequestBody>
+  BodyType<ReviewArtistVerificationRequestBody>;
 export type ReviewArtistVerificationRequestMutationError = ErrorType<
   | ReviewArtistVerificationRequest401
   | ReviewArtistVerificationRequest403
   | ReviewArtistVerificationRequest404
->
+>;
 
 /**
  * @summary Review Artist Verification Request
@@ -473,28 +473,28 @@ export const useReviewArtistVerificationRequest = <
       Awaited<ReturnType<typeof reviewArtistVerificationRequest>>,
       TError,
       {
-        artistVerificationRequestId: string
-        data: BodyType<ReviewArtistVerificationRequestBody>
+        artistVerificationRequestId: string;
+        data: BodyType<ReviewArtistVerificationRequestBody>;
       },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof reviewArtistVerificationRequest>>,
   TError,
   {
-    artistVerificationRequestId: string
-    data: BodyType<ReviewArtistVerificationRequestBody>
+    artistVerificationRequestId: string;
+    data: BodyType<ReviewArtistVerificationRequestBody>;
   },
   TContext
 > => {
   const mutationOptions =
-    getReviewArtistVerificationRequestMutationOptions(options)
+    getReviewArtistVerificationRequestMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * Retrieve a list of artist verification requests submitted by the authenticated user.
@@ -502,21 +502,21 @@ export const useReviewArtistVerificationRequest = <
  */
 export const getAuthenticatedUserArtistVerificationRequests = (
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<GetAuthenticatedUserArtistVerificationRequests200>(
     {
       url: `/api/v1/users/me/artist-verification-requests`,
-      method: 'GET',
+      method: "GET",
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getGetAuthenticatedUserArtistVerificationRequestsQueryKey = () => {
-  return [`/api/v1/users/me/artist-verification-requests`] as const
-}
+  return [`/api/v1/users/me/artist-verification-requests`] as const;
+};
 
 export const getGetAuthenticatedUserArtistVerificationRequestsQueryOptions = <
   TData = Awaited<
@@ -532,33 +532,33 @@ export const getGetAuthenticatedUserArtistVerificationRequestsQueryOptions = <
       TError,
       TData
     >
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ??
-    getGetAuthenticatedUserArtistVerificationRequestsQueryKey()
+    getGetAuthenticatedUserArtistVerificationRequestsQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof getAuthenticatedUserArtistVerificationRequests>>
   > = ({ signal }) =>
-    getAuthenticatedUserArtistVerificationRequests(requestOptions, signal)
+    getAuthenticatedUserArtistVerificationRequests(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getAuthenticatedUserArtistVerificationRequests>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
 export type GetAuthenticatedUserArtistVerificationRequestsQueryResult =
   NonNullable<
     Awaited<ReturnType<typeof getAuthenticatedUserArtistVerificationRequests>>
-  >
+  >;
 export type GetAuthenticatedUserArtistVerificationRequestsQueryError =
-  ErrorType<GetAuthenticatedUserArtistVerificationRequests401>
+  ErrorType<GetAuthenticatedUserArtistVerificationRequests401>;
 
 export function useGetAuthenticatedUserArtistVerificationRequests<
   TData = Awaited<
@@ -586,14 +586,14 @@ export function useGetAuthenticatedUserArtistVerificationRequests<
             ReturnType<typeof getAuthenticatedUserArtistVerificationRequests>
           >
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useGetAuthenticatedUserArtistVerificationRequests<
   TData = Awaited<
     ReturnType<typeof getAuthenticatedUserArtistVerificationRequests>
@@ -620,14 +620,14 @@ export function useGetAuthenticatedUserArtistVerificationRequests<
             ReturnType<typeof getAuthenticatedUserArtistVerificationRequests>
           >
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useGetAuthenticatedUserArtistVerificationRequests<
   TData = Awaited<
     ReturnType<typeof getAuthenticatedUserArtistVerificationRequests>
@@ -643,13 +643,13 @@ export function useGetAuthenticatedUserArtistVerificationRequests<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Get Authenticated User Artist Verification Requests
  */
@@ -669,24 +669,24 @@ export function useGetAuthenticatedUserArtistVerificationRequests<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions =
-    getGetAuthenticatedUserArtistVerificationRequestsQueryOptions(options)
+    getGetAuthenticatedUserArtistVerificationRequestsQueryOptions(options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -708,14 +708,14 @@ export const prefetchGetAuthenticatedUserArtistVerificationRequests = async <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
   const queryOptions =
-    getGetAuthenticatedUserArtistVerificationRequestsQueryOptions(options)
+    getGetAuthenticatedUserArtistVerificationRequestsQueryOptions(options);
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};

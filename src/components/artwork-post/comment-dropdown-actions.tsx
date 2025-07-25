@@ -1,30 +1,30 @@
-'use client'
+"use client";
 
-import { useDeleteArtworkComment } from '@/hooks/artwork-comments'
-import { authHeader, onError } from '@/lib/utils'
-import { useEditCommentStore } from '@/stores/edit-comment-store'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
-import { useQueryClient } from '@tanstack/react-query'
-import toast from 'react-hot-toast'
+import { useDeleteArtworkComment } from "@/hooks/artwork-comments";
+import { authHeader, onError } from "@/lib/utils";
+import { useEditCommentStore } from "@/stores/edit-comment-store";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 type CommentDropdownActionsProps = {
-  token: string | undefined
-  artworkId: string
-  commentId: string
-}
+  token: string | undefined;
+  artworkId: string;
+  commentId: string;
+};
 
 export default function CommentDropdownActions({
   token,
   artworkId,
   commentId,
 }: CommentDropdownActionsProps) {
-  const queryClient = useQueryClient()
-  const setFormVisible = useEditCommentStore((state) => state.setFormVisible)
+  const queryClient = useQueryClient();
+  const setFormVisible = useEditCommentStore((state) => state.setFormVisible);
 
-  const authConfig = token ? authHeader(token!) : undefined
+  const authConfig = token ? authHeader(token) : undefined;
 
-  const deleteArtworkCommentMutation = useDeleteArtworkComment(authConfig)
+  const deleteArtworkCommentMutation = useDeleteArtworkComment(authConfig);
 
   function onDelete() {
     deleteArtworkCommentMutation.mutate(
@@ -36,38 +36,32 @@ export default function CommentDropdownActions({
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: [`/api/v1/artworks/${artworkId}`],
-          })
-          toast.success('Comment deleted successfully!')
+          });
+          toast.success("Comment deleted successfully!");
         },
-      }
-    )
+      },
+    );
   }
 
-  const isDisabled = deleteArtworkCommentMutation.isPending || !token
+  const isDisabled = deleteArtworkCommentMutation.isPending || !token;
   return (
-    <Menu
-      as="div"
-      className="relative inline-block text-left"
-    >
+    <Menu as="div" className="relative inline-block text-left">
       <div>
-        <MenuButton className="flex items-center text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+        <MenuButton className="flex items-center text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100 focus:outline-none">
           <span className="sr-only">Open options</span>
-          <EllipsisHorizontalIcon
-            aria-hidden="true"
-            className="h-7 w-7"
-          />
+          <EllipsisHorizontalIcon aria-hidden="true" className="h-7 w-7" />
         </MenuButton>
       </div>
 
       <MenuItems
         transition
-        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+        className="ring-opacity-5 absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[enter]:ease-out data-[leave]:duration-75 data-[leave]:ease-in"
       >
         <div className="py-1">
           <MenuItem>
             <button
               onClick={() => setFormVisible(true)}
-              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 w-full text-left"
+              className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
             >
               Edit
             </button>
@@ -76,7 +70,7 @@ export default function CommentDropdownActions({
             <button
               disabled={isDisabled}
               onClick={onDelete}
-              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 w-full text-left"
+              className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
             >
               Remove
             </button>
@@ -84,5 +78,5 @@ export default function CommentDropdownActions({
         </div>
       </MenuItems>
     </Menu>
-  )
+  );
 }

@@ -1,49 +1,47 @@
-'use client'
+"use client";
 
 import {
   useDeleteArtwork,
   useListAuthenticatedUserArtworks,
-} from '@/hooks/artworks'
-import { authHeader, fileUrl, matchQueryStatus, onError } from '@/lib/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import toast from 'react-hot-toast'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import Pagination from '../pagination'
-import MyArtworksSkeleton from './my-artworks-skeleton'
+} from "@/hooks/artworks";
+import { authHeader, fileUrl, matchQueryStatus, onError } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import EmptyUI from "../empty-ui";
+import ErrorUI from "../error-ui";
+import Pagination from "../pagination";
+import MyArtworksSkeleton from "./my-artworks-skeleton";
+import { useSession } from "@/hooks/session";
 
-type MyArtworksProps = {
-  token: string
-}
+export default function MyArtworks() {
+  const { token } = useSession();
+  const queryClient = useQueryClient();
+  const authConfig = authHeader(token);
+  const searchParams = useSearchParams();
 
-export default function MyArtworks({ token }: MyArtworksProps) {
-  const queryClient = useQueryClient()
-  const authConfig = authHeader(token)
-  const searchParams = useSearchParams()
-
-  const page = searchParams.get('page')
-  const status = searchParams.get('status')
+  const page = searchParams.get("page");
+  const status = searchParams.get("status");
 
   const queryParams: Record<string, string> = {
-    perPage: '10',
-    ...(status && { 'filter[status]': status }),
+    perPage: "10",
+    ...(status && { "filter[status]": status }),
     ...(page && { page }),
-  }
+  };
 
   const listAuthenticatedUserArtworksQuery = useListAuthenticatedUserArtworks(
     queryParams,
-    authConfig
-  )
+    authConfig,
+  );
 
-  const deleteArtworkMutation = useDeleteArtwork(authConfig)
+  const deleteArtworkMutation = useDeleteArtwork(authConfig);
 
   const handleDeleteArtwork = (artworkId: string) => {
     if (
       window.confirm(
-        'Are you sure you want to delete this artwork? This action cannot be undone.'
+        "Are you sure you want to delete this artwork? This action cannot be undone.",
       )
     ) {
       deleteArtworkMutation.mutate(
@@ -53,38 +51,38 @@ export default function MyArtworks({ token }: MyArtworksProps) {
         {
           onError,
           onSuccess: () => {
-            queryClient.invalidateQueries({
-              queryKey: ['/api/v1/users/me/artworks'],
-            })
+            void queryClient.invalidateQueries({
+              queryKey: ["/api/v1/users/me/artworks"],
+            });
 
-            toast.success('Artwork deleted successfully!')
+            toast.success("Artwork deleted successfully!");
           },
-        }
-      )
+        },
+      );
     }
-  }
+  };
 
   return matchQueryStatus(listAuthenticatedUserArtworksQuery, {
     Loading: <MyArtworksSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'You have not submitted any artworks'} />,
+    Empty: <EmptyUI message={"You have not submitted any artworks"} />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,
         title: artwork.title,
         mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
         status: artwork.status,
-      }))
+      }));
 
-      const links = data.links
-      const meta = data.meta
+      const links = data.links;
+      const meta = data.meta;
 
       return (
         <div className="bg-white">
           <div className="mx-auto max-w-2xl lg:max-w-7xl">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-x-1">
-                My Artworks |{' '}
+              <h2 className="flex items-center gap-x-1 text-2xl font-bold tracking-tight text-gray-900">
+                My Artworks |{" "}
                 <span className="text-lg">{artworks.length} artworks</span>
               </h2>
             </div>
@@ -97,7 +95,7 @@ export default function MyArtworks({ token }: MyArtworksProps) {
                         <tr>
                           <th
                             scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                            className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                           >
                             Title
                           </th>
@@ -115,7 +113,7 @@ export default function MyArtworks({ token }: MyArtworksProps) {
                           </th>
                           <th
                             scope="col"
-                            className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                            className="relative py-3.5 pr-4 pl-3 sm:pr-0"
                           >
                             <span className="sr-only">Edit</span>
                           </th>
@@ -124,24 +122,24 @@ export default function MyArtworks({ token }: MyArtworksProps) {
                       <tbody className="divide-y divide-gray-200">
                         {artworks.map((artwork) => (
                           <tr key={artwork.id}>
-                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                            <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
                               {artwork.title}
                             </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                               <Image
                                 src={artwork.mainPhotoUrl}
                                 alt=""
-                                className="w-32 h-32"
+                                className="h-32 w-32"
                                 width={128}
                                 height={128}
                               />
                             </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                               {artwork.status}
                             </td>
-                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                               <div className="flex flex-col items-end gap-y-3">
-                                {artwork.status === 'draft' ? (
+                                {artwork.status === "draft" ? (
                                   <Link
                                     href={`/my-artworks/${artwork.id}/edit`}
                                     className="text-indigo-600 hover:text-indigo-900"
@@ -187,15 +185,12 @@ export default function MyArtworks({ token }: MyArtworksProps) {
 
             {meta.total > 10 && (
               <div className="pt-8">
-                <Pagination
-                  links={links}
-                  meta={meta}
-                />
+                <Pagination links={links} meta={meta} />
               </div>
             )}
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

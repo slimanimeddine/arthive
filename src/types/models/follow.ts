@@ -1,12 +1,12 @@
-import { BaseModel } from './base'
-import { User } from './user'
+import { type BaseModel } from "./base";
+import { type User } from "./user";
 
 export type FollowModel = BaseModel & {
-  follower_id: string
-  followed_id: string
-}
+  follower_id: string;
+  followed_id: string;
+};
 
 export type Follow = FollowModel & {
-  follower: User
-  followed: User
-}
+  follower: User;
+  followed: User;
+};

@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import ArtistInformation from './artist-information'
-import ArtworksDisplay from './artworks-display'
+import ArtistInformation from "./artist-information";
+import ArtworksDisplay from "./artworks-display";
 
 type ArtistProfileProps = {
-  token: string | undefined
-  username: string
-}
+  token: string | undefined;
+  username: string;
+};
 
 export default function ArtistProfile({ token, username }: ArtistProfileProps) {
   return (
@@ -16,10 +16,7 @@ export default function ArtistProfile({ token, username }: ArtistProfileProps) {
           {/* artist information */}
           <div className="lg:col-start-3 lg:row-end-1">
             <h2 className="sr-only">Summary</h2>
-            <ArtistInformation
-              token={token}
-              username={username}
-            />
+            <ArtistInformation token={token} username={username} />
           </div>
 
           {/* artworks */}
@@ -27,5 +24,5 @@ export default function ArtistProfile({ token, username }: ArtistProfileProps) {
         </div>
       </div>
     </main>
-  )
+  );
 }

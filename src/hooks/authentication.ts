@@ -11,73 +11,77 @@ import type {
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
-} from '@tanstack/react-query'
-import { useMutation, useQuery } from '@tanstack/react-query'
+} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-export type SignUp200 = NoContentApiResponse
-export type SignUpBody = z.infer<typeof signUpBody>
+export type SignUp200 = NoContentApiResponse;
+export type SignUpBody = z.infer<typeof signUpBody>;
 
 export type SignIn200 = SuccessApiResponse<{
-  token: string
-  id: string
-}>
-export type SignIn401 = ErrorApiResponse<401>
-export type SignInBody = z.infer<typeof signInBody>
+  token: string;
+  id: string;
+}>;
+export type SignIn401 = ErrorApiResponse<401>;
+export type SignInBody = z.infer<typeof signInBody>;
 
-export type AdminSignIn200 = SignIn200
-export type AdminSignIn401 = SignIn401
-export type AdminSignInBody = SignInBody
+export type AdminSignIn200 = SignIn200;
+export type AdminSignIn401 = SignIn401;
+export type AdminSignInBody = SignInBody;
 
-export type SignOut200 = NoContentApiResponse
-export type SignOut401 = UnauthenticatedApiResponse
+export type SignOut200 = NoContentApiResponse;
+export type SignOut401 = UnauthenticatedApiResponse;
 
-export type ChangePassword200 = NoContentApiResponse
-export type ChangePassword401 = UnauthenticatedApiResponse
-export type ChangePassword422 = ErrorApiResponse<422>
-export type ChangePasswordBody = z.infer<typeof changePasswordBody>
+export type ChangePassword200 = NoContentApiResponse;
+export type ChangePassword401 = UnauthenticatedApiResponse;
+export type ChangePassword422 = ErrorApiResponse<422>;
+export type ChangePasswordBody = z.infer<typeof changePasswordBody>;
 
-export type DeleteUser200 = NoContentApiResponse
-export type DeleteUser401 = UnauthenticatedApiResponse
-export type DeleteUser400 = ErrorApiResponse
-export type DeleteUserBody = z.infer<typeof deleteUserBody>
+export type DeleteUser200 = NoContentApiResponse;
+export type DeleteUser401 = UnauthenticatedApiResponse;
+export type DeleteUser400 = ErrorApiResponse;
+export type DeleteUserBody = z.infer<typeof deleteUserBody>;
 
-export type ResendEmailVerification200 = NoContentApiResponse
-export type ResendEmailVerification401 = UnauthenticatedApiResponse
+export type ResendEmailVerification200 = NoContentApiResponse;
+export type ResendEmailVerification401 = UnauthenticatedApiResponse;
 
-export type VerifyEmail200 = NoContentApiResponse
-export type VerifyEmail401 = UnauthenticatedApiResponse
-export type VerifyEmail403 = UnauthorizedApiResponse
+export type VerifyEmail200 = NoContentApiResponse;
+export type VerifyEmail401 = UnauthenticatedApiResponse;
+export type VerifyEmail403 = UnauthorizedApiResponse;
+export type VerifyEmailParams = {
+  expires: string;
+  signature: string;
+};
 
-export type ResetPassword200 = NoContentApiResponse
-export type ResetPassword400 = ErrorApiResponse
-export type ResetPasswordBody = z.infer<typeof resetPasswordBody>
+export type ResetPassword200 = NoContentApiResponse;
+export type ResetPassword400 = ErrorApiResponse;
+export type ResetPasswordBody = z.infer<typeof resetPasswordBody>;
 
-export type SendPasswordResetLink200 = NoContentApiResponse
-export type SendPasswordResetLink400 = ErrorApiResponse
+export type SendPasswordResetLink200 = NoContentApiResponse;
+export type SendPasswordResetLink400 = ErrorApiResponse;
 export type SendPasswordResetLinkBody = z.infer<
   typeof sendPasswordResetLinkBody
->
+>;
 
-import type { BodyType, ErrorType } from '@/lib/axios'
-import { customInstance } from '@/lib/axios'
+import type { BodyType, ErrorType } from "@/lib/axios";
+import { customInstance } from "@/lib/axios";
 import {
-  changePasswordBody,
-  deleteUserBody,
-  resetPasswordBody,
-  sendPasswordResetLinkBody,
-  signInBody,
-  signUpBody,
-} from '@/schemas/authentication'
+  type changePasswordBody,
+  type deleteUserBody,
+  type resetPasswordBody,
+  type sendPasswordResetLinkBody,
+  type signInBody,
+  type signUpBody,
+} from "@/schemas/authentication";
 import {
-  ErrorApiResponse,
-  NoContentApiResponse,
-  SuccessApiResponse,
-  UnauthenticatedApiResponse,
-  UnauthorizedApiResponse,
-} from '@/types/api-responses'
-import { z } from 'zod'
+  type ErrorApiResponse,
+  type NoContentApiResponse,
+  type SuccessApiResponse,
+  type UnauthenticatedApiResponse,
+  type UnauthorizedApiResponse,
+} from "@/types/api-responses";
+import { type z } from "zod";
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
  * Creates a new user
@@ -86,19 +90,19 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 export const signUp = (
   signUpBody: BodyType<SignUpBody>,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<SignUp200>(
     {
       url: `/api/v1/sign-up`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: signUpBody,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getSignUpMutationOptions = <
   TError = ErrorType<unknown>,
@@ -109,40 +113,40 @@ export const getSignUpMutationOptions = <
     TError,
     { data: BodyType<SignUpBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof signUp>>,
   TError,
   { data: BodyType<SignUpBody> },
   TContext
 > => {
-  const mutationKey = ['signUp']
+  const mutationKey = ["signUp"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof signUp>>,
     { data: BodyType<SignUpBody> }
   > = (props) => {
-    const { data } = props ?? {}
+    const { data } = props ?? {};
 
-    return signUp(data, requestOptions)
-  }
+    return signUp(data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type SignUpMutationResult = NonNullable<
   Awaited<ReturnType<typeof signUp>>
->
-export type SignUpMutationBody = BodyType<SignUpBody>
-export type SignUpMutationError = ErrorType<unknown>
+>;
+export type SignUpMutationBody = BodyType<SignUpBody>;
+export type SignUpMutationError = ErrorType<unknown>;
 
 /**
  * @summary Sign Up
@@ -154,20 +158,20 @@ export const useSignUp = <TError = ErrorType<unknown>, TContext = unknown>(
       TError,
       { data: BodyType<SignUpBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof signUp>>,
   TError,
   { data: BodyType<SignUpBody> },
   TContext
 > => {
-  const mutationOptions = getSignUpMutationOptions(options)
+  const mutationOptions = getSignUpMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Signs in a user and returns an auth token
  * @summary Sign In
@@ -175,19 +179,19 @@ export const useSignUp = <TError = ErrorType<unknown>, TContext = unknown>(
 export const signIn = (
   signInBody: BodyType<SignInBody>,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<SignIn200>(
     {
       url: `/api/v1/sign-in`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: signInBody,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getSignInMutationOptions = <
   TError = ErrorType<SignIn401>,
@@ -198,40 +202,40 @@ export const getSignInMutationOptions = <
     TError,
     { data: BodyType<SignInBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof signIn>>,
   TError,
   { data: BodyType<SignInBody> },
   TContext
 > => {
-  const mutationKey = ['signIn']
+  const mutationKey = ["signIn"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof signIn>>,
     { data: BodyType<SignInBody> }
   > = (props) => {
-    const { data } = props ?? {}
+    const { data } = props ?? {};
 
-    return signIn(data, requestOptions)
-  }
+    return signIn(data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type SignInMutationResult = NonNullable<
   Awaited<ReturnType<typeof signIn>>
->
-export type SignInMutationBody = BodyType<SignInBody>
-export type SignInMutationError = ErrorType<SignIn401>
+>;
+export type SignInMutationBody = BodyType<SignInBody>;
+export type SignInMutationError = ErrorType<SignIn401>;
 
 /**
  * @summary Sign In
@@ -243,33 +247,33 @@ export const useSignIn = <TError = ErrorType<SignIn401>, TContext = unknown>(
       TError,
       { data: BodyType<SignInBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof signIn>>,
   TError,
   { data: BodyType<SignInBody> },
   TContext
 > => {
-  const mutationOptions = getSignInMutationOptions(options)
+  const mutationOptions = getSignInMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Signs out a user and deletes the auth token
  * @summary Sign Out
  */
 export const signOut = (
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<SignOut200>(
-    { url: `/api/v1/sign-out`, method: 'POST', signal },
-    options
-  )
-}
+    { url: `/api/v1/sign-out`, method: "POST", signal },
+    options,
+  );
+};
 
 export const getSignOutMutationOptions = <
   TError = ErrorType<SignOut401>,
@@ -280,38 +284,38 @@ export const getSignOutMutationOptions = <
     TError,
     void,
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof signOut>>,
   TError,
   void,
   TContext
 > => {
-  const mutationKey = ['signOut']
+  const mutationKey = ["signOut"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof signOut>>,
     void
   > = () => {
-    return signOut(requestOptions)
-  }
+    return signOut(requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type SignOutMutationResult = NonNullable<
   Awaited<ReturnType<typeof signOut>>
->
+>;
 
-export type SignOutMutationError = ErrorType<SignOut401>
+export type SignOutMutationError = ErrorType<SignOut401>;
 
 /**
  * @summary Sign Out
@@ -323,20 +327,20 @@ export const useSignOut = <TError = ErrorType<SignOut401>, TContext = unknown>(
       TError,
       void,
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof signOut>>,
   TError,
   void,
   TContext
 > => {
-  const mutationOptions = getSignOutMutationOptions(options)
+  const mutationOptions = getSignOutMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Changes the password of the authenticated user
  * @summary Change Password
@@ -344,19 +348,19 @@ export const useSignOut = <TError = ErrorType<SignOut401>, TContext = unknown>(
 export const changePassword = (
   changePasswordBody: BodyType<ChangePasswordBody>,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ChangePassword200>(
     {
       url: `/api/v1/change-password`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: changePasswordBody,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getChangePasswordMutationOptions = <
   TError = ErrorType<ChangePassword401 | ChangePassword422>,
@@ -367,42 +371,42 @@ export const getChangePasswordMutationOptions = <
     TError,
     { data: BodyType<ChangePasswordBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof changePassword>>,
   TError,
   { data: BodyType<ChangePasswordBody> },
   TContext
 > => {
-  const mutationKey = ['changePassword']
+  const mutationKey = ["changePassword"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof changePassword>>,
     { data: BodyType<ChangePasswordBody> }
   > = (props) => {
-    const { data } = props ?? {}
+    const { data } = props ?? {};
 
-    return changePassword(data, requestOptions)
-  }
+    return changePassword(data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type ChangePasswordMutationResult = NonNullable<
   Awaited<ReturnType<typeof changePassword>>
->
-export type ChangePasswordMutationBody = BodyType<ChangePasswordBody>
+>;
+export type ChangePasswordMutationBody = BodyType<ChangePasswordBody>;
 export type ChangePasswordMutationError = ErrorType<
   ChangePassword401 | ChangePassword422
->
+>;
 
 /**
  * @summary Change Password
@@ -417,20 +421,20 @@ export const useChangePassword = <
       TError,
       { data: BodyType<ChangePasswordBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof changePassword>>,
   TError,
   { data: BodyType<ChangePasswordBody> },
   TContext
 > => {
-  const mutationOptions = getChangePasswordMutationOptions(options)
+  const mutationOptions = getChangePasswordMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * Signs in an admin user and returns an auth token
@@ -439,19 +443,19 @@ export const useChangePassword = <
 export const adminSignIn = (
   adminSignInBody: BodyType<AdminSignInBody>,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<AdminSignIn200>(
     {
       url: `/api/v1/admin/sign-in`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: adminSignInBody,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getAdminSignInMutationOptions = <
   TError = ErrorType<AdminSignIn401>,
@@ -462,40 +466,40 @@ export const getAdminSignInMutationOptions = <
     TError,
     { data: BodyType<AdminSignInBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof adminSignIn>>,
   TError,
   { data: BodyType<AdminSignInBody> },
   TContext
 > => {
-  const mutationKey = ['adminSignIn']
+  const mutationKey = ["adminSignIn"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof adminSignIn>>,
     { data: BodyType<AdminSignInBody> }
   > = (props) => {
-    const { data } = props ?? {}
+    const { data } = props ?? {};
 
-    return adminSignIn(data, requestOptions)
-  }
+    return adminSignIn(data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type AdminSignInMutationResult = NonNullable<
   Awaited<ReturnType<typeof adminSignIn>>
->
-export type AdminSignInMutationBody = BodyType<AdminSignInBody>
-export type AdminSignInMutationError = ErrorType<AdminSignIn401>
+>;
+export type AdminSignInMutationBody = BodyType<AdminSignInBody>;
+export type AdminSignInMutationError = ErrorType<AdminSignIn401>;
 
 /**
  * @summary Admin Sign In
@@ -510,20 +514,20 @@ export const useAdminSignIn = <
       TError,
       { data: BodyType<AdminSignInBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof adminSignIn>>,
   TError,
   { data: BodyType<AdminSignInBody> },
   TContext
 > => {
-  const mutationOptions = getAdminSignInMutationOptions(options)
+  const mutationOptions = getAdminSignInMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * Deletes the authenticated user
@@ -531,18 +535,18 @@ export const useAdminSignIn = <
  */
 export const deleteUser = (
   deleteUserBody: BodyType<DeleteUserBody>,
-  options?: SecondParameter<typeof customInstance>
+  options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<DeleteUser200>(
     {
       url: `/api/v1/users/me`,
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
       data: deleteUserBody,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getDeleteUserMutationOptions = <
   TError = ErrorType<DeleteUser400 | DeleteUser401>,
@@ -553,40 +557,40 @@ export const getDeleteUserMutationOptions = <
     TError,
     { data: BodyType<DeleteUserBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof deleteUser>>,
   TError,
   { data: BodyType<DeleteUserBody> },
   TContext
 > => {
-  const mutationKey = ['deleteUser']
+  const mutationKey = ["deleteUser"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof deleteUser>>,
     { data: BodyType<DeleteUserBody> }
   > = (props) => {
-    const { data } = props ?? {}
+    const { data } = props ?? {};
 
-    return deleteUser(data, requestOptions)
-  }
+    return deleteUser(data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type DeleteUserMutationResult = NonNullable<
   Awaited<ReturnType<typeof deleteUser>>
->
-export type DeleteUserMutationBody = BodyType<DeleteUserBody>
-export type DeleteUserMutationError = ErrorType<DeleteUser400 | DeleteUser401>
+>;
+export type DeleteUserMutationBody = BodyType<DeleteUserBody>;
+export type DeleteUserMutationError = ErrorType<DeleteUser400 | DeleteUser401>;
 
 /**
  * @summary Delete User
@@ -601,20 +605,20 @@ export const useDeleteUser = <
       TError,
       { data: BodyType<DeleteUserBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof deleteUser>>,
   TError,
   { data: BodyType<DeleteUserBody> },
   TContext
 > => {
-  const mutationOptions = getDeleteUserMutationOptions(options)
+  const mutationOptions = getDeleteUserMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * Verifies the email of the authenticated user
@@ -623,18 +627,31 @@ export const useDeleteUser = <
 export const verifyEmail = (
   id: string,
   hash: string,
+  params?: VerifyEmailParams,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<VerifyEmail200>(
-    { url: `/api/v1/email/verify/${id}/${hash}`, method: 'GET', signal },
-    options
-  )
-}
+    {
+      url: `/api/v1/email/verify/${id}/${hash}`,
+      method: "GET",
+      params,
+      signal,
+    },
+    options,
+  );
+};
 
-export const getVerifyEmailQueryKey = (id: string, hash: string) => {
-  return [`/api/v1/email/verify/${id}/${hash}`] as const
-}
+export const getVerifyEmailQueryKey = (
+  id: string,
+  hash: string,
+  params?: VerifyEmailParams,
+) => {
+  return [
+    `/api/v1/email/verify/${id}/${hash}`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
 export const getVerifyEmailQueryOptions = <
   TData = Awaited<ReturnType<typeof verifyEmail>>,
@@ -642,20 +659,22 @@ export const getVerifyEmailQueryOptions = <
 >(
   id: string,
   hash: string,
+  params?: VerifyEmailParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getVerifyEmailQueryKey(id, hash)
+  const queryKey =
+    queryOptions?.queryKey ?? getVerifyEmailQueryKey(id, hash, params);
 
   const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyEmail>>> = ({
     signal,
-  }) => verifyEmail(id, hash, requestOptions, signal)
+  }) => verifyEmail(id, hash, params, requestOptions, signal);
 
   return {
     queryKey,
@@ -666,13 +685,13 @@ export const getVerifyEmailQueryOptions = <
     Awaited<ReturnType<typeof verifyEmail>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
 export type VerifyEmailQueryResult = NonNullable<
   Awaited<ReturnType<typeof verifyEmail>>
->
-export type VerifyEmailQueryError = ErrorType<VerifyEmail401 | VerifyEmail403>
+>;
+export type VerifyEmailQueryError = ErrorType<VerifyEmail401 | VerifyEmail403>;
 
 export function useVerifyEmail<
   TData = Awaited<ReturnType<typeof verifyEmail>>,
@@ -680,6 +699,7 @@ export function useVerifyEmail<
 >(
   id: string,
   hash: string,
+  params: undefined | VerifyEmailParams,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
@@ -690,20 +710,21 @@ export function useVerifyEmail<
           TError,
           Awaited<ReturnType<typeof verifyEmail>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useVerifyEmail<
   TData = Awaited<ReturnType<typeof verifyEmail>>,
   TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
 >(
   id: string,
   hash: string,
+  params?: VerifyEmailParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
@@ -714,30 +735,31 @@ export function useVerifyEmail<
           TError,
           Awaited<ReturnType<typeof verifyEmail>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useVerifyEmail<
   TData = Awaited<ReturnType<typeof verifyEmail>>,
   TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
 >(
   id: string,
   hash: string,
+  params?: VerifyEmailParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Verify Email
  */
@@ -748,51 +770,53 @@ export function useVerifyEmail<
 >(
   id: string,
   hash: string,
+  params?: VerifyEmailParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getVerifyEmailQueryOptions(id, hash, options)
+  const queryOptions = getVerifyEmailQueryOptions(id, hash, params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
  * @summary Verify Email
  */
-export const prefetchVerifyEmail = async <
+export const prefetchVerifyEmailQuery = async <
   TData = Awaited<ReturnType<typeof verifyEmail>>,
   TError = ErrorType<VerifyEmail401 | VerifyEmail403>,
 >(
   queryClient: QueryClient,
   id: string,
   hash: string,
+  params?: VerifyEmailParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof verifyEmail>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
-  const queryOptions = getVerifyEmailQueryOptions(id, hash, options)
+  const queryOptions = getVerifyEmailQueryOptions(id, hash, params, options);
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};
 
 /**
  * Resends the email verification notification to the authenticated user
@@ -800,13 +824,13 @@ export const prefetchVerifyEmail = async <
  */
 export const resendEmailVerification = (
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ResendEmailVerification200>(
-    { url: `/api/v1/email/verification-notification`, method: 'POST', signal },
-    options
-  )
-}
+    { url: `/api/v1/email/verification-notification`, method: "POST", signal },
+    options,
+  );
+};
 
 export const getResendEmailVerificationMutationOptions = <
   TError = ErrorType<ResendEmailVerification401>,
@@ -817,39 +841,39 @@ export const getResendEmailVerificationMutationOptions = <
     TError,
     void,
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof resendEmailVerification>>,
   TError,
   void,
   TContext
 > => {
-  const mutationKey = ['resendEmailVerification']
+  const mutationKey = ["resendEmailVerification"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof resendEmailVerification>>,
     void
   > = () => {
-    return resendEmailVerification(requestOptions)
-  }
+    return resendEmailVerification(requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type ResendEmailVerificationMutationResult = NonNullable<
   Awaited<ReturnType<typeof resendEmailVerification>>
->
+>;
 
 export type ResendEmailVerificationMutationError =
-  ErrorType<ResendEmailVerification401>
+  ErrorType<ResendEmailVerification401>;
 
 /**
  * @summary Resend Email Verification
@@ -864,20 +888,20 @@ export const useResendEmailVerification = <
       TError,
       void,
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof resendEmailVerification>>,
   TError,
   void,
   TContext
 > => {
-  const mutationOptions = getResendEmailVerificationMutationOptions(options)
+  const mutationOptions = getResendEmailVerificationMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * Sends a password reset link to the user's email
@@ -886,19 +910,19 @@ export const useResendEmailVerification = <
 export const sendPasswordResetLink = (
   sendPasswordResetLinkBody: BodyType<SendPasswordResetLinkBody>,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<SendPasswordResetLink200>(
     {
       url: `/api/v1/forgot-password`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: sendPasswordResetLinkBody,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getSendPasswordResetLinkMutationOptions = <
   TError = ErrorType<SendPasswordResetLink400>,
@@ -909,41 +933,41 @@ export const getSendPasswordResetLinkMutationOptions = <
     TError,
     { data: BodyType<SendPasswordResetLinkBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof sendPasswordResetLink>>,
   TError,
   { data: BodyType<SendPasswordResetLinkBody> },
   TContext
 > => {
-  const mutationKey = ['sendPasswordResetLink']
+  const mutationKey = ["sendPasswordResetLink"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof sendPasswordResetLink>>,
     { data: BodyType<SendPasswordResetLinkBody> }
   > = (props) => {
-    const { data } = props ?? {}
+    const { data } = props ?? {};
 
-    return sendPasswordResetLink(data, requestOptions)
-  }
+    return sendPasswordResetLink(data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type SendPasswordResetLinkMutationResult = NonNullable<
   Awaited<ReturnType<typeof sendPasswordResetLink>>
->
+>;
 export type SendPasswordResetLinkMutationBody =
-  BodyType<SendPasswordResetLinkBody>
-export type SendPasswordResetLinkMutationError = ErrorType<string>
+  BodyType<SendPasswordResetLinkBody>;
+export type SendPasswordResetLinkMutationError = ErrorType<string>;
 
 /**
  * @summary Send Password Reset Link
@@ -958,20 +982,20 @@ export const useSendPasswordResetLink = <
       TError,
       { data: BodyType<SendPasswordResetLinkBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof sendPasswordResetLink>>,
   TError,
   { data: BodyType<SendPasswordResetLinkBody> },
   TContext
 > => {
-  const mutationOptions = getSendPasswordResetLinkMutationOptions(options)
+  const mutationOptions = getSendPasswordResetLinkMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * Resets the password of the user
  * @summary Reset Password
@@ -979,19 +1003,19 @@ export const useSendPasswordResetLink = <
 export const resetPassword = (
   resetPasswordBody: BodyType<ResetPasswordBody>,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ResetPassword200>(
     {
       url: `/api/v1/reset-password`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: resetPasswordBody,
       signal,
     },
-    options
-  )
-}
+    options,
+  );
+};
 
 export const getResetPasswordMutationOptions = <
   TError = ErrorType<ResetPassword400>,
@@ -1002,40 +1026,40 @@ export const getResetPasswordMutationOptions = <
     TError,
     { data: BodyType<ResetPasswordBody> },
     TContext
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof resetPassword>>,
   TError,
   { data: BodyType<ResetPasswordBody> },
   TContext
 > => {
-  const mutationKey = ['resetPassword']
+  const mutationKey = ["resetPassword"];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      'mutationKey' in options.mutation &&
+      "mutationKey" in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof resetPassword>>,
     { data: BodyType<ResetPasswordBody> }
   > = (props) => {
-    const { data } = props ?? {}
+    const { data } = props ?? {};
 
-    return resetPassword(data, requestOptions)
-  }
+    return resetPassword(data, requestOptions);
+  };
 
-  return { mutationFn, ...mutationOptions }
-}
+  return { mutationFn, ...mutationOptions };
+};
 
 export type ResetPasswordMutationResult = NonNullable<
   Awaited<ReturnType<typeof resetPassword>>
->
-export type ResetPasswordMutationBody = BodyType<ResetPasswordBody>
-export type ResetPasswordMutationError = ErrorType<string>
+>;
+export type ResetPasswordMutationBody = BodyType<ResetPasswordBody>;
+export type ResetPasswordMutationError = ErrorType<string>;
 
 /**
  * @summary Reset Password
@@ -1050,17 +1074,17 @@ export const useResetPassword = <
       TError,
       { data: BodyType<ResetPasswordBody> },
       TContext
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseMutationResult<
   Awaited<ReturnType<typeof resetPassword>>,
   TError,
   { data: BodyType<ResetPasswordBody> },
   TContext
 > => {
-  const mutationOptions = getResetPasswordMutationOptions(options)
+  const mutationOptions = getResetPasswordMutationOptions(options);
 
-  return useMutation(mutationOptions, queryClient)
-}
+  return useMutation(mutationOptions, queryClient);
+};

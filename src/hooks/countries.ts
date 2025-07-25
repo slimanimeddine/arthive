@@ -8,17 +8,17 @@ import type {
   UndefinedInitialDataOptions,
   UseQueryOptions,
   UseQueryResult,
-} from '@tanstack/react-query'
-import { useQuery } from '@tanstack/react-query'
+} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-export type ListCountries200 = ApiResource<CountryModel[]>
+export type ListCountries200 = ApiResource<CountryModel[]>;
 
-import type { ErrorType } from '@/lib/axios'
-import { customInstance } from '@/lib/axios'
-import { ApiResource } from '@/types/api-responses'
-import { CountryModel } from '@/types/models/country'
+import type { ErrorType } from "@/lib/axios";
+import { customInstance } from "@/lib/axios";
+import { type ApiResource } from "@/types/api-responses";
+import { type CountryModel } from "@/types/models/country";
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
  * Retrieve a list of countries
@@ -26,17 +26,17 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
  */
 export const listCountries = (
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ListCountries200>(
-    { url: `/api/v1/countries`, method: 'GET', signal },
-    options
-  )
-}
+    { url: `/api/v1/countries`, method: "GET", signal },
+    options,
+  );
+};
 
 export const getListCountriesQueryKey = () => {
-  return [`/api/v1/countries`] as const
-}
+  return [`/api/v1/countries`] as const;
+};
 
 export const getListCountriesQueryOptions = <
   TData = Awaited<ReturnType<typeof listCountries>>,
@@ -44,30 +44,30 @@ export const getListCountriesQueryOptions = <
 >(options?: {
   query?: Partial<
     UseQueryOptions<Awaited<ReturnType<typeof listCountries>>, TError, TData>
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getListCountriesQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getListCountriesQueryKey();
 
   const queryFn: QueryFunction<Awaited<ReturnType<typeof listCountries>>> = ({
     signal,
-  }) => listCountries(requestOptions, signal)
+  }) => listCountries(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listCountries>>,
     TError,
     TData
   > & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
-}
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
 
 export type ListCountriesQueryResult = NonNullable<
   Awaited<ReturnType<typeof listCountries>>
->
-export type ListCountriesQueryError = ErrorType<unknown>
+>;
+export type ListCountriesQueryError = ErrorType<unknown>;
 
 export function useListCountries<
   TData = Awaited<ReturnType<typeof listCountries>>,
@@ -83,14 +83,14 @@ export function useListCountries<
           TError,
           Awaited<ReturnType<typeof listCountries>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListCountries<
   TData = Awaited<ReturnType<typeof listCountries>>,
   TError = ErrorType<unknown>,
@@ -105,14 +105,14 @@ export function useListCountries<
           TError,
           Awaited<ReturnType<typeof listCountries>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListCountries<
   TData = Awaited<ReturnType<typeof listCountries>>,
   TError = ErrorType<unknown>,
@@ -120,13 +120,13 @@ export function useListCountries<
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof listCountries>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List Countries
  */
@@ -138,23 +138,23 @@ export function useListCountries<
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof listCountries>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getListCountriesQueryOptions(options)
+  const queryOptions = getListCountriesQueryOptions(options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -168,13 +168,13 @@ export const prefetchListCountries = async <
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof listCountries>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
-  const queryOptions = getListCountriesQueryOptions(options)
+  const queryOptions = getListCountriesQueryOptions(options);
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};

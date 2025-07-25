@@ -1,23 +1,23 @@
-import { fileUrl } from '@/lib/utils'
-import Image from 'next/image'
-import Link from 'next/link'
-import FollowButton from './follow-button'
+import { fileUrl } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import FollowButton from "./follow-button";
 
 type Artwork = {
-  id: string
-  mainPhotoUrl: string
-}
+  id: string;
+  mainPhotoUrl: string;
+};
 
 type ArtistCardProps = {
-  token: string | undefined
-  id: string
-  fullName: string
-  username: string
-  country: string | undefined
-  profilePictureUrl: string | undefined
-  description: string | undefined
-  artworks: Artwork[]
-}
+  token: string | undefined;
+  id: string;
+  fullName: string;
+  username: string;
+  country: string | undefined;
+  profilePictureUrl: string | undefined;
+  description: string | undefined;
+  artworks: Artwork[];
+};
 
 export default function ArtistCard({
   token,
@@ -45,7 +45,7 @@ export default function ArtistCard({
             ) : (
               <span
                 className={
-                  'inline-block overflow-hidden rounded-lg bg-gray-100 w-14 h-14 '
+                  "inline-block h-14 w-14 overflow-hidden rounded-lg bg-gray-100"
                 }
               >
                 <svg
@@ -64,10 +64,7 @@ export default function ArtistCard({
               <h3 className="font-medium sm:text-lg">
                 <Link href={`/artists/${username}`}>{fullName}</Link>
               </h3>
-              <FollowButton
-                token={token}
-                userId={id}
-              />
+              <FollowButton token={token} userId={id} />
             </div>
 
             <p className="line-clamp-2 text-sm text-gray-700">{description}</p>
@@ -93,7 +90,7 @@ export default function ArtistCard({
             <Link
               href={`/artworks/${artwork.id}`}
               key={artwork.id}
-              className="group block w-32 h-32 overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100"
+              className="group block h-32 w-32 overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100"
             >
               <Image
                 alt=""
@@ -107,5 +104,5 @@ export default function ArtistCard({
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -1,40 +1,40 @@
-'use client'
+"use client";
 
-import EmptyUI from '@/components/empty-ui'
-import ErrorUI from '@/components/error-ui'
-import LoadingUI from '@/components/loading-ui'
-import { useListPublishedArtworks } from '@/hooks/artworks'
-import { matchQueryStatus } from '@/lib/utils'
-import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import EmptyUI from "@/components/empty-ui";
+import ErrorUI from "@/components/error-ui";
+import LoadingUI from "@/components/loading-ui";
+import { useListPublishedArtworks } from "@/hooks/artworks";
+import { matchQueryStatus } from "@/lib/utils";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function ArtworksSection() {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
-  const searchQuery = searchParams.get('searchQuery')
+  const searchQuery = searchParams.get("searchQuery");
 
   const queryParams: Record<string, string> = {
     ...(searchQuery && { searchQuery }),
-  }
+  };
 
-  const listPublishedArtworksQuery = useListPublishedArtworks(queryParams)
+  const listPublishedArtworksQuery = useListPublishedArtworks(queryParams);
 
   return matchQueryStatus(listPublishedArtworksQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'No artwork was found'} />,
+    Empty: <EmptyUI message={"No artwork was found"} />,
     Success: ({ data }) => {
-      const artworks = data.data
+      const artworks = data.data;
 
-      const showArtworksViewAll = artworks.length > 4
+      const showArtworksViewAll = artworks.length > 4;
 
       const displayedArtworks = showArtworksViewAll
         ? artworks.slice(0, 4)
-        : artworks
+        : artworks;
 
       return (
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
+          <div className="mb-2 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-gray-900">Artworks</h3>
             {showArtworksViewAll && (
               <Link
@@ -51,7 +51,7 @@ export default function ArtworksSection() {
                 <li key={artist.id}>
                   <Link
                     href={`/artworks/${artist.id}`}
-                    className="block px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded"
+                    className="block rounded px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
                   >
                     {artist.title}
                   </Link>
@@ -59,10 +59,10 @@ export default function ArtworksSection() {
               ))}
             </ul>
           ) : (
-            <EmptyUI message={'No artwork was found'} />
+            <EmptyUI message={"No artwork was found"} />
           )}
         </div>
-      )
+      );
     },
-  })
+  });
 }

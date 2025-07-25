@@ -1,9 +1,9 @@
-'use client'
-import Link from 'next/link'
+"use client";
+import Link from "next/link";
 
 export default function Verified() {
   return (
-    <div className="max-w-2xl mx-auto lg:max-w-7xl">
+    <div className="mx-auto max-w-2xl lg:max-w-7xl">
       <div className="rounded-md bg-green-50 p-4">
         <div className="flex">
           <div className="flex-shrink-0">
@@ -43,5 +43,5 @@ export default function Verified() {
         </div>
       </div>
     </div>
-  )
+  );
 }

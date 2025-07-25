@@ -1,16 +1,16 @@
-'use client'
+"use client";
 
-import HeaderAuth from './header-auth'
-import HeaderGuest from './header-guest'
+import HeaderAuth from "./header-auth";
+import HeaderGuest from "./header-guest";
 
 type HeaderProps = {
-  isAuth: boolean
-  token?: string
-}
+  isAuth: boolean;
+  token?: string;
+};
 
 export default function Header({ isAuth, token }: HeaderProps) {
   if (isAuth && token) {
-    return <HeaderAuth token={token!} />
+    return <HeaderAuth />;
   }
-  return <HeaderGuest />
+  return <HeaderGuest />;
 }

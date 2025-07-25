@@ -8,29 +8,29 @@ import type {
   UndefinedInitialDataOptions,
   UseQueryOptions,
   UseQueryResult,
-} from '@tanstack/react-query'
-import { useQuery } from '@tanstack/react-query'
+} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-export type ListTags200 = ApiResource<TagModel>
+export type ListTags200 = ApiResource<TagModel>;
 
 export type ListUserArtworkTags200 = SuccessApiResponse<
   {
-    id: string
-    name: string
+    id: string;
+    name: string;
   }[]
->
-export type ListUserArtworkTags404 = NotFoundApiResponse
+>;
+export type ListUserArtworkTags404 = NotFoundApiResponse;
 
-import type { ErrorType } from '@/lib/axios'
-import { customInstance } from '@/lib/axios'
+import type { ErrorType } from "@/lib/axios";
+import { customInstance } from "@/lib/axios";
 import {
-  ApiResource,
-  NotFoundApiResponse,
-  SuccessApiResponse,
-} from '@/types/api-responses'
-import { TagModel } from '@/types/models/tag'
+  type ApiResource,
+  type NotFoundApiResponse,
+  type SuccessApiResponse,
+} from "@/types/api-responses";
+import { type TagModel } from "@/types/models/tag";
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
  * Retrieve a list of tags used by a user's published artworks
@@ -39,17 +39,17 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 export const listUserArtworkTags = (
   username: string,
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ListUserArtworkTags200>(
-    { url: `/api/v1/users/${username}/artwork-tags`, method: 'GET', signal },
-    options
-  )
-}
+    { url: `/api/v1/users/${username}/artwork-tags`, method: "GET", signal },
+    options,
+  );
+};
 
 export const getListUserArtworkTagsQueryKey = (username: string) => {
-  return [`/api/v1/users/${username}/artwork-tags`] as const
-}
+  return [`/api/v1/users/${username}/artwork-tags`] as const;
+};
 
 export const getListUserArtworkTagsQueryOptions = <
   TData = Awaited<ReturnType<typeof listUserArtworkTags>>,
@@ -63,18 +63,18 @@ export const getListUserArtworkTagsQueryOptions = <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getListUserArtworkTagsQueryKey(username)
+    queryOptions?.queryKey ?? getListUserArtworkTagsQueryKey(username);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof listUserArtworkTags>>
-  > = ({ signal }) => listUserArtworkTags(username, requestOptions, signal)
+  > = ({ signal }) => listUserArtworkTags(username, requestOptions, signal);
 
   return {
     queryKey,
@@ -85,13 +85,13 @@ export const getListUserArtworkTagsQueryOptions = <
     Awaited<ReturnType<typeof listUserArtworkTags>>,
     TError,
     TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
 export type ListUserArtworkTagsQueryResult = NonNullable<
   Awaited<ReturnType<typeof listUserArtworkTags>>
->
-export type ListUserArtworkTagsQueryError = ErrorType<ListUserArtworkTags404>
+>;
+export type ListUserArtworkTagsQueryError = ErrorType<ListUserArtworkTags404>;
 
 export function useListUserArtworkTags<
   TData = Awaited<ReturnType<typeof listUserArtworkTags>>,
@@ -112,14 +112,14 @@ export function useListUserArtworkTags<
           TError,
           Awaited<ReturnType<typeof listUserArtworkTags>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListUserArtworkTags<
   TData = Awaited<ReturnType<typeof listUserArtworkTags>>,
   TError = ErrorType<ListUserArtworkTags404>,
@@ -139,14 +139,14 @@ export function useListUserArtworkTags<
           TError,
           Awaited<ReturnType<typeof listUserArtworkTags>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListUserArtworkTags<
   TData = Awaited<ReturnType<typeof listUserArtworkTags>>,
   TError = ErrorType<ListUserArtworkTags404>,
@@ -159,13 +159,13 @@ export function useListUserArtworkTags<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List User Artwork Tags
  */
@@ -182,23 +182,23 @@ export function useListUserArtworkTags<
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getListUserArtworkTagsQueryOptions(username, options)
+  const queryOptions = getListUserArtworkTagsQueryOptions(username, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -217,16 +217,16 @@ export const prefetchListUserArtworkTags = async <
         TError,
         TData
       >
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
-  const queryOptions = getListUserArtworkTagsQueryOptions(username, options)
+  const queryOptions = getListUserArtworkTagsQueryOptions(username, options);
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};
 
 /**
  * Retrieve a list of all tags
@@ -234,17 +234,17 @@ export const prefetchListUserArtworkTags = async <
  */
 export const listTags = (
   options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return customInstance<ListTags200>(
-    { url: `/api/v1/tags`, method: 'GET', signal },
-    options
-  )
-}
+    { url: `/api/v1/tags`, method: "GET", signal },
+    options,
+  );
+};
 
 export const getListTagsQueryKey = () => {
-  return [`/api/v1/tags`] as const
-}
+  return [`/api/v1/tags`] as const;
+};
 
 export const getListTagsQueryOptions = <
   TData = Awaited<ReturnType<typeof listTags>>,
@@ -252,30 +252,30 @@ export const getListTagsQueryOptions = <
 >(options?: {
   query?: Partial<
     UseQueryOptions<Awaited<ReturnType<typeof listTags>>, TError, TData>
-  >
-  request?: SecondParameter<typeof customInstance>
+  >;
+  request?: SecondParameter<typeof customInstance>;
 }) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getListTagsQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getListTagsQueryKey();
 
   const queryFn: QueryFunction<Awaited<ReturnType<typeof listTags>>> = ({
     signal,
-  }) => listTags(requestOptions, signal)
+  }) => listTags(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listTags>>,
     TError,
     TData
   > & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
-}
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
 
 export type ListTagsQueryResult = NonNullable<
   Awaited<ReturnType<typeof listTags>>
->
-export type ListTagsQueryError = ErrorType<unknown>
+>;
+export type ListTagsQueryError = ErrorType<unknown>;
 
 export function useListTags<
   TData = Awaited<ReturnType<typeof listTags>>,
@@ -291,14 +291,14 @@ export function useListTags<
           TError,
           Awaited<ReturnType<typeof listTags>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListTags<
   TData = Awaited<ReturnType<typeof listTags>>,
   TError = ErrorType<unknown>,
@@ -313,14 +313,14 @@ export function useListTags<
           TError,
           Awaited<ReturnType<typeof listTags>>
         >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 export function useListTags<
   TData = Awaited<ReturnType<typeof listTags>>,
   TError = ErrorType<unknown>,
@@ -328,13 +328,13 @@ export function useListTags<
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof listTags>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List Tags
  */
@@ -346,23 +346,23 @@ export function useListTags<
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof listTags>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
+    >;
+    request?: SecondParameter<typeof customInstance>;
   },
-  queryClient?: QueryClient
+  queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+  queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getListTagsQueryOptions(options)
+  const queryOptions = getListTagsQueryOptions(options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
     TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey;
 
-  return query
+  return query;
 }
 
 /**
@@ -376,13 +376,13 @@ export const prefetchListTags = async <
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof listTags>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customInstance>
-  }
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ): Promise<QueryClient> => {
-  const queryOptions = getListTagsQueryOptions(options)
+  const queryOptions = getListTagsQueryOptions(options);
 
-  await queryClient.prefetchQuery(queryOptions)
+  await queryClient.prefetchQuery(queryOptions);
 
-  return queryClient
-}
+  return queryClient;
+};

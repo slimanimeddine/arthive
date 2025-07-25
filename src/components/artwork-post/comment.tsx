@@ -1,29 +1,29 @@
-'use client'
+"use client";
 
-import { useShowAuthenticatedUser } from '@/hooks/users'
-import { authHeader, matchQueryStatus } from '@/lib/utils'
-import { useEditCommentStore } from '@/stores/edit-comment-store'
-import Image from 'next/image'
-import Link from 'next/link'
-import AvatarPlaceholder from '../avatar-placeholder'
-import ErrorUI from '../error-ui'
-import LoadingUI from '../loading-ui'
-import CommentDropdownActions from './comment-dropdown-actions'
-import EditComment from './edit-comment'
+import { useShowAuthenticatedUser } from "@/hooks/users";
+import { authHeader, matchQueryStatus } from "@/lib/utils";
+import { useEditCommentStore } from "@/stores/edit-comment-store";
+import Image from "next/image";
+import Link from "next/link";
+import AvatarPlaceholder from "../avatar-placeholder";
+import ErrorUI from "../error-ui";
+import LoadingUI from "../loading-ui";
+import CommentDropdownActions from "./comment-dropdown-actions";
+import EditComment from "./edit-comment";
 
 type CommentProps = {
-  token: string | undefined
-  id: string
-  content: string
-  commentedAt: string
-  artworkId: string
+  token: string | undefined;
+  id: string;
+  content: string;
+  commentedAt: string;
+  artworkId: string;
   user: {
-    id: string
-    fullName: string
-    username: string
-    profilePictureUrl: string | undefined
-  }
-}
+    id: string;
+    fullName: string;
+    username: string;
+    profilePictureUrl: string | undefined;
+  };
+};
 
 export default function Comment({
   token,
@@ -33,26 +33,23 @@ export default function Comment({
   artworkId,
   user,
 }: CommentProps) {
-  const formVisble = useEditCommentStore((state) => state.formVisble)
+  const formVisble = useEditCommentStore((state) => state.formVisble);
 
-  const authConfig = token ? authHeader(token!) : undefined
+  const authConfig = token ? authHeader(token) : undefined;
 
-  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig)
+  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig);
 
   return (
-    <article
-      id={`${id}`}
-      className="py-6 text-base bg-white dark:bg-gray-900"
-    >
-      <footer className="flex justify-between items-center mb-2">
+    <article id={`${id}`} className="bg-white py-6 text-base dark:bg-gray-900">
+      <footer className="mb-2 flex items-center justify-between">
         <div className="flex items-center">
           <Link
             href={`/artists/${user.username}`}
-            className="inline-flex items-center gap-x-2 mr-3 text-sm text-gray-900 dark:text-white font-semibold"
+            className="mr-3 inline-flex items-center gap-x-2 text-sm font-semibold text-gray-900 dark:text-white"
           >
             {user.profilePictureUrl ? (
               <Image
-                className="w-8 h-8 rounded-full"
+                className="h-8 w-8 rounded-full"
                 src={user.profilePictureUrl}
                 alt={user.username}
                 width={32}
@@ -81,16 +78,16 @@ export default function Comment({
             Errored: <ErrorUI />,
             Empty: <span></span>,
             Success: ({ data }) => {
-              const isOwner = data.data.id === user.id
+              const isOwner = data.data.id === user.id;
 
-              if (!isOwner) return <></>
+              if (!isOwner) return <></>;
               return (
                 <CommentDropdownActions
                   token={token}
                   commentId={id}
                   artworkId={artworkId}
                 />
-              )
+              );
             },
           })
         ) : (
@@ -103,7 +100,7 @@ export default function Comment({
           Errored: <ErrorUI />,
           Empty: <span></span>,
           Success: ({ data }) => {
-            const isOwner = data.data.id === user.id
+            const isOwner = data.data.id === user.id;
 
             if (!(isOwner && formVisble)) {
               return (
@@ -113,7 +110,7 @@ export default function Comment({
                 >
                   {content}
                 </Link>
-              )
+              );
             }
             return (
               <EditComment
@@ -122,17 +119,14 @@ export default function Comment({
                 commentId={id}
                 artworkId={artworkId}
               />
-            )
+            );
           },
         })
       ) : (
-        <Link
-          href={`#${id}`}
-          className="text-gray-500 dark:text-gray-400"
-        >
+        <Link href={`#${id}`} className="text-gray-500 dark:text-gray-400">
           {content}
         </Link>
       )}
     </article>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-'use client'
-import { useState } from 'react'
-import { parseAsString, useQueryState } from 'nuqs'
-import ArtistsSection from './artists-section'
-import ArtworksSection from './artworks-section'
+"use client";
+import { useState } from "react";
+import { parseAsString, useQueryState } from "nuqs";
+import ArtistsSection from "./artists-section";
+import ArtworksSection from "./artworks-section";
 
 export default function SearchComponent() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useQueryState(
-    'searchQuery',
-    parseAsString.withDefault('')
-  )
+    "searchQuery",
+    parseAsString.withDefault(""),
+  );
 
   return (
     <div className="relative">
@@ -18,15 +18,15 @@ export default function SearchComponent() {
         <input
           type="text"
           placeholder="Search artists and artworks..."
-          className="w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+          className="w-full rounded-md border-0 bg-white py-1.5 pr-4 pl-10 text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 focus:ring-inset sm:text-sm sm:leading-6"
           value={searchQuery}
           onChange={(e) => {
-            setSearchQuery(e.target.value)
-            setIsOpen(e.target.value.length > 0)
+            void setSearchQuery(e.target.value);
+            setIsOpen(e.target.value.length > 0);
           }}
           onFocus={() => searchQuery.length > 0 && setIsOpen(true)}
         />
-        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+        <div className="absolute top-1/2 left-3 -translate-y-1/2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 text-gray-400"
@@ -46,7 +46,7 @@ export default function SearchComponent() {
 
       {/* Search Modal */}
       {isOpen && (
-        <div className="absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+        <div className="ring-opacity-5 absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black">
           <div className="p-4">
             {/* Artists Section */}
             <ArtistsSection />
@@ -59,11 +59,8 @@ export default function SearchComponent() {
 
       {/* Click outside to close */}
       {isOpen && (
-        <div
-          className="fixed inset-0 z-0"
-          onClick={() => setIsOpen(false)}
-        />
+        <div className="fixed inset-0 z-0" onClick={() => setIsOpen(false)} />
       )}
     </div>
-  )
+  );
 }

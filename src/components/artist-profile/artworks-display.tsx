@@ -1,41 +1,41 @@
-'use client'
-import { useListUserPublishedArtworks } from '@/hooks/artworks'
-import { fileUrl, matchQueryStatus } from '@/lib/utils'
-import { useSearchParams } from 'next/navigation'
-import SortFilterArtworks from '../artworks/sort-filter-artworks'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import Pagination from '../pagination'
-import ArtworkCard from './artwork-card'
-import ArtworksDisplaySkeleton from './artworks-display-skeleton'
+"use client";
+import { useListUserPublishedArtworks } from "@/hooks/artworks";
+import { fileUrl, matchQueryStatus } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import SortFilterArtworks from "../artworks/sort-filter-artworks";
+import EmptyUI from "../empty-ui";
+import ErrorUI from "../error-ui";
+import Pagination from "../pagination";
+import ArtworkCard from "./artwork-card";
+import ArtworksDisplaySkeleton from "./artworks-display-skeleton";
 
 type ArtworksDisplayProps = {
-  username: string
-}
+  username: string;
+};
 
 export default function ArtworksDisplay({ username }: ArtworksDisplayProps) {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
-  const page = searchParams.get('page')
-  const artworkSort = searchParams.get('artworkSort')
-  const tag = searchParams.get('tag')
+  const page = searchParams.get("page");
+  const artworkSort = searchParams.get("artworkSort");
+  const tag = searchParams.get("tag");
 
   const queryParams: Record<string, string> = {
-    perPage: '12',
-    ...(tag && { 'filter[tag]': tag }),
+    perPage: "12",
+    ...(tag && { "filter[tag]": tag }),
     ...(artworkSort && { sort: artworkSort }),
     ...(page && { page }),
-  }
+  };
 
   const listUserPublishedArtworksQuery = useListUserPublishedArtworks(
     username,
-    queryParams
-  )
+    queryParams,
+  );
 
   return matchQueryStatus(listUserPublishedArtworksQuery, {
     Loading: <ArtworksDisplaySkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'Artist has no artworks'} />,
+    Empty: <EmptyUI message={"Artist has no artworks"} />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,
@@ -43,10 +43,10 @@ export default function ArtworksDisplay({ username }: ArtworksDisplayProps) {
         mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
         likesCount: artwork.artwork_likes_count,
         commentsCount: artwork.artwork_comments_count,
-      }))
+      }));
 
-      const links = data.links
-      const meta = data.meta
+      const links = data.links;
+      const meta = data.meta;
 
       return (
         <div className="sm:rounded-lg lg:col-span-2 lg:row-span-2 lg:row-end-2">
@@ -68,14 +68,11 @@ export default function ArtworksDisplay({ username }: ArtworksDisplayProps) {
           </div>
           {meta.total > 12 && (
             <div className="pt-8">
-              <Pagination
-                links={links}
-                meta={meta}
-              />
+              <Pagination links={links} meta={meta} />
             </div>
           )}
         </div>
-      )
+      );
     },
-  })
+  });
 }

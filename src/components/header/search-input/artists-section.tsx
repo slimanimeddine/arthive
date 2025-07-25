@@ -1,40 +1,40 @@
-'use client'
+"use client";
 
-import EmptyUI from '@/components/empty-ui'
-import ErrorUI from '@/components/error-ui'
-import LoadingUI from '@/components/loading-ui'
-import { useListUsers } from '@/hooks/users'
-import { matchQueryStatus } from '@/lib/utils'
-import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import EmptyUI from "@/components/empty-ui";
+import ErrorUI from "@/components/error-ui";
+import LoadingUI from "@/components/loading-ui";
+import { useListUsers } from "@/hooks/users";
+import { matchQueryStatus } from "@/lib/utils";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function ArtistsSection() {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
-  const searchQuery = searchParams.get('searchQuery')
+  const searchQuery = searchParams.get("searchQuery");
 
   const queryParams: Record<string, string> = {
     ...(searchQuery && { searchQuery }),
-  }
+  };
 
-  const listUsersQuery = useListUsers(queryParams)
+  const listUsersQuery = useListUsers(queryParams);
 
   return matchQueryStatus(listUsersQuery, {
     Loading: <LoadingUI />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'No artist was found'} />,
+    Empty: <EmptyUI message={"No artist was found"} />,
     Success: ({ data }) => {
-      const artists = data.data
+      const artists = data.data;
 
-      const showArtistsViewAll = artists.length > 4
+      const showArtistsViewAll = artists.length > 4;
 
       const displayedArtists = showArtistsViewAll
         ? artists.slice(0, 4)
-        : artists
+        : artists;
 
       return (
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
+          <div className="mb-2 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-gray-900">Artists</h3>
             {showArtistsViewAll && (
               <Link
@@ -51,7 +51,7 @@ export default function ArtistsSection() {
                 <li key={artist.id}>
                   <Link
                     href={`/artists/${artist.username}`}
-                    className="block px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded"
+                    className="block rounded px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
                   >
                     {artist.first_name} {artist.last_name}
                   </Link>
@@ -59,10 +59,10 @@ export default function ArtistsSection() {
               ))}
             </ul>
           ) : (
-            <EmptyUI message={'No artist was found'} />
+            <EmptyUI message={"No artist was found"} />
           )}
         </div>
-      )
+      );
     },
-  })
+  });
 }

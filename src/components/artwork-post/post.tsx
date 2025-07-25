@@ -1,34 +1,34 @@
-'use client'
+"use client";
 
-import { useShowPublishedArtwork } from '@/hooks/artworks'
-import { fileUrl, matchQueryStatus } from '@/lib/utils'
-import Image from 'next/image'
-import Link from 'next/link'
-import AvatarPlaceholder from '../avatar-placeholder'
-import EmptyUI from '../empty-ui'
-import ErrorUI from '../error-ui'
-import Comment from './comment'
-import FavoriteButton from './favorite-button'
-import FollowButton from './follow-button'
-import LikeButton from './like-button'
-import LikedByModal from './liked-by-modal'
-import PostComment from './post-comment'
-import ArtworkPostSkeleton from '../ui-skeletons/artwork-post-skeleton'
+import { useShowPublishedArtwork } from "@/hooks/artworks";
+import { fileUrl, matchQueryStatus } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import AvatarPlaceholder from "../avatar-placeholder";
+import EmptyUI from "../empty-ui";
+import ErrorUI from "../error-ui";
+import Comment from "./comment";
+import FavoriteButton from "./favorite-button";
+import FollowButton from "./follow-button";
+import LikeButton from "./like-button";
+import LikedByModal from "./liked-by-modal";
+import PostComment from "./post-comment";
+import ArtworkPostSkeleton from "../ui-skeletons/artwork-post-skeleton";
 
 type ArtworkPostProps = {
-  id: string
-  token: string | undefined
-}
+  id: string;
+  token: string | undefined;
+};
 
 export default function ArtworkPost({ id, token }: ArtworkPostProps) {
-  const showPublishedArtworkQuery = useShowPublishedArtwork(id)
+  const showPublishedArtworkQuery = useShowPublishedArtwork(id);
 
   return matchQueryStatus(showPublishedArtworkQuery, {
     Loading: <ArtworkPostSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={'No artwork data was found'} />,
+    Empty: <EmptyUI message={"No artwork data was found"} />,
     Success: ({ data }) => {
-      const artworkData = data.data
+      const artworkData = data.data;
 
       const artwork = {
         id: artworkData.id,
@@ -80,13 +80,13 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
           username: artworkData.user.username,
           profilePictureUrl: fileUrl(artworkData.user.photo),
         },
-      }
+      };
 
       return (
-        <div className="p-6 py-14 bg-white">
-          <div className="flex flex-col sm:max-w-4xl mx-auto gap-y-5">
+        <div className="bg-white p-6 py-14">
+          <div className="mx-auto flex flex-col gap-y-5 sm:max-w-4xl">
             {/* 1st line */}
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <Link
                 href={`/artists/${artwork.artist.username}`}
                 className="flex items-center gap-x-3"
@@ -110,14 +110,11 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
                   </p>
                 </div>
               </Link>
-              <FollowButton
-                token={token}
-                userId={artwork.artist.id}
-              />
+              <FollowButton token={token} userId={artwork.artist.id} />
             </div>
 
             {/* 2nd line */}
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <h3 className="text-xl font-semibold">{artwork.title}</h3>
               <p className="text-xs text-gray-500">
                 published on {new Date(artwork.publishedAt).toDateString()}
@@ -143,7 +140,7 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
               <Image
                 alt=""
                 src={artwork.mainPhotoUrl}
-                className="object-cover w-full h-[600px] rounded-lg"
+                className="h-[600px] w-full rounded-lg object-cover"
                 width={500}
                 height={500}
               />
@@ -152,7 +149,7 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
                   {artwork.photos.map((photo) => (
                     <div
                       key={photo.id}
-                      className="group block w-32 h-32 overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100"
+                      className="group block h-32 w-32 overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100"
                     >
                       <Image
                         alt=""
@@ -171,10 +168,10 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
               <p>{artwork.description}</p>
             </div>
 
-            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+            <hr className="my-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
 
             {/* 3rd line */}
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               {artwork.likedBy.length > 0 ? (
                 <div className="flex items-center gap-x-1">
                   <span className="font-semibold">Liked by</span>
@@ -207,42 +204,29 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
 
               <div className="flex items-center gap-x-4">
                 <div className="flex items-center gap-x-4">
-                  <span className="font-semibold text-md border-r px-4">
+                  <span className="text-md border-r px-4 font-semibold">
                     Likes {artwork.likesCount}
                   </span>
-                  <LikeButton
-                    token={token}
-                    artworkId={artwork.id}
-                  />
+                  <LikeButton token={token} artworkId={artwork.id} />
                 </div>
-                <FavoriteButton
-                  token={token}
-                  artworkId={artwork.id}
-                />
+                <FavoriteButton token={token} artworkId={artwork.id} />
               </div>
             </div>
 
             {/* comments */}
 
-            <section className="bg-white dark:bg-gray-900 py-4 lg:py-8 antialiased">
+            <section className="bg-white py-4 antialiased lg:py-8 dark:bg-gray-900">
               <div>
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
+                <div className="mb-6 flex items-center justify-between">
+                  <h2 className="text-lg font-bold text-gray-900 lg:text-2xl dark:text-white">
                     Comments ({artwork.commentsCount})
                   </h2>
                 </div>
-                <PostComment
-                  token={token}
-                  artworkId={artwork.id}
-                />
+                <PostComment token={token} artworkId={artwork.id} />
                 {artwork.comments.length > 0 && (
                   <div className="divide-y">
                     {artwork.comments.map((comment) => (
-                      <Comment
-                        key={comment.id}
-                        token={token}
-                        {...comment}
-                      />
+                      <Comment key={comment.id} token={token} {...comment} />
                     ))}
                   </div>
                 )}
@@ -250,7 +234,7 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
             </section>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }
