@@ -1,6 +1,6 @@
 "use client";
 
-import { usePublishArtwork } from "@/hooks/artworks";
+import { usePublishArtwork } from "@/hooks/endpoints/artworks";
 import { useSession } from "@/hooks/session";
 import { authHeader, getUrlFromBlob, onError } from "@/lib/utils";
 import useArtworkStore from "@/stores/artwork-store";

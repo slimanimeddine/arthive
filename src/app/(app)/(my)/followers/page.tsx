@@ -1,5 +1,5 @@
 import Followers from "@/components/followers";
-import { prefetchListAuthenticatedUserFollowers } from "@/hooks/follows";
+import { prefetchListAuthenticatedUserFollowers } from "@/hooks/endpoints/follows";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { authHeader } from "@/lib/utils";

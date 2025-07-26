@@ -1,5 +1,5 @@
 "use client";
-import { useShowAuthenticatedUser } from "@/hooks/users";
+import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { authHeader, matchQueryStatus } from "@/lib/utils";
 import ErrorUI from "../error-ui";
 import ChangePasswordForm from "./change-password-form";

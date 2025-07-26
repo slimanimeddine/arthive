@@ -1,6 +1,9 @@
 "use client";
 import { deleteSession } from "@/actions/session";
-import { type DeleteUserBody, useDeleteUser } from "@/hooks/authentication";
+import {
+  type DeleteUserBody,
+  useDeleteUser,
+} from "@/hooks/endpoints/authentication";
 import { useSession } from "@/hooks/session";
 import { authHeader, onError } from "@/lib/utils";
 import { deleteUserBody } from "@/schemas/authentication";

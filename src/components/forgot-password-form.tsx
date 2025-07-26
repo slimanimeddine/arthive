@@ -2,7 +2,7 @@
 import {
   type SendPasswordResetLinkBody,
   useSendPasswordResetLink,
-} from "@/hooks/authentication";
+} from "@/hooks/endpoints/authentication";
 import { onError } from "@/lib/utils";
 import { sendPasswordResetLinkBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";

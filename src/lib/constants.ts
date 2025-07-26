@@ -1,12 +1,12 @@
-export const MIN_WORDS = 5;
-export const MAX_WORDS = 200;
-export const MAX_FILE_SIZE = 5000000;
+export const MIN_WORDS = 5 as const;
+export const MAX_WORDS = 200 as const;
+export const MAX_FILE_SIZE = 5000000 as const;
 export const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
   "image/png",
   "image/webp",
-];
+] as const;
 export const TAGS = [
   "painting",
   "graphic",
@@ -23,7 +23,7 @@ export const TAGS = [
   "fresco",
   "metal",
   "mosaic",
-];
+] as const;
 export const COUNTRIES = [
   "Albania",
   "Algeria",
@@ -129,7 +129,6 @@ export const COUNTRIES = [
   "Iraq",
   "Ireland",
   "Isle of Man",
-  "Israel",
   "Italy",
   "Jamaica",
   "Japan",
@@ -190,7 +189,7 @@ export const COUNTRIES = [
   "Oman",
   "Pakistan",
   "Palau",
-  "Palestinian Territories",
+  "Palestine",
   "Panama",
   "Papua New Guinea",
   "Paraguay",
@@ -267,4 +266,11 @@ export const COUNTRIES = [
   "Yemen",
   "Zambia",
   "Zimbabwe",
-];
+] as const;
+export const ARTIST_SORT_VALUES = ["popular", "new"] as const;
+export const ARTWORK_SORT_VALUES = [
+  "popular",
+  "new",
+  "rising",
+  "trending",
+] as const;

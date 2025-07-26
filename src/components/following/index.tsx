@@ -1,6 +1,6 @@
 "use client";
 
-import { useListAuthenticatedUserFollowing } from "@/hooks/follows";
+import { useListAuthenticatedUserFollowing } from "@/hooks/endpoints/follows";
 import { authHeader, matchQueryStatus } from "@/lib/utils";
 import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";

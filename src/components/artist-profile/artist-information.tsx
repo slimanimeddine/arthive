@@ -1,6 +1,6 @@
 "use client";
 
-import { useShowUser } from "@/hooks/users";
+import { useShowUser } from "@/hooks/endpoints/users";
 import { fileUrl, matchQueryStatus } from "@/lib/utils";
 import { CheckBadgeIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
@@ -9,16 +9,10 @@ import ErrorUI from "../error-ui";
 import FollowButton from "./follow-button";
 import RatingsByTag from "./ratings-by-tag";
 import ArtistInformationSkeleton from "./artist-information-skeleton";
+import { useParams } from "next/navigation";
 
-type ArtistInformationProps = {
-  token: string | undefined;
-  username: string;
-};
-
-export default function ArtistInformation({
-  token,
-  username,
-}: ArtistInformationProps) {
+export default function ArtistInformation() {
+  const { username } = useParams<{ username: string }>();
   const showUserQuery = useShowUser(username);
 
   return matchQueryStatus(showUserQuery, {
@@ -85,10 +79,7 @@ export default function ArtistInformation({
                       </p>
                     </div>
                     <div className="mt-5 flex flex-wrap space-y-3 sm:space-y-0 sm:space-x-3">
-                      <FollowButton
-                        token={token}
-                        userId={artistInformation.id}
-                      />
+                      <FollowButton userId={artistInformation.id} />
                     </div>
                   </div>
                 </div>

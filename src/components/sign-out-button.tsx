@@ -1,6 +1,6 @@
 "use client";
 import { deleteSession } from "@/actions/session";
-import { useSignOut } from "@/hooks/authentication";
+import { useSignOut } from "@/hooks/endpoints/authentication";
 import { useSession } from "@/hooks/session";
 import { authHeader, onError } from "@/lib/utils";
 import { useRouter } from "next/navigation";

@@ -3,12 +3,11 @@ import { useEcho } from "@/hooks/echo";
 import {
   useListAuthenticatedUserNotifications,
   useMarkAllNotificationsAsRead,
-} from "@/hooks/notifications";
+} from "@/hooks/endpoints/notifications";
 import { authHeader, matchQueryStatus, onError } from "@/lib/utils";
 import { type NotificationType } from "@/types/models/notification";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import EmptyUI from "../empty-ui";
@@ -17,20 +16,16 @@ import Pagination from "../pagination";
 import Notification from "./notification";
 import NotificationsSkeleton from "./notifications-skeleton";
 import { useSession } from "@/hooks/session";
+import { usePage } from "@/hooks/params/page";
 
-type NotificationsProps = {
-  userId: string;
-};
-
-export default function Notifications({ userId }: NotificationsProps) {
-  const { token } = useSession();
-  const searchParams = useSearchParams();
+export default function Notifications() {
+  const { token, id } = useSession();
   const queryClient = useQueryClient();
 
-  const page = searchParams.get("page");
+  const { page } = usePage();
 
-  const queryParams: Record<string, string> = {
-    perPage: "10",
+  const queryParams: Record<string, string | number> = {
+    perPage: 10,
     ...(page && { page }),
   };
 
@@ -62,7 +57,7 @@ export default function Notifications({ userId }: NotificationsProps) {
   useEffect(() => {
     if (echo) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      echo.private(`App.Models.User.${userId}`).notification(() => {
+      echo.private(`App.Models.User.${id}`).notification(() => {
         void queryClient.invalidateQueries({
           queryKey: [`/api/v1/users/me/notifications`],
         });
@@ -71,7 +66,7 @@ export default function Notifications({ userId }: NotificationsProps) {
         });
       });
     }
-  }, [echo, queryClient, userId]);
+  }, [echo, queryClient, id]);
 
   return matchQueryStatus(listAuthenticatedUserNotificationsQuery, {
     Loading: <NotificationsSkeleton />,

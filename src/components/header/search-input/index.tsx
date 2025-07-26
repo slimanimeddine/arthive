@@ -1,15 +1,12 @@
 "use client";
 import { useState } from "react";
-import { parseAsString, useQueryState } from "nuqs";
 import ArtistsSection from "./artists-section";
 import ArtworksSection from "./artworks-section";
+import { useSearchQuery } from "@/hooks/params/search-query";
 
 export default function SearchComponent() {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useQueryState(
-    "searchQuery",
-    parseAsString.withDefault(""),
-  );
+  const { searchQuery, setSearchQuery } = useSearchQuery();
 
   return (
     <div className="relative">

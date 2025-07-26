@@ -1,21 +1,21 @@
 import {
   type PostArtworkCommentBody,
   usePostArtworkComment,
-} from "@/hooks/artwork-comments";
+} from "@/hooks/endpoints/artwork-comments";
+import { useSession } from "@/hooks/session";
 import { authHeader, onError } from "@/lib/utils";
 import { postArtworkCommentBody } from "@/schemas/artwork-comments";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-type PostCommentProps = {
-  token: string | undefined;
-  artworkId: string;
-};
+export default function PostComment() {
+  const { token } = useSession();
+  const { id: artworkId } = useParams<{ id: string }>();
 
-export default function PostComment({ token, artworkId }: PostCommentProps) {
   const queryClient = useQueryClient();
 
   const { handleSubmit, register, formState, reset, clearErrors } =
@@ -29,9 +29,7 @@ export default function PostComment({ token, artworkId }: PostCommentProps) {
     }, 6000);
   }, [clearErrors, formState.errors.comment_text]);
 
-  const authConfig = token ? authHeader(token) : undefined;
-
-  const postArtworkCommentMutation = usePostArtworkComment(authConfig);
+  const postArtworkCommentMutation = usePostArtworkComment(authHeader(token));
 
   function onSubmit(data: PostArtworkCommentBody) {
     postArtworkCommentMutation.mutate(
@@ -43,7 +41,7 @@ export default function PostComment({ token, artworkId }: PostCommentProps) {
         onError,
         onSuccess: () => {
           reset();
-          queryClient.invalidateQueries({
+          void queryClient.invalidateQueries({
             queryKey: [`/api/v1/artworks/${artworkId}`],
           });
           toast.success("Comment posted successfully!");

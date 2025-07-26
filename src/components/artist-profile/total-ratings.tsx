@@ -1,4 +1,4 @@
-import { useShowUserReceivedLikesCount } from "@/hooks/artwork-likes";
+import { useShowUserReceivedLikesCount } from "@/hooks/endpoints/artwork-likes";
 import { matchQueryStatus } from "@/lib/utils";
 import { StarIcon } from "@heroicons/react/24/solid";
 import ErrorUI from "../error-ui";

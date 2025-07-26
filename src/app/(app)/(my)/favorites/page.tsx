@@ -1,5 +1,5 @@
 import Favorites from "@/components/favorites";
-import { prefetchListAuthenticatedUserFavoriteArtworks } from "@/hooks/favorites";
+import { prefetchListAuthenticatedUserFavoriteArtworks } from "@/hooks/endpoints/favorites";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { authHeader } from "@/lib/utils";

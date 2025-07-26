@@ -1,5 +1,5 @@
 "use client";
-import { useListUsers } from "@/hooks/users";
+import { useListUsers } from "@/hooks/endpoints/users";
 import { matchQueryStatus } from "@/lib/utils";
 import {
   Dialog,
@@ -9,7 +9,6 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";
@@ -19,6 +18,11 @@ import ArtistCategoryFilter from "./artist-category-filter";
 import ArtistCountryFilter from "./artist-country-filter";
 import SortArtists from "./sort-artists";
 import ArtistsDisplaySkeleton from "./artists-display-skeleton";
+import { usePage } from "@/hooks/params/page";
+import { useArtistSort } from "@/hooks/params/artist-sort";
+import { useCategory } from "@/hooks/params/category";
+import { useCountry } from "@/hooks/params/country";
+import { useSearchQuery } from "@/hooks/params/search-query";
 
 type ArtistsDisplayProps = {
   token: string | undefined;
@@ -26,15 +30,14 @@ type ArtistsDisplayProps = {
 
 export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
   const [open, setOpen] = useState(false);
-  const searchParams = useSearchParams();
 
-  const page = searchParams.get("page");
-  const artistSort = searchParams.get("artistSort");
-  const category = searchParams.get("category");
-  const country = searchParams.get("country");
-  const searchQuery = searchParams.get("searchQuery");
+  const { page } = usePage();
+  const { artistSort } = useArtistSort();
+  const { category } = useCategory();
+  const { country } = useCountry();
+  const { searchQuery } = useSearchQuery();
 
-  const queryParams: Record<string, string> = {
+  const queryParams: Record<string, string | number> = {
     include: "publishedArtworks",
     ...(country && { "filter[country]": country }),
     ...(category && { "filter[tag]": category }),

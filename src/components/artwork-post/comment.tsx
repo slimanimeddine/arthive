@@ -1,6 +1,6 @@
 "use client";
 
-import { useShowAuthenticatedUser } from "@/hooks/users";
+import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { authHeader, matchQueryStatus } from "@/lib/utils";
 import { useEditCommentStore } from "@/stores/edit-comment-store";
 import Image from "next/image";
@@ -10,13 +10,12 @@ import ErrorUI from "../error-ui";
 import LoadingUI from "../loading-ui";
 import CommentDropdownActions from "./comment-dropdown-actions";
 import EditComment from "./edit-comment";
+import { useSession } from "@/hooks/session";
 
 type CommentProps = {
-  token: string | undefined;
   id: string;
   content: string;
   commentedAt: string;
-  artworkId: string;
   user: {
     id: string;
     fullName: string;
@@ -26,18 +25,17 @@ type CommentProps = {
 };
 
 export default function Comment({
-  token,
   id,
   content,
   commentedAt,
-  artworkId,
   user,
 }: CommentProps) {
   const formVisble = useEditCommentStore((state) => state.formVisble);
+  const { token } = useSession();
 
-  const authConfig = token ? authHeader(token) : undefined;
-
-  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig);
+  const showAuthenticatedUserQuery = useShowAuthenticatedUser(
+    authHeader(token),
+  );
 
   return (
     <article id={`${id}`} className="bg-white py-6 text-base dark:bg-gray-900">
@@ -81,13 +79,7 @@ export default function Comment({
               const isOwner = data.data.id === user.id;
 
               if (!isOwner) return <></>;
-              return (
-                <CommentDropdownActions
-                  token={token}
-                  commentId={id}
-                  artworkId={artworkId}
-                />
-              );
+              return <CommentDropdownActions commentId={id} />;
             },
           })
         ) : (
@@ -112,14 +104,7 @@ export default function Comment({
                 </Link>
               );
             }
-            return (
-              <EditComment
-                token={token}
-                defaultContent={content}
-                commentId={id}
-                artworkId={artworkId}
-              />
-            );
+            return <EditComment defaultContent={content} commentId={id} />;
           },
         })
       ) : (

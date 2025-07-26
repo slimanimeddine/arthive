@@ -1,6 +1,6 @@
 "use client";
 import { createSession } from "@/actions/session";
-import { type SignInBody, useSignIn } from "@/hooks/authentication";
+import { type SignInBody, useSignIn } from "@/hooks/endpoints/authentication";
 import { onError } from "@/lib/utils";
 import { signInBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";

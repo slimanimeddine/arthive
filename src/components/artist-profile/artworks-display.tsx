@@ -1,26 +1,24 @@
 "use client";
-import { useListUserPublishedArtworks } from "@/hooks/artworks";
+import { useListUserPublishedArtworks } from "@/hooks/endpoints/artworks";
 import { fileUrl, matchQueryStatus } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import SortFilterArtworks from "../artworks/sort-filter-artworks";
 import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";
 import Pagination from "../pagination";
 import ArtworkCard from "./artwork-card";
 import ArtworksDisplaySkeleton from "./artworks-display-skeleton";
+import { usePage } from "@/hooks/params/page";
+import { useArtworkSort } from "@/hooks/params/artwork-sort";
+import { useTag } from "@/hooks/params/tag";
 
-type ArtworksDisplayProps = {
-  username: string;
-};
+export default function ArtworksDisplay() {
+  const { username } = useParams<{ username: string }>();
+  const { page } = usePage();
+  const { artworkSort } = useArtworkSort();
+  const { tag } = useTag();
 
-export default function ArtworksDisplay({ username }: ArtworksDisplayProps) {
-  const searchParams = useSearchParams();
-
-  const page = searchParams.get("page");
-  const artworkSort = searchParams.get("artworkSort");
-  const tag = searchParams.get("tag");
-
-  const queryParams: Record<string, string> = {
+  const queryParams: Record<string, string | number> = {
     perPage: "12",
     ...(tag && { "filter[tag]": tag }),
     ...(artworkSort && { sort: artworkSort }),

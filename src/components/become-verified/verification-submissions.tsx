@@ -1,5 +1,5 @@
 "use client";
-import { useGetAuthenticatedUserArtistVerificationRequests } from "@/hooks/artist-verification-requests";
+import { useGetAuthenticatedUserArtistVerificationRequests } from "@/hooks/endpoints/artist-verification-requests";
 import {
   addOrdinalSuffix,
   authHeader,

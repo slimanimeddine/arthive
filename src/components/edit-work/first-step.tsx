@@ -3,7 +3,7 @@
 import {
   useDeleteArtworkPhoto,
   useUploadArtworkPhotos,
-} from "@/hooks/artwork-photos";
+} from "@/hooks/endpoints/artwork-photos";
 import { MAX_FILE_SIZE } from "@/lib/constants";
 import { authHeader, onError, turnBlobToFile } from "@/lib/utils";
 import { type Tag } from "@/types/misc";

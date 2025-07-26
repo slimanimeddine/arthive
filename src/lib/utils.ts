@@ -7,6 +7,7 @@ import axios, { isAxiosError } from "axios";
 import { notFound } from "next/navigation";
 import { type JSX } from "react";
 import toast from "react-hot-toast";
+import type z from "zod";
 
 export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -203,4 +204,31 @@ export function addOrdinalSuffix(num: number): string {
     default:
       return `${num}th`;
   }
+}
+
+// /**
+//  * Validates raw params (URL or search) using the given Zod schema.
+//  * Throws an error if invalid.
+//  */
+// export function validateParams<T>(rawParams: unknown, schema: z.ZodType<T>): T {
+//   const parsed = schema.safeParse(rawParams);
+
+//   if (!parsed.success) {
+//     throw new Error("Invalid URL or query parameters");
+//   }
+
+//   return parsed.data;
+// }
+
+export function parseData<T extends z.ZodType>(
+  data: unknown,
+  schema: T,
+): z.output<T> {
+  const parsed = schema.safeParse(data);
+
+  if (!parsed.success) {
+    throw new Error("Invalid URL or query parameters");
+  }
+
+  return parsed.data;
 }

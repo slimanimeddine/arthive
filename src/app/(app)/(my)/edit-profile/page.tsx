@@ -1,5 +1,5 @@
 import EditProfile from "@/components/edit-profile";
-import { prefetchShowAuthenticatedUser } from "@/hooks/users";
+import { prefetchShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { authHeader } from "@/lib/utils";

@@ -3,15 +3,13 @@
 import EmptyUI from "@/components/empty-ui";
 import ErrorUI from "@/components/error-ui";
 import LoadingUI from "@/components/loading-ui";
-import { useListUsers } from "@/hooks/users";
+import { useListUsers } from "@/hooks/endpoints/users";
+import { useSearchQuery } from "@/hooks/params/search-query";
 import { matchQueryStatus } from "@/lib/utils";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 export default function ArtistsSection() {
-  const searchParams = useSearchParams();
-
-  const searchQuery = searchParams.get("searchQuery");
+  const { searchQuery } = useSearchQuery();
 
   const queryParams: Record<string, string> = {
     ...(searchQuery && { searchQuery }),

@@ -3,31 +3,28 @@
 import {
   useDeleteArtwork,
   useListAuthenticatedUserArtworks,
-} from "@/hooks/artworks";
+} from "@/hooks/endpoints/artworks";
 import { authHeader, fileUrl, matchQueryStatus, onError } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";
 import Pagination from "../pagination";
 import MyArtworksSkeleton from "./my-artworks-skeleton";
 import { useSession } from "@/hooks/session";
+import { usePage } from "@/hooks/params/page";
 
 export default function MyArtworks() {
   const { token } = useSession();
   const queryClient = useQueryClient();
   const authConfig = authHeader(token);
-  const searchParams = useSearchParams();
 
-  const page = searchParams.get("page");
-  const status = searchParams.get("status");
+  const { page } = usePage();
 
-  const queryParams: Record<string, string> = {
-    perPage: "10",
-    ...(status && { "filter[status]": status }),
+  const queryParams: Record<string, string | number> = {
+    perPage: 10,
     ...(page && { page }),
   };
 

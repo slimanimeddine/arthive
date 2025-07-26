@@ -2,7 +2,7 @@
 import {
   type ResetPasswordBody,
   useResetPassword,
-} from "@/hooks/authentication";
+} from "@/hooks/endpoints/authentication";
 import { onError } from "@/lib/utils";
 import { resetPasswordBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";

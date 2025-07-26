@@ -2,23 +2,21 @@ import {
   useCheckIfAuthenticatedUserIsLiking,
   useLikeArtwork,
   useUnlikeArtwork,
-} from "@/hooks/artwork-likes";
+} from "@/hooks/endpoints/artwork-likes";
+import { useSession } from "@/hooks/session";
 import { authHeader, classNames, matchQueryStatus, onError } from "@/lib/utils";
 import { HandThumbUpIcon } from "@heroicons/react/24/outline";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-type LikeButtonProps = {
-  token: string | undefined;
-  artworkId: string;
-};
-
-export default function LikeButton({ token, artworkId }: LikeButtonProps) {
+export default function LikeButton() {
+  const { id: artworkId } = useParams<{ id: string }>();
+  const { token } = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const authConfig = token ? authHeader(token) : undefined;
+  const authConfig = authHeader(token);
 
   const checkIfAuthenticatedUserIsLikingQuery =
     useCheckIfAuthenticatedUserIsLiking(artworkId, authConfig);
@@ -27,7 +25,7 @@ export default function LikeButton({ token, artworkId }: LikeButtonProps) {
   const unlikeArtworkMutation = useUnlikeArtwork(authConfig);
 
   const invalidateLikeQueries = () => {
-    queryClient.invalidateQueries({
+    void queryClient.invalidateQueries({
       queryKey: [`/api/v1/artworks/${artworkId}/is-liking`],
     });
   };

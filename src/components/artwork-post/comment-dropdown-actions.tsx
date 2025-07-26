@@ -1,30 +1,31 @@
 "use client";
 
-import { useDeleteArtworkComment } from "@/hooks/artwork-comments";
+import { useDeleteArtworkComment } from "@/hooks/endpoints/artwork-comments";
+import { useSession } from "@/hooks/session";
 import { authHeader, onError } from "@/lib/utils";
 import { useEditCommentStore } from "@/stores/edit-comment-store";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 type CommentDropdownActionsProps = {
-  token: string | undefined;
-  artworkId: string;
   commentId: string;
 };
 
 export default function CommentDropdownActions({
-  token,
-  artworkId,
   commentId,
 }: CommentDropdownActionsProps) {
+  const { token } = useSession();
+  const { id: artworkId } = useParams<{ id: string }>();
+
   const queryClient = useQueryClient();
   const setFormVisible = useEditCommentStore((state) => state.setFormVisible);
 
-  const authConfig = token ? authHeader(token) : undefined;
-
-  const deleteArtworkCommentMutation = useDeleteArtworkComment(authConfig);
+  const deleteArtworkCommentMutation = useDeleteArtworkComment(
+    authHeader(token),
+  );
 
   function onDelete() {
     deleteArtworkCommentMutation.mutate(
@@ -34,7 +35,7 @@ export default function CommentDropdownActions({
       {
         onError,
         onSuccess: () => {
-          queryClient.invalidateQueries({
+          void queryClient.invalidateQueries({
             queryKey: [`/api/v1/artworks/${artworkId}`],
           });
           toast.success("Comment deleted successfully!");

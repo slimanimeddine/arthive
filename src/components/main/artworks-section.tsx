@@ -2,7 +2,7 @@
 import {
   type ListPublishedArtworksParams,
   useListPublishedArtworks,
-} from "@/hooks/artworks";
+} from "@/hooks/endpoints/artworks";
 import { fileUrl, matchQueryStatus } from "@/lib/utils";
 import Link from "next/link";
 import { ArtworkCard } from "../artwork-card";

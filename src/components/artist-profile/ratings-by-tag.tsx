@@ -1,4 +1,4 @@
-import { useListUserReceivedLikesCountByTag } from "@/hooks/artwork-likes";
+import { useListUserReceivedLikesCountByTag } from "@/hooks/endpoints/artwork-likes";
 import { matchQueryStatus } from "@/lib/utils";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import ErrorUI from "../error-ui";

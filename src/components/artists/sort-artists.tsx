@@ -1,12 +1,18 @@
-import { useQueryState } from "nuqs";
+import { useArtistSort } from "@/hooks/params/artist-sort";
 
-const sortOptions = [
+type SortOption = {
+  id: number;
+  value: "popular" | "new";
+  label: "Popular" | "New";
+};
+
+const sortOptions: SortOption[] = [
   { id: 1, value: "popular", label: "Popular" },
   { id: 2, value: "new", label: "New" },
 ];
 
 export default function SortArtists() {
-  const [, setArtistSort] = useQueryState("artistSort");
+  const { setArtistSort } = useArtistSort();
 
   return (
     <div>
@@ -20,11 +26,10 @@ export default function SortArtists() {
       <select
         id="SortBy"
         className="mt-1 rounded border-gray-300 text-sm"
-        onChange={(e) =>
-          setArtistSort(e.target.value === "" ? null : e.target.value)
-        }
+        onChange={(e) => {
+          void setArtistSort(e.target.value as SortOption["value"]);
+        }}
       >
-        <option value="">Select</option>
         {sortOptions.map((option) => (
           <option key={option.id} value={option.value}>
             {option.label}

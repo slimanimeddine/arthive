@@ -1,5 +1,6 @@
 import Logo from "@/components/logo";
 import ResetPasswordForm from "@/components/reset-password-form";
+import { parseData } from "@/lib/utils";
 import Link from "next/link";
 import z from "zod";
 
@@ -15,13 +16,7 @@ export default async function Page({
 }: {
   searchParams: Promise<{ token: string }>;
 }) {
-  const parsedSearchParams = searchParamsSchema.safeParse(await searchParams);
-
-  if (!parsedSearchParams.success) {
-    throw new Error("Invalid URL or query parameters");
-  }
-
-  const { token } = parsedSearchParams.data;
+  const { token } = parseData(await searchParams, searchParamsSchema);
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

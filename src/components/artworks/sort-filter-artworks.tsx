@@ -1,4 +1,6 @@
 "use client";
+import { useArtworkSort } from "@/hooks/params/artwork-sort";
+import { useTag } from "@/hooks/params/tag";
 import { TAGS } from "@/lib/constants";
 import { classNames } from "@/lib/utils";
 import {
@@ -13,9 +15,14 @@ import {
   RadioGroup,
 } from "@headlessui/react";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
-import { useQueryState } from "nuqs";
 
-const sortOptions = [
+type SortOption = {
+  id: number;
+  value: "popular" | "new" | "rising" | "trending";
+  label: "Popular" | "New" | "Rising" | "Trending";
+};
+
+const sortOptions: SortOption[] = [
   { id: 1, value: "popular", label: "Popular" },
   { id: 2, value: "new", label: "New" },
   { id: 3, value: "rising", label: "Rising" },
@@ -23,9 +30,9 @@ const sortOptions = [
 ];
 
 export default function SortFilterArtworks() {
-  const [tag, setTag] = useQueryState("tag");
+  const { tag, setTag } = useTag();
 
-  const [artworkSort, setArtworkSort] = useQueryState("artworkSort");
+  const { artworkSort, setArtworkSort } = useArtworkSort();
 
   return (
     <div className="bg-white">
@@ -55,7 +62,7 @@ export default function SortFilterArtworks() {
           <div className="mx-auto max-w-7xl px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
             <RadioGroup
               value={tag ?? ""}
-              onChange={setTag}
+              onChange={(value) => setTag(value as (typeof TAGS)[number])}
               className="flex flex-wrap justify-end gap-2"
             >
               {TAGS.map((option) => (

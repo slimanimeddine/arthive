@@ -2,7 +2,7 @@
 import {
   useReplaceArtworkPhotoPath,
   useSetArtworkPhotoAsMain,
-} from "@/hooks/artwork-photos";
+} from "@/hooks/endpoints/artwork-photos";
 import {
   authHeader,
   getCroppedImg,

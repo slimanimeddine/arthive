@@ -1,10 +1,9 @@
+import { useCountry } from "@/hooks/params/country";
 import { COUNTRIES } from "@/lib/constants";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useQueryState } from "nuqs";
 
 export default function ArtistCountryFilter() {
-  const [country, setCountry] = useQueryState("country");
-
+  const { country, setCountry } = useCountry();
   return (
     <div className="mt-1 space-y-2">
       <details className="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">

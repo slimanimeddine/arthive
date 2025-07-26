@@ -4,25 +4,21 @@ import {
   useCheckIfAuthenticatedUserIsFavoriting,
   useMarkArtworkAsFavorite,
   useRemoveArtworkFromFavorites,
-} from "@/hooks/favorites";
+} from "@/hooks/endpoints/favorites";
 import { authHeader, classNames, matchQueryStatus, onError } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useSession } from "@/hooks/session";
 
-type FavoriteButtonProps = {
-  token: string | undefined;
-  artworkId: string;
-};
+export default function FavoriteButton() {
+  const { token } = useSession();
+  const { id: artworkId } = useParams<{ id: string }>();
 
-export default function FavoriteButton({
-  token,
-  artworkId,
-}: FavoriteButtonProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const authConfig = token ? authHeader(token) : undefined;
+  const authConfig = authHeader(token);
 
   const checkIfAuthenticatedUserIsFavoritingQuery =
     useCheckIfAuthenticatedUserIsFavoriting(artworkId, authConfig);
@@ -32,10 +28,10 @@ export default function FavoriteButton({
     useRemoveArtworkFromFavorites(authConfig);
 
   const invalidateFavoriteQueries = () => {
-    queryClient.invalidateQueries({
+    void queryClient.invalidateQueries({
       queryKey: ["/api/v1/users/me/favorites/artworks"],
     });
-    queryClient.invalidateQueries({
+    void queryClient.invalidateQueries({
       queryKey: [`/api/v1/artworks/${artworkId}/favorites/is-favoriting`],
     });
   };

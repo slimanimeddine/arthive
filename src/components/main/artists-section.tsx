@@ -1,5 +1,5 @@
 "use client";
-import { useListUsers } from "@/hooks/users";
+import { useListUsers } from "@/hooks/endpoints/users";
 import { matchQueryStatus } from "@/lib/utils";
 import Link from "next/link";
 import EmptyUI from "../empty-ui";

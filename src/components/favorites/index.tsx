@@ -1,6 +1,6 @@
 "use client";
 
-import { useListAuthenticatedUserFavoriteArtworks } from "@/hooks/favorites";
+import { useListAuthenticatedUserFavoriteArtworks } from "@/hooks/endpoints/favorites";
 import { authHeader, fileUrl, matchQueryStatus } from "@/lib/utils";
 import ErrorUI from "../error-ui";
 import EmptyUI from "../empty-ui";

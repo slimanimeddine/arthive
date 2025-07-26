@@ -1,7 +1,7 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { prefetchCheckIfUnreadNotificationsExist } from "@/hooks/notifications";
-import { prefetchShowAuthenticatedUser } from "@/hooks/users";
+import { prefetchCheckIfUnreadNotificationsExist } from "@/hooks/endpoints/notifications";
+import { prefetchShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { getAuth } from "@/lib/dal";
 import { authHeader } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";

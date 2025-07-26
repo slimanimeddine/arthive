@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const { token } = await verifyAuth();
+  await verifyAuth();
 
-  return <CreateArtwork token={token} />;
+  return <CreateArtwork />;
 }

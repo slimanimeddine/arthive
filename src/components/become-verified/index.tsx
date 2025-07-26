@@ -1,7 +1,7 @@
 "use client";
 
-import { useSubmitArtistVerificationRequest } from "@/hooks/artist-verification-requests";
-import { useShowAuthenticatedUser } from "@/hooks/users";
+import { useSubmitArtistVerificationRequest } from "@/hooks/endpoints/artist-verification-requests";
+import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { authHeader, matchQueryStatus, onError } from "@/lib/utils";
 import toast from "react-hot-toast";
 import LoadingUI from "../loading-ui";

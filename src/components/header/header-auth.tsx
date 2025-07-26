@@ -1,6 +1,6 @@
 "use client";
-import { useCheckIfUnreadNotificationsExist } from "@/hooks/notifications";
-import { useShowAuthenticatedUser } from "@/hooks/users";
+import { useCheckIfUnreadNotificationsExist } from "@/hooks/endpoints/notifications";
+import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { authHeader, classNames, fileUrl, matchQueryStatus } from "@/lib/utils";
 import {
   Disclosure,

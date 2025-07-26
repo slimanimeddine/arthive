@@ -1,9 +1,9 @@
+import { useCategory } from "@/hooks/params/category";
 import { TAGS } from "@/lib/constants";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useQueryState } from "nuqs";
 
 export default function ArtistCategoryFilter() {
-  const [category, setCategory] = useQueryState("category");
+  const { category, setCategory } = useCategory();
 
   return (
     <div className="mt-1 space-y-2">

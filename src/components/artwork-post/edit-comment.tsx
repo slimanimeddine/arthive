@@ -1,28 +1,29 @@
 import {
   type UpdateArtworkCommentBody,
   useUpdateArtworkComment,
-} from "@/hooks/artwork-comments";
+} from "@/hooks/endpoints/artwork-comments";
+import { useSession } from "@/hooks/session";
 import { authHeader, onError } from "@/lib/utils";
 import { updateArtworkCommentBody } from "@/schemas/artwork-comments";
 import { useEditCommentStore } from "@/stores/edit-comment-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 type EditCommentProps = {
-  token: string | undefined;
   commentId: string;
-  artworkId: string;
   defaultContent: string;
 };
 
 export default function EditComment({
-  token,
   defaultContent,
   commentId,
-  artworkId,
 }: EditCommentProps) {
+  const { token } = useSession();
+  const { id: artworkId } = useParams<{ id: string }>();
+
   const setFormVisible = useEditCommentStore((state) => state.setFormVisible);
 
   const queryClient = useQueryClient();
@@ -46,7 +47,7 @@ export default function EditComment({
         onError,
         onSuccess: () => {
           reset();
-          queryClient.invalidateQueries({
+          void queryClient.invalidateQueries({
             queryKey: [`/api/v1/artworks/${artworkId}`],
           });
           toast.success("Comment updated successfully!");

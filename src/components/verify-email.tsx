@@ -7,26 +7,20 @@ import { useEffect, useState } from "react";
 import { isAxiosError } from "axios";
 import LoadingUI from "./loading-ui";
 import { useSession } from "@/hooks/session";
-import { useVerifyEmail } from "@/hooks/authentication";
+import { useVerifyEmail } from "@/hooks/endpoints/authentication";
+import { useParams } from "next/navigation";
 
 type VerifyEmailProps = {
-  id: string;
-  hash: string;
   expires: string;
   signature: string;
 };
 
-export default function VerifyEmail({
-  id,
-  hash,
-  expires,
-  signature,
-}: VerifyEmailProps) {
+export default function VerifyEmail({ expires, signature }: VerifyEmailProps) {
   const [message, setMessage] = useState("");
   const { token } = useSession();
 
   const queryClient = useQueryClient();
-
+  const { id, hash } = useParams<{ id: string; hash: string }>();
   const { isLoading, isError, isSuccess, error } = useVerifyEmail(
     id,
     hash,

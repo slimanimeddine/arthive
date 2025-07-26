@@ -1,7 +1,7 @@
 import { authHeader, onError } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { useMarkNotificationAsRead } from "./notifications";
+import { useMarkNotificationAsRead } from "./endpoints/notifications";
 import { useSession } from "./session";
 
 export function useMarkNotificationRead(

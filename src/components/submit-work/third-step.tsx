@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateArtwork } from "@/hooks/artworks";
+import { useCreateArtwork } from "@/hooks/endpoints/artworks";
 import { useSession } from "@/hooks/session";
 import { TAGS } from "@/lib/constants";
 import { authHeader, onError } from "@/lib/utils";

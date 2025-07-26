@@ -7,11 +7,7 @@ import FourthStep from "./fourth-step";
 import SecondStep from "./second-step";
 import ThirdStep from "./third-step";
 
-type CreateArtworkProps = {
-  token: string;
-};
-
-export default function CreateArtwork({ token }: CreateArtworkProps) {
+export default function CreateArtwork() {
   const { step, setStep, isStepValid } = useArtworkStore();
 
   const renderStep = () => {
@@ -21,9 +17,9 @@ export default function CreateArtwork({ token }: CreateArtworkProps) {
       case 2:
         return <SecondStep />;
       case 3:
-        return <ThirdStep token={token} />;
+        return <ThirdStep />;
       case 4:
-        return <FourthStep token={token} />;
+        return <FourthStep />;
       default:
         return null;
     }

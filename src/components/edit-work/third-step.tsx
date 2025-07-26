@@ -3,7 +3,7 @@
 import {
   type UpdateArtworkDraftBody,
   useUpdateArtworkDraft,
-} from "@/hooks/artworks";
+} from "@/hooks/endpoints/artworks";
 import { TAGS } from "@/lib/constants";
 import { authHeader, getDirtyValues, onError } from "@/lib/utils";
 import { updateArtworkDraftBody } from "@/schemas/artworks";

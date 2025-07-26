@@ -2,9 +2,9 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import LoadingUI from "./loading-ui";
 import ErrorUI from "./error-ui";
-import { useShowAuthenticatedUser } from "@/hooks/users";
+import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { authHeader, matchQueryStatus, onError } from "@/lib/utils";
-import { useResendEmailVerification } from "@/hooks/authentication";
+import { useResendEmailVerification } from "@/hooks/endpoints/authentication";
 import toast from "react-hot-toast";
 import { useSession } from "@/hooks/session";
 

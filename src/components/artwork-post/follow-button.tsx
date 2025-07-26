@@ -1,14 +1,15 @@
 "use client";
 import { useFollowUserAction } from "@/hooks/follow-user";
+import { useSession } from "@/hooks/session";
 import { classNames } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 type FollowButtonProps = {
-  token: string | undefined;
   userId: string;
 };
 
-export default function FollowButton({ token, userId }: FollowButtonProps) {
+export default function FollowButton({ userId }: FollowButtonProps) {
+  const { token } = useSession();
   const { isFollowing, isLoading, handleFollowToggle } = useFollowUserAction(
     token,
     userId,

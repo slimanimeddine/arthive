@@ -1,10 +1,10 @@
+import { usePage } from "@/hooks/params/page";
 import { type LinksField, type MetaField } from "@/types/api-responses";
 import {
   ArrowLongLeftIcon,
   ArrowLongRightIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
-import { parseAsInteger, useQueryState } from "nuqs";
 
 interface PaginationProps {
   links: LinksField;
@@ -12,7 +12,7 @@ interface PaginationProps {
 }
 
 export default function Pagination({ links, meta }: PaginationProps) {
-  const [, setPage] = useQueryState("page", parseAsInteger);
+  const { setPage } = usePage();
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= (meta?.last_page || 1)) {

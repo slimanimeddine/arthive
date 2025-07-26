@@ -1,6 +1,6 @@
 "use client";
 
-import { usePublishArtwork } from "@/hooks/artworks";
+import { usePublishArtwork } from "@/hooks/endpoints/artworks";
 import { authHeader, onError } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";

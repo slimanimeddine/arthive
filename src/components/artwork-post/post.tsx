@@ -1,6 +1,6 @@
 "use client";
 
-import { useShowPublishedArtwork } from "@/hooks/artworks";
+import { useShowPublishedArtwork } from "@/hooks/endpoints/artworks";
 import { fileUrl, matchQueryStatus } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,13 +14,11 @@ import LikeButton from "./like-button";
 import LikedByModal from "./liked-by-modal";
 import PostComment from "./post-comment";
 import ArtworkPostSkeleton from "../ui-skeletons/artwork-post-skeleton";
+import { useParams } from "next/navigation";
 
-type ArtworkPostProps = {
-  id: string;
-  token: string | undefined;
-};
+export default function ArtworkPost() {
+  const { id } = useParams<{ id: string }>();
 
-export default function ArtworkPost({ id, token }: ArtworkPostProps) {
   const showPublishedArtworkQuery = useShowPublishedArtwork(id);
 
   return matchQueryStatus(showPublishedArtworkQuery, {
@@ -110,7 +108,7 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
                   </p>
                 </div>
               </Link>
-              <FollowButton token={token} userId={artwork.artist.id} />
+              <FollowButton userId={artwork.artist.id} />
             </div>
 
             {/* 2nd line */}
@@ -207,9 +205,9 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
                   <span className="text-md border-r px-4 font-semibold">
                     Likes {artwork.likesCount}
                   </span>
-                  <LikeButton token={token} artworkId={artwork.id} />
+                  <LikeButton />
                 </div>
-                <FavoriteButton token={token} artworkId={artwork.id} />
+                <FavoriteButton />
               </div>
             </div>
 
@@ -222,11 +220,11 @@ export default function ArtworkPost({ id, token }: ArtworkPostProps) {
                     Comments ({artwork.commentsCount})
                   </h2>
                 </div>
-                <PostComment token={token} artworkId={artwork.id} />
+                <PostComment />
                 {artwork.comments.length > 0 && (
                   <div className="divide-y">
                     {artwork.comments.map((comment) => (
-                      <Comment key={comment.id} token={token} {...comment} />
+                      <Comment key={comment.id} {...comment} />
                     ))}
                   </div>
                 )}

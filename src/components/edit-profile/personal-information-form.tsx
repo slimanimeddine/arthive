@@ -2,7 +2,7 @@
 import {
   type UpdateAuthenticatedUserBody,
   useUpdateAuthenticatedUser,
-} from "@/hooks/users";
+} from "@/hooks/endpoints/users";
 import { authHeader, classNames, getDirtyValues, onError } from "@/lib/utils";
 import { updateAuthenticatedUserBody } from "@/schemas/users";
 import { zodResolver } from "@hookform/resolvers/zod";

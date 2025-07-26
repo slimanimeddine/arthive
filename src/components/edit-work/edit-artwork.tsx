@@ -1,6 +1,6 @@
 "use client";
 
-import { useShowAuthenticatedUserArtwork } from "@/hooks/artworks";
+import { useShowAuthenticatedUserArtwork } from "@/hooks/endpoints/artworks";
 import { authHeader, classNames, fileUrl, matchQueryStatus } from "@/lib/utils";
 import { type Tag } from "@/types/misc";
 import ErrorUI from "../error-ui";
@@ -11,13 +11,12 @@ import ThirdStep from "./third-step";
 import Link from "next/link";
 import { useState } from "react";
 import LoadingSpinner from "../loading-spinner";
+import { useSession } from "@/hooks/session";
+import { useParams } from "next/navigation";
 
-type EditArtworkProps = {
-  token: string;
-  id: string;
-};
-
-export default function EditArtwork({ token, id }: EditArtworkProps) {
+export default function EditArtwork() {
+  const { token } = useSession();
+  const { id } = useParams<{ id: string }>();
   const showAuthenticatedUserArtworkQuery = useShowAuthenticatedUserArtwork(
     id,
     authHeader(token),

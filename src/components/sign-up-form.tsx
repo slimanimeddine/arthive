@@ -1,5 +1,5 @@
 "use client";
-import { type SignUpBody, useSignUp } from "@/hooks/authentication";
+import { type SignUpBody, useSignUp } from "@/hooks/endpoints/authentication";
 import { onError } from "@/lib/utils";
 import { signUpBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";

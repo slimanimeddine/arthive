@@ -1,5 +1,5 @@
 import VerificationSubmissions from "@/components/become-verified/verification-submissions";
-import { prefetchGetAuthenticatedUserArtistVerificationRequests } from "@/hooks/artist-verification-requests";
+import { prefetchGetAuthenticatedUserArtistVerificationRequests } from "@/hooks/endpoints/artist-verification-requests";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { authHeader } from "@/lib/utils";

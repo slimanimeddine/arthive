@@ -3,12 +3,7 @@
 import ArtistInformation from "./artist-information";
 import ArtworksDisplay from "./artworks-display";
 
-type ArtistProfileProps = {
-  token: string | undefined;
-  username: string;
-};
-
-export default function ArtistProfile({ token, username }: ArtistProfileProps) {
+export default function ArtistProfile() {
   return (
     <main>
       <div className="mx-auto max-w-7xl px-2 py-8 sm:px-2 lg:px-4">
@@ -16,11 +11,11 @@ export default function ArtistProfile({ token, username }: ArtistProfileProps) {
           {/* artist information */}
           <div className="lg:col-start-3 lg:row-end-1">
             <h2 className="sr-only">Summary</h2>
-            <ArtistInformation token={token} username={username} />
+            <ArtistInformation />
           </div>
 
           {/* artworks */}
-          <ArtworksDisplay username={username} />
+          <ArtworksDisplay />
         </div>
       </div>
     </main>

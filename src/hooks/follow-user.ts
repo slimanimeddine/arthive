@@ -6,7 +6,7 @@ import {
   useCheckIfAuthenticatedUserIsFollowing,
   useFollowUser,
   useUnfollowUser,
-} from "./follows";
+} from "./endpoints/follows";
 
 export function useFollowUserAction(token: string | undefined, userId: string) {
   const router = useRouter();
@@ -25,10 +25,10 @@ export function useFollowUserAction(token: string | undefined, userId: string) {
   const unfollowUserMutation = useUnfollowUser(authConfig);
 
   const invalidateFollowQueries = () => {
-    queryClient.invalidateQueries({
+    void queryClient.invalidateQueries({
       queryKey: ["/api/v1/users/me/follows/following"],
     });
-    queryClient.invalidateQueries({
+    void queryClient.invalidateQueries({
       queryKey: [`/api/v1/users/${userId}/is-following`],
     });
   };
