@@ -30,10 +30,9 @@ const userNavigation = [
 
 function NotificationIcon() {
   const { token } = useSession();
-  const authConfig = authHeader(token);
 
   const checkIfUnreadNotificationsExistQuery =
-    useCheckIfUnreadNotificationsExist(authConfig);
+    useCheckIfUnreadNotificationsExist(authHeader(token));
 
   return matchQueryStatus(checkIfUnreadNotificationsExistQuery, {
     Loading: <span className="text-xs text-gray-700">...</span>,
@@ -54,9 +53,10 @@ function NotificationIcon() {
 
 export default function HeaderAuth() {
   const { token } = useSession();
-  const authConfig = authHeader(token);
 
-  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig);
+  const showAuthenticatedUserQuery = useShowAuthenticatedUser(
+    authHeader(token),
+  );
 
   const pathname = usePathname();
 
