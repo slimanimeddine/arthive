@@ -12,13 +12,13 @@ import toast from "react-hot-toast";
 import { useSession } from "@/hooks/session";
 
 export default function FavoriteButton() {
-  const { token } = useSession();
+  const session = useSession();
   const { id: artworkId } = useParams<{ id: string }>();
 
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const authConfig = authHeader(token);
+  const authConfig = session?.token ? authHeader(session.token) : undefined;
 
   const checkIfAuthenticatedUserIsFavoritingQuery =
     useCheckIfAuthenticatedUserIsFavoriting(artworkId, authConfig);
@@ -37,7 +37,7 @@ export default function FavoriteButton() {
   };
 
   const handleFavoriteToggle = (isCurrentlyFavoriting: boolean) => {
-    if (!token) {
+    if (!session?.token) {
       return router.push("/sign-in");
     }
 
@@ -61,7 +61,7 @@ export default function FavoriteButton() {
     );
   };
 
-  if (!token) {
+  if (!session?.token) {
     return (
       <button
         className="flex items-center justify-center rounded-full bg-gray-200 p-2 text-gray-700 transition-colors"

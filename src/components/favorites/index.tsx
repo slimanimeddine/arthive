@@ -9,7 +9,7 @@ import FavoritesSkeleton from "./favorites-skeleton";
 import { useSession } from "@/hooks/session";
 
 export default function Favorites() {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const artworksQuery = useListAuthenticatedUserFavoriteArtworks(
     authHeader(token),
   );

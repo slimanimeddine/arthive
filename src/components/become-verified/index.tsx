@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useSession } from "@/hooks/session";
 
 export default function BecomeVerified() {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const authConfig = authHeader(token);
   const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig);
 

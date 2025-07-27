@@ -19,7 +19,7 @@ import { useSession } from "@/hooks/session";
 import { usePage } from "@/hooks/params/page";
 
 export default function Notifications() {
-  const { token, id } = useSession();
+  const { token, id } = useSession()!;
   const queryClient = useQueryClient();
 
   const { page } = usePage();

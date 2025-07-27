@@ -16,7 +16,7 @@ const schema = createArtworkBody.omit({ photos: true });
 type FormData = z.infer<typeof schema>;
 
 export default function ThirdStep() {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const createArtworkMutation = useCreateArtwork(authHeader(token));
 
   const queryClient = useQueryClient();

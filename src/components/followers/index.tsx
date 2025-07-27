@@ -9,7 +9,7 @@ import FollowersSkeleton from "./followers-skeleton";
 import { useSession } from "@/hooks/session";
 
 export default function Followers() {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const listAuthenticatedUserFollowersQuery = useListAuthenticatedUserFollowers(
     authHeader(token),
   );

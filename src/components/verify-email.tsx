@@ -17,7 +17,7 @@ type VerifyEmailProps = {
 
 export default function VerifyEmail({ expires, signature }: VerifyEmailProps) {
   const [message, setMessage] = useState("");
-  const { token } = useSession();
+  const { token } = useSession()!;
 
   const queryClient = useQueryClient();
   const { id, hash } = useParams<{ id: string; hash: string }>();

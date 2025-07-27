@@ -32,7 +32,7 @@ export default function ArtistInformation() {
       };
 
       return (
-        <div className="flex h-full flex-col overflow-y-scroll bg-white">
+        <div className="flex h-full flex-col overflow-x-hidden overflow-y-scroll bg-white">
           <div>
             <div className="pb-1 sm:pb-6">
               <div>

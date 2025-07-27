@@ -29,7 +29,7 @@ const userNavigation = [
 ];
 
 function NotificationIcon() {
-  const { token } = useSession();
+  const { token } = useSession()!;
 
   const checkIfUnreadNotificationsExistQuery =
     useCheckIfUnreadNotificationsExist(authHeader(token));
@@ -52,7 +52,7 @@ function NotificationIcon() {
 }
 
 export default function HeaderAuth() {
-  const { token } = useSession();
+  const { token } = useSession()!;
 
   const showAuthenticatedUserQuery = useShowAuthenticatedUser(
     authHeader(token),

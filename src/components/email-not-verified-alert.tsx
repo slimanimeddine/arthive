@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { useSession } from "@/hooks/session";
 
 export default function EmailNotVerifiedAlert() {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const authConfig = authHeader(token);
   const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig);
   const resendEmailVerificationMutation =

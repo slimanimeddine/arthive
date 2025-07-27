@@ -17,7 +17,7 @@ type CommentDropdownActionsProps = {
 export default function CommentDropdownActions({
   commentId,
 }: CommentDropdownActionsProps) {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const { id: artworkId } = useParams<{ id: string }>();
 
   const queryClient = useQueryClient();

@@ -7,12 +7,14 @@ import {
   useFollowUser,
   useUnfollowUser,
 } from "./endpoints/follows";
+import { useSession } from "./session";
 
-export function useFollowUserAction(token: string | undefined, userId: string) {
+export function useFollowUserAction(userId: string) {
+  const session = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const authConfig = token ? authHeader(token) : undefined;
+  const authConfig = session?.token ? authHeader(session.token) : undefined;
 
   const isFollowingQuery = useCheckIfAuthenticatedUserIsFollowing(
     userId,
@@ -34,7 +36,7 @@ export function useFollowUserAction(token: string | undefined, userId: string) {
   };
 
   const handleFollowToggle = (isCurrentlyFollowing: boolean) => {
-    if (!token || isFollowing === undefined) {
+    if (!session?.token || isFollowing === undefined) {
       return router.push("/sign-in");
     }
 

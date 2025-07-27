@@ -31,14 +31,12 @@ export default function Comment({
   user,
 }: CommentProps) {
   const formVisble = useEditCommentStore((state) => state.formVisble);
-  const { token } = useSession();
-
-  const showAuthenticatedUserQuery = useShowAuthenticatedUser(
-    authHeader(token),
-  );
+  const session = useSession();
+  const authConfig = session?.token ? authHeader(session.token) : undefined;
+  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig);
 
   return (
-    <article id={`${id}`} className="bg-white py-6 text-base dark:bg-gray-900">
+    <article id={id} className="bg-white py-6 text-base dark:bg-gray-900">
       <footer className="mb-2 flex items-center justify-between">
         <div className="flex items-center">
           <Link
@@ -70,7 +68,7 @@ export default function Comment({
             </time>
           </p>
         </div>
-        {token ? (
+        {session?.token ? (
           matchQueryStatus(showAuthenticatedUserQuery, {
             Loading: <LoadingUI />,
             Errored: <ErrorUI />,
@@ -86,7 +84,7 @@ export default function Comment({
           <></>
         )}
       </footer>
-      {token ? (
+      {session?.token ? (
         matchQueryStatus(showAuthenticatedUserQuery, {
           Loading: <LoadingUI />,
           Errored: <ErrorUI />,

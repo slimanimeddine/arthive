@@ -3,7 +3,6 @@ import { useListUserPublishedArtworks } from "@/hooks/endpoints/artworks";
 import { fileUrl, matchQueryStatus } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import SortFilterArtworks from "../artworks/sort-filter-artworks";
-import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";
 import Pagination from "../pagination";
 import ArtworkCard from "./artwork-card";
@@ -11,6 +10,7 @@ import ArtworksDisplaySkeleton from "./artworks-display-skeleton";
 import { usePage } from "@/hooks/params/page";
 import { useArtworkSort } from "@/hooks/params/artwork-sort";
 import { useTag } from "@/hooks/params/tag";
+import NoData from "../no-data";
 
 export default function ArtworksDisplay() {
   const { username } = useParams<{ username: string }>();
@@ -33,7 +33,14 @@ export default function ArtworksDisplay() {
   return matchQueryStatus(listUserPublishedArtworksQuery, {
     Loading: <ArtworksDisplaySkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={"Artist has no artworks"} />,
+    Empty: (
+      <div className="flex items-center justify-center lg:col-span-2">
+        <NoData
+          title="No Artworks to Display"
+          message="This user has not published any artworks yet."
+        />
+      </div>
+    ),
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,

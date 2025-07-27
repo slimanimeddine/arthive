@@ -17,7 +17,7 @@ import { useSession } from "@/hooks/session";
 import { usePage } from "@/hooks/params/page";
 
 export default function MyArtworks() {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const queryClient = useQueryClient();
   const authConfig = authHeader(token);
 

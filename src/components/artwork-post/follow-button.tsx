@@ -9,15 +9,15 @@ type FollowButtonProps = {
 };
 
 export default function FollowButton({ userId }: FollowButtonProps) {
-  const { token } = useSession();
+  const session = useSession();
   const { isFollowing, isLoading, handleFollowToggle } = useFollowUserAction(
-    token,
+    session?.token,
     userId,
   );
 
   const router = useRouter();
 
-  if (!token) {
+  if (!session?.token) {
     return (
       <button
         onClick={() => router.push("/sign-in")}

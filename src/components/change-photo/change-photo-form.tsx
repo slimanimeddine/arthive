@@ -17,7 +17,7 @@ import Cropper, { type Area } from "react-easy-crop";
 import toast from "react-hot-toast";
 
 export default function ChangePhotoForm() {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const queryClient = useQueryClient();
 
   const updateAuthenticatedUserMutation = useUpdateAuthenticatedUser(
@@ -173,7 +173,7 @@ export default function ChangePhotoForm() {
           onClick={onUpload}
           disabled={isDisabled}
           className={classNames(
-            "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+            "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
             isDisabled ? "cursor-not-allowed" : "hover:bg-indigo-500",
           )}
         >

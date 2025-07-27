@@ -2,7 +2,6 @@
 import { useListPublishedArtworks } from "@/hooks/endpoints/artworks";
 import { fileUrl, matchQueryStatus } from "@/lib/utils";
 import { ArtworkCard } from "../artwork-card";
-import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";
 import Pagination from "../pagination";
 import SortFilterArtworks from "./sort-filter-artworks";
@@ -11,6 +10,7 @@ import { usePage } from "@/hooks/params/page";
 import { useArtworkSort } from "@/hooks/params/artwork-sort";
 import { useTag } from "@/hooks/params/tag";
 import { useSearchQuery } from "@/hooks/params/search-query";
+import NoData from "../no-data";
 
 export default function ArtworksDisplay() {
   const { page } = usePage();
@@ -28,47 +28,59 @@ export default function ArtworksDisplay() {
 
   const listPublishedArtworksQuery = useListPublishedArtworks(queryParams);
 
-  return matchQueryStatus(listPublishedArtworksQuery, {
-    Loading: <ArtworksDisplaySkeleton />,
-    Errored: <ErrorUI />,
-    Empty: <EmptyUI message={"No artworks was found"} />,
-    Success: ({ data }) => {
-      const artworks = data.data.map((artwork) => ({
-        id: artwork.id,
-        title: artwork.title,
-        mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
-        likesCount: artwork.artwork_likes_count,
-        commentsCount: artwork.artwork_comments_count,
-        artistUsername: artwork.user.username,
-        artistFullName: `${artwork.user.first_name} ${artwork.user.last_name}`,
-        artistProfilePictureUrl: fileUrl(artwork.user.photo),
-      }));
-      const links = data.links;
-      const meta = data.meta;
-      return (
-        <div className="flex flex-col">
-          <div className="pt-8">
-            <SortFilterArtworks />
-          </div>
-          <div className="bg-white">
-            <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-              <ul
-                role="list"
-                className="mt-6 mb-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
-              >
-                {artworks.map((work) => (
-                  <li key={work.id}>
-                    <ArtworkCard {...work} />
-                  </li>
-                ))}
-              </ul>
-              <div className="py-8">
-                <Pagination links={links} meta={meta} />
-              </div>
+  return (
+    <div className="flex flex-col">
+      <div className="pt-8">
+        <SortFilterArtworks />
+      </div>
+      <div className="bg-white">
+        {matchQueryStatus(listPublishedArtworksQuery, {
+          Loading: <ArtworksDisplaySkeleton />,
+          Errored: <ErrorUI />,
+          Empty: (
+            <div className="flex min-h-[50px] items-center justify-center lg:col-span-3">
+              <NoData
+                title="No Artworks to Display"
+                message="No artworks were found matching your criteria. Try adjusting your filters or search query."
+              />
             </div>
-          </div>
-        </div>
-      );
-    },
-  });
+          ),
+          Success: ({ data }) => {
+            const artworks = data.data.map((artwork) => ({
+              id: artwork.id,
+              title: artwork.title,
+              mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
+              likesCount: artwork.artwork_likes_count,
+              commentsCount: artwork.artwork_comments_count,
+              artistUsername: artwork.user.username,
+              artistFullName: `${artwork.user.first_name} ${artwork.user.last_name}`,
+              artistProfilePictureUrl: fileUrl(artwork.user.photo),
+            }));
+            const links = data.links;
+            const meta = data.meta;
+
+            return (
+              <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+                <ul
+                  role="list"
+                  className="mt-6 mb-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
+                >
+                  {artworks.map((work) => (
+                    <li key={work.id}>
+                      <ArtworkCard {...work} />
+                    </li>
+                  ))}
+                </ul>
+                {meta.total > 12 && (
+                  <div className="py-8">
+                    <Pagination links={links} meta={meta} />
+                  </div>
+                )}
+              </div>
+            );
+          },
+        })}
+      </div>
+    </div>
+  );
 }

@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 export default function DeleteAccount() {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const { handleSubmit, register, formState } = useForm<DeleteUserBody>({
     resolver: zodResolver(deleteUserBody),
   });

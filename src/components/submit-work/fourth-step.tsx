@@ -21,7 +21,7 @@ export default function FourthStep() {
     setToDefault,
   } = useArtworkStore();
 
-  const { token } = useSession();
+  const { token } = useSession()!;
 
   const publishArtworkMutation = usePublishArtwork(authHeader(token));
 

@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 export default function PostComment() {
-  const { token } = useSession();
+  const session = useSession();
   const { id: artworkId } = useParams<{ id: string }>();
 
   const queryClient = useQueryClient();
@@ -29,7 +29,9 @@ export default function PostComment() {
     }, 6000);
   }, [clearErrors, formState.errors.comment_text]);
 
-  const postArtworkCommentMutation = usePostArtworkComment(authHeader(token));
+  const authConfig = session?.token ? authHeader(session.token) : undefined;
+
+  const postArtworkCommentMutation = usePostArtworkComment(authConfig);
 
   function onSubmit(data: PostArtworkCommentBody) {
     postArtworkCommentMutation.mutate(
@@ -51,7 +53,9 @@ export default function PostComment() {
   }
 
   const isDisabled =
-    formState.isSubmitting || postArtworkCommentMutation.isPending || !token;
+    formState.isSubmitting ||
+    postArtworkCommentMutation.isPending ||
+    !session?.token;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mb-6">

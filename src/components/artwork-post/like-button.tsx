@@ -12,11 +12,11 @@ import toast from "react-hot-toast";
 
 export default function LikeButton() {
   const { id: artworkId } = useParams<{ id: string }>();
-  const { token } = useSession();
+  const session = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const authConfig = authHeader(token);
+  const authConfig = session?.token ? authHeader(session.token) : undefined;
 
   const checkIfAuthenticatedUserIsLikingQuery =
     useCheckIfAuthenticatedUserIsLiking(artworkId, authConfig);
@@ -31,7 +31,7 @@ export default function LikeButton() {
   };
 
   const handleLikeToggle = (isCurrentlyLiking: boolean) => {
-    if (!token) {
+    if (!session?.token) {
       return router.push("/sign-in");
     }
 
@@ -55,7 +55,7 @@ export default function LikeButton() {
     );
   };
 
-  if (!token) {
+  if (!session?.token) {
     return (
       <button
         className="flex items-center justify-center rounded-full bg-gray-200 p-2 text-gray-700 transition-colors"

@@ -8,7 +8,7 @@ export function useMarkNotificationRead(
   notificationId: string,
   readAt: string | undefined,
 ) {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const queryClient = useQueryClient();
 
   const markNotificationAsReadMutation = useMarkNotificationAsRead(
