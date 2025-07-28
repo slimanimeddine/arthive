@@ -2,11 +2,11 @@
 
 import { useListAuthenticatedUserFollowers } from "@/hooks/endpoints/follows";
 import { authHeader, matchQueryStatus } from "@/lib/utils";
-import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";
 import ArtistCard from "../main/artist-card";
 import FollowersSkeleton from "./followers-skeleton";
 import { useSession } from "@/hooks/session";
+import NoFollowers from "./no-followers";
 
 export default function Followers() {
   const { token } = useSession()!;
@@ -17,7 +17,7 @@ export default function Followers() {
   return matchQueryStatus(listAuthenticatedUserFollowersQuery, {
     Loading: <FollowersSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={"You have no followers"} />,
+    Empty: <NoFollowers />,
     Success: ({ data }) => {
       const followers = data.data.map((follower) => ({
         id: follower.id,

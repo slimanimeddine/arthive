@@ -9,12 +9,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";
 import Pagination from "../pagination";
 import MyArtworksSkeleton from "./my-artworks-skeleton";
 import { useSession } from "@/hooks/session";
 import { usePage } from "@/hooks/params/page";
+import NoSubmitteArtworks from "./no-submitted-artworks";
 
 export default function MyArtworks() {
   const { token } = useSession()!;
@@ -62,7 +62,7 @@ export default function MyArtworks() {
   return matchQueryStatus(listAuthenticatedUserArtworksQuery, {
     Loading: <MyArtworksSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={"You have not submitted any artworks"} />,
+    Empty: <NoSubmitteArtworks />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,

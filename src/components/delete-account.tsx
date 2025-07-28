@@ -63,7 +63,7 @@ export default function DeleteAccount() {
           <input
             id="password"
             type="password"
-            className="mt-1 block w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-2 w-1/2 rounded-md border-0 bg-white p-1.5 text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 focus:ring-inset sm:text-sm sm:leading-6"
             {...register("password")}
           />
           {formState.errors.password && (

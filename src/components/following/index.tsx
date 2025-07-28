@@ -2,11 +2,11 @@
 
 import { useListAuthenticatedUserFollowing } from "@/hooks/endpoints/follows";
 import { authHeader, matchQueryStatus } from "@/lib/utils";
-import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";
 import ArtistCard from "../main/artist-card";
 import FollowingSkeleton from "./following-skeleton";
 import { useSession } from "@/hooks/session";
+import NoFollowing from "./no-following";
 
 export default function Following() {
   const { token } = useSession()!;
@@ -17,7 +17,7 @@ export default function Following() {
   return matchQueryStatus(listAuthenticatedUserFollowingQuery, {
     Loading: <FollowingSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={"You are not following anybody"} />,
+    Empty: <NoFollowing />,
     Success: ({ data }) => {
       const following = data.data.map((follower) => ({
         id: follower.id,

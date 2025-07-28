@@ -3,10 +3,10 @@
 import { useListAuthenticatedUserFavoriteArtworks } from "@/hooks/endpoints/favorites";
 import { authHeader, fileUrl, matchQueryStatus } from "@/lib/utils";
 import ErrorUI from "../error-ui";
-import EmptyUI from "../empty-ui";
 import ArtworkCard from "../artist-profile/artwork-card";
 import FavoritesSkeleton from "./favorites-skeleton";
 import { useSession } from "@/hooks/session";
+import NoBookmarkedArtworks from "./no-bookmarked-artworks";
 
 export default function Favorites() {
   const { token } = useSession()!;
@@ -17,7 +17,7 @@ export default function Favorites() {
   return matchQueryStatus(artworksQuery, {
     Loading: <FavoritesSkeleton />,
     Errored: <ErrorUI />,
-    Empty: <EmptyUI message={"You have no bookmarked artworks"} />,
+    Empty: <NoBookmarkedArtworks />,
     Success: ({ data }) => {
       const artworks = data.data.map((artwork) => ({
         id: artwork.id,
