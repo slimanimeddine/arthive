@@ -206,20 +206,6 @@ export function addOrdinalSuffix(num: number): string {
   }
 }
 
-// /**
-//  * Validates raw params (URL or search) using the given Zod schema.
-//  * Throws an error if invalid.
-//  */
-// export function validateParams<T>(rawParams: unknown, schema: z.ZodType<T>): T {
-//   const parsed = schema.safeParse(rawParams);
-
-//   if (!parsed.success) {
-//     throw new Error("Invalid URL or query parameters");
-//   }
-
-//   return parsed.data;
-// }
-
 export function parseData<T extends z.ZodType>(
   data: unknown,
   schema: T,

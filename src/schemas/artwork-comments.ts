@@ -1,12 +1,12 @@
 import { MAX_WORDS } from "@/lib/constants";
-import { z as zod } from "zod";
+import { z } from "zod";
 
 /**
  * Post a comment on an artwork
  * @summary Post Artwork Comment
  */
-export const postArtworkCommentBody = zod.object({
-  comment_text: zod
+export const postArtworkCommentBody = z.object({
+  comment_text: z
     .string()
     .min(1, {
       message: "Comment text must not be empty.",
@@ -27,8 +27,8 @@ export const postArtworkCommentBody = zod.object({
  * Update a comment on an artwork
  * @summary Update Artwork Comment
  */
-export const updateArtworkCommentBody = zod.object({
-  comment_text: zod.string().refine(
+export const updateArtworkCommentBody = z.object({
+  comment_text: z.string().refine(
     (value) => {
       if (!value) return true;
       const wordCount = value.trim().split(/\s+/).length;

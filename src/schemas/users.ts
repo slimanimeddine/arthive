@@ -4,14 +4,14 @@ import {
   MAX_WORDS,
   MIN_WORDS,
 } from "@/lib/constants";
-import { z as zod } from "zod";
+import { z } from "zod";
 
 /**
  * Update the currently authenticated user
  * @summary Update Authenticated User
  */
-export const updateAuthenticatedUserBody = zod.object({
-  username: zod
+export const updateAuthenticatedUserBody = z.object({
+  username: z
     .string()
     .min(3)
     .max(255)
@@ -20,20 +20,20 @@ export const updateAuthenticatedUserBody = zod.object({
       "Username can only contain letters, numbers, dashes, and underscores",
     )
     .optional(),
-  first_name: zod
+  first_name: z
     .string()
     .max(255)
     .regex(/^[A-Za-z]+$/, "First name can only contain letters")
     .optional(),
-  last_name: zod
+  last_name: z
     .string()
     .max(255)
     .regex(/^[A-Za-z]+$/, "Last name can only contain letters")
 
     .optional(),
-  email: zod.string().email().optional(),
-  country: zod.string().optional(),
-  bio: zod
+  email: z.email().optional(),
+  country: z.string().optional(),
+  bio: z
     .string()
     .optional()
     .refine(
@@ -46,7 +46,7 @@ export const updateAuthenticatedUserBody = zod.object({
         message: `Bio's words' count must be between ${MIN_WORDS} and ${MAX_WORDS} words.`,
       },
     ),
-  photo: zod
+  photo: z
     .instanceof(File)
     .refine((f) => f.size < MAX_FILE_SIZE, "5 MB is the max upload size.")
     .refine(

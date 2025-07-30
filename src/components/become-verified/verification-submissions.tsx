@@ -26,7 +26,7 @@ function statusClass(status: "pending" | "approved" | "rejected") {
 }
 
 export default function VerificationSubmissions() {
-  const { token } = useSession();
+  const { token } = useSession()!;
   const getAuthenticatedUserArtistVerificationRequestsQuery =
     useGetAuthenticatedUserArtistVerificationRequests(authHeader(token));
 

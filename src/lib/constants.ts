@@ -6,7 +6,7 @@ export const ACCEPTED_IMAGE_TYPES = [
   "image/jpg",
   "image/png",
   "image/webp",
-] as const;
+];
 export const TAGS = [
   "painting",
   "graphic",

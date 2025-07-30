@@ -3,21 +3,22 @@ import {
   MAX_FILE_SIZE,
   MAX_WORDS,
   MIN_WORDS,
+  TAGS,
 } from "@/lib/constants";
-import { z as zod } from "zod";
+import { z } from "zod";
 
 /**
  * Create a new artwork
  * @summary Create Artwork
  */
-export const createArtworkBody = zod.object({
-  title: zod
+export const createArtworkBody = z.object({
+  title: z
     .string()
     .min(3, {
       message: "Title is too short",
     })
     .max(255),
-  description: zod.string().refine(
+  description: z.string().refine(
     (value) => {
       if (!value) return true;
       const wordCount = value.trim().split(/\s+/).length;
@@ -27,26 +28,8 @@ export const createArtworkBody = zod.object({
       message: `Description's words' count must be between ${MIN_WORDS} and ${MAX_WORDS} words.`,
     },
   ),
-  tags: zod
-    .array(
-      zod.enum([
-        "painting",
-        "graphic",
-        "sculpture",
-        "folk art",
-        "textile",
-        "ceramics",
-        "stained glass windows",
-        "beads",
-        "paper",
-        "glass",
-        "dolls",
-        "jewellery",
-        "fresco",
-        "metal",
-        "mosaic",
-      ]),
-    )
+  tags: z
+    .array(z.enum(TAGS))
     .min(1, {
       message: "At least one tag is required",
     })
@@ -56,16 +39,16 @@ export const createArtworkBody = zod.object({
     .refine((tags) => new Set(tags).size === tags.length, {
       message: "Tags must be unique", // Custom error message for duplicate tags
     }),
-  photos: zod
+  photos: z
     .object({
-      file: zod
+      file: z
         .instanceof(Blob)
         .refine((f) => f.size < MAX_FILE_SIZE, "5 MB is the max upload size.")
         .refine(
           (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
           "Only .jpg, .jpeg, .png and .webp formats are supported.",
         ),
-      is_main: zod.boolean(),
+      is_main: z.boolean(),
     })
     .array()
     .min(1)
@@ -76,15 +59,15 @@ export const createArtworkBody = zod.object({
  * Update an artwork draft
  * @summary Update Artwork Draft
  */
-export const updateArtworkDraftBody = zod.object({
-  title: zod
+export const updateArtworkDraftBody = z.object({
+  title: z
     .string()
     .min(3, {
       message: "Title is too short",
     })
     .max(255)
     .optional(),
-  description: zod
+  description: z
     .string()
     .min(1, {
       message: "Description cannot be empty",
@@ -100,26 +83,8 @@ export const updateArtworkDraftBody = zod.object({
         message: `Description's words' count must be between ${MIN_WORDS} and ${MAX_WORDS} words.`,
       },
     ),
-  tags: zod
-    .array(
-      zod.enum([
-        "painting",
-        "graphic",
-        "sculpture",
-        "folk art",
-        "textile",
-        "ceramics",
-        "stained glass windows",
-        "beads",
-        "paper",
-        "glass",
-        "dolls",
-        "jewellery",
-        "fresco",
-        "metal",
-        "mosaic",
-      ]),
-    )
+  tags: z
+    .array(z.enum(TAGS))
     .min(1, {
       message: "At least one tag is required",
     })

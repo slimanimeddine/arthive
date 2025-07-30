@@ -1,15 +1,15 @@
 import { MAX_WORDS, MIN_WORDS } from "@/lib/constants";
-import { z as zod } from "zod";
+import { z } from "zod";
 
-export const reviewArtistVerificationRequestBody = zod.discriminatedUnion(
+export const reviewArtistVerificationRequestBody = z.discriminatedUnion(
   "status",
   [
-    zod.object({
-      status: zod.literal("approved"),
+    z.object({
+      status: z.literal("approved"),
     }),
-    zod.object({
-      status: zod.literal("rejected"),
-      reason: zod.string().refine(
+    z.object({
+      status: z.literal("rejected"),
+      reason: z.string().refine(
         (value) => {
           if (!value) return true;
           const wordCount = value.trim().split(/\s+/).length;

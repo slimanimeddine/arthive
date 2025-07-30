@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const auth = await verifyAuth();
+  await verifyAuth();
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -22,7 +22,7 @@ export default async function Page() {
       <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
         <div className="flex gap-2">
           <div className="w-full">
-            <SignOutButton token={auth.token} />
+            <SignOutButton />
           </div>
           <div className="w-full">
             <button className="flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset hover:bg-gray-50">

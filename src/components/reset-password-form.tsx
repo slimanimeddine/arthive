@@ -57,7 +57,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           <input
             id="email"
             type="email"
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             {...register("email")}
           />
           {formState.errors.email && (
@@ -79,7 +79,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           <input
             id="password"
             type="password"
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             {...register("password")}
           />
           {formState.errors.password && (
@@ -101,7 +101,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           <input
             id="password_confirmation"
             type="password"
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             {...register("password_confirmation")}
           />
           {formState.errors.password_confirmation && (
@@ -116,7 +116,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         <button
           disabled={isDisabled}
           type="submit"
-          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Reset password
         </button>

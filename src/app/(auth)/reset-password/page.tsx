@@ -11,11 +11,11 @@ const searchParamsSchema = z.object({
     .regex(/^[a-z0-9]{64}$/),
 });
 
-export default async function Page({
-  searchParams,
-}: {
+type Props = {
   searchParams: Promise<{ token: string }>;
-}) {
+};
+
+export default async function Page({ searchParams }: Props) {
   const { token } = parseData(await searchParams, searchParamsSchema);
 
   return (

@@ -42,10 +42,10 @@ export default function ThirdStep({ token, artwork }: ThirdStepProps) {
       {
         onError,
         onSuccess: () => {
-          queryClient.invalidateQueries({
+          void queryClient.invalidateQueries({
             queryKey: ["/api/v1/users/me/artworks"],
           });
-          queryClient.invalidateQueries({
+          void queryClient.invalidateQueries({
             queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
           });
 

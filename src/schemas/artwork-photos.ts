@@ -1,12 +1,12 @@
 import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "@/lib/constants";
-import { z as zod } from "zod";
+import { z } from "zod";
 
 /**
  * Upload photos to an artwork draft
  * @summary Upload Artwork Photos
  */
-export const uploadArtworkPhotosBody = zod.object({
-  photos: zod
+export const uploadArtworkPhotosBody = z.object({
+  photos: z
     .instanceof(File)
     .refine((f) => f.size < MAX_FILE_SIZE, "5 MB is the max upload size.")
     .refine(
@@ -22,8 +22,8 @@ export const uploadArtworkPhotosBody = zod.object({
  * Replace the path of an artwork photo
  * @summary Replace Artwork Photo Path
  */
-export const replaceArtworkPhotoPathBody = zod.object({
-  photo: zod
+export const replaceArtworkPhotoPathBody = z.object({
+  photo: z
     .instanceof(File)
     .refine((f) => f.size < MAX_FILE_SIZE, "5 MB is the max upload size.")
     .refine(

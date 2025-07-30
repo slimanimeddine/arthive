@@ -11,7 +11,7 @@ export default tseslint.config(
   {
     ignores: [".next"],
   },
-  ...compat.extends(["next/core-web-vitals", "next/typescript"]),
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     files: ["**/*.ts", "**/*.tsx"],
     extends: [
@@ -24,6 +24,7 @@ export default tseslint.config(
       "@tanstack/query": pluginQuery,
     },
     rules: {
+      "@next/next/no-html-link-for-pages": "warn",
       "@typescript-eslint/array-type": "off",
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/consistent-type-imports": [

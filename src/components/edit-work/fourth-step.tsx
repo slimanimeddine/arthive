@@ -29,7 +29,7 @@ export default function FourthStep({ token, artwork }: FourthStepProps) {
         {
           onError,
           onSuccess: () => {
-            queryClient.invalidateQueries({
+            void queryClient.invalidateQueries({
               queryKey: ["/api/v1/users/me/artworks"],
             });
             toast.success("Artwork draft published successfully!");

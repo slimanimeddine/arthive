@@ -11,15 +11,15 @@ export const metadata: Metadata = {
   ...seo("Notifications", "View your notifications"),
 };
 
+type Props = {
+  searchParams: Promise<{ page: number }>;
+};
+
 const searchParamsSchema = z.object({
   page: z.int().default(1),
 });
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ page: number }>;
-}) {
+export default async function Page({ searchParams }: Props) {
   const { token } = await verifyAuth();
   const queryClient = new QueryClient();
   const { page } = parseData(await searchParams, searchParamsSchema);

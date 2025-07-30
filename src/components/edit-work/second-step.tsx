@@ -65,7 +65,7 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
         {
           onError,
           onSuccess: () => {
-            queryClient.invalidateQueries({
+            void queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
             });
             toast.success("Main photo set successfully");
@@ -87,7 +87,7 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
         {
           onError,
           onSuccess: () => {
-            queryClient.invalidateQueries({
+            void queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
             });
 

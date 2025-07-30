@@ -21,16 +21,16 @@ const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
 });
 
-export default async function Page({
-  searchParams,
-}: {
+type Props = {
   searchParams: Promise<{
     page: number;
     tag?: string;
     artworkSort?: string;
     searchQuery?: string;
   }>;
-}) {
+};
+
+export default async function Page({ searchParams }: Props) {
   const queryClient = new QueryClient();
 
   const { tag, artworkSort, page, searchQuery } = parseData(

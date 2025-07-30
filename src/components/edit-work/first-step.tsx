@@ -59,7 +59,7 @@ export default function FirstStep({ token, artwork }: FirstStepProps) {
         {
           onError,
           onSuccess: () => {
-            queryClient.invalidateQueries({
+            void queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
             });
             toast.success("Photos uploaded successfully");
@@ -89,7 +89,7 @@ export default function FirstStep({ token, artwork }: FirstStepProps) {
       {
         onError,
         onSuccess: () => {
-          queryClient.invalidateQueries({
+          void queryClient.invalidateQueries({
             queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
           });
           toast.success("Photo removed successfully");

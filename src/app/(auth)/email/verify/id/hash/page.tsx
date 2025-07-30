@@ -10,6 +10,11 @@ export const metadata: Metadata = seo(
   "Verify your email on ArtHive",
 );
 
+type Props = {
+  params: Promise<{ id: string; hash: string }>;
+  searchParams: Promise<{ expires: string; signature: string }>;
+};
+
 const paramsSchema = z.object({
   id: z.uuid(),
   hash: z.string().regex(/^[a-f0-9]{40}$/),
@@ -20,13 +25,7 @@ const searchParamsSchema = z.object({
   signature: z.string().regex(/^[a-fA-F0-9]+$/),
 });
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ id: string; hash: string }>;
-  searchParams: Promise<{ expires: string; signature: string }>;
-}) {
+export default async function Page({ params, searchParams }: Props) {
   await verifyAuth();
 
   parseData(await params, paramsSchema);
