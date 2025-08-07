@@ -1,6 +1,7 @@
+import InvalidParams from "@/components/invalid-params";
 import Logo from "@/components/logo";
 import ResetPasswordForm from "@/components/reset-password-form";
-import { parseData } from "@/lib/utils";
+import { parseParams } from "@/lib/utils";
 import Link from "next/link";
 import z from "zod";
 
@@ -16,7 +17,19 @@ type Props = {
 };
 
 export default async function Page({ searchParams }: Props) {
-  const { token } = parseData(await searchParams, searchParamsSchema);
+  const { data, success, error } = parseParams(
+    await searchParams,
+    searchParamsSchema,
+  );
+
+  if (!success) {
+    const errors = Object.values(z.flattenError(error).fieldErrors).map((err) =>
+      err.join(", "),
+    );
+    return <InvalidParams errors={errors} />;
+  }
+
+  const { token } = data;
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

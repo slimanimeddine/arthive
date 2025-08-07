@@ -1,7 +1,8 @@
+import InvalidParams from "@/components/invalid-params";
 import VerifyEmail from "@/components/verify-email";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
-import { parseData } from "@/lib/utils";
+import { parseParams } from "@/lib/utils";
 import { type Metadata } from "next";
 import z from "zod";
 
@@ -28,11 +29,33 @@ const searchParamsSchema = z.object({
 export default async function Page({ params, searchParams }: Props) {
   await verifyAuth();
 
-  parseData(await params, paramsSchema);
-
-  const { expires, signature } = parseData(
-    await searchParams,
-    searchParamsSchema,
+  const { success: paramsSuccess, error: paramsError } = parseParams(
+    await params,
+    paramsSchema,
   );
+
+  if (!paramsSuccess) {
+    const errors = Object.values(z.flattenError(paramsError).fieldErrors).map(
+      (err) => err.join(", "),
+    );
+
+    return <InvalidParams errors={errors} />;
+  }
+
+  const {
+    data,
+    success: searchParamsSuccess,
+    error: searchParamsError,
+  } = parseParams(await searchParams, searchParamsSchema);
+
+  if (!searchParamsSuccess) {
+    const errors = Object.values(
+      z.flattenError(searchParamsError).fieldErrors,
+    ).map((err) => err.join(", "));
+
+    return <InvalidParams errors={errors} />;
+  }
+
+  const { expires, signature } = data;
   return <VerifyEmail expires={expires} signature={signature} />;
 }

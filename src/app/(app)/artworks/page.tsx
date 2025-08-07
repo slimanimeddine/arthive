@@ -1,8 +1,9 @@
 import ArtworksDisplay from "@/components/artworks/artworks-display";
+import InvalidParams from "@/components/invalid-params";
 import { prefetchListPublishedArtworks } from "@/hooks/endpoints/artworks";
 import { ARTWORK_SORT_VALUES, TAGS } from "@/lib/constants";
 import seo from "@/lib/seo";
-import { parseData } from "@/lib/utils";
+import { parseParams } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
 import { type Metadata } from "next";
 import z from "zod";
@@ -33,10 +34,19 @@ type Props = {
 export default async function Page({ searchParams }: Props) {
   const queryClient = new QueryClient();
 
-  const { tag, artworkSort, page, searchQuery } = parseData(
+  const { data, success, error } = parseParams(
     await searchParams,
     searchParamsSchema,
   );
+
+  if (!success) {
+    const errors = Object.values(z.flattenError(error).fieldErrors).map((err) =>
+      err.join(", "),
+    );
+    return <InvalidParams errors={errors} />;
+  }
+
+  const { tag, artworkSort, page, searchQuery } = data;
 
   const queryParams: Record<string, string | number> = {
     perPage: 12,

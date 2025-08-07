@@ -1,9 +1,10 @@
 import ArtistsDisplay from "@/components/artists/artists-display";
+import InvalidParams from "@/components/invalid-params";
 import { prefetchListUsers } from "@/hooks/endpoints/users";
 import { ARTIST_SORT_VALUES, COUNTRIES, TAGS } from "@/lib/constants";
 import { getAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
-import { parseData } from "@/lib/utils";
+import { parseParams } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
 import { type Metadata } from "next";
 import z from "zod";
@@ -37,10 +38,19 @@ export default async function Page({ searchParams }: Props) {
   const queryClient = new QueryClient();
 
   const { token } = await getAuth();
-  const { country, category, artistSort, page, searchQuery } = parseData(
+  const { data, success, error } = parseParams(
     await searchParams,
     searchParamsSchema,
   );
+
+  if (!success) {
+    const errors = Object.values(z.flattenError(error).fieldErrors).map((err) =>
+      err.join(", "),
+    );
+    return <InvalidParams errors={errors} />;
+  }
+
+  const { country, category, artistSort, page, searchQuery } = data;
 
   const queryParams: Record<string, string | number> = {
     perPage: 12,

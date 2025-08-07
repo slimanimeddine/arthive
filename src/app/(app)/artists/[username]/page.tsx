@@ -1,4 +1,5 @@
 import ArtistProfile from "@/components/artist-profile";
+import InvalidParams from "@/components/invalid-params";
 import {
   prefetchListUserReceivedLikesCountByTag,
   prefetchShowUserReceivedLikesCount,
@@ -6,7 +7,7 @@ import {
 import { prefetchListUserPublishedArtworks } from "@/hooks/endpoints/artworks";
 import { prefetchShowUser, showUser } from "@/hooks/endpoints/users";
 import seo from "@/lib/seo";
-import { parseData } from "@/lib/utils";
+import { parseParams } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
 import { type Metadata } from "next";
 import z from "zod";
@@ -20,7 +21,15 @@ const paramsSchema = z.object({
 });
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { username } = parseData(await params, paramsSchema);
+  const { data, success } = parseParams(await params, paramsSchema);
+
+  if (!success) {
+    return {
+      ...seo("Artist Not Found", "The requested artist does not exist."),
+    };
+  }
+
+  const { username } = data;
 
   const artist = await showUser(username);
 
@@ -30,7 +39,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Page({ params }: Props) {
-  const { username } = parseData(await params, paramsSchema);
+  const { data, success, error } = parseParams(await params, paramsSchema);
+
+  if (!success) {
+    const errors = Object.values(z.flattenError(error).fieldErrors).map((err) =>
+      err.join(", "),
+    );
+    return <InvalidParams errors={errors} />;
+  }
+
+  const { username } = data;
 
   const queryClient = new QueryClient();
 
