@@ -2,7 +2,7 @@
 
 import { usePublishArtwork } from "@/hooks/endpoints/artworks";
 import { useSession } from "@/hooks/session";
-import { authHeader, getUrlFromBlob, onError } from "@/lib/utils";
+import { authHeader, getUrlFromBlob } from "@/lib/utils";
 import useArtworkStore from "@/stores/artwork-store";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
@@ -23,7 +23,7 @@ export default function FourthStep() {
 
   const { token } = useSession()!;
 
-  const publishArtworkMutation = usePublishArtwork(authHeader(token));
+  const { mutate } = usePublishArtwork(authHeader(token));
 
   const queryClient = useQueryClient();
 
@@ -35,12 +35,20 @@ export default function FourthStep() {
     ) {
       setStatus("published");
 
-      publishArtworkMutation.mutate(
+      mutate(
         {
           artworkId: id!,
         },
         {
-          onError,
+          onError: (error) => {
+            if (error.isAxiosError) {
+              toast.error(
+                error.response?.data.message ?? "Something went wrong",
+              );
+            } else {
+              toast.error(error.message);
+            }
+          },
           onSuccess: () => {
             void queryClient.invalidateQueries({
               queryKey: ["/api/v1/users/me/artworks"],

@@ -1,6 +1,5 @@
 "use client";
 import { type SignUpBody, useSignUp } from "@/hooks/endpoints/authentication";
-import { onError } from "@/lib/utils";
 import { signUpBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -14,15 +13,17 @@ export default function SignUpForm() {
 
   const router = useRouter();
 
-  const signUpMutation = useSignUp();
+  const { mutate, isPending } = useSignUp();
 
   function onSubmit(data: SignUpBody) {
-    signUpMutation.mutate(
+    mutate(
       {
         data,
       },
       {
-        onError,
+        onError: (error) => {
+          toast.error(error.message);
+        },
         onSuccess: () => {
           toast.success("Account created successfully!");
           reset();
@@ -32,7 +33,7 @@ export default function SignUpForm() {
     );
   }
 
-  const isDisabled = formState.isSubmitting || signUpMutation.isPending;
+  const isDisabled = formState.isSubmitting || isPending;
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>

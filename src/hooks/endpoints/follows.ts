@@ -30,7 +30,7 @@ export type ListAuthenticatedUserFollowers401 = UnauthenticatedApiResponse;
 export type ListAuthenticatedUserFollowing200 = ApiResource<UserModel[]>;
 export type ListAuthenticatedUserFollowing401 = UnauthenticatedApiResponse;
 
-export type UnfollowUser200 = NoContentApiResponse;
+export type UnfollowUser200 = SuccessNoDataApiResponse;
 export type UnfollowUser401 = UnauthenticatedApiResponse;
 export type UnfollowUser403 = UnauthorizedApiResponse;
 export type UnfollowUser404 = NotFoundApiResponse;
@@ -39,7 +39,7 @@ import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
 import {
   type ApiResource,
-  type NoContentApiResponse,
+  type SuccessNoDataApiResponse,
   type NotFoundApiResponse,
   type SuccessApiResponse,
   type UnauthenticatedApiResponse,

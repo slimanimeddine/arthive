@@ -1,6 +1,4 @@
 "use client";
-import { useListUsers } from "@/hooks/endpoints/users";
-import { matchQueryStatus } from "@/lib/utils";
 import {
   Dialog,
   DialogBackdrop,
@@ -10,43 +8,13 @@ import {
 } from "@headlessui/react";
 import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import ErrorUI from "../error-ui";
-import Pagination from "../pagination";
-import ArtistCard from "./artist-card";
 import ArtistCategoryFilter from "./artist-category-filter";
 import ArtistCountryFilter from "./artist-country-filter";
 import SortArtists from "./sort-artists";
-import ArtistsDisplaySkeleton from "./artists-display-skeleton";
-import { usePage } from "@/hooks/params/page";
-import { useArtistSort } from "@/hooks/params/artist-sort";
-import { useCategory } from "@/hooks/params/category";
-import { useCountry } from "@/hooks/params/country";
-import { useSearchQuery } from "@/hooks/params/search-query";
-import NoData from "../no-data";
+import ArtistsDisplayInner from "./artists-display-inner";
 
-type ArtistsDisplayProps = {
-  token: string | undefined;
-};
-
-export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
+export default function ArtistsDisplay() {
   const [open, setOpen] = useState(false);
-
-  const { page } = usePage();
-  const { artistSort } = useArtistSort();
-  const { category } = useCategory();
-  const { country } = useCountry();
-  const { searchQuery } = useSearchQuery();
-
-  const queryParams: Record<string, string | number> = {
-    include: "publishedArtworks",
-    ...(country && { "filter[country]": country }),
-    ...(category && { "filter[tag]": category }),
-    ...(artistSort && { sort: artistSort }),
-    ...(page && { page }),
-    ...(searchQuery && { searchQuery }),
-  };
-
-  const listUsersQuery = useListUsers(queryParams);
 
   return (
     <>
@@ -122,54 +90,7 @@ export default function ArtistsDisplay({ token }: ArtistsDisplayProps) {
             </div>
           </div>
 
-          {matchQueryStatus(listUsersQuery, {
-            Loading: <ArtistsDisplaySkeleton />,
-            Errored: <ErrorUI />,
-            Empty: (
-              <div className="flex min-h-[50px] items-center justify-center lg:col-span-3">
-                <NoData
-                  title="No Artists to Display"
-                  message="No artists were found matching your criteria. Try adjusting your filters or search query."
-                />
-              </div>
-            ),
-            Success: ({ data }) => {
-              const artists = data.data.map((artist) => ({
-                id: artist.id,
-                fullName: `${artist.first_name} ${artist.last_name}`,
-                username: artist.username,
-                country: artist.country,
-                profilePictureUrl: artist.photo,
-                description: artist.bio,
-                artworks: artist.published_artworks
-                  .slice(0, 3)
-                  .map((artwork) => ({
-                    id: artwork.id,
-                    mainPhotoUrl: artwork.artwork_main_photo_path,
-                  })),
-              }));
-
-              const links = data.links;
-              const meta = data.meta;
-
-              return (
-                <div className="lg:col-span-3">
-                  <ul className="mb-8 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-                    {artists.map((artist) => (
-                      <li key={artist.id}>
-                        <ArtistCard {...artist} token={token} />
-                      </li>
-                    ))}
-                  </ul>
-                  {meta.total > 10 && (
-                    <div className="pt-8">
-                      <Pagination links={links} meta={meta} />
-                    </div>
-                  )}
-                </div>
-              );
-            },
-          })}
+          <ArtistsDisplayInner />
         </div>
       </div>
     </>

@@ -1,9 +1,4 @@
 import { type JWTPayload } from "jose";
-import {
-  type ApiResource,
-  type PaginatedApiResponse,
-  type SuccessApiResponse,
-} from "./api-responses";
 
 export type SessionPayload = {
   id: string;
@@ -28,8 +23,3 @@ export type Tag =
   | "fresco"
   | "metal"
   | "mosaic";
-
-export type QueryResult<T> =
-  | ApiResource<T>
-  | PaginatedApiResponse<T>
-  | SuccessApiResponse<T>;

@@ -19,7 +19,7 @@ export type CreateArtwork401 = UnauthenticatedApiResponse;
 export type CreateArtwork403 = UnauthorizedApiResponse;
 export type CreateArtworkBody = z.infer<typeof createArtworkBody>;
 
-export type DeleteArtwork200 = NoContentApiResponse;
+export type DeleteArtwork200 = SuccessNoDataApiResponse;
 export type DeleteArtwork401 = UnauthenticatedApiResponse;
 export type DeleteArtwork403 = UnauthorizedApiResponse;
 export type DeleteArtwork404 = NotFoundApiResponse;
@@ -84,7 +84,7 @@ import {
 } from "@/schemas/artworks";
 import {
   type ApiResource,
-  type NoContentApiResponse,
+  type SuccessNoDataApiResponse,
   type NotFoundApiResponse,
   type PaginatedApiResponse,
   type UnauthenticatedApiResponse,

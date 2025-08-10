@@ -7,7 +7,6 @@ import {
   classNames,
   getCroppedImg,
   getUrlFromBlob,
-  onError,
   turnBlobToFile,
 } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,9 +19,7 @@ export default function ChangePhotoForm() {
   const { token } = useSession()!;
   const queryClient = useQueryClient();
 
-  const updateAuthenticatedUserMutation = useUpdateAuthenticatedUser(
-    authHeader(token),
-  );
+  const { mutate, isPending } = useUpdateAuthenticatedUser(authHeader(token));
 
   const [file, setFile] = useState<string>();
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -66,14 +63,22 @@ export default function ChangePhotoForm() {
 
   function onUpload() {
     if (croppedImage) {
-      updateAuthenticatedUserMutation.mutate(
+      mutate(
         {
           data: {
             photo: turnBlobToFile(croppedImage),
           },
         },
         {
-          onError,
+          onError: (error) => {
+            if (error.isAxiosError) {
+              toast.error(
+                error.response?.data.message ?? "Something went wrong",
+              );
+            } else {
+              toast.error(error.message);
+            }
+          },
           onSuccess: () => {
             toast.success("Profile picture changed successfully!");
             void queryClient.invalidateQueries({
@@ -86,7 +91,7 @@ export default function ChangePhotoForm() {
     }
   }
 
-  const isDisabled = !croppedImage || updateAuthenticatedUserMutation.isPending;
+  const isDisabled = !croppedImage || isPending;
   return (
     <div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
       <div className="px-4 py-6 sm:p-8">

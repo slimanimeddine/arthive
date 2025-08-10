@@ -43,9 +43,9 @@ export type SuccessApiResponse<T> = {
   status: number;
 };
 
-export type NoContentApiResponse = {
+export type SuccessNoDataApiResponse = {
   message: string;
-  status: 204;
+  status: 200;
 };
 
 export type ErrorApiResponse<

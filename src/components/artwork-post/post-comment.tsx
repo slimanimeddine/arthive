@@ -3,7 +3,7 @@ import {
   usePostArtworkComment,
 } from "@/hooks/endpoints/artwork-comments";
 import { useSession } from "@/hooks/session";
-import { authHeader, onError } from "@/lib/utils";
+import { authHeader } from "@/lib/utils";
 import { postArtworkCommentBody } from "@/schemas/artwork-comments";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -31,16 +31,22 @@ export default function PostComment() {
 
   const authConfig = session?.token ? authHeader(session.token) : undefined;
 
-  const postArtworkCommentMutation = usePostArtworkComment(authConfig);
+  const { mutate, isPending } = usePostArtworkComment(authConfig);
 
   function onSubmit(data: PostArtworkCommentBody) {
-    postArtworkCommentMutation.mutate(
+    mutate(
       {
         artworkId,
         data,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           reset();
           void queryClient.invalidateQueries({
@@ -52,10 +58,7 @@ export default function PostComment() {
     );
   }
 
-  const isDisabled =
-    formState.isSubmitting ||
-    postArtworkCommentMutation.isPending ||
-    !session?.token;
+  const isDisabled = formState.isSubmitting || isPending || !session?.token;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mb-6">

@@ -1,18 +1,20 @@
 "use client";
 
 import { usePublishArtwork } from "@/hooks/endpoints/artworks";
-import { authHeader, onError } from "@/lib/utils";
+import { authHeader } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { type FirstStepProps } from "./first-step";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/hooks/session";
 
 type FourthStepProps = FirstStepProps;
 
-export default function FourthStep({ token, artwork }: FourthStepProps) {
+export default function FourthStep({ artwork }: FourthStepProps) {
+  const { token } = useSession()!;
   const router = useRouter();
-  const publishArtworkMutation = usePublishArtwork(authHeader(token));
+  const { mutate } = usePublishArtwork(authHeader(token));
 
   const queryClient = useQueryClient();
 
@@ -22,12 +24,20 @@ export default function FourthStep({ token, artwork }: FourthStepProps) {
         "Once you publish your artwork you cannot modify it anymore. Do you want to proceed?",
       )
     ) {
-      publishArtworkMutation.mutate(
+      mutate(
         {
           artworkId: artwork.id,
         },
         {
-          onError,
+          onError: (error) => {
+            if (error.isAxiosError) {
+              toast.error(
+                error.response?.data.message ?? "Something went wrong",
+              );
+            } else {
+              toast.error(error.message);
+            }
+          },
           onSuccess: () => {
             void queryClient.invalidateQueries({
               queryKey: ["/api/v1/users/me/artworks"],

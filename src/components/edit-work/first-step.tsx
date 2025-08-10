@@ -4,8 +4,9 @@ import {
   useDeleteArtworkPhoto,
   useUploadArtworkPhotos,
 } from "@/hooks/endpoints/artwork-photos";
+import { useSession } from "@/hooks/session";
 import { MAX_FILE_SIZE } from "@/lib/constants";
-import { authHeader, onError, turnBlobToFile } from "@/lib/utils";
+import { authHeader, turnBlobToFile } from "@/lib/utils";
 import { type Tag } from "@/types/misc";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useQueryClient } from "@tanstack/react-query";
@@ -15,7 +16,6 @@ import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
 
 export type FirstStepProps = {
-  token: string;
   artwork: {
     id: string;
     title: string;
@@ -34,14 +34,15 @@ export type FirstStepProps = {
   };
 };
 
-export default function FirstStep({ token, artwork }: FirstStepProps) {
+export default function FirstStep({ artwork }: FirstStepProps) {
+  const { token } = useSession()!;
   const queryClient = useQueryClient();
 
   const authConfig = authHeader(token);
 
-  const uploadArtworkPhotosMutation = useUploadArtworkPhotos(authConfig);
+  const { mutate: mutateUpload } = useUploadArtworkPhotos(authConfig);
 
-  const deleteArtworkPhotoMutation = useDeleteArtworkPhoto(authConfig);
+  const { mutate: mutateDelete } = useDeleteArtworkPhoto(authConfig);
 
   const onDrop = useCallback(
     (acceptedFiles: Blob[]) => {
@@ -49,7 +50,7 @@ export default function FirstStep({ token, artwork }: FirstStepProps) {
         alert("You can upload a maximum of 10 photos.");
         return;
       }
-      uploadArtworkPhotosMutation.mutate(
+      mutateUpload(
         {
           artworkId: artwork.id,
           data: {
@@ -57,7 +58,15 @@ export default function FirstStep({ token, artwork }: FirstStepProps) {
           },
         },
         {
-          onError,
+          onError: (error) => {
+            if (error.isAxiosError) {
+              toast.error(
+                error.response?.data.message ?? "Something went wrong",
+              );
+            } else {
+              toast.error(error.message);
+            }
+          },
           onSuccess: () => {
             void queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
@@ -67,12 +76,7 @@ export default function FirstStep({ token, artwork }: FirstStepProps) {
         },
       );
     },
-    [
-      artwork.photos.length,
-      artwork.id,
-      uploadArtworkPhotosMutation,
-      queryClient,
-    ],
+    [artwork.photos.length, artwork.id, mutateUpload, queryClient],
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -82,12 +86,18 @@ export default function FirstStep({ token, artwork }: FirstStepProps) {
   });
 
   const handleRemovePhoto = (photo: { id: string; path: string }) => {
-    deleteArtworkPhotoMutation.mutate(
+    mutateDelete(
       {
         artworkPhotoId: photo.id,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           void queryClient.invalidateQueries({
             queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],

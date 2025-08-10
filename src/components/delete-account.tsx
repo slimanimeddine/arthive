@@ -5,7 +5,7 @@ import {
   useDeleteUser,
 } from "@/hooks/endpoints/authentication";
 import { useSession } from "@/hooks/session";
-import { authHeader, onError } from "@/lib/utils";
+import { authHeader } from "@/lib/utils";
 import { deleteUserBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -18,17 +18,23 @@ export default function DeleteAccount() {
     resolver: zodResolver(deleteUserBody),
   });
 
-  const deleteUserMutation = useDeleteUser(authHeader(token));
+  const { mutate, isPending } = useDeleteUser(authHeader(token));
 
   const router = useRouter();
 
   function onSubmit(data: DeleteUserBody) {
-    deleteUserMutation.mutate(
+    mutate(
       {
         data,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           void deleteSession();
           toast.success("Account deleted successfully!");
@@ -38,10 +44,7 @@ export default function DeleteAccount() {
     );
   }
 
-  const isDisabled =
-    formState.isSubmitting ||
-    deleteUserMutation.isPending ||
-    !formState.isDirty;
+  const isDisabled = formState.isSubmitting || isPending || !formState.isDirty;
 
   return (
     <div className="mx-auto max-w-2xl lg:max-w-7xl">

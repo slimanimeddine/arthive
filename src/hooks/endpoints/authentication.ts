@@ -14,7 +14,7 @@ import type {
 } from "@tanstack/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export type SignUp200 = NoContentApiResponse;
+export type SignUp200 = SuccessNoDataApiResponse;
 export type SignUpBody = z.infer<typeof signUpBody>;
 
 export type SignIn200 = SuccessApiResponse<{
@@ -28,23 +28,23 @@ export type AdminSignIn200 = SignIn200;
 export type AdminSignIn401 = SignIn401;
 export type AdminSignInBody = SignInBody;
 
-export type SignOut200 = NoContentApiResponse;
+export type SignOut200 = SuccessNoDataApiResponse;
 export type SignOut401 = UnauthenticatedApiResponse;
 
-export type ChangePassword200 = NoContentApiResponse;
+export type ChangePassword200 = SuccessNoDataApiResponse;
 export type ChangePassword401 = UnauthenticatedApiResponse;
 export type ChangePassword422 = ErrorApiResponse<422>;
 export type ChangePasswordBody = z.infer<typeof changePasswordBody>;
 
-export type DeleteUser200 = NoContentApiResponse;
+export type DeleteUser200 = SuccessNoDataApiResponse;
 export type DeleteUser401 = UnauthenticatedApiResponse;
 export type DeleteUser400 = ErrorApiResponse;
 export type DeleteUserBody = z.infer<typeof deleteUserBody>;
 
-export type ResendEmailVerification200 = NoContentApiResponse;
+export type ResendEmailVerification200 = SuccessNoDataApiResponse;
 export type ResendEmailVerification401 = UnauthenticatedApiResponse;
 
-export type VerifyEmail200 = NoContentApiResponse;
+export type VerifyEmail200 = SuccessNoDataApiResponse;
 export type VerifyEmail401 = UnauthenticatedApiResponse;
 export type VerifyEmail403 = UnauthorizedApiResponse;
 export type VerifyEmailParams = {
@@ -52,11 +52,11 @@ export type VerifyEmailParams = {
   signature: string;
 };
 
-export type ResetPassword200 = NoContentApiResponse;
+export type ResetPassword200 = SuccessNoDataApiResponse;
 export type ResetPassword400 = ErrorApiResponse;
 export type ResetPasswordBody = z.infer<typeof resetPasswordBody>;
 
-export type SendPasswordResetLink200 = NoContentApiResponse;
+export type SendPasswordResetLink200 = SuccessNoDataApiResponse;
 export type SendPasswordResetLink400 = ErrorApiResponse;
 export type SendPasswordResetLinkBody = z.infer<
   typeof sendPasswordResetLinkBody
@@ -74,7 +74,7 @@ import {
 } from "@/schemas/authentication";
 import {
   type ErrorApiResponse,
-  type NoContentApiResponse,
+  type SuccessNoDataApiResponse,
   type SuccessApiResponse,
   type UnauthenticatedApiResponse,
   type UnauthorizedApiResponse,
@@ -967,13 +967,14 @@ export type SendPasswordResetLinkMutationResult = NonNullable<
 >;
 export type SendPasswordResetLinkMutationBody =
   BodyType<SendPasswordResetLinkBody>;
-export type SendPasswordResetLinkMutationError = ErrorType<string>;
+export type SendPasswordResetLinkMutationError =
+  ErrorType<SendPasswordResetLink400>;
 
 /**
  * @summary Send Password Reset Link
  */
 export const useSendPasswordResetLink = <
-  TError = ErrorType<string>,
+  TError = ErrorType<SendPasswordResetLink400>,
   TContext = unknown,
 >(
   options?: {
@@ -1059,13 +1060,13 @@ export type ResetPasswordMutationResult = NonNullable<
   Awaited<ReturnType<typeof resetPassword>>
 >;
 export type ResetPasswordMutationBody = BodyType<ResetPasswordBody>;
-export type ResetPasswordMutationError = ErrorType<string>;
+export type ResetPasswordMutationError = ErrorType<ResetPassword400>;
 
 /**
  * @summary Reset Password
  */
 export const useResetPassword = <
-  TError = ErrorType<string>,
+  TError = ErrorType<ResetPassword400>,
   TContext = unknown,
 >(
   options?: {

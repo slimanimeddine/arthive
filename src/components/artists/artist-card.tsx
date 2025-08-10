@@ -9,7 +9,6 @@ type Artwork = {
 };
 
 type ArtistCardProps = {
-  token: string | undefined;
   id: string;
   fullName: string;
   username: string;
@@ -20,7 +19,6 @@ type ArtistCardProps = {
 };
 
 export default function ArtistCard({
-  token,
   id,
   fullName,
   username,
@@ -64,7 +62,7 @@ export default function ArtistCard({
               <h3 className="font-medium sm:text-lg">
                 <Link href={`/artists/${username}`}>{fullName}</Link>
               </h3>
-              <FollowButton token={token} userId={id} />
+              <FollowButton userId={id} />
             </div>
 
             <p className="line-clamp-2 text-sm text-gray-700">{description}</p>

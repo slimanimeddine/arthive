@@ -3,22 +3,19 @@ import {
   useReplaceArtworkPhotoPath,
   useSetArtworkPhotoAsMain,
 } from "@/hooks/endpoints/artwork-photos";
-import {
-  authHeader,
-  getCroppedImg,
-  onError,
-  turnBlobToFile,
-} from "@/lib/utils";
+import { authHeader, getCroppedImg, turnBlobToFile } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
 import { type FirstStepProps } from "./first-step";
 import toast from "react-hot-toast";
+import { useSession } from "@/hooks/session";
 
 type SecondStepProps = FirstStepProps;
 
-export default function SecondStep({ token, artwork }: SecondStepProps) {
+export default function SecondStep({ artwork }: SecondStepProps) {
+  const { token } = useSession()!;
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
 
@@ -39,9 +36,8 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
   const queryClient = useQueryClient();
 
   const authConfig = authHeader(token);
-  const setArtworkPhotoAsMainMutation = useSetArtworkPhotoAsMain(authConfig);
-  const replaceArtworkPhotoPathMutation =
-    useReplaceArtworkPhotoPath(authConfig);
+  const { mutate: mutateSetMain } = useSetArtworkPhotoAsMain(authConfig);
+  const { mutate: mutateReplace } = useReplaceArtworkPhotoPath(authConfig);
 
   const onCropComplete = useCallback(
     async (croppedArea: Area, croppedAreaPixels: Area) => {
@@ -58,12 +54,20 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
 
   function handleSetMainPhoto() {
     if (mainPhoto) {
-      setArtworkPhotoAsMainMutation.mutate(
+      mutateSetMain(
         {
           artworkPhotoId: mainPhoto.id,
         },
         {
-          onError,
+          onError: (error) => {
+            if (error.isAxiosError) {
+              toast.error(
+                error.response?.data.message ?? "Something went wrong",
+              );
+            } else {
+              toast.error(error.message);
+            }
+          },
           onSuccess: () => {
             void queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],
@@ -77,7 +81,7 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
 
   function handleCropMainPhoto() {
     if (mainPhoto && croppedMainPhoto) {
-      replaceArtworkPhotoPathMutation.mutate(
+      mutateReplace(
         {
           artworkPhotoId: mainPhoto.id,
           data: {
@@ -85,7 +89,15 @@ export default function SecondStep({ token, artwork }: SecondStepProps) {
           },
         },
         {
-          onError,
+          onError: (error) => {
+            if (error.isAxiosError) {
+              toast.error(
+                error.response?.data.message ?? "Something went wrong",
+              );
+            } else {
+              toast.error(error.message);
+            }
+          },
           onSuccess: () => {
             void queryClient.invalidateQueries({
               queryKey: [`/api/v1/users/me/artworks/${artwork.id}`],

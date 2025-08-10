@@ -1,50 +1,44 @@
 "use client";
 
-import { useDeleteArtworkComment } from "@/hooks/endpoints/artwork-comments";
-import { useSession } from "@/hooks/session";
-import { authHeader, onError } from "@/lib/utils";
 import { useEditCommentStore } from "@/stores/edit-comment-store";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import toast from "react-hot-toast";
-
-type CommentDropdownActionsProps = {
-  commentId: string;
-};
+import DeleteCommentButton from "./delete-comment-button";
+import { useSession } from "@/hooks/session";
+import { authHeader } from "@/lib/utils";
+import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
+import LoadingUI from "../loading-ui";
+import ErrorUI from "../error-ui";
 
 export default function CommentDropdownActions({
   commentId,
-}: CommentDropdownActionsProps) {
-  const { token } = useSession()!;
-  const { id: artworkId } = useParams<{ id: string }>();
-
-  const queryClient = useQueryClient();
+  userId,
+}: {
+  commentId: string;
+  userId: string;
+}) {
   const setFormVisible = useEditCommentStore((state) => state.setFormVisible);
-
-  const deleteArtworkCommentMutation = useDeleteArtworkComment(
+  const { token } = useSession()!;
+  const { isPending, isError, data, error } = useShowAuthenticatedUser(
     authHeader(token),
   );
 
-  function onDelete() {
-    deleteArtworkCommentMutation.mutate(
-      {
-        artworkCommentId: commentId,
-      },
-      {
-        onError,
-        onSuccess: () => {
-          void queryClient.invalidateQueries({
-            queryKey: [`/api/v1/artworks/${artworkId}`],
-          });
-          toast.success("Comment deleted successfully!");
-        },
-      },
-    );
+  if (isPending) {
+    return <LoadingUI />;
   }
 
-  const isDisabled = deleteArtworkCommentMutation.isPending || !token;
+  if (isError) {
+    return <ErrorUI message={error.message} />;
+  }
+
+  if (data === undefined) {
+    return <></>;
+  }
+
+  const isOwner = data.data.id === userId;
+
+  if (!isOwner) return <></>;
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -68,13 +62,7 @@ export default function CommentDropdownActions({
             </button>
           </MenuItem>
           <MenuItem>
-            <button
-              disabled={isDisabled}
-              onClick={onDelete}
-              className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-            >
-              Remove
-            </button>
+            <DeleteCommentButton commentId={commentId} />
           </MenuItem>
         </div>
       </MenuItems>

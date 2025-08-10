@@ -35,9 +35,9 @@ export type ListAuthenticatedUserNotificationsParams = {
   perPage?: number;
 };
 
-export type MarkAllNotificationsAsRead200 = NoContentApiResponse;
+export type MarkAllNotificationsAsRead200 = SuccessNoDataApiResponse;
 export type MarkAllNotificationsAsRead401 = UnauthenticatedApiResponse;
-export type MarkNotificationAsRead200 = NoContentApiResponse;
+export type MarkNotificationAsRead200 = SuccessNoDataApiResponse;
 export type MarkNotificationAsRead401 = UnauthenticatedApiResponse;
 export type MarkNotificationAsRead404 = NotFoundApiResponse;
 
@@ -45,7 +45,7 @@ import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
 import {
   type ErrorApiResponse,
-  type NoContentApiResponse,
+  type SuccessNoDataApiResponse,
   type NotFoundApiResponse,
   type PaginatedNotificationResponse,
   type SuccessApiResponse,

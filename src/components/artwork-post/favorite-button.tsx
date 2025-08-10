@@ -1,3 +1,4 @@
+"use client";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 
 import {
@@ -5,11 +6,12 @@ import {
   useMarkArtworkAsFavorite,
   useRemoveArtworkFromFavorites,
 } from "@/hooks/endpoints/favorites";
-import { authHeader, classNames, matchQueryStatus, onError } from "@/lib/utils";
+import { authHeader, classNames } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
-import { useParams, useRouter } from "next/navigation";
+import { notFound, useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useSession } from "@/hooks/session";
+import ErrorUI from "../error-ui";
 
 export default function FavoriteButton() {
   const session = useSession();
@@ -20,7 +22,7 @@ export default function FavoriteButton() {
 
   const authConfig = session?.token ? authHeader(session.token) : undefined;
 
-  const checkIfAuthenticatedUserIsFavoritingQuery =
+  const { isPending, isError, data, error } =
     useCheckIfAuthenticatedUserIsFavoriting(artworkId, authConfig);
 
   const markArtworkAsFavoriteMutation = useMarkArtworkAsFavorite(authConfig);
@@ -48,7 +50,13 @@ export default function FavoriteButton() {
     mutation.mutate(
       { artworkId },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           toast.success(
             isCurrentlyFavoriting
@@ -72,37 +80,46 @@ export default function FavoriteButton() {
     );
   }
 
-  return matchQueryStatus(checkIfAuthenticatedUserIsFavoritingQuery, {
-    Loading: (
+  if (isPending) {
+    return (
       <button
         disabled
         className="flex cursor-not-allowed items-center justify-center rounded-full bg-gray-200 p-2 text-gray-700 transition-colors"
       >
         loading...
       </button>
-    ),
-    Errored: <span className="text-xs text-red-700">error</span>,
-    Empty: <span></span>,
-    Success: ({ data }) => {
-      const isFavoriting = data.data;
-      return (
-        <button
-          onClick={() => handleFavoriteToggle(!!isFavoriting)}
-          className={classNames(
-            "flex items-center justify-center rounded-full p-2 transition-colors",
-            isFavoriting
-              ? "bg-indigo-500 text-white hover:bg-indigo-600"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300",
-          )}
-        >
-          <BookmarkIcon
-            className={classNames(
-              "h-6 w-6 transition-transform",
-              isFavoriting ? "scale-110 text-white" : "text-gray-700",
-            )}
-          />
-        </button>
-      );
-    },
-  });
+    );
+  }
+
+  if (isError) {
+    if (error.isAxiosError && error.response?.status === 404) {
+      notFound();
+    }
+
+    return <ErrorUI message={error.message} />;
+  }
+
+  if (data === undefined) {
+    return <></>;
+  }
+
+  const isFavoriting = data.data;
+  return (
+    <button
+      onClick={() => handleFavoriteToggle(!!isFavoriting)}
+      className={classNames(
+        "flex items-center justify-center rounded-full p-2 transition-colors",
+        isFavoriting
+          ? "bg-indigo-500 text-white hover:bg-indigo-600"
+          : "bg-gray-200 text-gray-700 hover:bg-gray-300",
+      )}
+    >
+      <BookmarkIcon
+        className={classNames(
+          "h-6 w-6 transition-transform",
+          isFavoriting ? "scale-110 text-white" : "text-gray-700",
+        )}
+      />
+    </button>
+  );
 }

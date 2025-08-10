@@ -3,7 +3,7 @@ import {
   type UpdateAuthenticatedUserBody,
   useUpdateAuthenticatedUser,
 } from "@/hooks/endpoints/users";
-import { authHeader, classNames, getDirtyValues, onError } from "@/lib/utils";
+import { authHeader, classNames, getDirtyValues } from "@/lib/utils";
 import { updateAuthenticatedUserBody } from "@/schemas/users";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -45,18 +45,22 @@ export default function PersonalInformationForm({
       },
     });
 
-  const updateAuthenticatedUserMutation = useUpdateAuthenticatedUser(
-    authHeader(token),
-  );
+  const { mutate, isPending } = useUpdateAuthenticatedUser(authHeader(token));
 
   function onSubmit(data: UpdateAuthenticatedUserBody) {
     const dirtyValues = getDirtyValues(formState.dirtyFields, data);
-    updateAuthenticatedUserMutation.mutate(
+    mutate(
       {
         data: dirtyValues,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           toast.success("Personal Information updated successfully!");
           void queryClient.invalidateQueries({
@@ -67,11 +71,7 @@ export default function PersonalInformationForm({
     );
   }
 
-  const isDisabled =
-    formState.isSubmitting ||
-    updateAuthenticatedUserMutation.isPending ||
-    !token ||
-    !formState.isDirty;
+  const isDisabled = formState.isSubmitting || isPending || !formState.isDirty;
 
   return (
     <form

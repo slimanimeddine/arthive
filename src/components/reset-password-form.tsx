@@ -3,7 +3,6 @@ import {
   type ResetPasswordBody,
   useResetPassword,
 } from "@/hooks/endpoints/authentication";
-import { onError } from "@/lib/utils";
 import { resetPasswordBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -25,15 +24,21 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
   const router = useRouter();
 
-  const resetPasswordMutation = useResetPassword();
+  const { mutate, isPending } = useResetPassword();
 
   function onSubmit(data: ResetPasswordBody) {
-    resetPasswordMutation.mutate(
+    mutate(
       {
         data,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           toast.success("Password reset successfully!");
           reset();
@@ -43,7 +48,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     );
   }
 
-  const isDisabled = formState.isSubmitting || resetPasswordMutation.isPending;
+  const isDisabled = formState.isSubmitting || isPending;
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>

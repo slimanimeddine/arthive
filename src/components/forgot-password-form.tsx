@@ -3,7 +3,6 @@ import {
   type SendPasswordResetLinkBody,
   useSendPasswordResetLink,
 } from "@/hooks/endpoints/authentication";
-import { onError } from "@/lib/utils";
 import { sendPasswordResetLinkBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,15 +14,21 @@ export default function ForgotPasswordForm() {
       resolver: zodResolver(sendPasswordResetLinkBody),
     });
 
-  const sendPasswordResetLinkMutation = useSendPasswordResetLink();
+  const { mutate, isPending } = useSendPasswordResetLink();
 
   function onSubmit(data: SendPasswordResetLinkBody) {
-    sendPasswordResetLinkMutation.mutate(
+    mutate(
       {
         data,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           reset();
           toast.success("Password reset link sent successfully!");
@@ -32,8 +37,7 @@ export default function ForgotPasswordForm() {
     );
   }
 
-  const isDisabled =
-    formState.isSubmitting || sendPasswordResetLinkMutation.isPending;
+  const isDisabled = formState.isSubmitting || isPending;
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>

@@ -1,13 +1,8 @@
 "use client";
 
-import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
-import { authHeader, matchQueryStatus } from "@/lib/utils";
-import { useEditCommentStore } from "@/stores/edit-comment-store";
 import Image from "next/image";
 import Link from "next/link";
 import AvatarPlaceholder from "../avatar-placeholder";
-import ErrorUI from "../error-ui";
-import LoadingUI from "../loading-ui";
 import CommentDropdownActions from "./comment-dropdown-actions";
 import EditComment from "./edit-comment";
 import { useSession } from "@/hooks/session";
@@ -30,10 +25,7 @@ export default function Comment({
   commentedAt,
   user,
 }: CommentProps) {
-  const formVisble = useEditCommentStore((state) => state.formVisble);
   const session = useSession();
-  const authConfig = session?.token ? authHeader(session.token) : undefined;
-  const showAuthenticatedUserQuery = useShowAuthenticatedUser(authConfig);
 
   return (
     <article id={id} className="bg-white py-6 text-base dark:bg-gray-900">
@@ -69,42 +61,13 @@ export default function Comment({
           </p>
         </div>
         {session?.token ? (
-          matchQueryStatus(showAuthenticatedUserQuery, {
-            Loading: <LoadingUI />,
-            Errored: <ErrorUI />,
-            Empty: <span></span>,
-            Success: ({ data }) => {
-              const isOwner = data.data.id === user.id;
-
-              if (!isOwner) return <></>;
-              return <CommentDropdownActions commentId={id} />;
-            },
-          })
+          <CommentDropdownActions commentId={id} userId={user.id} />
         ) : (
           <></>
         )}
       </footer>
       {session?.token ? (
-        matchQueryStatus(showAuthenticatedUserQuery, {
-          Loading: <LoadingUI />,
-          Errored: <ErrorUI />,
-          Empty: <span></span>,
-          Success: ({ data }) => {
-            const isOwner = data.data.id === user.id;
-
-            if (!(isOwner && formVisble)) {
-              return (
-                <Link
-                  href={`#${id}`}
-                  className="text-gray-500 dark:text-gray-400"
-                >
-                  {content}
-                </Link>
-              );
-            }
-            return <EditComment defaultContent={content} commentId={id} />;
-          },
-        })
+        <EditComment userId={user.id} id={id} content={content} />
       ) : (
         <Link href={`#${id}`} className="text-gray-500 dark:text-gray-400">
           {content}

@@ -6,12 +6,12 @@ import type {
 } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 
-export type DeleteArtworkPhoto200 = NoContentApiResponse;
+export type DeleteArtworkPhoto200 = SuccessNoDataApiResponse;
 export type DeleteArtworkPhoto401 = UnauthenticatedApiResponse;
 export type DeleteArtworkPhoto403 = UnauthorizedApiResponse;
 export type DeleteArtworkPhoto404 = NotFoundApiResponse;
 
-export type ReplaceArtworkPhotoPath200 = NoContentApiResponse;
+export type ReplaceArtworkPhotoPath200 = SuccessNoDataApiResponse;
 export type ReplaceArtworkPhotoPath401 = UnauthenticatedApiResponse;
 export type ReplaceArtworkPhotoPath403 = UnauthorizedApiResponse;
 export type ReplaceArtworkPhotoPath404 = NotFoundApiResponse;
@@ -38,7 +38,7 @@ import {
 } from "@/schemas/artwork-photos";
 import {
   type ApiResource,
-  type NoContentApiResponse,
+  type SuccessNoDataApiResponse,
   type NotFoundApiResponse,
   type UnauthenticatedApiResponse,
   type UnauthorizedApiResponse,
@@ -120,14 +120,16 @@ export type UploadArtworkPhotosMutationResult = NonNullable<
 >;
 export type UploadArtworkPhotosMutationBody = BodyType<UploadArtworkPhotosBody>;
 export type UploadArtworkPhotosMutationError = ErrorType<
-  UploadArtworkPhotos401 | string | UploadArtworkPhotos404
+  UploadArtworkPhotos401 | UploadArtworkPhotos403 | UploadArtworkPhotos404
 >;
 
 /**
  * @summary Upload Artwork Photos
  */
 export const useUploadArtworkPhotos = <
-  TError = ErrorType<UploadArtworkPhotos401 | string | UploadArtworkPhotos404>,
+  TError = ErrorType<
+    UploadArtworkPhotos401 | UploadArtworkPhotos403 | UploadArtworkPhotos404
+  >,
   TContext = unknown,
 >(
   options?: {
@@ -211,7 +213,7 @@ export type SetArtworkPhotoAsMainMutationResult = NonNullable<
 >;
 
 export type SetArtworkPhotoAsMainMutationError = ErrorType<
-  SetArtworkPhotoAsMain401 | string | SetArtworkPhotoAsMain404
+  SetArtworkPhotoAsMain401 | SetArtworkPhotoAsMain403 | SetArtworkPhotoAsMain404
 >;
 
 /**
@@ -219,7 +221,9 @@ export type SetArtworkPhotoAsMainMutationError = ErrorType<
  */
 export const useSetArtworkPhotoAsMain = <
   TError = ErrorType<
-    SetArtworkPhotoAsMain401 | string | SetArtworkPhotoAsMain404
+    | SetArtworkPhotoAsMain401
+    | SetArtworkPhotoAsMain403
+    | SetArtworkPhotoAsMain404
   >,
   TContext = unknown,
 >(

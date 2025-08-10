@@ -1,29 +1,45 @@
-import { fileUrl } from "@/lib/utils";
+import { authHeader, fileUrl } from "@/lib/utils";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
 import AvatarPlaceholder from "../avatar-placeholder";
+import { useSession } from "@/hooks/session";
+import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 
 const userNavigation = [
   { name: "Your Profile", href: "/edit-profile" },
   { name: "Sign out", href: "/sign-out" },
 ];
 
-type ProfileDropdownProps = {
-  userPhoto?: string;
-};
+export default function ProfileDropdown() {
+  const { token } = useSession()!;
 
-export default function ProfileDropdown({ userPhoto }: ProfileDropdownProps) {
+  const { isPending, isError, data } = useShowAuthenticatedUser(
+    authHeader(token),
+  );
+
+  if (isPending) {
+    return <span className="text-xs text-gray-700">...</span>;
+  }
+
+  if (isError) {
+    return <span className="text-xs text-red-700">err</span>;
+  }
+
+  if (data === undefined) {
+    return <></>;
+  }
+
   return (
     <Menu as="div" className="relative ml-4 flex-shrink-0">
       <div>
         <MenuButton className="relative flex rounded-full bg-white text-sm focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none">
           <span className="absolute -inset-1.5" />
           <span className="sr-only">Open user menu</span>
-          {userPhoto ? (
+          {data.data.photo ? (
             <Image
               alt=""
-              src={fileUrl(userPhoto)!}
+              src={fileUrl(data.data.photo)!}
               className="h-8 w-8 rounded-full"
               width={32}
               height={32}

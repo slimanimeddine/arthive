@@ -2,19 +2,25 @@
 import { deleteSession } from "@/actions/session";
 import { useSignOut } from "@/hooks/endpoints/authentication";
 import { useSession } from "@/hooks/session";
-import { authHeader, onError } from "@/lib/utils";
+import { authHeader } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function SignOutButton() {
   const { token } = useSession()!;
-  const signOutMutation = useSignOut(authHeader(token));
+  const { mutate, isPending } = useSignOut(authHeader(token));
 
   const router = useRouter();
 
   function onSignOut() {
-    signOutMutation.mutate(undefined, {
-      onError,
+    mutate(undefined, {
+      onError: (error) => {
+        if (error.isAxiosError) {
+          toast.error(error.response?.data.message ?? "Something went wrong");
+        } else {
+          toast.error(error.message);
+        }
+      },
       onSuccess: () => {
         void deleteSession();
         toast.success("You have been signed out");
@@ -23,7 +29,7 @@ export default function SignOutButton() {
     });
   }
 
-  const isDisabled = signOutMutation.isPending;
+  const isDisabled = isPending;
 
   return (
     <button

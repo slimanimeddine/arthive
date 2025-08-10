@@ -31,7 +31,7 @@ export type MarkArtworkAsFavorite401 = UnauthenticatedApiResponse;
 export type MarkArtworkAsFavorite403 = UnauthorizedApiResponse;
 export type MarkArtworkAsFavorite404 = NotFoundApiResponse;
 
-export type RemoveArtworkFromFavorites200 = NoContentApiResponse;
+export type RemoveArtworkFromFavorites200 = SuccessNoDataApiResponse;
 export type RemoveArtworkFromFavorites401 = UnauthenticatedApiResponse;
 export type RemoveArtworkFromFavorites403 = UnauthorizedApiResponse;
 export type RemoveArtworkFromFavorites404 = NotFoundApiResponse;
@@ -40,7 +40,7 @@ import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
 import {
   type ApiResource,
-  type NoContentApiResponse,
+  type SuccessNoDataApiResponse,
   type NotFoundApiResponse,
   type SuccessApiResponse,
   type UnauthenticatedApiResponse,

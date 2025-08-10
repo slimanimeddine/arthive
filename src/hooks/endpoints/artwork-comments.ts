@@ -6,7 +6,7 @@ import type {
 } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 
-export type DeleteArtworkComment200 = NoContentApiResponse;
+export type DeleteArtworkComment200 = SuccessNoDataApiResponse;
 export type DeleteArtworkComment401 = UnauthenticatedApiResponse;
 export type DeleteArtworkComment403 = UnauthorizedApiResponse;
 export type DeleteArtworkComment404 = NotFoundApiResponse;
@@ -31,7 +31,7 @@ import {
 } from "@/schemas/artwork-comments";
 import {
   type ApiResource,
-  type NoContentApiResponse,
+  type SuccessNoDataApiResponse,
   type NotFoundApiResponse,
   type UnauthenticatedApiResponse,
   type UnauthorizedApiResponse,

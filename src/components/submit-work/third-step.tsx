@@ -3,7 +3,7 @@
 import { useCreateArtwork } from "@/hooks/endpoints/artworks";
 import { useSession } from "@/hooks/session";
 import { TAGS } from "@/lib/constants";
-import { authHeader, onError } from "@/lib/utils";
+import { authHeader } from "@/lib/utils";
 import { createArtworkBody } from "@/schemas/artworks";
 import useArtworkStore from "@/stores/artwork-store";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +17,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function ThirdStep() {
   const { token } = useSession()!;
-  const createArtworkMutation = useCreateArtwork(authHeader(token));
+  const { mutate } = useCreateArtwork(authHeader(token));
 
   const queryClient = useQueryClient();
 
@@ -58,12 +58,18 @@ export default function ThirdStep() {
       })),
     };
 
-    createArtworkMutation.mutate(
+    mutate(
       {
         data: dataObj,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: (data) => {
           setId(data.data.id);
           void queryClient.invalidateQueries({

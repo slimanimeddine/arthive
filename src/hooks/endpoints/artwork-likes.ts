@@ -34,7 +34,7 @@ export type ListUserReceivedLikesCountByTag404 = NotFoundApiResponse;
 export type ShowUserReceivedLikesCount200 = SuccessApiResponse<number>;
 export type ShowUserReceivedLikesCount404 = NotFoundApiResponse;
 
-export type UnlikeArtwork200 = NoContentApiResponse;
+export type UnlikeArtwork200 = SuccessNoDataApiResponse;
 export type UnlikeArtwork401 = UnauthenticatedApiResponse;
 export type UnlikeArtwork403 = UnauthorizedApiResponse;
 export type UnlikeArtwork404 = NotFoundApiResponse;
@@ -43,7 +43,7 @@ import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
 import {
   type ApiResource,
-  type NoContentApiResponse,
+  type SuccessNoDataApiResponse,
   type NotFoundApiResponse,
   type SuccessApiResponse,
   type UnauthenticatedApiResponse,

@@ -5,18 +5,20 @@ import {
   useUpdateArtworkDraft,
 } from "@/hooks/endpoints/artworks";
 import { TAGS } from "@/lib/constants";
-import { authHeader, getDirtyValues, onError } from "@/lib/utils";
+import { authHeader, getDirtyValues } from "@/lib/utils";
 import { updateArtworkDraftBody } from "@/schemas/artworks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { type FirstStepProps } from "./first-step";
+import { useSession } from "@/hooks/session";
 
 type ThirdStepProps = FirstStepProps;
 
-export default function ThirdStep({ token, artwork }: ThirdStepProps) {
-  const updateArtworkDraftMutation = useUpdateArtworkDraft(authHeader(token));
+export default function ThirdStep({ artwork }: ThirdStepProps) {
+  const { token } = useSession()!;
+  const { mutate, isPending } = useUpdateArtworkDraft(authHeader(token));
 
   const queryClient = useQueryClient();
 
@@ -34,13 +36,19 @@ export default function ThirdStep({ token, artwork }: ThirdStepProps) {
   const onSubmit = (data: UpdateArtworkDraftBody) => {
     const dirtyValues = getDirtyValues(formState.dirtyFields, data);
 
-    updateArtworkDraftMutation.mutate(
+    mutate(
       {
         artworkId: artwork.id,
         data: dirtyValues,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           void queryClient.invalidateQueries({
             queryKey: ["/api/v1/users/me/artworks"],
@@ -55,11 +63,7 @@ export default function ThirdStep({ token, artwork }: ThirdStepProps) {
     );
   };
 
-  const isDisabled =
-    formState.isSubmitting ||
-    updateArtworkDraftMutation.isPending ||
-    !token ||
-    !formState.isDirty;
+  const isDisabled = formState.isSubmitting || isPending || !formState.isDirty;
 
   return (
     <form

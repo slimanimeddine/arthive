@@ -4,7 +4,6 @@ import { authHeader } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { isAxiosError } from "axios";
 import LoadingUI from "./loading-ui";
 import { useSession } from "@/hooks/session";
 import { useVerifyEmail } from "@/hooks/endpoints/authentication";
@@ -43,7 +42,7 @@ export default function VerifyEmail({ expires, signature }: VerifyEmailProps) {
 
   useEffect(() => {
     if (isError) {
-      if (isAxiosError(error) && error.response) {
+      if (error.isAxiosError && error.response) {
         setMessage(error.response.data.message);
       } else {
         setMessage("An error occurred while verifying your email");

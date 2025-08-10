@@ -2,7 +2,6 @@ import ArtistsDisplay from "@/components/artists/artists-display";
 import InvalidParams from "@/components/invalid-params";
 import { prefetchListUsers } from "@/hooks/endpoints/users";
 import { ARTIST_SORT_VALUES, COUNTRIES, TAGS } from "@/lib/constants";
-import { getAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { parseParams } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
@@ -37,7 +36,6 @@ const searchParamsSchema = z.object({
 export default async function Page({ searchParams }: Props) {
   const queryClient = new QueryClient();
 
-  const { token } = await getAuth();
   const { data, success, error } = parseParams(
     await searchParams,
     searchParamsSchema,
@@ -63,5 +61,5 @@ export default async function Page({ searchParams }: Props) {
 
   await prefetchListUsers(queryClient, queryParams);
 
-  return <ArtistsDisplay token={token} />;
+  return <ArtistsDisplay />;
 }

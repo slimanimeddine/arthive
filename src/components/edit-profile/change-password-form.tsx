@@ -4,7 +4,7 @@ import {
   useChangePassword,
 } from "@/hooks/endpoints/authentication";
 import { useSession } from "@/hooks/session";
-import { authHeader, classNames, onError } from "@/lib/utils";
+import { authHeader, classNames } from "@/lib/utils";
 import { changePasswordBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,15 +20,21 @@ export default function ChangePasswordForm() {
       resolver: zodResolver(changePasswordBody),
     });
 
-  const changePasswordMutation = useChangePassword(authHeader(token));
+  const { mutate, isPending } = useChangePassword(authHeader(token));
 
   function onSubmit(data: ChangePasswordBody) {
-    changePasswordMutation.mutate(
+    mutate(
       {
         data,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           toast.success("Password updated successfully!");
           void queryClient.invalidateQueries({
@@ -40,10 +46,7 @@ export default function ChangePasswordForm() {
     );
   }
 
-  const isDisabled =
-    formState.isSubmitting ||
-    changePasswordMutation.isPending ||
-    !formState.isDirty;
+  const isDisabled = formState.isSubmitting || isPending || !formState.isDirty;
 
   return (
     <form

@@ -1,21 +1,19 @@
 "use client";
-import { useCheckIfUnreadNotificationsExist } from "@/hooks/endpoints/notifications";
-import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
-import { authHeader, classNames, fileUrl, matchQueryStatus } from "@/lib/utils";
+import { classNames } from "@/lib/utils";
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import AvatarPlaceholder from "../avatar-placeholder";
 import Logo from "../logo";
 import ProfileDropdown from "./profile-dropdown";
 import SearchComponent from "./search-input";
-import { useSession } from "@/hooks/session";
+import NotificationIcon from "./notification-icon";
+import ProfileImage from "./profile-image";
+import ProfileInfo from "./profile-info";
 
 const navigation = [
   { name: "Artists", href: "/artists" },
@@ -28,36 +26,7 @@ const userNavigation = [
   { name: "Sign out", href: "/sign-out" },
 ];
 
-function NotificationIcon() {
-  const { token } = useSession()!;
-
-  const checkIfUnreadNotificationsExistQuery =
-    useCheckIfUnreadNotificationsExist(authHeader(token));
-
-  return matchQueryStatus(checkIfUnreadNotificationsExistQuery, {
-    Loading: <span className="text-xs text-gray-700">...</span>,
-    Errored: <span className="text-xs text-red-700">err</span>,
-    Empty: <></>,
-    Success: ({ data }) => {
-      return (
-        <span className="relative inline-block">
-          <BellIcon aria-hidden="true" className="h-6 w-6" />
-          {data.data.exists && (
-            <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-indigo-600 ring-2 ring-white" />
-          )}
-        </span>
-      );
-    },
-  });
-}
-
 export default function HeaderAuth() {
-  const { token } = useSession()!;
-
-  const showAuthenticatedUserQuery = useShowAuthenticatedUser(
-    authHeader(token),
-  );
-
   const pathname = usePathname();
 
   return (
@@ -112,15 +81,7 @@ export default function HeaderAuth() {
               <span className="sr-only">View notifications</span>
               <NotificationIcon />
             </Link>
-            {matchQueryStatus(showAuthenticatedUserQuery, {
-              Loading: <span className="text-xs text-gray-700">...</span>,
-              Errored: <span className="text-xs text-red-700">err</span>,
-              Empty: <></>,
-              Success: ({ data }) => {
-                const user = data.data;
-                return <ProfileDropdown userPhoto={user.photo} />;
-              },
-            })}
+            <ProfileDropdown />
           </div>
         </div>
       </div>
@@ -145,47 +106,8 @@ export default function HeaderAuth() {
         </div>
         <div className="border-t border-gray-200 pt-4 pb-3">
           <div className="flex items-center px-4">
-            {matchQueryStatus(showAuthenticatedUserQuery, {
-              Loading: <span className="text-xs text-gray-700">...</span>,
-              Errored: <span className="text-xs text-red-700">err</span>,
-              Empty: <></>,
-              Success: ({ data }) => {
-                const user = data.data;
-                if (user.photo) {
-                  return (
-                    <div className="flex-shrink-0">
-                      <Image
-                        alt=""
-                        src={fileUrl(user.photo)!}
-                        className="h-10 w-10 rounded-full"
-                        width={40}
-                        height={40}
-                      />
-                    </div>
-                  );
-                }
-                return <AvatarPlaceholder size={10} />;
-              },
-            })}
-
-            {matchQueryStatus(showAuthenticatedUserQuery, {
-              Loading: <span className="text-xs text-gray-700">...</span>,
-              Errored: <span className="text-xs text-red-700">err</span>,
-              Empty: <></>,
-              Success: ({ data }) => {
-                const user = data.data;
-                return (
-                  <div className="ml-3">
-                    <div className="text-base font-medium text-gray-800">
-                      {user.first_name} {user.last_name}
-                    </div>
-                    <div className="text-sm font-medium text-gray-500">
-                      {user.email}
-                    </div>
-                  </div>
-                );
-              },
-            })}
+            <ProfileImage />
+            <ProfileInfo />
 
             <Link
               href="/notifications"
