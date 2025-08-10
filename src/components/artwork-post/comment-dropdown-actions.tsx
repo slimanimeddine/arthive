@@ -31,7 +31,7 @@ export default function CommentDropdownActions({
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <></>;
   }
 

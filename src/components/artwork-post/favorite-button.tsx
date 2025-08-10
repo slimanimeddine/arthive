@@ -99,7 +99,7 @@ export default function FavoriteButton() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <></>;
   }
 

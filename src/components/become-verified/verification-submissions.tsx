@@ -33,7 +33,7 @@ export default function VerificationSubmissions() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined || data.data.length === 0) {
+  if (!data || data.data.length === 0) {
     return (
       <EmptyUI message={"You have not submitted any verification requests."} />
     );

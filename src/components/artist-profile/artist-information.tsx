@@ -27,7 +27,7 @@ export default function ArtistInformation() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <EmptyUI message="Artist information not found" />;
   }
 

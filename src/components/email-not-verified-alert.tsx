@@ -47,7 +47,7 @@ export default function EmailNotVerifiedAlert() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <EmptyUI message="Email verification information not found" />;
   }
 

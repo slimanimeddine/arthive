@@ -24,7 +24,7 @@ export default function RatingsByTag({ username }: RatingsByTagProps) {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <></>;
   }
 

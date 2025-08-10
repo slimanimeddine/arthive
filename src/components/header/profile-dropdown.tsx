@@ -26,7 +26,7 @@ export default function ProfileDropdown() {
     return <span className="text-xs text-red-700">err</span>;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <></>;
   }
 

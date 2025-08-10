@@ -21,7 +21,7 @@ export default function TotalRatings({ username }: TotalRatingsProps) {
     }
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <></>;
   }
 

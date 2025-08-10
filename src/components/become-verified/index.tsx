@@ -41,7 +41,7 @@ export default function BecomeVerified() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <></>;
   }
 

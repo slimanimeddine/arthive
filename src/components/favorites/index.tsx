@@ -21,7 +21,7 @@ export default function Favorites() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined || data.data.length === 0) {
+  if (!data || data.data.length === 0) {
     return <NoBookmarkedArtworks />;
   }
 

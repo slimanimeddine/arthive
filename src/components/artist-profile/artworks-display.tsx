@@ -43,7 +43,7 @@ export default function ArtworksDisplay() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return (
       <div className="flex items-center justify-center lg:col-span-2">
         <NoData

@@ -21,7 +21,7 @@ export default function ProfileImage() {
     return <span className="text-xs text-red-700">{error.message}</span>;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <></>;
   }
 

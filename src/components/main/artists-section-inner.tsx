@@ -19,7 +19,7 @@ export default function ArtistsSectionInner() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined || data.data.length === 0) {
+  if (!data || data.data.length === 0) {
     return (
       <NoData
         title="No verified artists found."

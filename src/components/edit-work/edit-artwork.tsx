@@ -44,7 +44,7 @@ export default function EditArtwork() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined) {
+  if (!data) {
     return <></>;
   }
 

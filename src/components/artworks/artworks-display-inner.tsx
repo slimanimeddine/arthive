@@ -37,7 +37,7 @@ export default function ArtworksDisplayInner() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (data === undefined || data.data.length === 0) {
+  if (!data || data.data.length === 0) {
     return (
       <div className="flex min-h-[50px] items-center justify-center lg:col-span-3">
         <NoData
