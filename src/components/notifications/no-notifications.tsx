@@ -1,5 +1,3 @@
-"use client";
-
 import { BellIcon } from "@heroicons/react/24/outline";
 
 type NoNotificationsProps = {

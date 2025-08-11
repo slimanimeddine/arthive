@@ -1,3 +1,5 @@
+"use client";
+
 import { useListUserReceivedLikesCountByTag } from "@/hooks/endpoints/artwork-likes";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import ErrorUI from "../error-ui";

@@ -1,3 +1,5 @@
+"use client";
+
 import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";

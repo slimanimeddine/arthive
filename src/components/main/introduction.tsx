@@ -1,4 +1,3 @@
-"use client";
 export default function Introduction() {
   return (
     <div className="bg-gray-900 py-12 sm:py-20">

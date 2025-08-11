@@ -1,3 +1,5 @@
+"use client";
+
 import { useListUsers } from "@/hooks/endpoints/users";
 import { useArtistSort } from "@/hooks/params/artist-sort";
 import { useCategory } from "@/hooks/params/category";

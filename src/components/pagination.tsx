@@ -1,3 +1,5 @@
+"use client";
+
 import { usePage } from "@/hooks/params/page";
 import { type LinksField, type MetaField } from "@/types/api-responses";
 import {

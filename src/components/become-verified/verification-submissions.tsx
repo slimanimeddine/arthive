@@ -1,4 +1,5 @@
 "use client";
+
 import { useGetAuthenticatedUserArtistVerificationRequests } from "@/hooks/endpoints/artist-verification-requests";
 import { addOrdinalSuffix, authHeader, classNames } from "@/lib/utils";
 import LoadingUI from "../loading-ui";

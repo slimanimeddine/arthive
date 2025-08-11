@@ -10,10 +10,8 @@ type FollowButtonProps = {
 
 export default function FollowButton({ userId }: FollowButtonProps) {
   const session = useSession();
-  const { isFollowing, isLoading, handleFollowToggle } = useFollowUserAction(
-    session?.token,
-    userId,
-  );
+  const { isFollowing, isLoading, handleFollowToggle } =
+    useFollowUserAction(userId);
 
   const router = useRouter();
 

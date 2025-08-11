@@ -1,5 +1,3 @@
-"use client";
-
 import { PaintBrushIcon } from "@heroicons/react/24/outline";
 
 type NoDataProps = {

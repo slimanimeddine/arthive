@@ -1,3 +1,5 @@
+"use client";
+
 import { useCategory } from "@/hooks/params/category";
 import { TAGS } from "@/lib/constants";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";

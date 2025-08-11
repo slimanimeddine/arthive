@@ -18,7 +18,7 @@ export default function ArtistInformationSkeleton() {
                   <div className="h-3 w-1/3 rounded bg-gray-200" />
                 </div>
                 <div className="mt-5 flex flex-wrap space-y-3 sm:space-y-0 sm:space-x-3">
-                  <div className="inline-flex w-full flex-shrink-0 items-center justify-center rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-gray-300 hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:flex-1"></div>
+                  <div className="inline-flex w-full flex-shrink-0 items-center justify-center rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-gray-300 hover:bg-gray-200 focus-visible:outline-2 focus-visible:outline-offset-2 sm:flex-1"></div>
                 </div>
               </div>
             </div>

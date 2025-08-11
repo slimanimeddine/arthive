@@ -1,3 +1,5 @@
+"use client";
+
 import { useMarkNotificationRead } from "@/hooks/mark-notification-as-read";
 import { classNames } from "@/lib/utils";
 import {

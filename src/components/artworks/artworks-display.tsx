@@ -1,4 +1,3 @@
-"use client";
 import SortFilterArtworks from "./sort-filter-artworks";
 import ArtworksDisplayInner from "./artworks-display-inner";
 

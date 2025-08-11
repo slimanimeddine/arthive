@@ -1,3 +1,5 @@
+"use client";
+
 import { useShowUserReceivedLikesCount } from "@/hooks/endpoints/artwork-likes";
 import { StarIcon } from "@heroicons/react/24/solid";
 import LoadingUI from "../loading-ui";

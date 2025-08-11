@@ -1,3 +1,5 @@
+"use client";
+
 import { useCountry } from "@/hooks/params/country";
 import { COUNTRIES } from "@/lib/constants";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
