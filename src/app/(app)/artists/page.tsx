@@ -15,16 +15,6 @@ export const metadata: Metadata = {
   ),
 };
 
-type Props = {
-  searchParams: Promise<{
-    country?: string;
-    category?: string;
-    artistSort?: string;
-    page: number;
-    searchQuery?: string;
-  }>;
-};
-
 const searchParamsSchema = z.object({
   country: z.enum(COUNTRIES).optional(),
   category: z.enum(TAGS).optional(),
@@ -32,6 +22,10 @@ const searchParamsSchema = z.object({
   page: z.int().default(1),
   searchQuery: z.string().optional(),
 });
+
+type Props = {
+  searchParams: Promise<z.infer<typeof searchParamsSchema>>;
+};
 
 export default async function Page({ searchParams }: Props) {
   const queryClient = new QueryClient();

@@ -12,13 +12,13 @@ export const metadata: Metadata = {
   ...seo("Notifications", "View your notifications"),
 };
 
-type Props = {
-  searchParams: Promise<{ page: number }>;
-};
-
 const searchParamsSchema = z.object({
   page: z.int().default(1),
 });
+
+type Props = {
+  searchParams: Promise<z.infer<typeof searchParamsSchema>>;
+};
 
 export default async function Page({ searchParams }: Props) {
   const { token } = await verifyAuth();

@@ -6,11 +6,12 @@ import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "@/providers/session-provider";
 
 const inter = Inter({ subsets: ["latin"] });
-export default function RootLayout({
-  children,
-}: Readonly<{
+
+type Props = Readonly<{
   children: React.ReactNode;
-}>) {
+}>;
+
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" className="h-full">
       <body className={`${inter.className} h-full antialiased`}>

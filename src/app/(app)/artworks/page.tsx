@@ -23,12 +23,7 @@ const searchParamsSchema = z.object({
 });
 
 type Props = {
-  searchParams: Promise<{
-    page: number;
-    tag?: string;
-    artworkSort?: string;
-    searchQuery?: string;
-  }>;
+  searchParams: Promise<z.infer<typeof searchParamsSchema>>;
 };
 
 export default async function Page({ searchParams }: Props) {

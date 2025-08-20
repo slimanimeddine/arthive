@@ -10,13 +10,13 @@ import { QueryClient } from "@tanstack/react-query";
 import { type Metadata } from "next";
 import z from "zod";
 
-type Props = {
-  params: Promise<{ id: string }>;
-};
-
 const paramsSchema = z.object({
   id: z.uuid(),
 });
+
+type Props = {
+  params: Promise<z.infer<typeof paramsSchema>>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data, success } = parseParams(await params, paramsSchema);

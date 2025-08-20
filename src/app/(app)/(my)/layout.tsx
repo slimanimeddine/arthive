@@ -53,11 +53,11 @@ const secondaryNavigation = [
   },
 ];
 
-export default function Layout({
-  children,
-}: Readonly<{
+type Props = Readonly<{
   children: React.ReactNode;
-}>) {
+}>;
+
+export default function Layout({ children }: Props) {
   const pathname = usePathname();
   return (
     <div className="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8">

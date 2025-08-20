@@ -13,7 +13,7 @@ const searchParamsSchema = z.object({
 });
 
 type Props = {
-  searchParams: Promise<{ token: string }>;
+  searchParams: Promise<z.infer<typeof searchParamsSchema>>;
 };
 
 export default async function Page({ searchParams }: Props) {
