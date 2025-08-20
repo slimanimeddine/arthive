@@ -78,6 +78,7 @@ These are the main technologies I have used to build this app, for a complete li
 Before you begin, make sure your system meets the following requirements:
 
 - [Node.js 18.18](https://nodejs.org/en) or later.
+- [pNPm](https://pnpm.io/)
 - macOS, Windows (including WSL), or Linux.
 
 ### Installation
@@ -92,24 +93,22 @@ Follow these instructions to run this project locally on your machine
    git clone https://github.com/slimanimeddine/arthive
    ```
 
-3. Copy the following env variables to `.env.local`:
+3. Copy the content of `.env.example` to `.env`:
 
    ```sh
-   SESSION_SECRET=yoursecret
-   NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
-
-   NEXT_PUBLIC_REVERB_APP_ID=
-   NEXT_PUBLIC_REVERB_APP_KEY=
-   NEXT_PUBLIC_REVERB_APP_SECRET=
-   NEXT_PUBLIC_REVERB_HOST=
-   NEXT_PUBLIC_REVERB_PORT=
-   NEXT_PUBLIC_REVERB_SCHEME=
+   cp .env.example .env
    ```
 
-4. Start the Next.js development server:
+4. Install the project's dependencies:
 
    ```sh
-   npm run dev
+   pnpm install
+   ```
+
+5. Start the Next.js development server:
+
+   ```sh
+   pnpm dev
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
