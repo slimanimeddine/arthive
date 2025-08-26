@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import ArtistsSectionInner from "./artists-section-inner";
+import type { Route } from "next";
 
 type ArtistsSectionProps = {
   title: string;
@@ -21,7 +22,7 @@ export default function ArtistsSection({
           </h2>
           <Link
             className="ml-6 text-sm font-semibold whitespace-nowrap text-indigo-500 hover:text-indigo-600"
-            href={viewMoreLink}
+            href={viewMoreLink as Route}
           >
             View more <span aria-hidden="true">→</span>
           </Link>

@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "../logo";
 import SearchComponent from "./search-input";
+import type { Route } from "next";
 
 const navigation = [
   { name: "Artists", href: "/artists" },
@@ -32,7 +33,7 @@ export default function HeaderGuest() {
               {navigation.map((item) => (
                 <Link
                   key={item.name}
-                  href={item.href}
+                  href={item.href as Route}
                   className={classNames(
                     pathname === item.href
                       ? "border-indigo-500 text-gray-900"
@@ -80,7 +81,7 @@ export default function HeaderGuest() {
             <DisclosureButton
               as={Link}
               key={item.name}
-              href={item.href}
+              href={item.href as Route}
               className={classNames(
                 pathname === item.href
                   ? "border-indigo-500 text-gray-900"

@@ -1,3 +1,4 @@
+import type { Route } from "next";
 import Link from "next/link";
 import { type JSX, type SVGProps } from "react";
 
@@ -84,7 +85,7 @@ export default function Footer() {
           {navigation.main.map((item) => (
             <div key={item.name} className="pb-6">
               <Link
-                href={item.href}
+                href={item.href as Route}
                 className="text-sm leading-6 text-gray-300 hover:text-gray-400"
               >
                 {item.name}
@@ -96,7 +97,7 @@ export default function Footer() {
           {navigation.social.map((item) => (
             <Link
               key={item.name}
-              href={item.href}
+              href={item.href as Route}
               className="text-gray-300 hover:text-gray-400"
             >
               <span className="sr-only">{item.name}</span>

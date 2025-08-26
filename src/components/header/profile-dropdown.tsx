@@ -5,6 +5,7 @@ import Link from "next/link";
 import AvatarPlaceholder from "../avatar-placeholder";
 import { useSession } from "@/hooks/session";
 import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
+import type { Route } from "next";
 
 const userNavigation = [
   { name: "Your Profile", href: "/edit-profile" },
@@ -56,7 +57,7 @@ export default function ProfileDropdown() {
         {userNavigation.map((item) => (
           <MenuItem key={item.name}>
             <Link
-              href={item.href}
+              href={item.href as Route}
               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
             >
               {item.name}

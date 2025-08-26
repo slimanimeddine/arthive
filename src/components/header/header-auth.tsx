@@ -14,6 +14,7 @@ import SearchComponent from "./search-input";
 import NotificationIcon from "./notification-icon";
 import ProfileImage from "./profile-image";
 import ProfileInfo from "./profile-info";
+import type { Route } from "next";
 
 const navigation = [
   { name: "Artists", href: "/artists" },
@@ -41,7 +42,7 @@ export default function HeaderAuth() {
               {navigation.map((item) => (
                 <Link
                   key={item.name}
-                  href={item.href}
+                  href={item.href as Route}
                   className={classNames(
                     pathname === item.href
                       ? "border-indigo-500 text-gray-900"
@@ -92,7 +93,7 @@ export default function HeaderAuth() {
             <DisclosureButton
               as={Link}
               key={item.name}
-              href={item.href}
+              href={item.href as Route}
               className={classNames(
                 pathname === item.href
                   ? "border-indigo-500 text-gray-900"
@@ -123,7 +124,7 @@ export default function HeaderAuth() {
               <DisclosureButton
                 as={Link}
                 key={item.name}
-                href={item.href}
+                href={item.href as Route}
                 className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
               >
                 {item.name}

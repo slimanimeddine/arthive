@@ -2,6 +2,7 @@
 import { type ListPublishedArtworksParams } from "@/hooks/endpoints/artworks";
 import Link from "next/link";
 import ArtworksSectionInner from "./artworks-section-inner";
+import type { Route } from "next";
 
 type ArtworksSectionProps = {
   title: string;
@@ -23,7 +24,7 @@ export default function ArtworksSection({
           </h2>
           <Link
             className="ml-6 text-sm font-semibold whitespace-nowrap text-indigo-500 hover:text-indigo-600"
-            href={viewMoreLink}
+            href={viewMoreLink as Route}
           >
             View more <span aria-hidden="true">→</span>
           </Link>

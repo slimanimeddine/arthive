@@ -13,6 +13,7 @@ import {
   UserPlusIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -69,7 +70,7 @@ export default function Layout({ children }: Props) {
             {secondaryNavigation.map((item) => (
               <li key={item.name}>
                 <Link
-                  href={item.href}
+                  href={item.href as Route}
                   className={classNames(
                     item.href === pathname
                       ? "bg-gray-50 text-indigo-600"
