@@ -32,7 +32,7 @@ export default function ArtworkPost() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (!data) {
+  if (!data?.data) {
     return <></>;
   }
 

@@ -100,11 +100,8 @@ export default function FavoriteButton() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (!data) {
-    return <></>;
-  }
-
   const isFavoriting = data.data;
+
   return (
     <button
       onClick={() => handleFavoriteToggle(!!isFavoriting)}

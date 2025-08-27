@@ -24,7 +24,7 @@ export default function ArtistsSection() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (!data || data.data.length === 0) {
+  if (!data?.data || data.data.length === 0) {
     return <EmptyUI message="No artist was found" />;
   }
 

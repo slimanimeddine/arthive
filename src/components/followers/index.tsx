@@ -22,7 +22,7 @@ export default function Followers() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (!data || data.data.length === 0) {
+  if (!data?.data || data.data.length === 0) {
     return <NoFollowers />;
   }
 

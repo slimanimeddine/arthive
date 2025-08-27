@@ -85,7 +85,7 @@ export default function PostComment() {
       <button
         disabled={isDisabled}
         type="submit"
-        className="inline-flex items-center rounded-lg bg-indigo-700 px-4 py-2.5 text-center text-xs font-medium text-white transition hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-900"
+        className="inline-flex items-center rounded-lg bg-indigo-700 px-4 py-2.5 text-center text-xs font-medium text-white transition hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:bg-gray-400 dark:focus:ring-indigo-900"
       >
         Post comment
       </button>

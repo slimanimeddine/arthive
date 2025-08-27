@@ -23,7 +23,7 @@ export default function TotalRatings({ username }: TotalRatingsProps) {
     }
   }
 
-  if (!data) {
+  if (!data?.data) {
     return <></>;
   }
 

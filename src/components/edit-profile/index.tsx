@@ -22,7 +22,7 @@ export default function EditProfile() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (!data) {
+  if (!data?.data) {
     return <ErrorUI message="User data not found." />;
   }
 

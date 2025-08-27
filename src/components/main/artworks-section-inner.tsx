@@ -27,7 +27,7 @@ export default function ArtworksSectionInner({ sort }: ArtworksSectionProps) {
     return <ErrorUI message={error.message} />;
   }
 
-  if (!data || data.data.length === 0) {
+  if (!data?.data || data.data.length === 0) {
     return (
       <NoData
         title="No Artworks to Display"

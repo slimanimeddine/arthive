@@ -94,11 +94,8 @@ export default function LikeButton() {
     return <ErrorUI message={error.message} />;
   }
 
-  if (!data) {
-    return <></>;
-  }
-
   const isLiking = data.data;
+
   return (
     <button
       onClick={() => handleLikeToggle(isLiking)}
