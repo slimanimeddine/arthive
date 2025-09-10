@@ -6,7 +6,7 @@ await jiti.import("./src/env/client.ts");
 await jiti.import("./src/env/server.ts");
 
 /** @type {import('next').NextConfig} */
-export default {
+const nextConfig = {
   typedRoutes: true,
   images: {
     remotePatterns: [
@@ -15,3 +15,5 @@ export default {
     ],
   },
 };
+
+export default nextConfig;
