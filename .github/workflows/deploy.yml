@@ -22,6 +22,7 @@ jobs:
           REMOTE_USER: ${{ secrets.VPS_USER }}
           TARGET: "/var/www/arthive"
           ARGS: "-avz --delete"
+          EXCLUDE: ".env"
 
       - name: Run Remote Build & Restart
         uses: appleboy/ssh-action@v0.1.6
