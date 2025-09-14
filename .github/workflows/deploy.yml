@@ -22,7 +22,23 @@ jobs:
           REMOTE_USER: ${{ secrets.VPS_USER }}
           TARGET: "/var/www/arthive"
           ARGS: "-avz --delete"
-          EXCLUDE: ".env"
+
+      - name: Write .env file
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/arthive
+            echo "SESSION_SECRET=${{ secrets.SESSION_SECRET }}" > .env
+            echo "NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}" >> .env
+            echo "NEXT_PUBLIC_REVERB_APP_ID=${{ secrets.NEXT_PUBLIC_REVERB_APP_ID }}" >> .env
+            echo "NEXT_PUBLIC_REVERB_APP_KEY=${{ secrets.NEXT_PUBLIC_REVERB_APP_KEY }}" >> .env
+            echo "NEXT_PUBLIC_REVERB_APP_SECRET=${{ secrets.NEXT_PUBLIC_REVERB_APP_SECRET }}" >> .env
+            echo "NEXT_PUBLIC_REVERB_HOST=${{ secrets.NEXT_PUBLIC_REVERB_HOST }}" >> .env
+            echo "NEXT_PUBLIC_REVERB_PORT=${{ secrets.NEXT_PUBLIC_REVERB_PORT }}" >> .env
+            echo "NEXT_PUBLIC_REVERB_SCHEME=${{ secrets.NEXT_PUBLIC_REVERB_SCHEME }}" >> .env
 
       - name: Run Remote Build & Restart
         uses: appleboy/ssh-action@v0.1.6
@@ -34,7 +50,6 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             source "$NVM_DIR/nvm.sh"
             cd /var/www/arthive
-            git clean -fdx || true
             pnpm install --frozen-lockfile
             pnpm build
             pm2 restart arthive-fe
