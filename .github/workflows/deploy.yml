@@ -21,6 +21,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.VPS_HOST }}
           REMOTE_USER: ${{ secrets.VPS_USER }}
           TARGET: "/var/www/arthive"
+          ARGS: "-avz --delete"
 
       - name: Run Remote Build & Restart
         uses: appleboy/ssh-action@v0.1.6
@@ -32,6 +33,7 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             source "$NVM_DIR/nvm.sh"
             cd /var/www/arthive
-            pnpm install
+            git clean -fdx || true
+            pnpm install --frozen-lockfile
             pnpm build
             pm2 restart arthive-fe
