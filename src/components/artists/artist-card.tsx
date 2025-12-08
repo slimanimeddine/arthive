@@ -1,6 +1,6 @@
-import { fileUrl } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { fileUrl } from "@/lib/utils";
 import FollowButton from "./follow-button";
 
 type Artwork = {
@@ -35,7 +35,7 @@ export default function ArtistCard({
             {profilePictureUrl ? (
               <Image
                 alt=""
-                src={fileUrl(profilePictureUrl)!}
+                src={fileUrl(profilePictureUrl) as string}
                 className="size-14 w-14 rounded-lg object-cover"
                 width={56}
                 height={56}
@@ -51,6 +51,7 @@ export default function ArtistCard({
                   viewBox="0 0 24 24"
                   className="h-full w-full text-gray-300"
                 >
+                  <title>Profile picture placeholder</title>
                   <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </span>
@@ -92,7 +93,7 @@ export default function ArtistCard({
             >
               <Image
                 alt=""
-                src={fileUrl(artwork.mainPhotoUrl)!}
+                src={fileUrl(artwork.mainPhotoUrl) as string}
                 className="object-cover"
                 width={128}
                 height={128}

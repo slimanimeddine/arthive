@@ -1,18 +1,19 @@
 "use client";
 
-import { useDeleteArtworkComment } from "@/hooks/endpoints/artwork-comments";
-import { useSession } from "@/hooks/session";
-import { authHeader } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
+import { useDeleteArtworkComment } from "@/hooks/endpoints/artwork-comments";
+import { useSession } from "@/hooks/session";
+import { authHeader } from "@/lib/utils";
+import type { SessionPayload } from "@/types/misc";
 
 export default function DeleteCommentButton({
   commentId,
 }: {
   commentId: string;
 }) {
-  const { token } = useSession()!;
+  const { token } = useSession() as SessionPayload;
   const { id: artworkId } = useParams<{ id: string }>();
 
   const queryClient = useQueryClient();
@@ -46,9 +47,10 @@ export default function DeleteCommentButton({
 
   return (
     <button
+      type="button"
       disabled={isDisabled}
       onClick={onDelete}
-      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900"
     >
       Remove
     </button>

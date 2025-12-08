@@ -1,11 +1,11 @@
+import { QueryClient } from "@tanstack/react-query";
+import type { Metadata } from "next";
 import ArtistsSection from "@/components/main/artists-section";
 import ArtworksSection from "@/components/main/artworks-section";
 import Introduction from "@/components/main/introduction";
 import { prefetchListPublishedArtworks } from "@/hooks/endpoints/artworks";
 import { prefetchListUsers } from "@/hooks/endpoints/users";
 import seo from "@/lib/seo";
-import { QueryClient } from "@tanstack/react-query";
-import { type Metadata } from "next";
 
 export const metadata: Metadata = {
   ...seo(

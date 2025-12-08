@@ -1,7 +1,7 @@
 "use client";
+import { CheckIcon } from "@heroicons/react/20/solid";
 import { classNames } from "@/lib/utils";
 import useArtworkStore from "@/stores/artwork-store";
-import { CheckIcon } from "@heroicons/react/20/solid";
 
 export default function StepsNavigation() {
   const { step: currentStep, setStep, isStepValid } = useArtworkStore();
@@ -46,7 +46,7 @@ export default function StepsNavigation() {
 
   return (
     <nav aria-label="Progress">
-      <ol role="list" className="flex items-center">
+      <ol className="flex items-center">
         {steps.map((step, stepIdx) => (
           <li
             key={step.name}
@@ -64,6 +64,7 @@ export default function StepsNavigation() {
                   <div className="h-0.5 w-full bg-indigo-600" />
                 </div>
                 <button
+                  type="button"
                   onClick={() => handleStepClick(stepIdx + 1)}
                   className="relative flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-900"
                 >
@@ -83,6 +84,7 @@ export default function StepsNavigation() {
                   <div className="h-0.5 w-full bg-gray-200" />
                 </div>
                 <button
+                  type="button"
                   onClick={() => handleStepClick(stepIdx + 1)}
                   aria-current="step"
                   className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-indigo-600 bg-white"
@@ -103,6 +105,7 @@ export default function StepsNavigation() {
                   <div className="h-0.5 w-full bg-gray-200" />
                 </div>
                 <button
+                  type="button"
                   onClick={() => handleStepClick(stepIdx + 1)}
                   disabled={step.status === "upcoming"}
                   className="group relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-gray-400"

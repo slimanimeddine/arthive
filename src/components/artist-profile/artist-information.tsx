@@ -1,15 +1,15 @@
 "use client";
 
-import { useShowUser } from "@/hooks/endpoints/users";
-import { fileUrl } from "@/lib/utils";
 import { CheckBadgeIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
+import { notFound, useParams } from "next/navigation";
+import { useShowUser } from "@/hooks/endpoints/users";
+import { fileUrl } from "@/lib/utils";
+import EmptyUI from "../empty-ui";
 import ErrorUI from "../error-ui";
+import ArtistInformationSkeleton from "./artist-information-skeleton";
 import FollowButton from "./follow-button";
 import RatingsByTag from "./ratings-by-tag";
-import ArtistInformationSkeleton from "./artist-information-skeleton";
-import { notFound, useParams } from "next/navigation";
-import EmptyUI from "../empty-ui";
 
 export default function ArtistInformation() {
   const { username } = useParams<{ username: string }>();
@@ -39,7 +39,7 @@ export default function ArtistInformation() {
     profilePictureUrl: fileUrl(data.data.photo),
     country: data.data.country,
     dateJoined: data.data.created_at,
-    verified: data.data.artist_verified_at ? true : false,
+    verified: !!data.data.artist_verified_at,
   };
 
   return (
@@ -69,6 +69,7 @@ export default function ArtistInformation() {
                     viewBox="0 0 24 24"
                     className="h-full w-full text-gray-300"
                   >
+                    <title>Default profile picture</title>
                     <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </div>
@@ -99,7 +100,7 @@ export default function ArtistInformation() {
         <div className="px-4 pt-5 pb-5 sm:px-0 sm:pt-0">
           <dl className="space-y-8 px-4 sm:space-y-6 sm:px-6">
             <div>
-              <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
+              <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:shrink-0">
                 Bio
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
@@ -107,7 +108,7 @@ export default function ArtistInformation() {
               </dd>
             </div>
             <div>
-              <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
+              <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:shrink-0">
                 Country
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
@@ -115,7 +116,7 @@ export default function ArtistInformation() {
               </dd>
             </div>
             <div>
-              <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
+              <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:shrink-0">
                 Date joined
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">

@@ -1,8 +1,8 @@
+import type { Metadata } from "next";
+import Link from "next/link";
 import Logo from "@/components/logo";
 import SignInForm from "@/components/sign-in-form";
 import seo from "@/lib/seo";
-import { type Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   ...seo("Sign In", "Sign in to your Arthive account"),

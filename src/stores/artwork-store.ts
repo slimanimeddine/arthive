@@ -1,5 +1,5 @@
-import { type Tag } from "@/types/misc";
 import { create } from "zustand";
+import type { Tag } from "@/types/misc";
 
 interface ArtworkState {
   step: number;

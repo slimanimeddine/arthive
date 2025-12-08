@@ -2,9 +2,9 @@
 
 import { useListUsers } from "@/hooks/endpoints/users";
 import ErrorUI from "../error-ui";
+import NoData from "../no-data";
 import ArtistCard from "./artist-card";
 import ArtistsSectionSkeleton from "./artists-section-skeleton";
-import NoData from "../no-data";
 
 export default function ArtistsSectionInner() {
   const { isPending, isError, data, error } = useListUsers({
@@ -34,11 +34,11 @@ export default function ArtistsSectionInner() {
     username: artist.username,
     country: artist.country,
     profilePictureUrl: artist.photo,
-    verified: artist.artist_verified_at ? true : false,
+    verified: !!artist.artist_verified_at,
   }));
 
   return (
-    <ul role="list" className="divide-y divide-gray-100">
+    <ul className="divide-y divide-gray-100">
       {artists.map((artist) => (
         <li key={artist.id}>
           <ArtistCard {...artist} />

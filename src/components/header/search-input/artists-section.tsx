@@ -1,11 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import EmptyUI from "@/components/empty-ui";
 import ErrorUI from "@/components/error-ui";
 import LoadingUI from "@/components/loading-ui";
 import { useListUsers } from "@/hooks/endpoints/users";
 import { useSearchQuery } from "@/hooks/params/search-query";
-import Link from "next/link";
 
 export default function ArtistsSection() {
   const { searchQuery } = useSearchQuery();

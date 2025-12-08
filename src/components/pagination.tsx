@@ -1,12 +1,12 @@
 "use client";
 
-import { usePage } from "@/hooks/params/page";
-import { type LinksField, type MetaField } from "@/types/api-responses";
 import {
   ArrowLongLeftIcon,
   ArrowLongRightIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
+import { usePage } from "@/hooks/params/page";
+import type { LinksField, MetaField } from "@/types/api-responses";
 
 interface PaginationProps {
   links: LinksField;

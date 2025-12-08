@@ -1,8 +1,8 @@
 "use client";
 
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useCategory } from "@/hooks/params/category";
 import { TAGS } from "@/lib/constants";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 export default function ArtistCategoryFilter() {
   const { category, setCategory } = useCategory();
@@ -26,6 +26,7 @@ export default function ArtistCategoryFilter() {
                     viewBox="0 0 14 14"
                     className="h-3.5 w-3.5 stroke-indigo-700/50 group-hover:stroke-indigo-700/75"
                   >
+                    <title>Remove category filter</title>
                     <path d="M4 4l6 6m0-6l-6 6" />
                   </svg>
                   <span className="absolute -inset-1" />
@@ -49,7 +50,10 @@ export default function ArtistCategoryFilter() {
                   onChange={() => setCategory(tag)}
                   checked={tag === category}
                 />
-                <label className="ml-3 block text-sm leading-6 font-medium text-gray-900">
+                <label
+                  htmlFor={tag}
+                  className="ml-3 block text-sm leading-6 font-medium text-gray-900"
+                >
                   {tag}
                 </label>
               </div>

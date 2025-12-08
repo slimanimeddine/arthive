@@ -1,9 +1,9 @@
-import { type ArtworkComment } from "./artwork-comment";
-import { type ArtworkLike } from "./artwork-like";
-import { type ArtworkPhoto } from "./artwork-photo";
-import { type BaseModel } from "./base";
-import { type Tag } from "./tag";
-import { type User } from "./user";
+import type { ArtworkComment } from "./artwork-comment";
+import type { ArtworkLike } from "./artwork-like";
+import type { ArtworkPhoto } from "./artwork-photo";
+import type { BaseModel } from "./base";
+import type { Tag } from "./tag";
+import type { User } from "./user";
 
 export type ArtworkModel = BaseModel & {
   title: string;

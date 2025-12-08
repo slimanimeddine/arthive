@@ -38,16 +38,16 @@ export type RemoveArtworkFromFavorites404 = NotFoundApiResponse;
 
 import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type ApiResource,
-  type SuccessNoDataApiResponse,
-  type NotFoundApiResponse,
-  type SuccessApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type {
+  ApiResource,
+  NotFoundApiResponse,
+  SuccessApiResponse,
+  SuccessNoDataApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type ArtworkModel } from "@/types/models/artwork";
-import { type FavoriteModel } from "@/types/models/favorite";
+import type { ArtworkModel } from "@/types/models/artwork";
+import type { FavoriteModel } from "@/types/models/favorite";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

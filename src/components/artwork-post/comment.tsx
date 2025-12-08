@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "@/hooks/session";
 import AvatarPlaceholder from "../avatar-placeholder";
 import CommentDropdownActions from "./comment-dropdown-actions";
 import EditComment from "./edit-comment";
-import { useSession } from "@/hooks/session";
 
 type CommentProps = {
   id: string;
@@ -63,7 +63,7 @@ export default function Comment({
         {session?.token ? (
           <CommentDropdownActions commentId={id} userId={user.id} />
         ) : (
-          <></>
+          <div></div>
         )}
       </footer>
       {session?.token ? (

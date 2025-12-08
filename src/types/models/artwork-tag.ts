@@ -1,6 +1,6 @@
-import { type Artwork } from "./artwork";
-import { type BaseModel } from "./base";
-import { type Tag } from "./tag";
+import type { Artwork } from "./artwork";
+import type { BaseModel } from "./base";
+import type { Tag } from "./tag";
 
 export type ArtworkTagModel = BaseModel & {
   artwork_id: string;

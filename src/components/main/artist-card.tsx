@@ -1,7 +1,7 @@
-import { fileUrl } from "@/lib/utils";
 import { CheckBadgeIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
+import { fileUrl } from "@/lib/utils";
 import AvatarPlaceholder from "../avatar-placeholder";
 
 type ArtistCardProps = {
@@ -25,7 +25,7 @@ export default function ArtistCard({
         {profilePictureUrl ? (
           <Image
             alt=""
-            src={fileUrl(profilePictureUrl)!}
+            src={fileUrl(profilePictureUrl) as string}
             className="h-12 w-12 flex-none rounded-full bg-gray-50"
             height={48}
             width={48}

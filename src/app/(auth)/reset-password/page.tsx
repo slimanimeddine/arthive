@@ -1,9 +1,9 @@
+import Link from "next/link";
+import z from "zod";
 import InvalidParams from "@/components/invalid-params";
 import Logo from "@/components/logo";
 import ResetPasswordForm from "@/components/reset-password-form";
 import { parseParams } from "@/lib/utils";
-import Link from "next/link";
-import z from "zod";
 
 const searchParamsSchema = z.object({
   token: z

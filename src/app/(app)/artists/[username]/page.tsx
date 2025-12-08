@@ -1,3 +1,6 @@
+import { QueryClient } from "@tanstack/react-query";
+import type { Metadata } from "next";
+import z from "zod";
 import ArtistProfile from "@/components/artist-profile";
 import InvalidParams from "@/components/invalid-params";
 import {
@@ -8,9 +11,6 @@ import { prefetchListUserPublishedArtworks } from "@/hooks/endpoints/artworks";
 import { prefetchShowUser, showUser } from "@/hooks/endpoints/users";
 import seo from "@/lib/seo";
 import { parseParams } from "@/lib/utils";
-import { QueryClient } from "@tanstack/react-query";
-import { type Metadata } from "next";
-import z from "zod";
 
 const paramsSchema = z.object({
   username: z.string().regex(/^[\p{L}\p{M}\p{N}_-]+$/u),

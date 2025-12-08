@@ -1,13 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { useSession } from "@/hooks/session";
 import { authHeader, fileUrl } from "@/lib/utils";
+import type { Session } from "@/types/misc";
 import AvatarPlaceholder from "../avatar-placeholder";
-import Image from "next/image";
 
 export default function ProfileImage() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
 
   const { isPending, isError, data, error } = useShowAuthenticatedUser(
     authHeader(token),
@@ -22,15 +23,15 @@ export default function ProfileImage() {
   }
 
   if (!data?.data) {
-    return <></>;
+    return <div></div>;
   }
 
   if (data.data.photo) {
     return (
-      <div className="flex-shrink-0">
+      <div className="shrink-0">
         <Image
           alt=""
-          src={fileUrl(data.data.photo)!}
+          src={fileUrl(data.data.photo) as string}
           className="h-10 w-10 rounded-full"
           width={40}
           height={40}

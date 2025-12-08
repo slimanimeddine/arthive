@@ -1,12 +1,13 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import toast from "react-hot-toast";
 import { usePublishArtwork } from "@/hooks/endpoints/artworks";
 import { useSession } from "@/hooks/session";
 import { authHeader, getUrlFromBlob } from "@/lib/utils";
 import useArtworkStore from "@/stores/artwork-store";
-import { useQueryClient } from "@tanstack/react-query";
-import Image from "next/image";
-import toast from "react-hot-toast";
+import type { Session } from "@/types/misc";
 
 export default function FourthStep() {
   const {
@@ -21,7 +22,7 @@ export default function FourthStep() {
     setToDefault,
   } = useArtworkStore();
 
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
 
   const { mutate } = usePublishArtwork(authHeader(token));
 
@@ -37,7 +38,7 @@ export default function FourthStep() {
 
       mutate(
         {
-          artworkId: id!,
+          artworkId: id as string,
         },
         {
           onError: (error) => {
@@ -104,6 +105,7 @@ export default function FourthStep() {
         </p>
       </div>
       <button
+        type="button"
         onClick={handlePublish}
         className="mt-4 rounded-md bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600"
       >

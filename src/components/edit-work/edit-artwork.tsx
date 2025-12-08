@@ -1,21 +1,21 @@
 "use client";
 
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 import { useShowAuthenticatedUserArtwork } from "@/hooks/endpoints/artworks";
+import { useSession } from "@/hooks/session";
 import { authHeader, classNames, fileUrl } from "@/lib/utils";
-import { type Tag } from "@/types/misc";
+import type { Session, Tag } from "@/types/misc";
 import ErrorUI from "../error-ui";
+import LoadingUI from "../loading-ui";
 import FirstStep from "./first-step";
 import FourthStep from "./fourth-step";
 import SecondStep from "./second-step";
 import ThirdStep from "./third-step";
-import Link from "next/link";
-import { useState } from "react";
-import { useSession } from "@/hooks/session";
-import { useParams } from "next/navigation";
-import LoadingUI from "../loading-ui";
 
 export default function EditArtwork() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { id } = useParams<{ id: string }>();
   const { isPending, isError, data, error } = useShowAuthenticatedUserArtwork(
     id,
@@ -45,7 +45,7 @@ export default function EditArtwork() {
   }
 
   if (!data?.data) {
-    return <></>;
+    return <div></div>;
   }
 
   const artworkData = data.data;
@@ -56,10 +56,10 @@ export default function EditArtwork() {
     description: artworkData.description,
     status: artworkData.status,
     publishedAt: artworkData.created_at,
-    mainPhotoUrl: fileUrl(artworkData.artwork_main_photo_path)!,
+    mainPhotoUrl: fileUrl(artworkData.artwork_main_photo_path) as string,
     photos: artworkData.artwork_photos.map((photo) => ({
       id: photo.id,
-      path: fileUrl(photo.path)!,
+      path: fileUrl(photo.path) as string,
     })),
     tags: artworkData.tags.map((tag) => ({
       id: tag.id,
@@ -110,6 +110,7 @@ export default function EditArtwork() {
 
       <div className="mt-6 flex justify-between">
         <button
+          type="button"
           onClick={handleBack}
           className={classNames(
             "rounded-md px-4 py-2 text-white transition-colors",
@@ -122,6 +123,7 @@ export default function EditArtwork() {
           Back
         </button>
         <button
+          type="button"
           onClick={handleNext}
           className={classNames(
             "rounded-md px-4 py-2 text-white transition-colors",

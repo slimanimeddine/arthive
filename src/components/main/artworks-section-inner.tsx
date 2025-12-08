@@ -4,10 +4,10 @@ import {
   useListPublishedArtworks,
 } from "@/hooks/endpoints/artworks";
 import { fileUrl } from "@/lib/utils";
-import ErrorUI from "../error-ui";
-import ArtworksSectionSkeleton from "./artworks-section-skeleton";
-import NoData from "../no-data";
 import { ArtworkCard } from "../artwork-card";
+import ErrorUI from "../error-ui";
+import NoData from "../no-data";
+import ArtworksSectionSkeleton from "./artworks-section-skeleton";
 
 type ArtworksSectionProps = {
   sort: ListPublishedArtworksParams["sort"];
@@ -39,19 +39,16 @@ export default function ArtworksSectionInner({ sort }: ArtworksSectionProps) {
   const artworks = data.data.map((artwork) => ({
     id: artwork.id,
     title: artwork.title,
-    mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
+    mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path) as string,
     likesCount: artwork.artwork_likes_count,
     commentsCount: artwork.artwork_comments_count,
     artistUsername: artwork.user.username,
     artistFullName: `${artwork.user.first_name} ${artwork.user.last_name}`,
-    artistProfilePictureUrl: fileUrl(artwork.user.photo),
+    artistProfilePictureUrl: fileUrl(artwork.user.photo) as string,
   }));
 
   return (
-    <ul
-      role="list"
-      className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
-    >
+    <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
       {artworks.map((artwork) => (
         <li key={artwork.id}>
           <ArtworkCard {...artwork} />

@@ -1,7 +1,5 @@
 "use client";
 
-import { useMarkNotificationRead } from "@/hooks/mark-notification-as-read";
-import { classNames } from "@/lib/utils";
 import {
   Dialog,
   DialogBackdrop,
@@ -16,6 +14,9 @@ import {
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useState } from "react";
+import { useMarkNotificationRead } from "@/hooks/mark-notification-as-read";
+import { classNames } from "@/lib/utils";
+
 dayjs.extend(relativeTime);
 
 type ArtistVerificationResponseNotificationProps = {
@@ -32,6 +33,7 @@ function RejectionReasonModal({ reason }: { reason: string }) {
   return (
     <>
       <button
+        type="button"
         onClick={() => setOpen(true)}
         className="font-semibold text-black hover:underline"
       >
@@ -88,7 +90,8 @@ export default function ArtistVerificationResponseNotification({
   const { markAsRead } = useMarkNotificationRead(notificationId, readAt);
 
   return (
-    <div
+    <button
+      type="button"
       onClick={markAsRead}
       className={classNames(
         "relative p-2",
@@ -117,7 +120,7 @@ export default function ArtistVerificationResponseNotification({
             <p className="text-sm text-gray-500">
               Your verification request was {status}{" "}
               {status === "rejected" && (
-                <RejectionReasonModal reason={reason!} />
+                <RejectionReasonModal reason={reason as string} />
               )}
             </p>
           </div>
@@ -126,6 +129,6 @@ export default function ArtistVerificationResponseNotification({
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 }

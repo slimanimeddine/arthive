@@ -7,6 +7,7 @@ export default function Logo() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Logo</title>
       <g id="logogram" transform="translate(0, 1) rotate(0)">
         <path
           d="M13.0832 0.429993L23.4173 9.25886C24.0309 9.78301 24.3845 10.5522 24.3845 11.3623V18.0162L14.0503 9.18733C13.4368 8.66319 13.0832 7.894 13.0832 7.08386V0.429993Z"

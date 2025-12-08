@@ -13,7 +13,7 @@ import type {
   UseQueryResult,
 } from "@tanstack/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { type z } from "zod";
+import type { z } from "zod";
 
 export type GetAuthenticatedUserArtistVerificationRequests200 =
   PaginatedApiResponse<ArtistVerificationRequestModel>;
@@ -44,18 +44,18 @@ export type SubmitArtistVerificationRequest403 = UnauthorizedApiResponse;
 
 import type { BodyType, ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import { type reviewArtistVerificationRequestBody } from "@/schemas/artist-verification-requests";
-import {
-  type ApiResource,
-  type ErrorApiResponse,
-  type NotFoundApiResponse,
-  type PaginatedApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type { reviewArtistVerificationRequestBody } from "@/schemas/artist-verification-requests";
+import type {
+  ApiResource,
+  ErrorApiResponse,
+  NotFoundApiResponse,
+  PaginatedApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import {
-  type ArtistVerificationRequest,
-  type ArtistVerificationRequestModel,
+import type {
+  ArtistVerificationRequest,
+  ArtistVerificationRequestModel,
 } from "@/types/models/artist-verification-request";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];

@@ -1,8 +1,8 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useFollowUserAction } from "@/hooks/follow-user";
 import { useSession } from "@/hooks/session";
 import { classNames } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 type FollowButtonProps = {
   userId: string;
@@ -18,6 +18,7 @@ export default function FollowButton({ userId }: FollowButtonProps) {
   if (!session?.token) {
     return (
       <button
+        type="button"
         onClick={() => router.push("/sign-in")}
         className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
       >
@@ -29,6 +30,7 @@ export default function FollowButton({ userId }: FollowButtonProps) {
   if (isLoading) {
     return (
       <button
+        type="button"
         disabled
         className="bg-gray cursor-not-allowed rounded-full px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset"
       >
@@ -39,6 +41,7 @@ export default function FollowButton({ userId }: FollowButtonProps) {
 
   return (
     <button
+      type="button"
       onClick={() => handleFollowToggle(!!isFollowing)}
       className={classNames(
         "rounded-full px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset",

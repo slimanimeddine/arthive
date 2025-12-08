@@ -3,9 +3,10 @@
 import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
+import type { Session } from "@/types/misc";
 
 export default function ProfileInfo() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
 
   const { isPending, isError, data, error } = useShowAuthenticatedUser(
     authHeader(token),
@@ -20,7 +21,7 @@ export default function ProfileInfo() {
   }
 
   if (!data?.data) {
-    return <></>;
+    return <div></div>;
   }
 
   const user = data.data;

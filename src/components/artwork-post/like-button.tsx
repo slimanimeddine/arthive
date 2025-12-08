@@ -1,5 +1,9 @@
 "use client";
 
+import { HandThumbUpIcon } from "@heroicons/react/24/outline";
+import { useQueryClient } from "@tanstack/react-query";
+import { notFound, useParams, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import {
   useCheckIfAuthenticatedUserIsLiking,
   useLikeArtwork,
@@ -7,10 +11,6 @@ import {
 } from "@/hooks/endpoints/artwork-likes";
 import { useSession } from "@/hooks/session";
 import { authHeader, classNames } from "@/lib/utils";
-import { HandThumbUpIcon } from "@heroicons/react/24/outline";
-import { useQueryClient } from "@tanstack/react-query";
-import { notFound, useParams, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import ErrorUI from "../error-ui";
 
 export default function LikeButton() {
@@ -67,6 +67,7 @@ export default function LikeButton() {
   if (!session?.token) {
     return (
       <button
+        type="button"
         className="flex items-center justify-center rounded-full bg-gray-200 p-2 text-gray-700 transition-colors"
         onClick={() => router.push("/sign-in")}
       >
@@ -78,6 +79,7 @@ export default function LikeButton() {
   if (isPending) {
     return (
       <button
+        type="button"
         disabled
         className="flex cursor-not-allowed items-center justify-center rounded-full bg-gray-200 p-2 text-gray-700 transition-colors"
       >
@@ -98,6 +100,7 @@ export default function LikeButton() {
 
   return (
     <button
+      type="button"
       onClick={() => handleLikeToggle(isLiking)}
       className={classNames(
         "flex items-center justify-center rounded-full p-2 transition-colors",

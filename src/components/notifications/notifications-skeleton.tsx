@@ -10,7 +10,7 @@ export default function NotificationsSkeleton() {
           </h2>
         </div>
 
-        <ul role="list" className="mt-2 flex flex-col gap-2">
+        <ul className="mt-2 flex flex-col gap-2">
           {[...Array(10).keys()].map((item) => (
             <li key={item}>
               <NotificationItemSkeleton />

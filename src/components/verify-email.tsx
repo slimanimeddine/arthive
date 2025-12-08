@@ -1,13 +1,14 @@
 "use client";
 
-import { authHeader } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
-import LoadingUI from "./loading-ui";
-import { useSession } from "@/hooks/session";
-import { useVerifyEmail } from "@/hooks/endpoints/authentication";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useVerifyEmail } from "@/hooks/endpoints/authentication";
+import { useSession } from "@/hooks/session";
+import { authHeader } from "@/lib/utils";
+import type { Session } from "@/types/misc";
+import LoadingUI from "./loading-ui";
 
 type VerifyEmailProps = {
   expires: string;
@@ -16,7 +17,7 @@ type VerifyEmailProps = {
 
 export default function VerifyEmail({ expires, signature }: VerifyEmailProps) {
   const [message, setMessage] = useState("");
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
 
   const queryClient = useQueryClient();
   const { id, hash } = useParams<{ id: string; hash: string }>();

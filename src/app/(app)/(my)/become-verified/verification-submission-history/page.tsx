@@ -1,10 +1,10 @@
+import { QueryClient } from "@tanstack/react-query";
+import type { Metadata } from "next";
 import VerificationSubmissions from "@/components/become-verified/verification-submissions";
 import { prefetchGetAuthenticatedUserArtistVerificationRequests } from "@/hooks/endpoints/artist-verification-requests";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { authHeader } from "@/lib/utils";
-import { QueryClient } from "@tanstack/react-query";
-import { type Metadata } from "next";
 
 export const metadata: Metadata = {
   ...seo(

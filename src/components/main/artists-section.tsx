@@ -1,8 +1,8 @@
 "use client";
 
+import type { Route } from "next";
 import Link from "next/link";
 import ArtistsSectionInner from "./artists-section-inner";
-import type { Route } from "next";
 
 type ArtistsSectionProps = {
   title: string;

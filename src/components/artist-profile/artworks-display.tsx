@@ -1,17 +1,17 @@
 "use client";
 
-import { useListUserPublishedArtworks } from "@/hooks/endpoints/artworks";
-import { fileUrl } from "@/lib/utils";
 import { notFound, useParams } from "next/navigation";
+import { useListUserPublishedArtworks } from "@/hooks/endpoints/artworks";
+import { useArtworkSort } from "@/hooks/params/artwork-sort";
+import { usePage } from "@/hooks/params/page";
+import { useTag } from "@/hooks/params/tag";
+import { fileUrl } from "@/lib/utils";
 import SortFilterArtworks from "../artworks/sort-filter-artworks";
 import ErrorUI from "../error-ui";
+import NoData from "../no-data";
 import Pagination from "../pagination";
 import ArtworkCard from "./artwork-card";
 import ArtworksDisplaySkeleton from "./artworks-display-skeleton";
-import { usePage } from "@/hooks/params/page";
-import { useArtworkSort } from "@/hooks/params/artwork-sort";
-import { useTag } from "@/hooks/params/tag";
-import NoData from "../no-data";
 
 export default function ArtworksDisplay() {
   const { username } = useParams<{ username: string }>();
@@ -57,7 +57,7 @@ export default function ArtworksDisplay() {
   const artworks = data.data.map((artwork) => ({
     id: artwork.id,
     title: artwork.title,
-    mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
+    mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path) as string,
     likesCount: artwork.artwork_likes_count,
     commentsCount: artwork.artwork_comments_count,
   }));
@@ -71,10 +71,7 @@ export default function ArtworksDisplay() {
 
       <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-          <ul
-            role="list"
-            className="mt-6 mb-8 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8"
-          >
+          <ul className="mt-6 mb-8 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8">
             {artworks.map((work) => (
               <li key={work.id}>
                 <ArtworkCard {...work} />

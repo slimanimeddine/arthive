@@ -1,17 +1,18 @@
 "use client";
 
+import Link from "next/link";
+import toast from "react-hot-toast";
 import { useSubmitArtistVerificationRequest } from "@/hooks/endpoints/artist-verification-requests";
 import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
-import { authHeader } from "@/lib/utils";
-import toast from "react-hot-toast";
-import LoadingUI from "../loading-ui";
-import ErrorUI from "../error-ui";
-import Verified from "./verified";
-import Link from "next/link";
 import { useSession } from "@/hooks/session";
+import { authHeader } from "@/lib/utils";
+import type { Session } from "@/types/misc";
+import ErrorUI from "../error-ui";
+import LoadingUI from "../loading-ui";
+import Verified from "./verified";
 
 export default function BecomeVerified() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const authConfig = authHeader(token);
   const { isPending, isError, data, error } =
     useShowAuthenticatedUser(authConfig);
@@ -42,7 +43,7 @@ export default function BecomeVerified() {
   }
 
   if (!data?.data) {
-    return <></>;
+    return <div></div>;
   }
 
   const isArtistVerified = data.data.artist_verified_at;

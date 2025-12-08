@@ -1,15 +1,16 @@
 "use client";
 
 import { useListAuthenticatedUserFollowers } from "@/hooks/endpoints/follows";
+import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
+import type { Session } from "@/types/misc";
 import ErrorUI from "../error-ui";
 import ArtistCard from "../main/artist-card";
 import FollowersSkeleton from "./followers-skeleton";
-import { useSession } from "@/hooks/session";
 import NoFollowers from "./no-followers";
 
 export default function Followers() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { isPending, isError, data, error } = useListAuthenticatedUserFollowers(
     authHeader(token),
   );
@@ -32,7 +33,7 @@ export default function Followers() {
     username: follower.username,
     country: follower.country,
     profilePictureUrl: follower.photo,
-    verified: follower.artist_verified_at ? true : false,
+    verified: !!follower.artist_verified_at,
   }));
 
   return (
@@ -45,7 +46,7 @@ export default function Followers() {
           </h2>
         </div>
 
-        <ul role="list" className="divide-y divide-gray-100">
+        <ul className="divide-y divide-gray-100">
           {followers.map((follower) => (
             <li key={follower.id}>
               <ArtistCard {...follower} />

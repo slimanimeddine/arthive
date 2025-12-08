@@ -1,6 +1,7 @@
-import { authHeader } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { authHeader } from "@/lib/utils";
+import type { Session } from "@/types/misc";
 import { useMarkNotificationAsRead } from "./endpoints/notifications";
 import { useSession } from "./session";
 
@@ -8,7 +9,7 @@ export function useMarkNotificationRead(
   notificationId: string,
   readAt: string | undefined,
 ) {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const queryClient = useQueryClient();
 
   const { mutate } = useMarkNotificationAsRead(authHeader(token));

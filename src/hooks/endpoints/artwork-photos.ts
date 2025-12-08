@@ -30,21 +30,21 @@ export type UploadArtworkPhotos403 = UnauthorizedApiResponse;
 export type UploadArtworkPhotos404 = NotFoundApiResponse;
 export type UploadArtworkPhotosBody = z.infer<typeof uploadArtworkPhotosBody>;
 
+import type { z } from "zod";
 import type { BodyType, ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type replaceArtworkPhotoPathBody,
-  type uploadArtworkPhotosBody,
+import type {
+  replaceArtworkPhotoPathBody,
+  uploadArtworkPhotosBody,
 } from "@/schemas/artwork-photos";
-import {
-  type ApiResource,
-  type SuccessNoDataApiResponse,
-  type NotFoundApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type {
+  ApiResource,
+  NotFoundApiResponse,
+  SuccessNoDataApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type ArtworkPhotoModel } from "@/types/models/artwork-photo";
-import { type z } from "zod";
+import type { ArtworkPhotoModel } from "@/types/models/artwork-photo";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

@@ -1,5 +1,5 @@
-import { MAX_WORDS, MIN_WORDS } from "@/lib/constants";
 import { z } from "zod";
+import { MAX_WORDS, MIN_WORDS } from "@/lib/constants";
 
 export const reviewArtistVerificationRequestBody = z.discriminatedUnion(
   "status",

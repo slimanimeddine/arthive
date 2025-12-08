@@ -23,21 +23,21 @@ export type UpdateArtworkComment403 = UnauthorizedApiResponse;
 export type UpdateArtworkComment404 = NotFoundApiResponse;
 export type UpdateArtworkCommentBody = z.infer<typeof updateArtworkCommentBody>;
 
+import type { z } from "zod";
 import type { BodyType, ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type postArtworkCommentBody,
-  type updateArtworkCommentBody,
+import type {
+  postArtworkCommentBody,
+  updateArtworkCommentBody,
 } from "@/schemas/artwork-comments";
-import {
-  type ApiResource,
-  type SuccessNoDataApiResponse,
-  type NotFoundApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type {
+  ApiResource,
+  NotFoundApiResponse,
+  SuccessNoDataApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type ArtworkCommentModel } from "@/types/models/artwork-comment";
-import { type z } from "zod";
+import type { ArtworkCommentModel } from "@/types/models/artwork-comment";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

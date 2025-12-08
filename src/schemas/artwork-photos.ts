@@ -1,5 +1,5 @@
-import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "@/lib/constants";
 import { z } from "zod";
+import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "@/lib/constants";
 
 /**
  * Upload photos to an artwork draft

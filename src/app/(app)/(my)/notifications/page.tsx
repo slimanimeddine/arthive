@@ -1,12 +1,12 @@
+import { QueryClient } from "@tanstack/react-query";
+import type { Metadata } from "next";
+import z from "zod";
 import InvalidParams from "@/components/invalid-params";
 import Notifications from "@/components/notifications";
 import { prefetchListAuthenticatedUserNotifications } from "@/hooks/endpoints/notifications";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { authHeader, parseParams } from "@/lib/utils";
-import { QueryClient } from "@tanstack/react-query";
-import { type Metadata } from "next";
-import z from "zod";
 
 export const metadata: Metadata = {
   ...seo("Notifications", "View your notifications"),

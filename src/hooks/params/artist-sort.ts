@@ -1,5 +1,5 @@
-import { ARTIST_SORT_VALUES } from "@/lib/constants";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { ARTIST_SORT_VALUES } from "@/lib/constants";
 
 export function useArtistSort() {
   const [artistSort, setArtistSort] = useQueryState(

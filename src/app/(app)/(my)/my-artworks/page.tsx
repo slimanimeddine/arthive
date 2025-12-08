@@ -1,12 +1,12 @@
+import { QueryClient } from "@tanstack/react-query";
+import type { Metadata } from "next";
+import z from "zod";
 import InvalidParams from "@/components/invalid-params";
 import MyArtworks from "@/components/my-artworks";
 import { prefetchListAuthenticatedUserArtworks } from "@/hooks/endpoints/artworks";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { authHeader, parseParams } from "@/lib/utils";
-import { QueryClient } from "@tanstack/react-query";
-import { type Metadata } from "next";
-import z from "zod";
 
 export const metadata: Metadata = {
   ...seo("My Artworks", "View your artworks on ArtHive"),

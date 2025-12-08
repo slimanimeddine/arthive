@@ -7,6 +7,7 @@ export default function LogoIcon() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Logo icon</title>
       <path
         d="M12.446 0L22.7801 8.82887C23.3936 9.35302 23.7473 10.1222 23.7473 10.9323V17.5862L13.4131 8.75734C12.7996 8.23319 12.446 7.464 12.446 6.65386V0Z"
         fill="#7B19D8"

@@ -1,7 +1,7 @@
-import { type Artwork } from "./artwork";
-import { type ArtworkComment } from "./artwork-comment";
-import { type ArtworkLike } from "./artwork-like";
-import { type BaseModel } from "./base";
+import type { Artwork } from "./artwork";
+import type { ArtworkComment } from "./artwork-comment";
+import type { ArtworkLike } from "./artwork-like";
+import type { BaseModel } from "./base";
 
 export type UserModel = BaseModel & {
   username: string;

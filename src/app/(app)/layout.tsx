@@ -1,10 +1,10 @@
+import { QueryClient } from "@tanstack/react-query";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { prefetchCheckIfUnreadNotificationsExist } from "@/hooks/endpoints/notifications";
 import { prefetchShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { getAuth } from "@/lib/dal";
 import { authHeader } from "@/lib/utils";
-import { QueryClient } from "@tanstack/react-query";
 
 type Props = Readonly<{
   children: React.ReactNode;
@@ -12,13 +12,15 @@ type Props = Readonly<{
 
 export default async function Layout({ children }: Props) {
   const { isAuth, token } = await getAuth();
-  const authConfig = isAuth ? authHeader(token!) : undefined;
 
-  const queryClient = new QueryClient();
+  if (isAuth && token) {
+    const authConfig = authHeader(token);
 
-  await prefetchCheckIfUnreadNotificationsExist(queryClient, authConfig);
+    const queryClient = new QueryClient();
 
-  await prefetchShowAuthenticatedUser(queryClient, authConfig);
+    await prefetchCheckIfUnreadNotificationsExist(queryClient, authConfig);
+    await prefetchShowAuthenticatedUser(queryClient, authConfig);
+  }
 
   return (
     <div className="min-h-full">

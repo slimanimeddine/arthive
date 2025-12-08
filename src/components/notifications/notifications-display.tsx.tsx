@@ -1,21 +1,22 @@
 "use client";
 
-import { useEcho } from "@/hooks/echo";
-import { useListAuthenticatedUserNotifications } from "@/hooks/endpoints/notifications";
-import { authHeader } from "@/lib/utils";
-import { type NotificationType } from "@/types/models/notification";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useEcho } from "@/hooks/echo";
+import { useListAuthenticatedUserNotifications } from "@/hooks/endpoints/notifications";
+import { usePage } from "@/hooks/params/page";
+import { useSession } from "@/hooks/session";
+import { authHeader } from "@/lib/utils";
+import type { Session } from "@/types/misc";
+import type { NotificationType } from "@/types/models/notification";
 import ErrorUI from "../error-ui";
 import Pagination from "../pagination";
+import NoNotifications from "./no-notifications";
 import Notification from "./notification";
 import NotificationsSkeleton from "./notifications-skeleton";
-import { useSession } from "@/hooks/session";
-import { usePage } from "@/hooks/params/page";
-import NoNotifications from "./no-notifications";
 
 export default function NotificationsDisplay() {
-  const { token, id } = useSession()!;
+  const { token, id } = useSession() as Session;
   const queryClient = useQueryClient();
 
   const { page } = usePage();
@@ -34,7 +35,6 @@ export default function NotificationsDisplay() {
 
   useEffect(() => {
     if (echo) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       echo.private(`App.Models.User.${id}`).notification(() => {
         void queryClient.invalidateQueries({
           queryKey: [`/api/v1/users/me/notifications`],
@@ -89,7 +89,7 @@ export default function NotificationsDisplay() {
 
   return (
     <div>
-      <ul role="list" className="mt-2 flex flex-col gap-2">
+      <ul className="mt-2 flex flex-col gap-2">
         {notifications.map((notification) => (
           <li key={notification.id}>
             <Notification notification={notification} />

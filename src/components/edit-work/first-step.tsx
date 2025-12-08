@@ -1,5 +1,11 @@
 "use client";
 
+import { XMarkIcon } from "@heroicons/react/20/solid";
+import { useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import toast from "react-hot-toast";
 import {
   useDeleteArtworkPhoto,
   useUploadArtworkPhotos,
@@ -7,13 +13,7 @@ import {
 import { useSession } from "@/hooks/session";
 import { MAX_FILE_SIZE } from "@/lib/constants";
 import { authHeader, turnBlobToFile } from "@/lib/utils";
-import { type Tag } from "@/types/misc";
-import { XMarkIcon } from "@heroicons/react/20/solid";
-import { useQueryClient } from "@tanstack/react-query";
-import Image from "next/image";
-import { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
-import toast from "react-hot-toast";
+import type { Session, Tag } from "@/types/misc";
 
 export type FirstStepProps = {
   artwork: {
@@ -35,7 +35,7 @@ export type FirstStepProps = {
 };
 
 export default function FirstStep({ artwork }: FirstStepProps) {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const queryClient = useQueryClient();
 
   const authConfig = authHeader(token);
@@ -133,6 +133,7 @@ export default function FirstStep({ artwork }: FirstStepProps) {
               />
 
               <button
+                type="button"
                 onClick={() => handleRemovePhoto(photo)}
                 className="absolute top-0 right-0 block h-4 w-4 translate-x-1/2 -translate-y-1/2 transform rounded-full bg-gray-400 ring-2 ring-white hover:h-[18px] hover:w-[18px]"
               >

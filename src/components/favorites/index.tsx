@@ -1,15 +1,16 @@
 "use client";
 
 import { useListAuthenticatedUserFavoriteArtworks } from "@/hooks/endpoints/favorites";
-import { authHeader, fileUrl } from "@/lib/utils";
-import ErrorUI from "../error-ui";
-import ArtworkCard from "../artist-profile/artwork-card";
-import FavoritesSkeleton from "./favorites-skeleton";
 import { useSession } from "@/hooks/session";
+import { authHeader, fileUrl } from "@/lib/utils";
+import type { Session } from "@/types/misc";
+import ArtworkCard from "../artist-profile/artwork-card";
+import ErrorUI from "../error-ui";
+import FavoritesSkeleton from "./favorites-skeleton";
 import NoBookmarkedArtworks from "./no-bookmarked-artworks";
 
 export default function Favorites() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { isPending, isError, data, error } =
     useListAuthenticatedUserFavoriteArtworks(authHeader(token));
 
@@ -28,7 +29,7 @@ export default function Favorites() {
   const artworks = data.data.map((artwork) => ({
     id: artwork.id,
     title: artwork.title,
-    mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path)!,
+    mainPhotoUrl: fileUrl(artwork.artwork_main_photo_path) as string,
     likesCount: artwork.artwork_likes_count,
     commentsCount: artwork.artwork_comments_count,
   }));
@@ -43,10 +44,7 @@ export default function Favorites() {
           </h2>
         </div>
 
-        <ul
-          role="list"
-          className="mt-6 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8"
-        >
+        <ul className="mt-6 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8">
           {artworks.map((work) => (
             <li key={work.id}>
               <ArtworkCard {...work} />

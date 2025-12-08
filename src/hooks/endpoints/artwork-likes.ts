@@ -41,15 +41,15 @@ export type UnlikeArtwork404 = NotFoundApiResponse;
 
 import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type ApiResource,
-  type SuccessNoDataApiResponse,
-  type NotFoundApiResponse,
-  type SuccessApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type {
+  ApiResource,
+  NotFoundApiResponse,
+  SuccessApiResponse,
+  SuccessNoDataApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type ArtworkLikeModel } from "@/types/models/artwork-like";
+import type { ArtworkLikeModel } from "@/types/models/artwork-like";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

@@ -1,9 +1,5 @@
 "use client";
 
-import { useArtworkSort } from "@/hooks/params/artwork-sort";
-import { useTag } from "@/hooks/params/tag";
-import { TAGS } from "@/lib/constants";
-import { classNames } from "@/lib/utils";
 import {
   Disclosure,
   DisclosureButton,
@@ -16,6 +12,10 @@ import {
   RadioGroup,
 } from "@headlessui/react";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
+import { useArtworkSort } from "@/hooks/params/artwork-sort";
+import { useTag } from "@/hooks/params/tag";
+import { TAGS } from "@/lib/constants";
+import { classNames } from "@/lib/utils";
 
 type SortOption = {
   id: number;
@@ -70,7 +70,7 @@ export default function SortFilterArtworks() {
                 <Radio
                   key={option}
                   value={option}
-                  className="flex cursor-pointer items-center justify-center rounded-md bg-white p-2 text-xs font-semibold whitespace-nowrap text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none data-[checked]:bg-indigo-100 data-[checked]:text-indigo-700 data-[checked]:ring-0 data-[checked]:hover:bg-indigo-200 data-[focus]:ring-2 data-[focus]:ring-indigo-600 data-[focus]:ring-offset-2 data-[focus]:data-[checked]:ring-2 sm:flex-1 [&:not([data-focus],[data-checked])]:ring-inset"
+                  className="flex cursor-pointer items-center justify-center rounded-md bg-white p-2 text-xs font-semibold whitespace-nowrap text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none data-checked:bg-indigo-100 data-checked:text-indigo-700 data-checked:ring-0 data-checked:hover:bg-indigo-200 data-focus:ring-2 data-focus:ring-indigo-600 data-focus:ring-offset-2 data-focus:data-checked:ring-2 sm:flex-1 [&:not([data-focus],[data-checked])]:ring-inset"
                 >
                   <span>{option}</span>
                   {option === tag && (
@@ -84,6 +84,7 @@ export default function SortFilterArtworks() {
                         viewBox="0 0 14 14"
                         className="h-3.5 w-3.5 stroke-indigo-700/50 group-hover:stroke-indigo-700/75"
                       >
+                        <title>Remove tag filter</title>
                         <path d="M4 4l6 6m0-6l-6 6" />
                       </svg>
                       <span className="absolute -inset-1" />
@@ -102,20 +103,21 @@ export default function SortFilterArtworks() {
                   Sort
                   <ChevronDownIcon
                     aria-hidden="true"
-                    className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                    className="-mr-1 ml-1 h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-500"
                   />
                 </MenuButton>
               </div>
 
               <MenuItems
                 transition
-                className="ring-opacity-5 absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[enter]:ease-out data-[leave]:duration-75 data-[leave]:ease-in"
+                className="ring-opacity-5 absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black transition focus:outline-none data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
                 <div className="py-1">
                   <MenuItem>
                     <button
+                      type="button"
                       onClick={() => setArtworkSort(null)}
-                      className="block w-full px-4 py-2 text-left text-sm text-gray-500 data-[focus]:bg-gray-100"
+                      className="block w-full px-4 py-2 text-left text-sm text-gray-500 data-focus:bg-gray-100"
                     >
                       None
                     </button>
@@ -124,12 +126,13 @@ export default function SortFilterArtworks() {
                   {sortOptions.map((option) => (
                     <MenuItem key={option.value}>
                       <button
+                        type="button"
                         onClick={() => setArtworkSort(option.value)}
                         className={classNames(
                           artworkSort === option.value
                             ? "font-medium text-gray-900"
                             : "text-gray-500",
-                          "block w-full px-4 py-2 text-left text-sm data-[focus]:bg-gray-100",
+                          "block w-full px-4 py-2 text-left text-sm data-focus:bg-gray-100",
                         )}
                       >
                         {option.label}

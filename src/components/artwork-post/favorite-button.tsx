@@ -1,17 +1,16 @@
 "use client";
 
 import { BookmarkIcon } from "@heroicons/react/24/outline";
-
+import { useQueryClient } from "@tanstack/react-query";
+import { notFound, useParams, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import {
   useCheckIfAuthenticatedUserIsFavoriting,
   useMarkArtworkAsFavorite,
   useRemoveArtworkFromFavorites,
 } from "@/hooks/endpoints/favorites";
-import { authHeader, classNames } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
-import { notFound, useParams, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import { useSession } from "@/hooks/session";
+import { authHeader, classNames } from "@/lib/utils";
 import ErrorUI from "../error-ui";
 
 export default function FavoriteButton() {
@@ -73,6 +72,7 @@ export default function FavoriteButton() {
   if (!session?.token) {
     return (
       <button
+        type="button"
         className="flex items-center justify-center rounded-full bg-gray-200 p-2 text-gray-700 transition-colors"
         onClick={() => router.push("/sign-in")}
       >
@@ -84,6 +84,7 @@ export default function FavoriteButton() {
   if (isPending) {
     return (
       <button
+        type="button"
         disabled
         className="flex cursor-not-allowed items-center justify-center rounded-full bg-gray-200 p-2 text-gray-700 transition-colors"
       >
@@ -104,6 +105,7 @@ export default function FavoriteButton() {
 
   return (
     <button
+      type="button"
       onClick={() => handleFavoriteToggle(!!isFavoriting)}
       className={classNames(
         "flex items-center justify-center rounded-full p-2 transition-colors",

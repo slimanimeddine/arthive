@@ -1,5 +1,11 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import {
   type PostArtworkCommentBody,
   usePostArtworkComment,
@@ -7,12 +13,6 @@ import {
 import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
 import { postArtworkCommentBody } from "@/schemas/artwork-comments";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 export default function PostComment() {
   const session = useSession();
@@ -29,7 +29,7 @@ export default function PostComment() {
     setTimeout(() => {
       clearErrors("comment_text");
     }, 6000);
-  }, [clearErrors, formState.errors.comment_text]);
+  }, [clearErrors]);
 
   const authConfig = session?.token ? authHeader(session.token) : undefined;
 

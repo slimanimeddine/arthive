@@ -1,5 +1,5 @@
-import { type BaseModel } from "./base";
-import { type User } from "./user";
+import type { BaseModel } from "./base";
+import type { User } from "./user";
 
 export type ArtistVerificationRequestModel = BaseModel & {
   user_id: string;

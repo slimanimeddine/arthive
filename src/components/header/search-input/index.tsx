@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
+import { useSearchQuery } from "@/hooks/params/search-query";
 import ArtistsSection from "./artists-section";
 import ArtworksSection from "./artworks-section";
-import { useSearchQuery } from "@/hooks/params/search-query";
 
 export default function SearchComponent() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +31,7 @@ export default function SearchComponent() {
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
+            <title>Search Icon</title>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -56,7 +57,11 @@ export default function SearchComponent() {
 
       {/* Click outside to close */}
       {isOpen && (
-        <div className="fixed inset-0 z-0" onClick={() => setIsOpen(false)} />
+        <button
+          type="button"
+          className="fixed inset-0 z-0"
+          onClick={() => setIsOpen(false)}
+        />
       )}
     </div>
   );

@@ -1,23 +1,24 @@
 "use client";
 
-import {
-  type UpdateArtworkDraftBody,
-  useUpdateArtworkDraft,
-} from "@/hooks/endpoints/artworks";
-import { TAGS } from "@/lib/constants";
-import { authHeader, getDirtyValues } from "@/lib/utils";
-import { updateArtworkDraftBody } from "@/schemas/artworks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { type FirstStepProps } from "./first-step";
+import {
+  type UpdateArtworkDraftBody,
+  useUpdateArtworkDraft,
+} from "@/hooks/endpoints/artworks";
 import { useSession } from "@/hooks/session";
+import { TAGS } from "@/lib/constants";
+import { authHeader, getDirtyValues } from "@/lib/utils";
+import { updateArtworkDraftBody } from "@/schemas/artworks";
+import type { Session } from "@/types/misc";
+import type { FirstStepProps } from "./first-step";
 
 type ThirdStepProps = FirstStepProps;
 
 export default function ThirdStep({ artwork }: ThirdStepProps) {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { mutate, isPending } = useUpdateArtworkDraft(authHeader(token));
 
   const queryClient = useQueryClient();
@@ -72,7 +73,10 @@ export default function ThirdStep({ artwork }: ThirdStepProps) {
     >
       <h2 className="mb-4 text-2xl font-bold">Step 3: Fill Details</h2>
       <div className="mb-4">
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="title"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
           Title:
         </label>
         <input
@@ -86,7 +90,10 @@ export default function ThirdStep({ artwork }: ThirdStepProps) {
         )}
       </div>
       <div className="mb-4">
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="description"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
           Description:
         </label>
         <textarea
@@ -101,7 +108,10 @@ export default function ThirdStep({ artwork }: ThirdStepProps) {
         )}
       </div>
       <div className="mb-4">
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="tags"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
           Categories:
         </label>
         <select

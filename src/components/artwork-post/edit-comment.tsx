@@ -1,13 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
 import { useEditCommentStore } from "@/stores/edit-comment-store";
-import LoadingUI from "../loading-ui";
+import type { Session } from "@/types/misc";
 import ErrorUI from "../error-ui";
+import LoadingUI from "../loading-ui";
 import EditCommentForm from "./edit-comment-form";
-import Link from "next/link";
 
 type EditCommentProps = {
   userId: string;
@@ -16,7 +17,7 @@ type EditCommentProps = {
 };
 
 export default function EditComment({ userId, id, content }: EditCommentProps) {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { isPending, isError, data, error } = useShowAuthenticatedUser(
     authHeader(token),
   );

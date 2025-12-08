@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import Echo, { type Broadcaster } from "laravel-echo";
+import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
 import { env } from "@/env/client";
 import { axiosInstance } from "@/lib/axios";
-import Pusher from "pusher-js";
 
 interface Authorizer {
   authorize: (socketId: string, callback: CallableFunction) => void;

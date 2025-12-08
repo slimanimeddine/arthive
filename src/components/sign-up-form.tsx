@@ -1,10 +1,10 @@
 "use client";
-import { type SignUpBody, useSignUp } from "@/hooks/endpoints/authentication";
-import { signUpBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { type SignUpBody, useSignUp } from "@/hooks/endpoints/authentication";
+import { signUpBody } from "@/schemas/authentication";
 
 export default function SignUpForm() {
   const { handleSubmit, register, formState, reset } = useForm<SignUpBody>({

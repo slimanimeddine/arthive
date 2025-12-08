@@ -37,16 +37,16 @@ export type UnfollowUser404 = NotFoundApiResponse;
 
 import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type ApiResource,
-  type SuccessNoDataApiResponse,
-  type NotFoundApiResponse,
-  type SuccessApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type {
+  ApiResource,
+  NotFoundApiResponse,
+  SuccessApiResponse,
+  SuccessNoDataApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type FollowModel } from "@/types/models/follow";
-import { type UserModel } from "@/types/models/user";
+import type { FollowModel } from "@/types/models/follow";
+import type { UserModel } from "@/types/models/user";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

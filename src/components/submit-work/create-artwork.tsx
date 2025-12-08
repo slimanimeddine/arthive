@@ -39,6 +39,7 @@ export default function CreateArtwork() {
       {renderStep()}
       <div className="mt-6 flex justify-between">
         <button
+          type="button"
           onClick={handleBack}
           className={classNames(
             "rounded-md px-4 py-2 text-white transition-colors",
@@ -51,6 +52,7 @@ export default function CreateArtwork() {
           Back
         </button>
         <button
+          type="button"
           onClick={handleNext}
           className={classNames(
             "rounded-md px-4 py-2 text-white transition-colors",

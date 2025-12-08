@@ -1,11 +1,11 @@
 "use client";
 
-import { useListUserReceivedLikesCountByTag } from "@/hooks/endpoints/artwork-likes";
 import { HeartIcon } from "@heroicons/react/24/outline";
+import { notFound } from "next/navigation";
+import { useListUserReceivedLikesCountByTag } from "@/hooks/endpoints/artwork-likes";
 import ErrorUI from "../error-ui";
 import LoadingUI from "../loading-ui";
 import TotalRatings from "./total-ratings";
-import { notFound } from "next/navigation";
 
 type RatingsByTagProps = {
   username: string;
@@ -27,7 +27,7 @@ export default function RatingsByTag({ username }: RatingsByTagProps) {
   }
 
   if (!data?.data || data.data.length === 0) {
-    return <></>;
+    return <div></div>;
   }
 
   const likesCountByTag = data.data.map((item) => ({

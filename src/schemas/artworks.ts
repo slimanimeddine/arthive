@@ -1,3 +1,4 @@
+import { z } from "zod";
 import {
   ACCEPTED_IMAGE_TYPES,
   MAX_FILE_SIZE,
@@ -5,7 +6,6 @@ import {
   MIN_WORDS,
   TAGS,
 } from "@/lib/constants";
-import { z } from "zod";
 
 /**
  * Create a new artwork

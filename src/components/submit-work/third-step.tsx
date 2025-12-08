@@ -1,22 +1,23 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import type { z } from "zod";
 import { useCreateArtwork } from "@/hooks/endpoints/artworks";
 import { useSession } from "@/hooks/session";
 import { TAGS } from "@/lib/constants";
 import { authHeader } from "@/lib/utils";
 import { createArtworkBody } from "@/schemas/artworks";
 import useArtworkStore from "@/stores/artwork-store";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { type z } from "zod";
+import type { Session } from "@/types/misc";
 
 const schema = createArtworkBody.omit({ photos: true });
 type FormData = z.infer<typeof schema>;
 
 export default function ThirdStep() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { mutate } = useCreateArtwork(authHeader(token));
 
   const queryClient = useQueryClient();
@@ -53,7 +54,7 @@ export default function ThirdStep() {
       description: data.description,
       tags: data.tags,
       photos: photos.map((item) => ({
-        file: item === mainPhoto ? croppedMainPhoto! : item,
+        file: item === mainPhoto ? (croppedMainPhoto as Blob) : item,
         is_main: item === mainPhoto,
       })),
     };
@@ -88,7 +89,10 @@ export default function ThirdStep() {
     >
       <h2 className="mb-4 text-2xl font-bold">Step 3: Fill Details</h2>
       <div className="mb-4">
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="title"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
           Title:
         </label>
         <input
@@ -100,7 +104,10 @@ export default function ThirdStep() {
         )}
       </div>
       <div className="mb-4">
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="description"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
           Description:
         </label>
         <textarea
@@ -113,7 +120,10 @@ export default function ThirdStep() {
         )}
       </div>
       <div className="mb-4">
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="tags"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
           Categories:
         </label>
         <select

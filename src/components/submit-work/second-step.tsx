@@ -1,9 +1,9 @@
 "use client";
-import { getCroppedImg, getUrlFromBlob } from "@/lib/utils";
-import useArtworkStore from "@/stores/artwork-store";
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
+import { getCroppedImg, getUrlFromBlob } from "@/lib/utils";
+import useArtworkStore from "@/stores/artwork-store";
 
 export default function SecondStep() {
   const { photos, mainPhoto, setMainPhoto, setCroppedMainPhoto } =
@@ -12,7 +12,7 @@ export default function SecondStep() {
   const [zoom, setZoom] = useState(1);
 
   const onCropComplete = useCallback(
-    async (croppedArea: Area, croppedAreaPixels: Area) => {
+    async (_croppedArea: Area, croppedAreaPixels: Area) => {
       if (!mainPhoto) return;
       const croppedImage = await getCroppedImg(
         getUrlFromBlob(mainPhoto),

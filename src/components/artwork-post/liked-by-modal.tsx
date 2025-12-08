@@ -24,7 +24,7 @@ export default function LikedByModal({ likes }: LikedByModalProps) {
 
   return (
     <>
-      <button onClick={() => setOpen(true)}>
+      <button type="button" onClick={() => setOpen(true)}>
         <span className="font-semibold">Others</span>
       </button>
 
@@ -41,10 +41,7 @@ export default function LikedByModal({ likes }: LikedByModalProps) {
               className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95"
             >
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <ul
-                  role="list"
-                  className="h-2/3 max-h-96 divide-y divide-gray-100 overflow-y-scroll"
-                >
+                <ul className="h-2/3 max-h-96 divide-y divide-gray-100 overflow-y-scroll">
                   {likes.map((like) => (
                     <li key={like.id}>
                       <Link

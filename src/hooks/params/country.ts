@@ -1,5 +1,5 @@
-import { COUNTRIES } from "@/lib/constants";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { COUNTRIES } from "@/lib/constants";
 
 export function useCountry() {
   const [country, setCountry] = useQueryState(

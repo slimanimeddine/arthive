@@ -6,11 +6,11 @@ import { useCategory } from "@/hooks/params/category";
 import { useCountry } from "@/hooks/params/country";
 import { usePage } from "@/hooks/params/page";
 import { useSearchQuery } from "@/hooks/params/search-query";
-import ArtistsDisplaySkeleton from "./artists-display-skeleton";
 import ErrorUI from "../error-ui";
 import NoData from "../no-data";
-import ArtistCard from "./artist-card";
 import Pagination from "../pagination";
+import ArtistCard from "./artist-card";
+import ArtistsDisplaySkeleton from "./artists-display-skeleton";
 
 export default function ArtistsDisplayInner() {
   const { page } = usePage();

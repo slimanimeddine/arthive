@@ -10,10 +10,7 @@ export default function FavoritesSkeleton() {
           </h2>
         </div>
 
-        <ul
-          role="list"
-          className="mt-6 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8"
-        >
+        <ul className="mt-6 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8">
           {[...Array(9).keys()].map((item) => (
             <li key={item}>
               <ArtworkCardSkeleton />

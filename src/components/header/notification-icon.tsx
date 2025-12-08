@@ -1,12 +1,13 @@
 "use client";
 
+import { BellIcon } from "@heroicons/react/24/outline";
 import { useCheckIfUnreadNotificationsExist } from "@/hooks/endpoints/notifications";
 import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
-import { BellIcon } from "@heroicons/react/24/outline";
+import type { Session } from "@/types/misc";
 
 export default function NotificationIcon() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
 
   const { isPending, isError, data } = useCheckIfUnreadNotificationsExist(
     authHeader(token),
@@ -21,7 +22,7 @@ export default function NotificationIcon() {
   }
 
   if (!data?.data) {
-    return <></>;
+    return <div></div>;
   }
 
   return (

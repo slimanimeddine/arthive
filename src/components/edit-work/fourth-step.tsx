@@ -1,18 +1,19 @@
 "use client";
 
-import { usePublishArtwork } from "@/hooks/endpoints/artworks";
-import { authHeader } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import toast from "react-hot-toast";
-import { type FirstStepProps } from "./first-step";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { usePublishArtwork } from "@/hooks/endpoints/artworks";
 import { useSession } from "@/hooks/session";
+import { authHeader } from "@/lib/utils";
+import type { Session } from "@/types/misc";
+import type { FirstStepProps } from "./first-step";
 
 type FourthStepProps = FirstStepProps;
 
 export default function FourthStep({ artwork }: FourthStepProps) {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const router = useRouter();
   const { mutate } = usePublishArtwork(authHeader(token));
 
@@ -92,6 +93,7 @@ export default function FourthStep({ artwork }: FourthStepProps) {
         </p>
       </div>
       <button
+        type="button"
         onClick={handlePublish}
         className="mt-4 rounded-md bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600"
       >

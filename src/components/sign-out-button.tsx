@@ -1,13 +1,14 @@
 "use client";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { deleteSession } from "@/actions/session";
 import { useSignOut } from "@/hooks/endpoints/authentication";
 import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+import type { Session } from "@/types/misc";
 
 export default function SignOutButton() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { mutate, isPending } = useSignOut(authHeader(token));
 
   const router = useRouter();

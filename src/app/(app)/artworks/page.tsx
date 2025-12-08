@@ -1,12 +1,12 @@
+import { QueryClient } from "@tanstack/react-query";
+import type { Metadata } from "next";
+import z from "zod";
 import ArtworksDisplay from "@/components/artworks/artworks-display";
 import InvalidParams from "@/components/invalid-params";
 import { prefetchListPublishedArtworks } from "@/hooks/endpoints/artworks";
 import { ARTWORK_SORT_VALUES, TAGS } from "@/lib/constants";
 import seo from "@/lib/seo";
 import { parseParams } from "@/lib/utils";
-import { QueryClient } from "@tanstack/react-query";
-import { type Metadata } from "next";
-import z from "zod";
 
 export const metadata: Metadata = {
   ...seo(

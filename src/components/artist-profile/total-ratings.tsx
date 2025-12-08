@@ -1,9 +1,9 @@
 "use client";
 
-import { useShowUserReceivedLikesCount } from "@/hooks/endpoints/artwork-likes";
 import { StarIcon } from "@heroicons/react/24/solid";
-import LoadingUI from "../loading-ui";
 import { notFound } from "next/navigation";
+import { useShowUserReceivedLikesCount } from "@/hooks/endpoints/artwork-likes";
+import LoadingUI from "../loading-ui";
 
 type TotalRatingsProps = {
   username: string;
@@ -24,7 +24,7 @@ export default function TotalRatings({ username }: TotalRatingsProps) {
   }
 
   if (!data?.data) {
-    return <></>;
+    return <div></div>;
   }
 
   return (

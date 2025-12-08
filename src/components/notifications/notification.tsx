@@ -1,4 +1,4 @@
-import { type NotificationItem } from "@/types/models/notification";
+import type { NotificationItem } from "@/types/models/notification";
 import ArtistVerificationResponseNotification from "./artist-verification-response notification";
 import ArtworkCommentNotification from "./artwork-comment-notification";
 import ArtworkLikeNotification from "./artwork-like-notification";
@@ -69,5 +69,5 @@ export default function Notification({ notification }: NotificationProps) {
     );
   }
 
-  return <></>;
+  return <div></div>;
 }

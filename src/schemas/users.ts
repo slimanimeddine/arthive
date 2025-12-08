@@ -1,10 +1,10 @@
+import { z } from "zod";
 import {
   ACCEPTED_IMAGE_TYPES,
   MAX_FILE_SIZE,
   MAX_WORDS,
   MIN_WORDS,
 } from "@/lib/constants";
-import { z } from "zod";
 
 /**
  * Update the currently authenticated user

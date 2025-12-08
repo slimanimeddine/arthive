@@ -1,5 +1,5 @@
-import { type BaseModel } from "./base";
-import { type User } from "./user";
+import type { BaseModel } from "./base";
+import type { User } from "./user";
 
 export type FollowModel = BaseModel & {
   follower_id: string;

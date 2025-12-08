@@ -23,12 +23,12 @@ export type ListUserArtworkTags404 = NotFoundApiResponse;
 
 import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type ApiResource,
-  type NotFoundApiResponse,
-  type SuccessApiResponse,
+import type {
+  ApiResource,
+  NotFoundApiResponse,
+  SuccessApiResponse,
 } from "@/types/api-responses";
-import { type TagModel } from "@/types/models/tag";
+import type { TagModel } from "@/types/models/tag";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

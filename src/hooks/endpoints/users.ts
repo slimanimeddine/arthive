@@ -54,18 +54,18 @@ export type UpdateAuthenticatedUserBody = z.infer<
   typeof updateAuthenticatedUserBody
 >;
 
+import type { z } from "zod";
 import type { BodyType, ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import { type updateAuthenticatedUserBody } from "@/schemas/users";
-import {
-  type ApiResource,
-  type NotFoundApiResponse,
-  type PaginatedApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type { updateAuthenticatedUserBody } from "@/schemas/users";
+import type {
+  ApiResource,
+  NotFoundApiResponse,
+  PaginatedApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type User, type UserModel } from "@/types/models/user";
-import { type z } from "zod";
+import type { User, UserModel } from "@/types/models/user";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

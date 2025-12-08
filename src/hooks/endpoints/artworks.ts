@@ -76,23 +76,23 @@ export type UpdateArtworkDraft403 = UnauthorizedApiResponse;
 export type UpdateArtworkDraft404 = NotFoundApiResponse;
 export type UpdateArtworkDraftBody = z.infer<typeof updateArtworkDraftBody>;
 
+import type { z } from "zod";
 import type { BodyType, ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type createArtworkBody,
-  type updateArtworkDraftBody,
+import type {
+  createArtworkBody,
+  updateArtworkDraftBody,
 } from "@/schemas/artworks";
-import {
-  type ApiResource,
-  type SuccessNoDataApiResponse,
-  type NotFoundApiResponse,
-  type PaginatedApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type {
+  ApiResource,
+  NotFoundApiResponse,
+  PaginatedApiResponse,
+  SuccessNoDataApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type Tag } from "@/types/misc";
-import { type Artwork, type ArtworkModel } from "@/types/models/artwork";
-import { type z } from "zod";
+import type { Tag } from "@/types/misc";
+import type { Artwork, ArtworkModel } from "@/types/models/artwork";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

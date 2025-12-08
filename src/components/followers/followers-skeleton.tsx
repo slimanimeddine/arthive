@@ -10,7 +10,7 @@ export default function FollowersSkeleton() {
           </h2>
         </div>
 
-        <ul role="list" className="divide-y divide-gray-100">
+        <ul className="divide-y divide-gray-100">
           {[...Array(10).keys()].map((item) => (
             <li key={item}>
               <ArtistListItemSkeleton />

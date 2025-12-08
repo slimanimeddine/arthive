@@ -62,24 +62,24 @@ export type SendPasswordResetLinkBody = z.infer<
   typeof sendPasswordResetLinkBody
 >;
 
+import type { z } from "zod";
 import type { BodyType, ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type changePasswordBody,
-  type deleteUserBody,
-  type resetPasswordBody,
-  type sendPasswordResetLinkBody,
-  type signInBody,
-  type signUpBody,
+import type {
+  changePasswordBody,
+  deleteUserBody,
+  resetPasswordBody,
+  sendPasswordResetLinkBody,
+  signInBody,
+  signUpBody,
 } from "@/schemas/authentication";
-import {
-  type ErrorApiResponse,
-  type SuccessNoDataApiResponse,
-  type SuccessApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type {
+  ErrorApiResponse,
+  SuccessApiResponse,
+  SuccessNoDataApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type z } from "zod";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

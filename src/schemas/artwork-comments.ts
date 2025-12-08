@@ -1,5 +1,5 @@
-import { MAX_WORDS } from "@/lib/constants";
 import { z } from "zod";
+import { MAX_WORDS } from "@/lib/constants";
 
 /**
  * Post a comment on an artwork

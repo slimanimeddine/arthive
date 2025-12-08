@@ -1,12 +1,13 @@
 "use client";
 
 import { useGetAuthenticatedUserArtistVerificationRequests } from "@/hooks/endpoints/artist-verification-requests";
-import { addOrdinalSuffix, authHeader, classNames } from "@/lib/utils";
-import LoadingUI from "../loading-ui";
-import ErrorUI from "../error-ui";
-import EmptyUI from "../empty-ui";
-import RejectionReasonModal from "./rejection-reason-modal";
 import { useSession } from "@/hooks/session";
+import { addOrdinalSuffix, authHeader, classNames } from "@/lib/utils";
+import type { Session } from "@/types/misc";
+import EmptyUI from "../empty-ui";
+import ErrorUI from "../error-ui";
+import LoadingUI from "../loading-ui";
+import RejectionReasonModal from "./rejection-reason-modal";
 
 function statusClass(status: "pending" | "approved" | "rejected") {
   switch (status) {
@@ -22,7 +23,7 @@ function statusClass(status: "pending" | "approved" | "rejected") {
 }
 
 export default function VerificationSubmissions() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { isPending, isError, data, error } =
     useGetAuthenticatedUserArtistVerificationRequests(authHeader(token));
 
@@ -55,7 +56,7 @@ export default function VerificationSubmissions() {
             Verification Submission History
           </h2>
         </div>
-        <ul role="list" className="divide-y divide-gray-100">
+        <ul className="divide-y divide-gray-100">
           {submissions.map((submission, index) => (
             <li
               key={submission.id}

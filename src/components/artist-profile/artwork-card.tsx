@@ -43,11 +43,11 @@ export default function ArtworkCard({
             {title ?? ""}
           </p>
           <div className="flex items-center justify-end gap-x-2">
-            <div className="flex items-center gap-x-[1px]">
+            <div className="flex items-center gap-x-px">
               <HeartIcon className="h-4 w-4" />
               <span className="text-sm">{likesCount}</span>
             </div>
-            <div className="flex items-center gap-x-[1px]">
+            <div className="flex items-center gap-x-px">
               <ChatBubbleOvalLeftIcon className="h-4 w-4" />
               <span className="text-sm">{commentsCount}</span>
             </div>

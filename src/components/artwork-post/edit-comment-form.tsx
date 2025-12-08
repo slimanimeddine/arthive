@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import {
   type UpdateArtworkCommentBody,
   useUpdateArtworkComment,
@@ -8,11 +13,7 @@ import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
 import { updateArtworkCommentBody } from "@/schemas/artwork-comments";
 import { useEditCommentStore } from "@/stores/edit-comment-store";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import type { Session } from "@/types/misc";
 
 type EditCommentProps = {
   commentId: string;
@@ -23,7 +24,7 @@ export default function EditCommentForm({
   defaultContent,
   commentId,
 }: EditCommentProps) {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { id: artworkId } = useParams<{ id: string }>();
 
   const setFormVisible = useEditCommentStore((state) => state.setFormVisible);
@@ -85,8 +86,9 @@ export default function EditCommentForm({
         )}
       </div>
       <div className="flex justify-end gap-2 pt-2">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <button
+            type="button"
             onClick={() => setFormVisible(false)}
             className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
           >
@@ -94,7 +96,7 @@ export default function EditCommentForm({
           </button>
         </div>
 
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <button
             disabled={isDisabled}
             type="submit"

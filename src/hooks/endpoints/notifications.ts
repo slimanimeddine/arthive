@@ -43,13 +43,13 @@ export type MarkNotificationAsRead404 = NotFoundApiResponse;
 
 import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type ErrorApiResponse,
-  type SuccessNoDataApiResponse,
-  type NotFoundApiResponse,
-  type PaginatedNotificationResponse,
-  type SuccessApiResponse,
-  type UnauthenticatedApiResponse,
+import type {
+  ErrorApiResponse,
+  NotFoundApiResponse,
+  PaginatedNotificationResponse,
+  SuccessApiResponse,
+  SuccessNoDataApiResponse,
+  UnauthenticatedApiResponse,
 } from "@/types/api-responses";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];

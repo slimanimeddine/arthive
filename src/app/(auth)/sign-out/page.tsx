@@ -1,7 +1,8 @@
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import SignOutButton from "@/components/sign-out-button";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
-import { type Metadata } from "next";
 
 export const metadata: Metadata = {
   ...seo("Sign Out", "Sign out of your account on ArtHive"),
@@ -25,7 +26,11 @@ export default async function Page() {
             <SignOutButton />
           </div>
           <div className="w-full">
-            <button className="flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset hover:bg-gray-50">
+            <button
+              type="button"
+              className="flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+              onClick={() => redirect("/")}
+            >
               Cancel
             </button>
           </div>

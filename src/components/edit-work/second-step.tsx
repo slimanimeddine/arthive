@@ -1,21 +1,22 @@
 "use client";
-import {
-  useReplaceArtworkPhotoPath,
-  useSetArtworkPhotoAsMain,
-} from "@/hooks/endpoints/artwork-photos";
-import { authHeader, getCroppedImg, turnBlobToFile } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
-import { type FirstStepProps } from "./first-step";
 import toast from "react-hot-toast";
+import {
+  useReplaceArtworkPhotoPath,
+  useSetArtworkPhotoAsMain,
+} from "@/hooks/endpoints/artwork-photos";
 import { useSession } from "@/hooks/session";
+import { authHeader, getCroppedImg, turnBlobToFile } from "@/lib/utils";
+import type { Session } from "@/types/misc";
+import type { FirstStepProps } from "./first-step";
 
 type SecondStepProps = FirstStepProps;
 
 export default function SecondStep({ artwork }: SecondStepProps) {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
 
@@ -40,7 +41,7 @@ export default function SecondStep({ artwork }: SecondStepProps) {
   const { mutate: mutateReplace } = useReplaceArtworkPhotoPath(authConfig);
 
   const onCropComplete = useCallback(
-    async (croppedArea: Area, croppedAreaPixels: Area) => {
+    async (_croppedArea: Area, croppedAreaPixels: Area) => {
       if (!mainPhoto) return;
       const croppedImage = await getCroppedImg(
         artwork.mainPhotoUrl,

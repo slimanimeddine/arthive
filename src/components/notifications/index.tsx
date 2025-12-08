@@ -1,16 +1,17 @@
 "use client";
-import { useEcho } from "@/hooks/echo";
-import { useMarkAllNotificationsAsRead } from "@/hooks/endpoints/notifications";
-import { authHeader } from "@/lib/utils";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useEcho } from "@/hooks/echo";
+import { useMarkAllNotificationsAsRead } from "@/hooks/endpoints/notifications";
 import { useSession } from "@/hooks/session";
+import { authHeader } from "@/lib/utils";
+import type { Session } from "@/types/misc.js";
 import NotificationsDisplay from "./notifications-display.tsx";
 
 export default function Notifications() {
-  const { token, id } = useSession()!;
+  const { token, id } = useSession() as Session;
   const queryClient = useQueryClient();
 
   const authConfig = authHeader(token);
@@ -42,7 +43,6 @@ export default function Notifications() {
 
   useEffect(() => {
     if (echo) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       echo.private(`App.Models.User.${id}`).notification(() => {
         void queryClient.invalidateQueries({
           queryKey: [`/api/v1/users/me/notifications`],

@@ -1,19 +1,19 @@
 "use client";
 
-import { useShowPublishedArtwork } from "@/hooks/endpoints/artworks";
-import { fileUrl } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound, useParams } from "next/navigation";
+import { useShowPublishedArtwork } from "@/hooks/endpoints/artworks";
+import { fileUrl } from "@/lib/utils";
 import AvatarPlaceholder from "../avatar-placeholder";
 import ErrorUI from "../error-ui";
+import ArtworkPostSkeleton from "../ui-skeletons/artwork-post-skeleton";
 import Comment from "./comment";
 import FavoriteButton from "./favorite-button";
 import FollowButton from "./follow-button";
 import LikeButton from "./like-button";
 import LikedByModal from "./liked-by-modal";
 import PostComment from "./post-comment";
-import ArtworkPostSkeleton from "../ui-skeletons/artwork-post-skeleton";
-import { notFound, useParams } from "next/navigation";
 
 export default function ArtworkPost() {
   const { id } = useParams<{ id: string }>();
@@ -33,7 +33,7 @@ export default function ArtworkPost() {
   }
 
   if (!data?.data) {
-    return <></>;
+    return <div></div>;
   }
 
   const artworkData = data.data;
@@ -44,12 +44,12 @@ export default function ArtworkPost() {
     description: artworkData.description,
     publishedAt: artworkData.created_at,
     // photos
-    mainPhotoUrl: fileUrl(artworkData.artwork_main_photo_path)!,
+    mainPhotoUrl: fileUrl(artworkData.artwork_main_photo_path) as string,
     photos: artworkData.artwork_photos
       .filter((photo) => photo.is_main === 0)
       .map((photo) => ({
         id: photo.id,
-        url: fileUrl(photo.path)!,
+        url: fileUrl(photo.path) as string,
       })),
     // counts
     commentsCount: artworkData.artwork_comments_count,

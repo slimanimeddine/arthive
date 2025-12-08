@@ -1,15 +1,16 @@
 "use client";
 import { useShowAuthenticatedUser } from "@/hooks/endpoints/users";
+import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
+import type { Session } from "@/types/misc";
+import EmailNotVerifiedAlert from "../email-not-verified-alert";
 import ErrorUI from "../error-ui";
+import LoadingUI from "../loading-ui";
 import ChangePasswordForm from "./change-password-form";
 import PersonalInformationForm from "./personal-information-form";
-import EmailNotVerifiedAlert from "../email-not-verified-alert";
-import { useSession } from "@/hooks/session";
-import LoadingUI from "../loading-ui";
 
 export default function EditProfile() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const { isPending, isError, data, error } = useShowAuthenticatedUser(
     authHeader(token),
   );

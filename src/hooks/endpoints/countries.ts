@@ -15,8 +15,8 @@ export type ListCountries200 = ApiResource<CountryModel[]>;
 
 import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import { type ApiResource } from "@/types/api-responses";
-import { type CountryModel } from "@/types/models/country";
+import type { ApiResource } from "@/types/api-responses";
+import type { CountryModel } from "@/types/models/country";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

@@ -1,10 +1,10 @@
 "use client";
-import { COUNTRIES } from "@/lib/constants";
 import {
   type FieldValues,
-  useController,
   type UseControllerProps,
+  useController,
 } from "react-hook-form";
+import { COUNTRIES } from "@/lib/constants";
 
 export type SelectCountryProps<T extends FieldValues> = UseControllerProps<T>;
 

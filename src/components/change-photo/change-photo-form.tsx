@@ -1,6 +1,11 @@
 "use client";
-import { useSession } from "@/hooks/session";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import Cropper, { type Area } from "react-easy-crop";
+import toast from "react-hot-toast";
 import { useUpdateAuthenticatedUser } from "@/hooks/endpoints/users";
+import { useSession } from "@/hooks/session";
 import { MAX_FILE_SIZE } from "@/lib/constants";
 import {
   authHeader,
@@ -9,14 +14,10 @@ import {
   getUrlFromBlob,
   turnBlobToFile,
 } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import Cropper, { type Area } from "react-easy-crop";
-import toast from "react-hot-toast";
+import type { Session } from "@/types/misc";
 
 export default function ChangePhotoForm() {
-  const { token } = useSession()!;
+  const { token } = useSession() as Session;
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useUpdateAuthenticatedUser(authHeader(token));
@@ -39,7 +40,7 @@ export default function ChangePhotoForm() {
   });
 
   const onCropComplete = useCallback(
-    async (croppedArea: Area, croppedAreaPixels: Area) => {
+    async (_croppedArea: Area, croppedAreaPixels: Area) => {
       if (!file) return;
       const croppedImage = await getCroppedImg(
         file,

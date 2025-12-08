@@ -1,8 +1,8 @@
 "use client";
-import { type ListPublishedArtworksParams } from "@/hooks/endpoints/artworks";
-import Link from "next/link";
-import ArtworksSectionInner from "./artworks-section-inner";
 import type { Route } from "next";
+import Link from "next/link";
+import type { ListPublishedArtworksParams } from "@/hooks/endpoints/artworks";
+import ArtworksSectionInner from "./artworks-section-inner";
 
 type ArtworksSectionProps = {
   title: string;

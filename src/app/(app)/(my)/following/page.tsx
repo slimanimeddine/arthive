@@ -1,10 +1,10 @@
+import { QueryClient } from "@tanstack/react-query";
+import type { Metadata } from "next";
 import Following from "@/components/following";
 import { prefetchListAuthenticatedUserFollowing } from "@/hooks/endpoints/follows";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { authHeader } from "@/lib/utils";
-import { QueryClient } from "@tanstack/react-query";
-import { type Metadata } from "next";
 
 export const metadata: Metadata = {
   ...seo("Following", "View the users you are following on ArtHive"),

@@ -1,7 +1,7 @@
 "use client";
 
-import { useArtistSort } from "@/hooks/params/artist-sort";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import { useArtistSort } from "@/hooks/params/artist-sort";
 
 type SortOption = {
   id: number;

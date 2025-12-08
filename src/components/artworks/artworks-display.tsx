@@ -1,5 +1,5 @@
-import SortFilterArtworks from "./sort-filter-artworks";
 import ArtworksDisplayInner from "./artworks-display-inner";
+import SortFilterArtworks from "./sort-filter-artworks";
 
 export default function ArtworksDisplay() {
   return (

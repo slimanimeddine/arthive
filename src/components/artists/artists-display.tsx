@@ -10,8 +10,8 @@ import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import ArtistCategoryFilter from "./artist-category-filter";
 import ArtistCountryFilter from "./artist-country-filter";
-import SortArtists from "./sort-artists";
 import ArtistsDisplayInner from "./artists-display-inner";
+import SortArtists from "./sort-artists";
 
 export default function ArtistsDisplay() {
   const [open, setOpen] = useState(false);
@@ -21,7 +21,7 @@ export default function ArtistsDisplay() {
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <DialogBackdrop
           transition
-          className="fixed inset-0 bg-gray-500/75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
+          className="fixed inset-0 bg-gray-500/75 transition-opacity duration-500 ease-in-out data-closed:opacity-0"
         />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -29,10 +29,10 @@ export default function ArtistsDisplay() {
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <DialogPanel
                 transition
-                className="pointer-events-auto relative w-screen max-w-xs transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
+                className="pointer-events-auto relative w-screen max-w-xs transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
               >
                 <TransitionChild>
-                  <div className="absolute top-0 left-0 -ml-8 flex pt-4 pr-2 duration-500 ease-in-out data-[closed]:opacity-0 sm:-ml-10 sm:pr-4">
+                  <div className="absolute top-0 left-0 -ml-8 flex pt-4 pr-2 duration-500 ease-in-out data-closed:opacity-0 sm:-ml-10 sm:pr-4">
                     <button
                       type="button"
                       onClick={() => setOpen(false)}
@@ -69,9 +69,10 @@ export default function ArtistsDisplay() {
           </div>
         </div>
       </Dialog>
-      <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 sm:py-8 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-8 lg:px-8">
         <div className="mt-8 block lg:hidden">
           <button
+            type="button"
             onClick={() => setOpen(true)}
             className="flex cursor-pointer items-center gap-2 border-b border-gray-400 pb-1 text-gray-900 transition hover:border-gray-600"
           >

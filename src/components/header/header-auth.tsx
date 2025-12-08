@@ -1,20 +1,20 @@
 "use client";
-import { classNames } from "@/lib/utils";
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { classNames } from "@/lib/utils";
 import Logo from "../logo";
-import ProfileDropdown from "./profile-dropdown";
-import SearchComponent from "./search-input";
 import NotificationIcon from "./notification-icon";
+import ProfileDropdown from "./profile-dropdown";
 import ProfileImage from "./profile-image";
 import ProfileInfo from "./profile-info";
-import type { Route } from "next";
+import SearchComponent from "./search-input";
 
 const navigation = [
   { name: "Artists", href: "/artists" },
