@@ -50,6 +50,7 @@ export default function LikedByModal({ likes }: LikedByModalProps) {
                       >
                         {like.user.profilePictureUrl ? (
                           <Image
+                            unoptimized
                             alt=""
                             src={like.user.profilePictureUrl}
                             className="h-12 w-12 flex-none rounded-full bg-gray-50"

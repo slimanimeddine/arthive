@@ -125,6 +125,7 @@ export default function FirstStep({ artwork }: FirstStepProps) {
           {artwork.photos.map((photo) => (
             <span key={photo.id} className="relative inline-block">
               <Image
+                unoptimized
                 src={photo.path}
                 alt={`Uploaded ${photo.id}`}
                 className="h-24 w-24 rounded-md object-cover"

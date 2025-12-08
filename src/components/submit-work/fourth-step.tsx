@@ -68,6 +68,7 @@ export default function FourthStep() {
       <div>
         <h3 className="mb-2 text-lg font-semibold">Main Photo:</h3>
         <Image
+          unoptimized
           src={
             getUrlFromBlob(croppedMainPhoto) || getUrlFromBlob(mainPhoto) || ""
           }
@@ -82,6 +83,7 @@ export default function FourthStep() {
         <div className="flex flex-wrap gap-2">
           {photos.map((photo, index) => (
             <Image
+              unoptimized
               key={index}
               src={getUrlFromBlob(photo)}
               alt={`Uploaded ${index}`}

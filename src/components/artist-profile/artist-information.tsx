@@ -51,6 +51,7 @@ export default function ArtistInformation() {
               {artistInformation.profilePictureUrl ? (
                 <div className="relative h-40 sm:h-56">
                   <Image
+                    unoptimized
                     alt=""
                     src={artistInformation.profilePictureUrl}
                     className="absolute h-full w-full rounded-lg object-cover"

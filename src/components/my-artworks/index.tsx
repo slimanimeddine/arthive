@@ -140,6 +140,7 @@ export default function MyArtworks() {
                         </td>
                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                           <Image
+                            unoptimized
                             src={artwork.mainPhotoUrl}
                             alt=""
                             className="h-32 w-32"

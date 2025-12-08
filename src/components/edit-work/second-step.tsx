@@ -121,6 +121,7 @@ export default function SecondStep({ artwork }: SecondStepProps) {
         <div className="flex flex-wrap gap-2">
           {artwork.photos.map((photo) => (
             <Image
+              unoptimized
               key={photo.id}
               src={photo.path}
               alt={`Uploaded ${photo.id}`}

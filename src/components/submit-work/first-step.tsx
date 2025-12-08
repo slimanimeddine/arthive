@@ -56,6 +56,7 @@ export default function FirstStep() {
         {photos.map((photo, index) => (
           <span key={index} className="relative inline-block">
             <Image
+              unoptimized
               src={getUrlFromBlob(photo)}
               alt={`Uploaded ${index}`}
               className="h-24 w-24 rounded-md object-cover"

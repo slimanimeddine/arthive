@@ -33,6 +33,7 @@ export default function SecondStep() {
         <div className="flex flex-wrap gap-2">
           {photos.map((photo, index) => (
             <Image
+              unoptimized
               key={index}
               src={getUrlFromBlob(photo)}
               alt={`Uploaded ${index}`}

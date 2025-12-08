@@ -37,6 +37,7 @@ export default function Comment({
           >
             {user.profilePictureUrl ? (
               <Image
+                unoptimized
                 className="h-8 w-8 rounded-full"
                 src={user.profilePictureUrl}
                 alt={user.username}

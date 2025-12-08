@@ -40,6 +40,7 @@ export default function ProfileDropdown() {
           <span className="sr-only">Open user menu</span>
           {data.data.photo ? (
             <Image
+              unoptimized
               alt=""
               src={fileUrl(data.data.photo) as string}
               className="h-8 w-8 rounded-full"

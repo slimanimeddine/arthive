@@ -102,6 +102,7 @@ export default function ArtworkPost() {
             <div>
               {artwork.artist.profilePictureUrl ? (
                 <Image
+                  unoptimized
                   alt=""
                   src={artwork.artist.profilePictureUrl}
                   className="h-10 w-10 rounded-full"
@@ -146,6 +147,7 @@ export default function ArtworkPost() {
         {/* Image */}
         <div className="flex flex-col gap-y-1">
           <Image
+            unoptimized
             alt=""
             src={artwork.mainPhotoUrl}
             className="h-[600px] w-full rounded-lg object-cover"
@@ -160,6 +162,7 @@ export default function ArtworkPost() {
                   className="group block h-32 w-32 overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100"
                 >
                   <Image
+                    unoptimized
                     alt=""
                     src={photo.url}
                     className="object-cover"
@@ -188,6 +191,7 @@ export default function ArtworkPost() {
                   <Link key={like.id} href={`/artists/${like.user.username}`}>
                     {like.user.profilePictureUrl ? (
                       <Image
+                        unoptimized
                         alt=""
                         src={like.user.profilePictureUrl}
                         className="inline-block size-8 rounded-full ring-2 ring-white"

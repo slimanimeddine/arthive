@@ -24,6 +24,7 @@ export default function ArtistCard({
       <div className="flex min-w-0 gap-x-4">
         {profilePictureUrl ? (
           <Image
+            unoptimized
             alt=""
             src={fileUrl(profilePictureUrl) as string}
             className="h-12 w-12 flex-none rounded-full bg-gray-50"

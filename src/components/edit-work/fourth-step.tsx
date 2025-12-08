@@ -57,6 +57,7 @@ export default function FourthStep({ artwork }: FourthStepProps) {
       <div>
         <h3 className="mb-2 text-lg font-semibold">Main Photo:</h3>
         <Image
+          unoptimized
           src={artwork.mainPhotoUrl}
           alt="Main Photo"
           className="h-48 w-48 rounded-md object-cover"
@@ -69,6 +70,7 @@ export default function FourthStep({ artwork }: FourthStepProps) {
         <div className="flex flex-wrap gap-2">
           {artwork.photos.map((photo) => (
             <Image
+              unoptimized
               key={photo.id}
               src={photo.path}
               alt={`Uploaded ${photo.id}`}

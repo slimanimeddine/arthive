@@ -31,6 +31,7 @@ export function ArtworkCard({
         className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100"
       >
         <Image
+          unoptimized
           alt=""
           src={mainPhotoUrl}
           className="object-cover"
@@ -66,6 +67,7 @@ export function ArtworkCard({
         <div className="shrink-0">
           {artistProfilePictureUrl ? (
             <Image
+              unoptimized
               alt=""
               src={artistProfilePictureUrl}
               className="h-8 w-8 rounded-full"

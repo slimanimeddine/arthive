@@ -34,6 +34,7 @@ export default function ArtistCard({
           <span className="block shrink-0">
             {profilePictureUrl ? (
               <Image
+                unoptimized
                 alt=""
                 src={fileUrl(profilePictureUrl) as string}
                 className="size-14 w-14 rounded-lg object-cover"
@@ -92,6 +93,7 @@ export default function ArtistCard({
               className="group block h-32 w-32 overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100"
             >
               <Image
+                unoptimized
                 alt=""
                 src={fileUrl(artwork.mainPhotoUrl) as string}
                 className="object-cover"
