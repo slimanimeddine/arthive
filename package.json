@@ -20,7 +20,6 @@
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.13.2",
     "dayjs": "^1.11.19",
-    "jiti": "^2.6.1",
     "jose": "^6.1.3",
     "laravel-echo": "^2.2.6",
     "next": "^16.1.0",
