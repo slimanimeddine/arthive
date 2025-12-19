@@ -1,13 +1,10 @@
-import { fileURLToPath } from "node:url";
-import { createJiti } from "jiti";
+import { NextConfig } from "next";
 
-const jiti = createJiti(fileURLToPath(import.meta.url));
-
-await jiti.import("./src/env/client.ts");
-await jiti.import("./src/env/server.ts");
+import "./src/env/client";
+import "./src/env/server";
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   typedRoutes: true,
   images: {
     remotePatterns: [
